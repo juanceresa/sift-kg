@@ -9,6 +9,7 @@ from pathlib import Path
 
 import typer
 from rich.console import Console
+from rich.table import Table
 
 from sift_kg.config import SiftConfig
 
@@ -135,7 +136,45 @@ def info() -> None:
     Show the current project's configuration, domain schema,
     and processing status.
     """
-    console.print("[yellow]⚠️  Not implemented yet (Plan 01-02)[/yellow]")
+    # Load configuration
+    config = SiftConfig()
+
+    # Check if output directory exists
+    if not config.output_dir.exists():
+        console.print("[yellow]No output directory found. Run 'sift extract' first.[/yellow]")
+        raise typer.Exit(0)
+
+    # Create stats table
+    table = Table(title="Project Information", show_header=True, header_style="bold cyan")
+    table.add_column("Metric", style="dim")
+    table.add_column("Value")
+
+    # Configuration stats
+    table.add_row("Output Directory", str(config.output_dir))
+    table.add_row("Default Model", config.default_model)
+
+    # Processing stats
+    extractions_dir = config.output_dir / "extractions"
+    if extractions_dir.exists():
+        doc_count = len(list(extractions_dir.glob("*.json")))
+        table.add_row("Documents Processed", str(doc_count))
+    else:
+        table.add_row("Documents Processed", "0")
+
+    # Output file stats
+    graph_exists = "Yes" if (config.output_dir / "graph_data.json").exists() else "No"
+    table.add_row("Graph File Exists", graph_exists)
+
+    narrative_exists = "Yes" if (config.output_dir / "narrative.md").exists() else "No"
+    table.add_row("Narrative File Exists", narrative_exists)
+
+    # Placeholder stats for future phases
+    table.add_row("Entities Extracted", "Not available (run after Phase 4)")
+    table.add_row("Relations Extracted", "Not available (run after Phase 4)")
+    table.add_row("Total Cost Spent", "Not tracked yet (Phase 3+)")
+
+    # Display table
+    console.print(table)
     raise typer.Exit(0)
 
 
