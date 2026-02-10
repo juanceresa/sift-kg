@@ -1,4 +1,4 @@
-# sift
+# sift-kg
 
 **Turn any pile of documents into a knowledge graph.**
 
@@ -16,7 +16,7 @@ sift narrate                           # generate a narrative from the graph
 
 ## Overview
 
-sift is an end-to-end CLI tool for building knowledge graphs from unstructured document collections. It handles text extraction, LLM-powered entity and relation extraction, entity deduplication with human review, and narrative generation — in a single pipeline.
+sift-kg is an end-to-end CLI tool for building knowledge graphs from unstructured document collections. It handles text extraction, LLM-powered entity and relation extraction, entity deduplication with human review, and narrative generation — in a single pipeline.
 
 ### Pipeline
 
