@@ -56,15 +56,67 @@ Documents (PDF, text, HTML, email)
 - Academic research — build structured datasets from historical archives and primary sources
 - Legal review — extract and connect entities across document collections
 
+## Installation
+
+**Requirements:** Python 3.11 or higher
+
+```bash
+pip install sift-kg
+```
+
+For development:
+
+```bash
+git clone https://github.com/civictable/sift-kg.git
+cd sift-kg
+pip install -e ".[dev]"
+```
+
+### Shell Completion
+
+Install shell completion for your shell:
+
+```bash
+sift --install-completion
+```
+
+Then restart your terminal. Supports bash, zsh, fish, and PowerShell.
+
+## Quick Start
+
+```bash
+# Show available commands
+sift --help
+
+# Initialize a project (coming in Phase 1)
+sift init
+
+# Extract entities and relations (coming in Phase 3)
+sift extract ./documents/
+
+# Review entity merges (coming in Phase 5)
+sift review
+
+# Generate narrative summaries (coming in Phase 6)
+sift narrate
+```
+
+**Note:** All commands currently show placeholder warnings until respective phases are completed. The CLI structure and installation are functional as of v0.2.0.
+
 ## Status
 
-Under active development.
+Under active development. Phase 1 (scaffolding) in progress.
+
+Current functionality:
+- ✅ Package installation via pip
+- ✅ CLI command structure with `sift` entry point
+- ✅ Shell completion support
+- ⏳ Project initialization (Plan 01-02)
+- ⏳ Document extraction (Phase 3)
+- ⏳ Entity resolution (Phase 5)
+- ⏳ Narrative generation (Phase 6)
 
 <!--
-## Quickstart
-
-Coming soon.
-
 ## Domain Configuration
 
 Coming soon.
