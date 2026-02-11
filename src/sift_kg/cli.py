@@ -53,6 +53,9 @@ def extract(
     domain: str | None = typer.Option(None, help="Path to custom domain YAML"),
     domain_name: str = typer.Option("default", "--domain-name", "-d", help="Bundled domain name (e.g. osint)"),
     max_cost: float | None = typer.Option(None, help="Maximum cost budget in USD"),
+    chunk_size: int = typer.Option(10000, "--chunk-size", help="Characters per chunk (larger = fewer API calls, lower cost)"),
+    concurrency: int = typer.Option(4, "-c", "--concurrency", help="Concurrent LLM calls per document"),
+    rpm: int = typer.Option(40, "--rpm", help="Max requests per minute (prevents rate limit waste)"),
     output: str | None = typer.Option(None, "-o", help="Output directory"),
     verbose: bool = typer.Option(False, "-v", "--verbose", help="Verbose logging"),
 ) -> None:
@@ -99,8 +102,8 @@ def extract(
     from sift_kg.extract.extractor import extract_all
     from sift_kg.extract.llm_client import LLMClient
 
-    llm = LLMClient(model=effective_model)
-    results = extract_all(docs, llm, domain_config, output_dir, max_cost=max_cost)
+    llm = LLMClient(model=effective_model, rpm=rpm)
+    results = extract_all(docs, llm, domain_config, output_dir, max_cost=max_cost, concurrency=concurrency, chunk_size=chunk_size)
 
     # Summary
     successful = [r for r in results if not r.error]
@@ -185,6 +188,8 @@ def build(
 @app.command()
 def resolve(
     model: str = typer.Option(None, help="LLM model for entity resolution"),
+    concurrency: int = typer.Option(4, "-c", "--concurrency", help="Concurrent LLM calls"),
+    rpm: int = typer.Option(40, "--rpm", help="Max requests per minute"),
     output: str | None = typer.Option(None, "-o", help="Output directory"),
     verbose: bool = typer.Option(False, "-v", "--verbose", help="Verbose logging"),
 ) -> None:
@@ -213,8 +218,8 @@ def resolve(
     kg = KnowledgeGraph.load(graph_path)
     console.print(f"[cyan]Graph:[/cyan] {kg.entity_count} entities, {kg.relation_count} relations")
 
-    llm = LLMClient(model=effective_model)
-    merge_file = find_merge_candidates(kg, llm)
+    llm = LLMClient(model=effective_model, rpm=rpm)
+    merge_file = find_merge_candidates(kg, llm, concurrency=concurrency)
 
     if not merge_file.proposals:
         console.print("[green]No duplicates found![/green]")
@@ -301,6 +306,10 @@ def apply_merges_cmd(
 @app.command()
 def review(
     output: str | None = typer.Option(None, "-o", help="Output directory"),
+    auto_approve: float = typer.Option(
+        0.85, "--auto-approve",
+        help="Auto-confirm proposals where all members meet this confidence (0-1). Set to 1.0 to disable.",
+    ),
     verbose: bool = typer.Option(False, "-v", "--verbose", help="Verbose logging"),
 ) -> None:
     """Interactively review merge proposals and flagged relations."""
@@ -331,7 +340,7 @@ def review(
     if has_merges:
         merge_file = read_proposals(proposals_path)
         if merge_file.draft:
-            merge_stats = review_merges(merge_file)
+            merge_stats = review_merges(merge_file, auto_approve_threshold=auto_approve)
             write_proposals(merge_file, proposals_path)
             console.print()
         else:
@@ -381,6 +390,11 @@ def export(
         console.print(f"Supported: {', '.join(SUPPORTED_FORMATS)}")
         raise typer.Exit(1)
 
+    # Guard: catch `sift export --to json` (user meant `sift export json`)
+    if export_path and export_path.lower() in SUPPORTED_FORMATS and fmt == "graphml":
+        fmt = export_path.lower()
+        export_path = None
+
     kg = KnowledgeGraph.load(graph_path)
 
     if export_path:
@@ -400,6 +414,45 @@ def export(
         console.print(f"  Output: {result}/entities.csv, {result}/relations.csv")
     else:
         console.print(f"  Output: {result}")
+
+
+@app.command()
+def view(
+    output: str | None = typer.Option(None, "-o", help="Output directory"),
+    to: str | None = typer.Option(None, "--to", help="Output HTML path"),
+    no_open: bool = typer.Option(False, "--no-open", help="Don't open in browser"),
+    verbose: bool = typer.Option(False, "-v", "--verbose", help="Verbose logging"),
+) -> None:
+    """Open an interactive graph visualization in your browser."""
+    _setup_logging(verbose)
+    config = SiftConfig()
+    output_dir = Path(output) if output else config.output_dir
+
+    graph_path = output_dir / "graph_data.json"
+    if not graph_path.exists():
+        console.print("[yellow]No graph found.[/yellow] Run [cyan]sift build[/cyan] first.")
+        raise typer.Exit(1)
+
+    try:
+        from sift_kg.visualize import generate_view
+    except ImportError:
+        console.print("[red]pyvis is required for visualization.[/red]")
+        console.print("Install it with: [cyan]pip install pyvis[/cyan]")
+        raise typer.Exit(1)
+
+    from sift_kg.graph.knowledge_graph import KnowledgeGraph
+
+    kg = KnowledgeGraph.load(graph_path)
+    dest = Path(to) if to else output_dir / "graph.html"
+
+    result = generate_view(kg, dest, open_browser=not no_open)
+
+    console.print(f"[green]View generated![/green]")
+    console.print(f"  Entities: {kg.entity_count}")
+    console.print(f"  Relations: {kg.relation_count}")
+    console.print(f"  Output: {result}")
+    if no_open:
+        console.print(f"  Open in browser: [cyan]file://{result.resolve()}[/cyan]")
 
 
 @app.command()

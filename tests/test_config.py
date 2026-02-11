@@ -34,8 +34,9 @@ class TestSiftConfig:
     def test_validate_openai_key_missing(self):
         """Error when using OpenAI model without API key."""
         config = SiftConfig(openai_api_key=None, _env_file=None)
-        with pytest.raises(ValueError, match="OPENAI_API_KEY"):
-            config.validate_api_keys("openai/gpt-4o-mini")
+        with patch.dict(os.environ, {}, clear=True):
+            with pytest.raises(ValueError, match="OPENAI_API_KEY"):
+                config.validate_api_keys("openai/gpt-4o-mini")
 
     def test_validate_anthropic_key_present(self):
         """No error when Anthropic key is set and model is Anthropic."""
@@ -45,8 +46,9 @@ class TestSiftConfig:
     def test_validate_anthropic_key_missing(self):
         """Error when using Anthropic model without API key."""
         config = SiftConfig(anthropic_api_key=None, _env_file=None)
-        with pytest.raises(ValueError, match="ANTHROPIC_API_KEY"):
-            config.validate_api_keys("anthropic/claude-3-haiku")
+        with patch.dict(os.environ, {}, clear=True):
+            with pytest.raises(ValueError, match="ANTHROPIC_API_KEY"):
+                config.validate_api_keys("anthropic/claude-3-haiku")
 
     def test_ollama_needs_no_key(self):
         """Ollama models don't require API keys."""

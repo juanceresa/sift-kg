@@ -1,6 +1,6 @@
 """Text chunker — splits documents into overlapping segments for LLM processing.
 
-5000-char chunks with 10% overlap and sentence-boundary-aware splitting.
+10000-char chunks with 10% overlap and sentence-boundary-aware splitting.
 """
 
 import re
@@ -24,7 +24,7 @@ _SENTENCE_END = re.compile(r"[.!?]\s+|\n\n|\n(?=[A-Z])")
 
 def chunk_text(
     text: str,
-    chunk_size: int = 5000,
+    chunk_size: int = 10000,
     overlap_ratio: float = 0.1,
 ) -> list[TextChunk]:
     """Split text into overlapping chunks.

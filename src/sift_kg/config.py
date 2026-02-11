@@ -5,9 +5,10 @@ from environment variables and .env files. All configuration is type-safe
 and validated using Pydantic models.
 """
 
+import os
 from pathlib import Path
 
-from pydantic import Field, field_validator
+from pydantic import Field, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -46,6 +47,11 @@ class SiftConfig(BaseSettings):
         description="Anthropic API key for Claude models. Get from: https://console.anthropic.com/settings/keys"
     )
 
+    gemini_api_key: str | None = Field(
+        default=None,
+        description="Google Gemini API key. Get from: https://aistudio.google.com/apikey"
+    )
+
     default_model: str = Field(
         default="openai/gpt-4o-mini",
         description="Default LLM model in format provider/model-name (e.g., openai/gpt-4o-mini, anthropic/claude-haiku, ollama/llama3.3)"
@@ -60,6 +66,19 @@ class SiftConfig(BaseSettings):
         default=None,
         description="Path to custom domain YAML file (uses default domain if not set)"
     )
+
+    @model_validator(mode="after")
+    def _export_api_keys(self) -> "SiftConfig":
+        """Export API keys to environment so LiteLLM can find them."""
+        key_map = {
+            "OPENAI_API_KEY": self.openai_api_key,
+            "ANTHROPIC_API_KEY": self.anthropic_api_key,
+            "GEMINI_API_KEY": self.gemini_api_key,
+        }
+        for env_var, value in key_map.items():
+            if value and env_var not in os.environ:
+                os.environ[env_var] = value
+        return self
 
     @field_validator("output_dir", mode="before")
     @classmethod
@@ -91,16 +110,22 @@ class SiftConfig(BaseSettings):
             >>> config.validate_api_keys("openai/gpt-4o-mini")  # OK
             >>> config.validate_api_keys("anthropic/claude-haiku")  # Raises ValueError
         """
-        if model.startswith("openai/") and not self.openai_api_key:
+        if model.startswith("openai/") and not self.openai_api_key and not os.environ.get("OPENAI_API_KEY"):
             raise ValueError(
                 "OPENAI_API_KEY not found. Set in environment or .env file.\n"
                 "Get your key from: https://platform.openai.com/api-keys"
             )
 
-        if model.startswith("anthropic/") and not self.anthropic_api_key:
+        if model.startswith("anthropic/") and not self.anthropic_api_key and not os.environ.get("ANTHROPIC_API_KEY"):
             raise ValueError(
                 "ANTHROPIC_API_KEY not found. Set in environment or .env file.\n"
                 "Get your key from: https://console.anthropic.com/settings/keys"
+            )
+
+        if model.startswith("gemini/") and not self.gemini_api_key and not os.environ.get("GEMINI_API_KEY"):
+            raise ValueError(
+                "GEMINI_API_KEY not found. Set in environment or .env file.\n"
+                "Get your key from: https://aistudio.google.com/apikey"
             )
 
         # Ollama models run locally - no API key needed
