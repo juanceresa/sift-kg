@@ -203,6 +203,39 @@ def run_narrate(
     )
 
 
+def run_export(
+    output_dir: Path,
+    fmt: str = "json",
+    export_path: Path | None = None,
+) -> Path:
+    """Export the knowledge graph to a specified format.
+
+    Args:
+        output_dir: Directory with graph_data.json
+        fmt: Export format — "json", "graphml", "gexf", or "csv"
+        export_path: Where to write output (default: output_dir/graph.{fmt})
+
+    Returns:
+        Path to the exported file or directory
+    """
+    from sift_kg.export import export_graph
+
+    graph_path = output_dir / "graph_data.json"
+    if not graph_path.exists():
+        raise FileNotFoundError(f"No graph found at {graph_path}")
+
+    kg = KnowledgeGraph.load(graph_path)
+
+    if export_path is None:
+        if fmt == "csv":
+            export_path = output_dir / "csv"
+        else:
+            ext = {"json": "json", "graphml": "graphml", "gexf": "gexf"}[fmt]
+            export_path = output_dir / f"graph.{ext}"
+
+    return export_graph(kg, export_path, fmt)
+
+
 def run_pipeline(
     doc_dir: Path,
     model: str,

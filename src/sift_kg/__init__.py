@@ -11,9 +11,11 @@ from sift_kg.domains.loader import load_domain
 from sift_kg.domains.models import DomainConfig
 from sift_kg.extract.llm_client import LLMClient
 from sift_kg.graph.knowledge_graph import KnowledgeGraph
+from sift_kg.export import export_graph
 from sift_kg.pipeline import (
     run_apply_merges,
     run_build,
+    run_export,
     run_extract,
     run_narrate,
     run_pipeline,
@@ -25,9 +27,11 @@ __all__ = [
     "DomainConfig",
     "KnowledgeGraph",
     "LLMClient",
+    "export_graph",
     "load_domain",
     "run_apply_merges",
     "run_build",
+    "run_export",
     "run_extract",
     "run_narrate",
     "run_pipeline",

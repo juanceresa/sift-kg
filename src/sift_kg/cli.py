@@ -357,6 +357,52 @@ def review(
 
 
 @app.command()
+def export(
+    fmt: str = typer.Argument("graphml", help="Export format: json, graphml, gexf, csv"),
+    output: str | None = typer.Option(None, "-o", help="Output directory"),
+    export_path: str | None = typer.Option(None, "--to", help="Export file/directory path"),
+    verbose: bool = typer.Option(False, "-v", "--verbose", help="Verbose logging"),
+) -> None:
+    """Export the knowledge graph to GraphML, GEXF, CSV, or JSON."""
+    _setup_logging(verbose)
+    config = SiftConfig()
+    output_dir = Path(output) if output else config.output_dir
+
+    graph_path = output_dir / "graph_data.json"
+    if not graph_path.exists():
+        console.print("[yellow]No graph found.[/yellow] Run [cyan]sift build[/cyan] first.")
+        raise typer.Exit(1)
+
+    from sift_kg.export import SUPPORTED_FORMATS, export_graph
+    from sift_kg.graph.knowledge_graph import KnowledgeGraph
+
+    if fmt.lower() not in SUPPORTED_FORMATS:
+        console.print(f"[red]Unsupported format:[/red] {fmt}")
+        console.print(f"Supported: {', '.join(SUPPORTED_FORMATS)}")
+        raise typer.Exit(1)
+
+    kg = KnowledgeGraph.load(graph_path)
+
+    if export_path:
+        dest = Path(export_path)
+    elif fmt == "csv":
+        dest = output_dir / "csv"
+    else:
+        ext = {"json": "json", "graphml": "graphml", "gexf": "gexf"}[fmt.lower()]
+        dest = output_dir / f"graph.{ext}"
+
+    result = export_graph(kg, dest, fmt)
+
+    console.print(f"[green]Exported![/green] ({fmt.upper()})")
+    console.print(f"  Entities: {kg.entity_count}")
+    console.print(f"  Relations: {kg.relation_count}")
+    if fmt.lower() == "csv":
+        console.print(f"  Output: {result}/entities.csv, {result}/relations.csv")
+    else:
+        console.print(f"  Output: {result}")
+
+
+@app.command()
 def domains() -> None:
     """List available bundled domains."""
     from sift_kg.domains.loader import DomainLoader
