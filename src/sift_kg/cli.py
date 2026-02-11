@@ -397,6 +397,14 @@ def export(
 
     kg = KnowledgeGraph.load(graph_path)
 
+    # Load entity descriptions if available (from sift narrate)
+    descriptions: dict[str, str] | None = None
+    desc_path = output_dir / "entity_descriptions.json"
+    if desc_path.exists():
+        import json
+        descriptions = json.loads(desc_path.read_text())
+        console.print(f"  Including {len(descriptions)} entity descriptions")
+
     if export_path:
         dest = Path(export_path)
     elif fmt == "csv":
@@ -405,7 +413,7 @@ def export(
         ext = {"json": "json", "graphml": "graphml", "gexf": "gexf"}[fmt.lower()]
         dest = output_dir / f"graph.{ext}"
 
-    result = export_graph(kg, dest, fmt)
+    result = export_graph(kg, dest, fmt, descriptions=descriptions)
 
     console.print(f"[green]Exported![/green] ({fmt.upper()})")
     console.print(f"  Entities: {kg.entity_count}")
@@ -445,7 +453,15 @@ def view(
     kg = KnowledgeGraph.load(graph_path)
     dest = Path(to) if to else output_dir / "graph.html"
 
-    result = generate_view(kg, dest, open_browser=not no_open)
+    # Load entity descriptions if narrate has been run
+    desc_path = output_dir / "entity_descriptions.json"
+    if desc_path.exists():
+        console.print(f"[cyan]Descriptions:[/cyan] loaded from {desc_path.name}")
+
+    result = generate_view(
+        kg, dest, open_browser=not no_open,
+        descriptions_path=desc_path if desc_path.exists() else None,
+    )
 
     console.print(f"[green]View generated![/green]")
     console.print(f"  Entities: {kg.entity_count}")

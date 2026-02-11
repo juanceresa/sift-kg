@@ -2,8 +2,11 @@
 
 Orchestrates the full extraction pipeline: chunk text → extract entities →
 extract relations → merge chunk results → persist to disk.
+
+Uses async concurrency to process multiple chunks in parallel.
 """
 
+import asyncio
 import json
 import logging
 from pathlib import Path
@@ -18,11 +21,14 @@ from sift_kg.extract.models import (
     ExtractedRelation,
     ExtractionResult,
 )
-from sift_kg.extract.prompts import build_entity_prompt, build_relation_prompt
+from sift_kg.extract.prompts import build_combined_prompt
 from sift_kg.ingest.chunker import TextChunk, chunk_text
 from sift_kg.ingest.reader import read_document
 
 logger = logging.getLogger(__name__)
+
+# Default concurrent LLM calls. Balances speed vs rate limits.
+DEFAULT_CONCURRENCY = 4
 
 
 def extract_from_text(
@@ -30,30 +36,41 @@ def extract_from_text(
     doc_id: str,
     llm: LLMClient,
     domain: DomainConfig,
-    chunk_size: int = 5000,
+    chunk_size: int = 10000,
+    concurrency: int = DEFAULT_CONCURRENCY,
 ) -> DocumentExtraction:
     """Extract entities and relations from document text.
 
     Pure logic — no file I/O. Testable without file fixtures.
-
-    Args:
-        text: Document text content
-        doc_id: Document identifier
-        llm: LLM client for API calls
-        domain: Domain configuration
-        chunk_size: Characters per chunk
-
-    Returns:
-        DocumentExtraction with all entities and relations
+    Runs async extraction internally for concurrency.
     """
+    return asyncio.run(
+        _aextract_from_text(text, doc_id, llm, domain, chunk_size, concurrency)
+    )
+
+
+async def _aextract_from_text(
+    text: str,
+    doc_id: str,
+    llm: LLMClient,
+    domain: DomainConfig,
+    chunk_size: int,
+    concurrency: int,
+) -> DocumentExtraction:
+    """Async extraction — processes chunks concurrently."""
     chunks = chunk_text(text, chunk_size=chunk_size)
+    cost_before = llm.total_cost_usd
+    sem = asyncio.Semaphore(concurrency)
+
+    async def _bounded(chunk: TextChunk) -> ExtractionResult:
+        async with sem:
+            return await _aextract_chunk(chunk, doc_id, llm, domain)
+
+    results = await asyncio.gather(*[_bounded(c) for c in chunks])
+
     all_entities: list[ExtractedEntity] = []
     all_relations: list[ExtractedRelation] = []
-
-    cost_before = llm.total_cost_usd
-
-    for chunk in chunks:
-        result = _extract_chunk(chunk, doc_id, llm, domain)
+    for result in results:
         all_entities.extend(result.entities)
         all_relations.extend(result.relations)
 
@@ -75,27 +92,17 @@ def extract_document(
     llm: LLMClient,
     domain: DomainConfig,
     output_dir: Path,
-    chunk_size: int = 5000,
+    chunk_size: int = 10000,
+    concurrency: int = DEFAULT_CONCURRENCY,
 ) -> DocumentExtraction:
     """Extract entities and relations from a single document file.
 
     Reads the file, calls extract_from_text, and saves results to disk.
     Idempotent — skips documents that already have extraction JSON.
-
-    Args:
-        doc_path: Path to document file
-        llm: LLM client for API calls
-        domain: Domain configuration
-        output_dir: Where to save extraction JSON
-        chunk_size: Characters per chunk
-
-    Returns:
-        DocumentExtraction with all entities and relations
     """
     doc_id = doc_path.stem
     extraction_path = output_dir / "extractions" / f"{doc_id}.json"
 
-    # Skip if already extracted (idempotent)
     if extraction_path.exists():
         logger.info(f"Skipping {doc_id} (already extracted)")
         raw = json.loads(extraction_path.read_text())
@@ -103,7 +110,6 @@ def extract_document(
 
     logger.info(f"Extracting: {doc_path.name}")
 
-    # Read document
     try:
         text = read_document(doc_path)
     except Exception as e:
@@ -124,11 +130,9 @@ def extract_document(
             model_used=llm.model,
         )
 
-    # Extract
-    extraction = extract_from_text(text, doc_id, llm, domain, chunk_size)
+    extraction = extract_from_text(text, doc_id, llm, domain, chunk_size, concurrency)
     extraction.document_path = str(doc_path)
 
-    # Persist
     extraction_path.parent.mkdir(parents=True, exist_ok=True)
     extraction_path.write_text(extraction.model_dump_json(indent=2))
 
@@ -139,23 +143,26 @@ def extract_document(
     return extraction
 
 
-def _extract_chunk(
+async def _aextract_chunk(
     chunk: TextChunk,
     doc_id: str,
     llm: LLMClient,
     domain: DomainConfig,
 ) -> ExtractionResult:
-    """Extract entities and relations from a single chunk."""
-    # Entity extraction
-    entity_prompt = build_entity_prompt(chunk.text, doc_id, domain)
+    """Extract entities and relations from a single chunk (async).
+
+    Uses a combined prompt (1 LLM call) instead of separate entity + relation
+    calls (2 LLM calls). Falls back to entity-only on parse failure.
+    """
+    prompt = build_combined_prompt(chunk.text, doc_id, domain)
     try:
-        entity_data = llm.call_json(entity_prompt)
+        data = await llm.acall_json(prompt)
     except (RuntimeError, ValueError) as e:
-        logger.warning(f"Entity extraction failed for {doc_id} chunk {chunk.chunk_index}: {e}")
+        logger.warning(f"Extraction failed for {doc_id} chunk {chunk.chunk_index}: {e}")
         return ExtractionResult(source_document=doc_id, chunk_index=chunk.chunk_index)
 
     entities = []
-    for raw in entity_data.get("entities", []):
+    for raw in data.get("entities", []):
         try:
             entities.append(ExtractedEntity(
                 name=raw.get("name", ""),
@@ -167,27 +174,18 @@ def _extract_chunk(
         except (ValueError, TypeError, KeyError) as e:
             logger.debug(f"Skipping malformed entity: {e}")
 
-    # Relation extraction (only if we got entities)
     relations = []
-    if entities:
-        entity_list = [{"name": e.name, "entity_type": e.entity_type} for e in entities]
-        relation_prompt = build_relation_prompt(chunk.text, entity_list, doc_id, domain)
-
+    for raw in data.get("relations", []):
         try:
-            relation_data = llm.call_json(relation_prompt)
-            for raw in relation_data.get("relations", []):
-                try:
-                    relations.append(ExtractedRelation(
-                        relation_type=raw.get("relation_type", "ASSOCIATED_WITH"),
-                        source_entity=raw.get("source_entity", ""),
-                        target_entity=raw.get("target_entity", ""),
-                        confidence=float(raw.get("confidence", 0.5)),
-                        evidence=raw.get("evidence", ""),
-                    ))
-                except (ValueError, TypeError, KeyError) as e:
-                    logger.debug(f"Skipping malformed relation: {e}")
-        except (RuntimeError, ValueError) as e:
-            logger.warning(f"Relation extraction failed for {doc_id} chunk {chunk.chunk_index}: {e}")
+            relations.append(ExtractedRelation(
+                relation_type=raw.get("relation_type", "ASSOCIATED_WITH"),
+                source_entity=raw.get("source_entity", ""),
+                target_entity=raw.get("target_entity", ""),
+                confidence=float(raw.get("confidence", 0.5)),
+                evidence=raw.get("evidence", ""),
+            ))
+        except (ValueError, TypeError, KeyError) as e:
+            logger.debug(f"Skipping malformed relation: {e}")
 
     return ExtractionResult(
         entities=entities,
@@ -203,7 +201,6 @@ def _dedupe_entities(entities: list[ExtractedEntity]) -> list[ExtractedEntity]:
     for e in entities:
         key = f"{e.entity_type}:{e.name.lower().strip()}"
         if key in seen:
-            # Keep higher confidence version
             if e.confidence > seen[key].confidence:
                 seen[key] = e
         else:
@@ -217,20 +214,78 @@ def extract_all(
     domain: DomainConfig,
     output_dir: Path,
     max_cost: float | None = None,
+    concurrency: int = DEFAULT_CONCURRENCY,
+    chunk_size: int = 10000,
 ) -> list[DocumentExtraction]:
     """Extract entities and relations from multiple documents.
 
-    Args:
-        doc_paths: List of document paths
-        llm: LLM client
-        domain: Domain configuration
-        output_dir: Output directory
-        max_cost: Budget cap in USD (None = no limit)
-
-    Returns:
-        List of DocumentExtraction results
+    All chunks across all documents share a single semaphore and rate limiter,
+    so slots aren't wasted waiting between documents.
     """
-    results = []
+    return asyncio.run(
+        _aextract_all(doc_paths, llm, domain, output_dir, max_cost, concurrency, chunk_size)
+    )
+
+
+async def _aextract_all(
+    doc_paths: list[Path],
+    llm: LLMClient,
+    domain: DomainConfig,
+    output_dir: Path,
+    max_cost: float | None,
+    concurrency: int,
+    chunk_size: int,
+) -> list[DocumentExtraction]:
+    """Async extraction across all documents with shared concurrency."""
+    sem = asyncio.Semaphore(concurrency)
+    extraction_dir = output_dir / "extractions"
+    extraction_dir.mkdir(parents=True, exist_ok=True)
+
+    # Read all docs and prepare chunks upfront (cheap, no LLM calls)
+    doc_work: list[tuple[Path, str, str, list[TextChunk]]] = []
+    cached: list[DocumentExtraction] = []
+
+    for doc_path in doc_paths:
+        doc_id = doc_path.stem
+        extraction_path = extraction_dir / f"{doc_id}.json"
+
+        if extraction_path.exists():
+            logger.info(f"Skipping {doc_id} (already extracted)")
+            cached.append(DocumentExtraction(**json.loads(extraction_path.read_text())))
+            continue
+
+        try:
+            text = read_document(doc_path)
+        except Exception as e:
+            logger.error(f"Failed to read {doc_path.name}: {e}")
+            cached.append(DocumentExtraction(
+                document_id=doc_id, document_path=str(doc_path),
+                error=str(e), model_used=llm.model,
+            ))
+            continue
+
+        if not text.strip():
+            logger.warning(f"Empty text from {doc_path.name}")
+            cached.append(DocumentExtraction(
+                document_id=doc_id, document_path=str(doc_path),
+                error="Empty document", model_used=llm.model,
+            ))
+            continue
+
+        chunks = chunk_text(text, chunk_size=chunk_size)
+        doc_work.append((doc_path, doc_id, text, chunks))
+
+    if not doc_work:
+        return cached
+
+    # Flatten all chunks across all docs, tagged with their doc info
+    all_tasks: list[tuple[str, TextChunk]] = []
+    for _, doc_id, _, chunks in doc_work:
+        for chunk in chunks:
+            all_tasks.append((doc_id, chunk))
+
+    total_chunks = len(all_tasks)
+    completed_chunks = 0
 
     with Progress(
         SpinnerColumn(),
@@ -239,19 +294,63 @@ def extract_all(
         TaskProgressColumn(),
         TextColumn("${task.fields[cost]:.3f}"),
     ) as progress:
-        task = progress.add_task("Extracting...", total=len(doc_paths), cost=0.0)
+        ptask = progress.add_task("Extracting...", total=total_chunks, cost=0.0)
 
-        for doc_path in doc_paths:
-            # Check budget
+        async def _bounded(doc_id: str, chunk: TextChunk) -> tuple[str, ExtractionResult]:
+            nonlocal completed_chunks
             if max_cost and llm.total_cost_usd >= max_cost:
-                logger.warning(
-                    f"Budget limit reached: ${llm.total_cost_usd:.2f} / ${max_cost:.2f}. "
-                    f"Processed {len(results)}/{len(doc_paths)} documents."
-                )
-                break
+                return doc_id, ExtractionResult(source_document=doc_id, chunk_index=chunk.chunk_index)
+            async with sem:
+                result = await _aextract_chunk(chunk, doc_id, llm, domain)
+                completed_chunks += 1
+                progress.update(ptask, completed=completed_chunks, cost=llm.total_cost_usd)
+                return doc_id, result
 
-            result = extract_document(doc_path, llm, domain, output_dir)
-            results.append(result)
-            progress.update(task, advance=1, cost=llm.total_cost_usd)
+        chunk_results = await asyncio.gather(
+            *[_bounded(doc_id, chunk) for doc_id, chunk in all_tasks]
+        )
 
-    return results
+    # Group results by document
+    doc_results: dict[str, list[ExtractionResult]] = {}
+    for doc_id, result in chunk_results:
+        doc_results.setdefault(doc_id, []).append(result)
+
+    # Build DocumentExtraction per doc and save
+    extractions = list(cached)
+    for doc_path, doc_id, _, chunks in doc_work:
+        results = doc_results.get(doc_id, [])
+        cost_for_doc = sum(
+            getattr(r, '_cost', 0.0) for r in results
+        )
+
+        all_entities: list[ExtractedEntity] = []
+        all_relations: list[ExtractedRelation] = []
+        for r in results:
+            all_entities.extend(r.entities)
+            all_relations.extend(r.relations)
+
+        extraction = DocumentExtraction(
+            document_id=doc_id,
+            document_path=str(doc_path),
+            chunks_processed=len(chunks),
+            entities=_dedupe_entities(all_entities),
+            relations=all_relations,
+            cost_usd=cost_for_doc,
+            model_used=llm.model,
+        )
+
+        extraction_path = extraction_dir / f"{doc_id}.json"
+        extraction_path.write_text(extraction.model_dump_json(indent=2))
+
+        logger.info(
+            f"  {doc_id}: {len(extraction.entities)} entities, "
+            f"{len(extraction.relations)} relations ({extraction.chunks_processed} chunks)"
+        )
+        extractions.append(extraction)
+
+    if max_cost and llm.total_cost_usd >= max_cost:
+        logger.warning(
+            f"Budget limit reached: ${llm.total_cost_usd:.2f} / ${max_cost:.2f}"
+        )
+
+    return extractions

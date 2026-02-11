@@ -9,15 +9,17 @@ def build_narrative_prompt(
     relations: list[dict[str, Any]],
     document_count: int,
     system_context: str = "",
+    total_entities: int | None = None,
+    total_relations: int | None = None,
 ) -> str:
     """Build prompt for generating overview narrative from graph data.
 
-    Args:
-        entities: Non-document entities with name, type, attributes
-        relations: Relations with source_name, target_name, relation_type
-        document_count: Total documents processed
-        system_context: Optional domain context from domain config
+    Entities should be pre-ranked by importance (e.g. graph degree).
+    The prompt receives only the top entities and their relations.
     """
+    total_ent = total_entities or len(entities)
+    total_rel = total_relations or len(relations)
+
     # Summarize entities by type
     type_groups: dict[str, list[str]] = {}
     for e in entities:
@@ -26,29 +28,31 @@ def build_narrative_prompt(
 
     entity_summary = ""
     for etype, names in sorted(type_groups.items()):
-        entity_summary += f"\n{etype} ({len(names)}): {', '.join(names[:20])}"
-        if len(names) > 20:
-            entity_summary += f" ... and {len(names) - 20} more"
+        entity_summary += f"\n{etype} ({len(names)}): {', '.join(names)}"
 
-    # Summarize relations
+    # Format relations
     rel_lines = []
-    for r in relations[:50]:  # Cap to avoid huge prompts
+    for r in relations:
         rel_lines.append(
             f"- {r.get('source_name', '?')} --[{r.get('relation_type', '?')}]--> "
             f"{r.get('target_name', '?')}"
         )
-    if len(relations) > 50:
-        rel_lines.append(f"... and {len(relations) - 50} more relations")
-
     relations_text = "\n".join(rel_lines) if rel_lines else "No relations found."
+
+    scope_note = ""
+    if total_ent > len(entities):
+        scope_note = (
+            f"\nNote: Showing the {len(entities)} most connected entities out of "
+            f"{total_ent} total, and {len(relations)} of {total_rel} relations.\n"
+        )
 
     context_section = ""
     if system_context:
         context_section = f"\nDOMAIN CONTEXT:\n{system_context[:2000]}\n"
 
-    return f"""{context_section}You are analyzing a knowledge graph extracted from {document_count} documents.
-
-ENTITIES:{entity_summary}
+    return f"""{context_section}You are analyzing a knowledge graph extracted from {document_count} documents ({total_ent} entities, {total_rel} relations total).
+{scope_note}
+TOP ENTITIES (ranked by connectivity):{entity_summary}
 
 KEY RELATIONS:
 {relations_text}
@@ -71,6 +75,7 @@ def build_entity_description_prompt(
     attributes: dict[str, Any],
     relations: list[dict[str, Any]],
     source_documents: list[str],
+    source_contexts: list[str] | None = None,
 ) -> str:
     """Build prompt for generating a description of a single entity.
 
@@ -80,6 +85,7 @@ def build_entity_description_prompt(
         attributes: Entity attributes from extraction
         relations: Relations involving this entity
         source_documents: Documents mentioning this entity
+        source_contexts: Quotes from source text where entity appears
     """
     attrs_text = json.dumps(attributes, indent=2, ensure_ascii=False) if attributes else "None"
 
@@ -93,18 +99,34 @@ def build_entity_description_prompt(
 
     docs_text = ", ".join(source_documents[:10]) if source_documents else "Unknown"
 
-    return f"""Write a brief description (2-4 sentences) of this entity based on the knowledge graph data.
+    # Deduplicate and cap source contexts
+    contexts = []
+    if source_contexts:
+        seen = set()
+        for ctx in source_contexts:
+            normalized = ctx.lower().strip()
+            if normalized not in seen:
+                seen.add(normalized)
+                contexts.append(ctx)
+    contexts = contexts[:15]  # Cap to avoid oversized prompts
+    contexts_text = "\n".join(f"- \"{ctx}\"" for ctx in contexts) if contexts else "None available."
+
+    return f"""Write a brief description (2-4 sentences) of this entity based on the source documents and knowledge graph data.
 
 ENTITY: {entity_name}
 TYPE: {entity_type}
 ATTRIBUTES: {attrs_text}
+
+SOURCE TEXT EXCERPTS:
+{contexts_text}
 
 RELATIONS:
 {relations_text}
 
 MENTIONED IN DOCUMENTS: {docs_text}
 
-Describe who/what this entity is and their significance based on the available data.
-Be specific and factual. Do not speculate beyond what the data shows.
+Synthesize the source excerpts and relations into a specific, factual description.
+Focus on what the documents actually say about this entity — their role, actions, and significance.
+Do not provide generic background information that isn't in the sources.
 
 Output ONLY the description. No headers or formatting."""

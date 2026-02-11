@@ -1,15 +1,19 @@
 """Narrative generator — produces markdown from knowledge graphs."""
 
+import asyncio
+import json
 import logging
 from pathlib import Path
 
-from rich.progress import Progress, SpinnerColumn, TextColumn
+from rich.progress import BarColumn, Progress, SpinnerColumn, TaskProgressColumn, TextColumn
 
 from sift_kg.extract.llm_client import LLMClient
 from sift_kg.graph.knowledge_graph import KnowledgeGraph
 from sift_kg.narrate.prompts import build_entity_description_prompt, build_narrative_prompt
 
 logger = logging.getLogger(__name__)
+
+DEFAULT_CONCURRENCY = 4
 
 
 def generate_narrative(
@@ -19,16 +23,9 @@ def generate_narrative(
     system_context: str = "",
     include_entity_descriptions: bool = True,
     max_cost: float | None = None,
+    concurrency: int = DEFAULT_CONCURRENCY,
 ) -> Path:
     """Generate narrative markdown from knowledge graph.
-
-    Args:
-        kg: Populated knowledge graph
-        llm: LLM client
-        output_dir: Where to write narrative.md
-        system_context: Optional domain context
-        include_entity_descriptions: Whether to generate per-entity descriptions
-        max_cost: Budget limit for narrative generation
 
     Returns:
         Path to written narrative.md
@@ -65,28 +62,69 @@ def generate_narrative(
             "source_name": source_data.get("name", source),
             "target_name": target_data.get("name", target),
             "relation_type": rel_type,
+            "_source_id": source,
+            "_target_id": target,
         })
 
     if not entities:
         logger.warning("No entities found in graph")
         return _write_empty_narrative(output_dir)
 
-    # Generate overview narrative
-    logger.info(f"Generating narrative: {len(entities)} entities, {len(relations)} relations")
+    # Rank entities by graph degree (most connected first) for the overview.
+    # Only the top entities go into the overview prompt to keep it bounded;
+    # per-entity descriptions still cover everything.
+    MAX_OVERVIEW_ENTITIES = 50
+    MAX_OVERVIEW_RELATIONS = 150
+    MAX_DESCRIBED_ENTITIES = 100
 
-    prompt = build_narrative_prompt(entities, relations, doc_count, system_context)
+    degree_map = dict(kg.graph.degree())
+    entities.sort(key=lambda e: degree_map.get(e["id"], 0), reverse=True)
+    top_entity_ids = {e["id"] for e in entities[:MAX_OVERVIEW_ENTITIES]}
+    top_relations = [
+        r for r in relations
+        if r.get("_source_id") in top_entity_ids or r.get("_target_id") in top_entity_ids
+    ][:MAX_OVERVIEW_RELATIONS]
+
+    logger.info(
+        f"Generating narrative: {len(entities)} entities ({min(len(entities), MAX_OVERVIEW_ENTITIES)} in overview), "
+        f"{len(relations)} relations ({len(top_relations)} in overview)"
+    )
+
+    prompt = build_narrative_prompt(
+        entities[:MAX_OVERVIEW_ENTITIES], top_relations, doc_count, system_context,
+        total_entities=len(entities), total_relations=len(relations),
+    )
     try:
         overview = llm.call(prompt)
     except RuntimeError as e:
         logger.error(f"Narrative generation failed: {e}")
         overview = "Narrative generation failed. Please try again."
 
-    # Generate per-entity descriptions
+    # Generate per-entity descriptions (top entities by degree only)
     entity_descriptions: dict[str, str] = {}
     if include_entity_descriptions and entities:
-        entity_descriptions = _generate_entity_descriptions(
-            entities, kg, llm, max_cost
+        described = entities[:MAX_DESCRIBED_ENTITIES]
+        skipped = len(entities) - len(described)
+        if skipped > 0:
+            logger.info(f"Describing top {len(described)} entities, skipping {skipped} low-connectivity entities")
+
+        # Load source context quotes from extractions
+        entity_contexts = _load_entity_contexts(output_dir / "extractions")
+
+        entity_descriptions = asyncio.run(
+            _agenerate_entity_descriptions(
+                described, kg, llm, max_cost, concurrency, entity_contexts
+            )
         )
+
+    # Save descriptions as JSON sidecar for viewer integration
+    if entity_descriptions:
+        desc_path = output_dir / "entity_descriptions.json"
+        desc_path.write_text(
+            json.dumps(entity_descriptions, indent=2, ensure_ascii=False),
+            encoding="utf-8",
+        )
+        logger.info(f"Descriptions saved: {desc_path}")
 
     # Build markdown
     md = _build_markdown(overview, entities, relations, entity_descriptions, doc_count)
@@ -104,25 +142,52 @@ def generate_narrative(
     return output_path
 
 
-def _generate_entity_descriptions(
+def _load_entity_contexts(extractions_dir: Path) -> dict[str, list[str]]:
+    """Load source text context quotes from extraction JSONs.
+
+    Returns a map of entity name (lowercased) → list of context quotes.
+    """
+    contexts: dict[str, list[str]] = {}
+    if not extractions_dir.exists():
+        return contexts
+
+    for f in extractions_dir.glob("*.json"):
+        data = json.loads(f.read_text())
+        for e in data.get("entities", []):
+            ctx = e.get("context", "").strip()
+            if ctx:
+                key = e.get("name", "").lower().strip()
+                contexts.setdefault(key, []).append(ctx)
+
+    return contexts
+
+
+async def _agenerate_entity_descriptions(
     entities: list[dict],
     kg: KnowledgeGraph,
     llm: LLMClient,
     max_cost: float | None = None,
+    concurrency: int = DEFAULT_CONCURRENCY,
+    entity_contexts: dict[str, list[str]] | None = None,
 ) -> dict[str, str]:
-    """Generate descriptions for each entity."""
-    descriptions: dict[str, str] = {}
+    """Generate descriptions for each entity with async concurrency."""
+    sem = asyncio.Semaphore(concurrency)
+    completed = 0
+    entity_contexts = entity_contexts or {}
 
     with Progress(
         SpinnerColumn(),
         TextColumn("[progress.description]{task.description}"),
+        BarColumn(),
+        TaskProgressColumn(),
+        TextColumn("${task.fields[cost]:.3f}"),
     ) as progress:
-        task = progress.add_task("Entity descriptions...", total=len(entities))
+        ptask = progress.add_task("Entity descriptions...", total=len(entities), cost=0.0)
 
-        for entity in entities:
+        async def _describe(entity: dict) -> tuple[str, str | None]:
+            nonlocal completed
             if max_cost and llm.total_cost_usd >= max_cost:
-                logger.warning("Budget limit reached during entity descriptions")
-                break
+                return entity["id"], None
 
             eid = entity["id"]
             rels = kg.get_relations(eid)
@@ -136,23 +201,36 @@ def _generate_entity_descriptions(
                     "relation_type": r.get("relation_type", ""),
                 })
 
+            # Get source text quotes for this entity
+            source_quotes = entity_contexts.get(entity["name"].lower().strip(), [])
+
             prompt = build_entity_description_prompt(
                 entity_name=entity["name"],
                 entity_type=entity["entity_type"],
                 attributes=entity.get("attributes", {}),
                 relations=rel_dicts,
                 source_documents=entity.get("source_documents", []),
+                source_contexts=source_quotes,
             )
 
-            try:
-                desc = llm.call(prompt)
-                descriptions[eid] = desc.strip()
-            except RuntimeError as e:
-                logger.warning(f"Failed to generate description for {entity['name']}: {e}")
+            async with sem:
+                try:
+                    desc = await llm.acall(prompt)
+                    completed += 1
+                    progress.update(ptask, completed=completed, cost=llm.total_cost_usd)
+                    return eid, desc.strip()
+                except RuntimeError as e:
+                    logger.warning(f"Failed to generate description for {entity['name']}: {e}")
+                    completed += 1
+                    progress.update(ptask, completed=completed, cost=llm.total_cost_usd)
+                    return eid, None
 
-            progress.advance(task)
+        results = await asyncio.gather(*[_describe(e) for e in entities])
 
-    return descriptions
+    if max_cost and llm.total_cost_usd >= max_cost:
+        logger.warning("Budget limit reached during entity descriptions")
+
+    return {eid: desc for eid, desc in results if desc is not None}
 
 
 def _build_markdown(

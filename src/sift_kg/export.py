@@ -14,19 +14,33 @@ from typing import Any
 import networkx as nx
 
 from sift_kg.graph.knowledge_graph import KnowledgeGraph
+from sift_kg.graph.postprocessor import strip_metadata
+from sift_kg.visualize import ENTITY_COLORS, DEFAULT_ENTITY_COLOR, EDGE_PALETTE
 
 logger = logging.getLogger(__name__)
+
+
+def _hex_to_rgb(hex_color: str) -> tuple[int, int, int]:
+    """Convert hex color to (r, g, b) tuple."""
+    h = hex_color.lstrip("#")
+    return int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16)
 
 SUPPORTED_FORMATS = ("json", "graphml", "gexf", "csv")
 
 
-def export_graph(kg: KnowledgeGraph, output_path: Path, fmt: str) -> Path:
+def export_graph(
+    kg: KnowledgeGraph,
+    output_path: Path,
+    fmt: str,
+    descriptions: dict[str, str] | None = None,
+) -> Path:
     """Export a knowledge graph to the specified format.
 
     Args:
         kg: Knowledge graph to export
         output_path: Where to write the output (file or directory for CSV)
         fmt: Format string — "json", "graphml", "gexf", or "csv"
+        descriptions: Optional entity descriptions to merge into node attributes
 
     Returns:
         Path to the written file (or directory for CSV)
@@ -39,12 +53,16 @@ def export_graph(kg: KnowledgeGraph, output_path: Path, fmt: str) -> Path:
 
     if fmt == "json":
         return _export_json(kg, output_path)
-    elif fmt == "graphml":
-        return _export_graphml(kg, output_path)
+
+    # Strip DOCUMENT nodes + MENTIONED_IN edges for visual/analytical exports
+    clean = strip_metadata(kg)
+
+    if fmt == "graphml":
+        return _export_graphml(clean, output_path, descriptions)
     elif fmt == "gexf":
-        return _export_gexf(kg, output_path)
+        return _export_gexf(clean, output_path, descriptions)
     elif fmt == "csv":
-        return _export_csv(kg, output_path)
+        return _export_csv(clean, output_path, descriptions)
     raise ValueError(f"Unsupported format: {fmt}")
 
 
@@ -65,19 +83,44 @@ def _flatten_value(value: Any) -> str | int | float | bool:
     return str(value)
 
 
-def _build_flat_graph(kg: KnowledgeGraph) -> nx.DiGraph:
+def _build_flat_graph(
+    kg: KnowledgeGraph,
+    descriptions: dict[str, str] | None = None,
+) -> nx.DiGraph:
     """Build a simple DiGraph with flattened attributes.
 
     GraphML/GEXF don't support MultiDiGraph well (parallel edges get
     collapsed). We merge parallel edges by concatenating relation types.
+
+    Sets `label` on nodes and edges for Gephi/yEd display.
+    Optionally merges entity descriptions from narrate output.
     """
     flat = nx.DiGraph()
+    descriptions = descriptions or {}
+    degrees = dict(kg.graph.degree())
 
     for node_id, data in kg.graph.nodes(data=True):
         flat_attrs = {k: _flatten_value(v) for k, v in data.items()}
+        # Gephi uses 'label' for display — set it to entity name
+        flat_attrs["label"] = data.get("name", node_id)
+        # Color by entity type — same palette as pyvis viewer
+        entity_type = data.get("entity_type", "UNKNOWN")
+        color = ENTITY_COLORS.get(entity_type, DEFAULT_ENTITY_COLOR)
+        r, g, b = _hex_to_rgb(color)
+        flat_attrs["color"] = color
+        flat_attrs["r"] = r
+        flat_attrs["g"] = g
+        flat_attrs["b"] = b
+        # Size by degree — same formula as pyvis viewer
+        degree = degrees.get(node_id, 0)
+        flat_attrs["size"] = float(max(8, min(50, 6 + degree * 2.5)))
+        # Merge description if available
+        if node_id in descriptions:
+            flat_attrs["description"] = descriptions[node_id]
         flat.add_node(node_id, **flat_attrs)
 
     # Merge parallel edges between same source/target
+    rel_color_map: dict[str, str] = {}
     edge_map: dict[tuple[str, str], dict[str, Any]] = {}
     for source, target, _key, data in kg.graph.edges(data=True, keys=True):
         pair = (source, target)
@@ -95,39 +138,66 @@ def _build_flat_graph(kg: KnowledgeGraph) -> nx.DiGraph:
             if isinstance(new_conf, (int, float)) and new_conf > edge_map[pair].get("confidence", 0):
                 edge_map[pair]["confidence"] = new_conf
 
-    # Flatten merged sets back to strings
+    # Flatten merged sets back to strings + assign colors
     for attrs in edge_map.values():
         types = attrs.pop("_relation_types", set())
-        attrs["relation_type"] = "; ".join(sorted(t for t in types if t))
+        rel_type = "; ".join(sorted(t for t in types if t))
+        attrs["relation_type"] = rel_type
         evidences = attrs.pop("_evidences", set())
         if evidences:
             attrs["evidence"] = " | ".join(sorted(evidences))
+        # Color by relation type — same palette as pyvis viewer
+        primary_type = next((t for t in sorted(types) if t), rel_type)
+        if primary_type not in rel_color_map:
+            idx = len(rel_color_map) % len(EDGE_PALETTE)
+            rel_color_map[primary_type] = EDGE_PALETTE[idx]
+        color = rel_color_map[primary_type]
+        r, g, b = _hex_to_rgb(color)
+        attrs["color"] = color
+        attrs["r"] = r
+        attrs["g"] = g
+        attrs["b"] = b
 
     for (source, target), attrs in edge_map.items():
+        # Gephi uses 'label' for edge display
+        attrs["label"] = attrs.get("relation_type", "")
         flat.add_edge(source, target, **attrs)
+
+    # Pre-compute layout so Gephi/yEd render a spread-out graph on import
+    pos = nx.spring_layout(flat, k=3.0, iterations=100, seed=42, scale=1000)
+    for node_id, (x, y) in pos.items():
+        flat.nodes[node_id]["x"] = float(x)
+        flat.nodes[node_id]["y"] = float(y)
 
     return flat
 
 
-def _export_graphml(kg: KnowledgeGraph, output_path: Path) -> Path:
+def _export_graphml(
+    kg: KnowledgeGraph, output_path: Path, descriptions: dict[str, str] | None = None,
+) -> Path:
     """Export as GraphML (compatible with yEd, Gephi, Cytoscape)."""
-    flat = _build_flat_graph(kg)
+    flat = _build_flat_graph(kg, descriptions)
     nx.write_graphml(flat, str(output_path))
     logger.info(f"GraphML exported: {flat.number_of_nodes()} nodes, {flat.number_of_edges()} edges -> {output_path}")
     return output_path
 
 
-def _export_gexf(kg: KnowledgeGraph, output_path: Path) -> Path:
+def _export_gexf(
+    kg: KnowledgeGraph, output_path: Path, descriptions: dict[str, str] | None = None,
+) -> Path:
     """Export as GEXF (Gephi native format)."""
-    flat = _build_flat_graph(kg)
+    flat = _build_flat_graph(kg, descriptions)
     nx.write_gexf(flat, str(output_path))
     logger.info(f"GEXF exported: {flat.number_of_nodes()} nodes, {flat.number_of_edges()} edges -> {output_path}")
     return output_path
 
 
-def _export_csv(kg: KnowledgeGraph, output_dir: Path) -> Path:
+def _export_csv(
+    kg: KnowledgeGraph, output_dir: Path, descriptions: dict[str, str] | None = None,
+) -> Path:
     """Export as CSV (entities.csv + relations.csv)."""
     output_dir.mkdir(parents=True, exist_ok=True)
+    descriptions = descriptions or {}
 
     # Entities
     entities_path = output_dir / "entities.csv"
@@ -140,9 +210,10 @@ def _export_csv(kg: KnowledgeGraph, output_dir: Path) -> Path:
             "confidence": data.get("confidence", ""),
             "source_documents": "; ".join(data.get("source_documents", [])),
             "attributes": json.dumps(data.get("attributes", {}), default=str),
+            "description": descriptions.get(node_id, ""),
         })
 
-    entity_fields = ["id", "name", "entity_type", "confidence", "source_documents", "attributes"]
+    entity_fields = ["id", "name", "entity_type", "confidence", "source_documents", "attributes", "description"]
     with open(entities_path, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=entity_fields)
         writer.writeheader()

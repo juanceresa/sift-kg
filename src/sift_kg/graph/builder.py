@@ -11,7 +11,7 @@ from unidecode import unidecode
 
 from sift_kg.extract.models import DocumentExtraction
 from sift_kg.graph.knowledge_graph import KnowledgeGraph
-from sift_kg.graph.postprocessor import remove_redundant_edges
+from sift_kg.graph.postprocessor import prune_isolated_entities, remove_redundant_edges
 
 logger = logging.getLogger(__name__)
 
@@ -139,6 +139,8 @@ def build_graph(
     if postprocess and kg.entity_count > 0:
         cleanup = remove_redundant_edges(kg)
         stats.update(cleanup)
+        prune = prune_isolated_entities(kg)
+        stats.update(prune)
 
     logger.info(
         f"Graph built: {stats['documents']} docs → "

@@ -57,25 +57,27 @@ class TestNarrativePrompt:
         )
         assert "Cuban land rights" in prompt
 
-    def test_caps_large_relation_lists(self):
-        """Large relation lists are capped to avoid huge prompts."""
+    def test_includes_all_relations_passed(self):
+        """Prompt includes all relations it receives (caller pre-filters)."""
         entities = [{"name": "X", "entity_type": "THING"}]
         relations = [
             {"source_name": f"A{i}", "target_name": f"B{i}", "relation_type": "RELATES"}
-            for i in range(100)
+            for i in range(20)
         ]
         prompt = build_narrative_prompt(entities, relations, document_count=1)
-        # Should mention there are more
-        assert "more" in prompt.lower()
+        assert "A19" in prompt
 
-    def test_caps_large_entity_lists(self):
-        """Large entity lists are capped per type."""
+    def test_scope_note_when_truncated(self):
+        """Prompt shows scope note when total counts exceed what's passed."""
         entities = [
-            {"name": f"Person{i}", "entity_type": "PERSON"} for i in range(30)
+            {"name": f"Person{i}", "entity_type": "PERSON"} for i in range(10)
         ]
-        prompt = build_narrative_prompt(entities, [], document_count=1)
-        # Should mention there are more
-        assert "more" in prompt.lower()
+        prompt = build_narrative_prompt(
+            entities, [], document_count=1,
+            total_entities=200, total_relations=500,
+        )
+        assert "most connected" in prompt.lower()
+        assert "200" in prompt
 
 
 class TestEntityDescriptionPrompt:
