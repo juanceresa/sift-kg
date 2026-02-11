@@ -1,0 +1,128 @@
+"""LLM extraction prompts — domain-driven, zero-shot."""
+
+import json
+
+from sift_kg.domains.models import DomainConfig
+
+
+def build_entity_prompt(
+    text: str,
+    document_id: str,
+    domain: DomainConfig,
+) -> str:
+    """Build entity extraction prompt from domain config.
+
+    Args:
+        text: Document text to extract from
+        document_id: Document identifier for context
+        domain: Domain configuration with entity types
+
+    Returns:
+        Formatted prompt string
+    """
+    # Build entity type descriptions from domain config
+    type_lines = []
+    for name, cfg in domain.entity_types.items():
+        desc = cfg.description or name
+        hints = ""
+        if cfg.extraction_hints:
+            hints = " (" + "; ".join(cfg.extraction_hints) + ")"
+        type_lines.append(f"- {name}: {desc}{hints}")
+
+    entity_types_section = "\n".join(type_lines)
+
+    context_section = ""
+    if domain.system_context:
+        context_section = f"\n{domain.system_context}\n"
+
+    return f"""{context_section}Extract entities from the following document text. Return valid JSON only.
+
+ENTITY TYPES:
+{entity_types_section}
+
+OUTPUT SCHEMA:
+{{
+  "entities": [
+    {{
+      "name": "string",
+      "entity_type": "TYPE_NAME",
+      "attributes": {{"key": "value"}},
+      "confidence": 0.0-1.0,
+      "context": "quote from text where entity appears"
+    }}
+  ]
+}}
+
+RULES:
+- Extract ALL entity types present, not just the most common
+- Extract only explicit information from the text
+- Preserve names exactly as written
+- confidence: 0.0-1.0 based on text clarity
+- attributes: include any relevant details (dates, roles, descriptions, etc.)
+
+Document: {document_id}
+
+TEXT:
+{text}
+
+OUTPUT JSON:"""
+
+
+def build_relation_prompt(
+    text: str,
+    entities: list[dict],
+    document_id: str,
+    domain: DomainConfig,
+) -> str:
+    """Build relation extraction prompt from domain config.
+
+    Args:
+        text: Document text
+        entities: Previously extracted entities (list of dicts with name, entity_type)
+        document_id: Document identifier
+        domain: Domain configuration with relation types
+
+    Returns:
+        Formatted prompt string
+    """
+    # Build relation types list
+    rel_types = ", ".join(domain.relation_types.keys())
+
+    entities_json = json.dumps(entities, indent=2, ensure_ascii=False)
+
+    context_section = ""
+    if domain.system_context:
+        context_section = f"\n{domain.system_context}\n"
+
+    return f"""{context_section}Extract relationships between entities from this document. Return valid JSON only.
+
+RELATION TYPES: {rel_types}
+
+OUTPUT SCHEMA:
+{{
+  "relations": [
+    {{
+      "relation_type": "TYPE_NAME",
+      "source_entity": "entity name",
+      "target_entity": "entity name",
+      "confidence": 0.0-1.0,
+      "evidence": "quote from text supporting this relation"
+    }}
+  ]
+}}
+
+RULES:
+- Use entity NAMES (not IDs) for source_entity and target_entity
+- Only extract explicit relationships stated in the text
+- Do not infer relationships from co-occurrence alone
+- If no relations found, return {{"relations": []}}
+
+Document: {document_id}
+
+ENTITIES:
+{entities_json}
+
+TEXT:
+{text}
+
+OUTPUT JSON:"""
