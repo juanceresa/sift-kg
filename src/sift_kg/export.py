@@ -7,7 +7,6 @@ complex attributes (lists, dicts) to strings for compatibility.
 import csv
 import json
 import logging
-from io import BytesIO
 from pathlib import Path
 from typing import Any
 
@@ -15,7 +14,7 @@ import networkx as nx
 
 from sift_kg.graph.knowledge_graph import KnowledgeGraph
 from sift_kg.graph.postprocessor import strip_metadata
-from sift_kg.visualize import ENTITY_COLORS, DEFAULT_ENTITY_COLOR, EDGE_PALETTE
+from sift_kg.visualize import DEFAULT_ENTITY_COLOR, EDGE_PALETTE, ENTITY_COLORS
 
 logger = logging.getLogger(__name__)
 

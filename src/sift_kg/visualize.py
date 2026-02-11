@@ -62,11 +62,11 @@ def generate_view(
         logger.info(f"Loaded {len(entity_descriptions)} entity descriptions for viewer")
     try:
         from pyvis.network import Network
-    except ImportError:
+    except ImportError as exc:
         raise ImportError(
             "pyvis is required for graph visualization.\n"
             "Install it with: pip install pyvis"
-        )
+        ) from exc
 
     from sift_kg.graph.postprocessor import strip_metadata
     kg = strip_metadata(kg)

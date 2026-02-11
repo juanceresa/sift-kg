@@ -343,7 +343,7 @@ def review(
     if has_merges:
         merge_file = read_proposals(proposals_path)
         if merge_file.draft:
-            merge_stats = review_merges(merge_file, auto_approve_threshold=auto_approve)
+            review_merges(merge_file, auto_approve_threshold=auto_approve)
             write_proposals(merge_file, proposals_path)
             console.print()
         else:
@@ -353,7 +353,7 @@ def review(
     if has_relations:
         relation_file = read_relation_review(review_path)
         if relation_file.draft:
-            relation_stats = review_relations(relation_file)
+            review_relations(relation_file)
             write_relation_review(relation_file, review_path)
             console.print()
         else:
@@ -460,7 +460,7 @@ def view(
         descriptions_path=desc_path if desc_path.exists() else None,
     )
 
-    console.print(f"[green]View generated![/green]")
+    console.print("[green]View generated![/green]")
     console.print(f"  Entities: {kg.entity_count}")
     console.print(f"  Relations: {kg.relation_count}")
     console.print(f"  Output: {result}")

@@ -4,14 +4,13 @@ Presents DRAFT items one-by-one with Rich panels. User approves, rejects,
 or skips each item. Updated files are written on completion.
 """
 
-import sys
 
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 from rich.text import Text
 
-from sift_kg.resolve.models import MergeFile, RelationReviewFile, StatusType
+from sift_kg.resolve.models import MergeFile, RelationReviewFile
 
 console = Console()
 
@@ -93,7 +92,7 @@ def review_merges(merge_file: MergeFile, auto_approve_threshold: float = 0.85) -
         header.append("Merge into: ", style="bold")
         header.append(f"{proposal.canonical_name}", style="green")
         header.append(f"  ({proposal.canonical_id})", style="dim")
-        header.append(f"\nType: ", style="bold")
+        header.append("\nType: ", style="bold")
         header.append(f"{proposal.entity_type}")
 
         # Member table
@@ -138,14 +137,14 @@ def review_merges(merge_file: MergeFile, auto_approve_threshold: float = 0.85) -
         if choice == "a":
             proposal.status = "CONFIRMED"
             stats["approved"] += 1
-            console.print(f"  [green]✓ Approved[/green]")
+            console.print("  [green]✓ Approved[/green]")
         elif choice == "r":
             proposal.status = "REJECTED"
             stats["rejected"] += 1
-            console.print(f"  [red]✗ Rejected[/red]")
+            console.print("  [red]✗ Rejected[/red]")
         elif choice == "s":
             stats["skipped"] += 1
-            console.print(f"  [dim]⏭ Skipped[/dim]")
+            console.print("  [dim]⏭ Skipped[/dim]")
         elif choice == "q":
             stats["skipped"] += total - i
             console.print(f"  [dim]Quit — skipping remaining {total - i} proposals[/dim]")
@@ -222,14 +221,14 @@ def review_relations(review_file: RelationReviewFile) -> dict[str, int]:
         if choice == "a":
             entry.status = "CONFIRMED"
             stats["approved"] += 1
-            console.print(f"  [green]✓ Approved[/green]")
+            console.print("  [green]✓ Approved[/green]")
         elif choice == "r":
             entry.status = "REJECTED"
             stats["rejected"] += 1
-            console.print(f"  [red]✗ Rejected[/red]")
+            console.print("  [red]✗ Rejected[/red]")
         elif choice == "s":
             stats["skipped"] += 1
-            console.print(f"  [dim]⏭ Skipped[/dim]")
+            console.print("  [dim]⏭ Skipped[/dim]")
         elif choice == "q":
             stats["skipped"] += total - i
             console.print(f"  [dim]Quit — skipping remaining {total - i} relations[/dim]")

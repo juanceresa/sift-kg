@@ -14,6 +14,9 @@ from sift_kg.narrate.prompts import build_entity_description_prompt, build_narra
 logger = logging.getLogger(__name__)
 
 DEFAULT_CONCURRENCY = 4
+MAX_OVERVIEW_ENTITIES = 50
+MAX_OVERVIEW_RELATIONS = 150
+MAX_DESCRIBED_ENTITIES = 100
 
 
 def generate_narrative(
@@ -71,12 +74,6 @@ def generate_narrative(
         return _write_empty_narrative(output_dir)
 
     # Rank entities by graph degree (most connected first) for the overview.
-    # Only the top entities go into the overview prompt to keep it bounded;
-    # per-entity descriptions still cover everything.
-    MAX_OVERVIEW_ENTITIES = 50
-    MAX_OVERVIEW_RELATIONS = 150
-    MAX_DESCRIBED_ENTITIES = 100
-
     degree_map = dict(kg.graph.degree())
     entities.sort(key=lambda e: degree_map.get(e["id"], 0), reverse=True)
     top_entity_ids = {e["id"] for e in entities[:MAX_OVERVIEW_ENTITIES]}

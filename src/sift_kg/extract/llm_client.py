@@ -143,13 +143,13 @@ class LLMClient:
 
                 return text
 
-            except litellm.RateLimitError:
+            except litellm.RateLimitError as exc:
                 rate_limit_hits += 1
                 if rate_limit_hits > self.rate_limit_retries:
                     raise RuntimeError(
                         f"Rate limited {rate_limit_hits} times, giving up. "
                         f"Consider upgrading to a paid tier or using a different model."
-                    )
+                    ) from exc
                 wait = min(self.rate_limit_base_wait * (2 ** (rate_limit_hits - 1)), 60)
                 logger.warning(
                     f"Rate limited, waiting {wait:.0f}s "
@@ -211,13 +211,13 @@ class LLMClient:
 
                 return text
 
-            except litellm.RateLimitError:
+            except litellm.RateLimitError as exc:
                 rate_limit_hits += 1
                 if rate_limit_hits > self.rate_limit_retries:
                     raise RuntimeError(
                         f"Rate limited {rate_limit_hits} times, giving up. "
                         f"Consider upgrading to a paid tier or using a different model."
-                    )
+                    ) from exc
                 wait = min(self.rate_limit_base_wait * (2 ** (rate_limit_hits - 1)), 60)
                 logger.warning(
                     f"Rate limited, waiting {wait:.0f}s "
