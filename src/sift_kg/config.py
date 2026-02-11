@@ -6,7 +6,6 @@ and validated using Pydantic models.
 """
 
 from pathlib import Path
-from typing import Optional
 
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -37,12 +36,12 @@ class SiftConfig(BaseSettings):
         env_ignore_empty=True,
     )
 
-    openai_api_key: Optional[str] = Field(
+    openai_api_key: str | None = Field(
         default=None,
         description="OpenAI API key for GPT models. Get from: https://platform.openai.com/api-keys"
     )
 
-    anthropic_api_key: Optional[str] = Field(
+    anthropic_api_key: str | None = Field(
         default=None,
         description="Anthropic API key for Claude models. Get from: https://console.anthropic.com/settings/keys"
     )
@@ -57,7 +56,7 @@ class SiftConfig(BaseSettings):
         description="Directory for output files (extractions, graph, narrative)"
     )
 
-    domain_path: Optional[Path] = Field(
+    domain_path: Path | None = Field(
         default=None,
         description="Path to custom domain YAML file (uses default domain if not set)"
     )

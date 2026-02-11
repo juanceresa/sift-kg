@@ -7,4 +7,29 @@ extraction, interactive entity resolution, and narrative generation.
 
 __version__ = "0.2.0"
 
-__all__ = ["__version__"]
+from sift_kg.domains.loader import load_domain
+from sift_kg.domains.models import DomainConfig
+from sift_kg.extract.llm_client import LLMClient
+from sift_kg.graph.knowledge_graph import KnowledgeGraph
+from sift_kg.pipeline import (
+    run_apply_merges,
+    run_build,
+    run_extract,
+    run_narrate,
+    run_pipeline,
+    run_resolve,
+)
+
+__all__ = [
+    "__version__",
+    "DomainConfig",
+    "KnowledgeGraph",
+    "LLMClient",
+    "load_domain",
+    "run_apply_merges",
+    "run_build",
+    "run_extract",
+    "run_narrate",
+    "run_pipeline",
+    "run_resolve",
+]
