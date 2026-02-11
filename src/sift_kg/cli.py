@@ -19,14 +19,14 @@ app = typer.Typer(
 console = Console()
 
 
-def _load_domain(config: SiftConfig):
-    """Load domain config from user path or bundled default."""
+def _load_domain(config: SiftConfig, domain_name: str = "default"):
+    """Load domain config from user path or bundled name."""
     from sift_kg.domains.loader import DomainLoader
 
     loader = DomainLoader()
     if config.domain_path:
         return loader.load_from_path(config.domain_path)
-    return loader.load_bundled("default")
+    return loader.load_bundled(domain_name)
 
 
 def _setup_logging(verbose: bool = False) -> None:
@@ -51,6 +51,7 @@ def extract(
     directory: str = typer.Argument(..., help="Directory containing documents to process"),
     model: str = typer.Option(None, help="LLM model (e.g. openai/gpt-4o-mini)"),
     domain: str | None = typer.Option(None, help="Path to custom domain YAML"),
+    domain_name: str = typer.Option("default", "--domain-name", "-d", help="Bundled domain name (e.g. osint)"),
     max_cost: float | None = typer.Option(None, help="Maximum cost budget in USD"),
     output: str | None = typer.Option(None, "-o", help="Output directory"),
     verbose: bool = typer.Option(False, "-v", "--verbose", help="Verbose logging"),
@@ -69,7 +70,7 @@ def extract(
     # Load domain
     if domain:
         config.domain_path = Path(domain)
-    domain_config = _load_domain(config)
+    domain_config = _load_domain(config, domain_name)
 
     # Output dir
     output_dir = Path(output) if output else config.output_dir
@@ -120,6 +121,7 @@ def extract(
 @app.command()
 def build(
     domain: str | None = typer.Option(None, help="Path to custom domain YAML"),
+    domain_name: str = typer.Option("default", "--domain-name", "-d", help="Bundled domain name (e.g. osint)"),
     output: str | None = typer.Option(None, "-o", help="Output directory"),
     review_threshold: float = typer.Option(0.7, help="Flag relations below this confidence"),
     no_postprocess: bool = typer.Option(False, help="Skip redundancy removal"),
@@ -133,7 +135,7 @@ def build(
     # Load domain config to check review_required relation types
     if domain:
         config.domain_path = Path(domain)
-    domain_config = _load_domain(config)
+    domain_config = _load_domain(config, domain_name)
 
     from sift_kg.graph.builder import build_graph, flag_relations_for_review, load_extractions
 
@@ -226,10 +228,9 @@ def resolve(
     console.print(f"  Cost: ${llm.total_cost_usd:.4f}")
     console.print(f"  Output: {proposals_path}")
     console.print()
-    console.print("Next steps:")
-    console.print(f"  1. Review [cyan]{proposals_path}[/cyan]")
-    console.print("     Change status: DRAFT → CONFIRMED (accept) or REJECTED (reject)")
-    console.print("  2. Run [cyan]sift apply-merges[/cyan] to apply confirmed merges")
+    console.print("Next: [cyan]sift review[/cyan] to approve/reject merges interactively")
+    console.print("  Or edit [cyan]{proposals_path}[/cyan] manually (DRAFT → CONFIRMED/REJECTED)")
+    console.print("  Then: [cyan]sift apply-merges[/cyan]")
 
 
 @app.command(name="apply-merges")
@@ -293,14 +294,107 @@ def apply_merges_cmd(
 
 
 # ============================================================================
+# Review Commands
+# ============================================================================
+
+
+@app.command()
+def review(
+    output: str | None = typer.Option(None, "-o", help="Output directory"),
+    verbose: bool = typer.Option(False, "-v", "--verbose", help="Verbose logging"),
+) -> None:
+    """Interactively review merge proposals and flagged relations."""
+    _setup_logging(verbose)
+    config = SiftConfig()
+    output_dir = Path(output) if output else config.output_dir
+
+    from sift_kg.resolve.io import (
+        read_proposals,
+        read_relation_review,
+        write_proposals,
+        write_relation_review,
+    )
+    from sift_kg.resolve.reviewer import review_merges, review_relations
+
+    proposals_path = output_dir / "merge_proposals.yaml"
+    review_path = output_dir / "relation_review.yaml"
+
+    has_merges = proposals_path.exists()
+    has_relations = review_path.exists()
+
+    if not has_merges and not has_relations:
+        console.print("[yellow]Nothing to review.[/yellow]")
+        console.print("Run [cyan]sift resolve[/cyan] (entity merges) or [cyan]sift build[/cyan] (relation flags) first.")
+        raise typer.Exit(0)
+
+    # Review merge proposals
+    if has_merges:
+        merge_file = read_proposals(proposals_path)
+        if merge_file.draft:
+            merge_stats = review_merges(merge_file)
+            write_proposals(merge_file, proposals_path)
+            console.print()
+        else:
+            console.print("[dim]No DRAFT merge proposals to review.[/dim]")
+
+    # Review flagged relations
+    if has_relations:
+        relation_file = read_relation_review(review_path)
+        if relation_file.draft:
+            relation_stats = review_relations(relation_file)
+            write_relation_review(relation_file, review_path)
+            console.print()
+        else:
+            console.print("[dim]No DRAFT flagged relations to review.[/dim]")
+
+    console.print()
+    console.print("Next: [cyan]sift apply-merges[/cyan] to apply your decisions")
+
+
+# ============================================================================
 # Utility Commands
 # ============================================================================
+
+
+@app.command()
+def domains() -> None:
+    """List available bundled domains."""
+    from sift_kg.domains.loader import DomainLoader
+
+    loader = DomainLoader()
+    available = loader.list_bundled()
+
+    if not available:
+        console.print("[yellow]No bundled domains found.[/yellow]")
+        raise typer.Exit(0)
+
+    table = Table(title="Available Domains", show_header=True, header_style="bold cyan")
+    table.add_column("Name", style="green")
+    table.add_column("Description")
+    table.add_column("Entities", justify="right")
+    table.add_column("Relations", justify="right")
+
+    for name in available:
+        domain_config = loader.load_bundled(name)
+        desc = domain_config.description.strip().split("\n")[0]  # First line
+        table.add_row(
+            name,
+            desc,
+            str(len(domain_config.entity_types)),
+            str(len(domain_config.relation_types)),
+        )
+
+    console.print(table)
+    console.print()
+    console.print("Usage: [cyan]sift extract ./docs --domain-name osint[/cyan]")
+    console.print("Custom: [cyan]sift extract ./docs --domain path/to/domain.yaml[/cyan]")
 
 
 @app.command()
 def narrate(
     model: str = typer.Option(None, help="LLM model for narrative generation"),
     domain: str | None = typer.Option(None, help="Path to custom domain YAML"),
+    domain_name: str = typer.Option("default", "--domain-name", "-d", help="Bundled domain name (e.g. osint)"),
     output: str | None = typer.Option(None, "-o", help="Output directory"),
     no_descriptions: bool = typer.Option(False, help="Skip per-entity descriptions"),
     max_cost: float | None = typer.Option(None, help="Maximum cost budget in USD"),
@@ -326,7 +420,7 @@ def narrate(
     # Load domain for system context
     if domain:
         config.domain_path = Path(domain)
-    domain_config = _load_domain(config)
+    domain_config = _load_domain(config, domain_name)
     system_context = domain_config.system_context or ""
 
     from sift_kg.extract.llm_client import LLMClient
@@ -393,6 +487,9 @@ SIFT_OUTPUT_DIR=output
     console.print("  1. cp .env.example .env")
     console.print("  2. Add your API key to .env")
     console.print("  3. sift extract ./docs/")
+    console.print()
+    console.print("Available domains: [cyan]sift domains[/cyan]")
+    console.print("  Use: [cyan]sift extract ./docs/ --domain-name osint[/cyan]")
     raise typer.Exit(0)
 
 
