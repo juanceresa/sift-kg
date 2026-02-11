@@ -11,7 +11,7 @@ open output/graph.html     # macOS
 xdg-open output/graph.html # Linux
 ```
 
-Or with sift installed: `sift view --output examples/ftx/output`
+Or with sift installed: `sift view -o examples/ftx/output`
 
 ## What's Here
 
@@ -46,14 +46,14 @@ output/
 pip install sift-kg
 
 # Start from the existing extractions (free — no LLM calls)
-sift build --output examples/ftx/output
+sift build -o examples/ftx/output
 
 # Or re-run the full pipeline from scratch
-sift extract examples/ftx/docs --model openai/gpt-4o-mini --output my-output
-sift build --output my-output
-sift resolve --output my-output --model openai/gpt-4o-mini
-sift review --output my-output
-sift apply-merges --output my-output
-sift narrate --output my-output --model openai/gpt-4o-mini
-sift view --output my-output
+sift extract examples/ftx/docs --model openai/gpt-4o-mini -o my-output
+sift build -o my-output
+sift resolve -o my-output --model openai/gpt-4o-mini
+sift review -o my-output
+sift apply-merges -o my-output
+sift narrate -o my-output --model openai/gpt-4o-mini
+sift view -o my-output
 ```
