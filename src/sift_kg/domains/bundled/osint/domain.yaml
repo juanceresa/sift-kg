@@ -1,0 +1,128 @@
+name: "OSINT Investigation"
+version: "1.0.0"
+description: |
+  Domain for open-source intelligence investigations. Optimized for
+  tracing beneficial ownership, shell company networks, financial
+  transactions, and connections between people and organizations
+  across corporate filings, court records, and leaked documents.
+
+system_context: |
+  You are analyzing documents for an open-source intelligence investigation.
+  Focus on identifying corporate structures, beneficial ownership chains,
+  financial relationships, and connections between individuals and entities.
+  Pay close attention to shell companies, nominee directors, offshore
+  jurisdictions, and obfuscated ownership patterns.
+
+entity_types:
+  PERSON:
+    description: "Individuals — directors, shareholders, signatories, beneficiaries, public officials"
+    extraction_hints:
+      - "Look for full names, titles, roles, nationalities, and any identifying details"
+      - "Note aliases, maiden names, and name variations — these are common in OSINT"
+      - "Capture roles like director, secretary, nominee, beneficial owner, authorized signatory"
+
+  ORGANIZATION:
+    description: "Companies, partnerships, trusts, foundations, government agencies, NGOs"
+    extraction_hints:
+      - "Include full legal names and any abbreviations or trading names"
+      - "Note the jurisdiction of incorporation and registration numbers"
+      - "Distinguish between operating companies and holding/shell entities"
+
+  SHELL_COMPANY:
+    description: "Entities with no apparent operations — holding companies, SPVs, brass plate entities"
+    extraction_hints:
+      - "Flag companies registered at known mass-registration addresses"
+      - "Look for entities with nominee directors, no employees, or minimal activity"
+      - "PO boxes, registered agent addresses, and offshore jurisdictions are indicators"
+
+  FINANCIAL_ACCOUNT:
+    description: "Bank accounts, investment accounts, cryptocurrency wallets, trusts"
+    extraction_hints:
+      - "Capture account numbers, bank names, and account holders"
+      - "Note the jurisdiction and type of financial institution"
+      - "Look for correspondent banking relationships and intermediary accounts"
+
+  LOCATION:
+    description: "Addresses, jurisdictions, countries, registered offices"
+    extraction_hints:
+      - "Capture full addresses for registered offices and business locations"
+      - "Note offshore jurisdictions: BVI, Cayman Islands, Panama, Seychelles, etc."
+      - "Identify addresses shared by multiple entities (mass-registration)"
+
+  DOCUMENT:
+    description: "Corporate filings, court records, contracts, leaks, financial statements"
+    extraction_hints:
+      - "Include document type, date, filing number, and issuing authority"
+      - "Note which entities are referenced or named in each document"
+
+  EVENT:
+    description: "Transactions, incorporations, dissolutions, sanctions, court proceedings"
+    extraction_hints:
+      - "Capture the date, parties involved, amounts (if financial), and outcome"
+      - "Note the type: incorporation, transfer, payment, lawsuit, sanctions listing"
+      - "Track the sequence of events to establish timelines"
+
+relation_types:
+  BENEFICIAL_OWNER_OF:
+    description: "Person is the ultimate beneficial owner of an entity (direct or indirect)"
+    source_types: [PERSON]
+    target_types: [ORGANIZATION, SHELL_COMPANY]
+    extraction_hints:
+      - "May be indirect through chains of holding companies"
+      - "Look for ownership percentages and control mechanisms"
+    review_required: true
+
+  DIRECTOR_OF:
+    description: "Person serves as director, officer, or secretary of an entity"
+    source_types: [PERSON]
+    target_types: [ORGANIZATION, SHELL_COMPANY]
+
+  SHAREHOLDER_OF:
+    description: "Person or entity holds shares in another entity"
+    source_types: [PERSON, ORGANIZATION, SHELL_COMPANY]
+    target_types: [ORGANIZATION, SHELL_COMPANY]
+    extraction_hints:
+      - "Note ownership percentages and share classes when available"
+      - "Bearer shares indicate potential ownership obfuscation"
+
+  TRANSACTED_WITH:
+    description: "Financial transaction between entities or through accounts"
+    source_types: [PERSON, ORGANIZATION, SHELL_COMPANY, FINANCIAL_ACCOUNT]
+    target_types: [PERSON, ORGANIZATION, SHELL_COMPANY, FINANCIAL_ACCOUNT]
+    extraction_hints:
+      - "Capture amount, currency, date, and stated purpose"
+      - "Note intermediary banks or correspondent accounts"
+    review_required: true
+
+  SUBSIDIARY_OF:
+    description: "Entity is a subsidiary, branch, or division of a parent"
+    source_types: [ORGANIZATION, SHELL_COMPANY]
+    target_types: [ORGANIZATION, SHELL_COMPANY]
+
+  REGISTERED_IN:
+    description: "Entity is registered or incorporated in a jurisdiction"
+    source_types: [ORGANIZATION, SHELL_COMPANY]
+    target_types: [LOCATION]
+
+  SIGNATORY_OF:
+    description: "Person is an authorized signatory on an account or document"
+    source_types: [PERSON]
+    target_types: [FINANCIAL_ACCOUNT, DOCUMENT]
+
+  ASSOCIATED_WITH:
+    description: "General association between entities — use when specific relationship is unclear"
+    source_types: [PERSON, ORGANIZATION, SHELL_COMPANY]
+    target_types: [PERSON, ORGANIZATION, SHELL_COMPANY]
+    symmetric: true
+    extraction_hints:
+      - "Use only when a more specific relation type does not apply"
+
+  LOCATED_IN:
+    description: "Entity has a physical presence or is based in a location"
+    source_types: [PERSON, ORGANIZATION, SHELL_COMPANY, FINANCIAL_ACCOUNT]
+    target_types: [LOCATION]
+
+  MENTIONED_IN:
+    description: "Entity is referenced in a document"
+    source_types: [PERSON, ORGANIZATION, SHELL_COMPANY, FINANCIAL_ACCOUNT, LOCATION, EVENT]
+    target_types: [DOCUMENT]
