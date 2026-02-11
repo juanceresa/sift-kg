@@ -38,7 +38,8 @@ def generate_narrative(
     doc_count = 0
     for nid, data in kg.graph.nodes(data=True):
         if data.get("entity_type") == "DOCUMENT":
-            doc_count += 1
+            if nid.startswith("doc:"):
+                doc_count += 1
             continue
         entities.append({
             "id": nid,

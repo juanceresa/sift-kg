@@ -133,8 +133,8 @@ def _semhash_cluster(
     merges: dict[str, str] = {}
     for item in result.selected_with_duplicates:
         kept_name = item.record["text"]
-        for dup in item.duplicates:
-            dup_name = dup.record["text"]
+        for dup_record, _score in item.duplicates:
+            dup_name = dup_record["text"]
             if dup_name != kept_name:
                 merges[dup_name] = kept_name
 
