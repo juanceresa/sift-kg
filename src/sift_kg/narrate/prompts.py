@@ -128,5 +128,7 @@ MENTIONED IN DOCUMENTS: {docs_text}
 Synthesize the source excerpts and relations into a specific, factual description.
 Focus on what the documents actually say about this entity — their role, actions, and significance.
 Do not provide generic background information that isn't in the sources.
+Write directly and factually. Do not hedge with phrases like "according to the source documents",
+"mentioned in connection with", or "available documentation indicates". State facts plainly.
 
 Output ONLY the description. No headers or formatting."""
