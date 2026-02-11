@@ -31,9 +31,9 @@ Documents (PDF, text, HTML)
        ↓
   Entity Resolution (LLM proposes → you review)
        ↓
-  Interactive Viewer (browser) / Export (GraphML, GEXF, CSV)
-       ↓
   Narrative Generation (LLM)
+       ↓
+  Interactive Viewer (browser) / Export (GraphML, GEXF, CSV)
 ```
 
 Every entity and relation links back to the source document and passage. You control what gets merged. The graph is yours.
@@ -58,6 +58,14 @@ Every entity and relation links back to the source document and passage. You con
 - **Academic research** — build structured datasets from historical archives
 - **Legal review** — extract and connect entities across document collections
 - **Genealogy** — trace family relationships across vital records
+
+## Civic Table
+
+Looking for a hosted platform with OCR, forensic legal analysis, and analyst verification?
+
+[**Civic Table**](https://github.com/juanceresa/forensic_analysis_platform) is a forensic intelligence platform built on the sift-kg pipeline. It adds OCR for scanned/degraded documents (Google Cloud Vision), a 4-tier verification system where analysts and JDs validate AI-extracted facts before they're treated as evidence, LaTeX dossier generation for legal submissions, and a web interface for sharing results with clients and families. Built for property restitution, investigative journalism, and any context where documentary provenance matters.
+
+sift-kg is the open-source CLI. Civic Table is the full platform — and where the output gets vetted by analysts and JDs before it carries evidentiary weight.
 
 ## Installation
 
