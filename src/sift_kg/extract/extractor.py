@@ -164,7 +164,7 @@ def _extract_chunk(
                 confidence=float(raw.get("confidence", 0.5)),
                 context=raw.get("context", ""),
             ))
-        except Exception as e:
+        except (ValueError, TypeError, KeyError) as e:
             logger.debug(f"Skipping malformed entity: {e}")
 
     # Relation extraction (only if we got entities)
@@ -184,7 +184,7 @@ def _extract_chunk(
                         confidence=float(raw.get("confidence", 0.5)),
                         evidence=raw.get("evidence", ""),
                     ))
-                except Exception as e:
+                except (ValueError, TypeError, KeyError) as e:
                     logger.debug(f"Skipping malformed relation: {e}")
         except (RuntimeError, ValueError) as e:
             logger.warning(f"Relation extraction failed for {doc_id} chunk {chunk.chunk_index}: {e}")

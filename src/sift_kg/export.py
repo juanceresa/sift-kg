@@ -83,12 +83,25 @@ def _build_flat_graph(kg: KnowledgeGraph) -> nx.DiGraph:
         pair = (source, target)
         if pair not in edge_map:
             edge_map[pair] = {k: _flatten_value(v) for k, v in data.items()}
+            # Track multi-valued fields as sets for proper merging
+            edge_map[pair]["_relation_types"] = {data.get("relation_type", "")}
+            edge_map[pair]["_evidences"] = {data.get("evidence", "")} - {""}
         else:
-            # Append relation type if different
-            existing_type = edge_map[pair].get("relation_type", "")
-            new_type = data.get("relation_type", "")
-            if new_type and new_type not in existing_type:
-                edge_map[pair]["relation_type"] = f"{existing_type}; {new_type}"
+            # Merge relation types (set-based, no substring issues)
+            edge_map[pair]["_relation_types"].add(data.get("relation_type", ""))
+            edge_map[pair]["_evidences"].add(data.get("evidence", ""))
+            # Keep highest confidence
+            new_conf = data.get("confidence", 0)
+            if isinstance(new_conf, (int, float)) and new_conf > edge_map[pair].get("confidence", 0):
+                edge_map[pair]["confidence"] = new_conf
+
+    # Flatten merged sets back to strings
+    for attrs in edge_map.values():
+        types = attrs.pop("_relation_types", set())
+        attrs["relation_type"] = "; ".join(sorted(t for t in types if t))
+        evidences = attrs.pop("_evidences", set())
+        if evidences:
+            attrs["evidence"] = " | ".join(sorted(evidences))
 
     for (source, target), attrs in edge_map.items():
         flat.add_edge(source, target, **attrs)
@@ -129,12 +142,11 @@ def _export_csv(kg: KnowledgeGraph, output_dir: Path) -> Path:
             "attributes": json.dumps(data.get("attributes", {}), default=str),
         })
 
-    if entity_rows:
-        fieldnames = ["id", "name", "entity_type", "confidence", "source_documents", "attributes"]
-        with open(entities_path, "w", newline="", encoding="utf-8") as f:
-            writer = csv.DictWriter(f, fieldnames=fieldnames)
-            writer.writeheader()
-            writer.writerows(entity_rows)
+    entity_fields = ["id", "name", "entity_type", "confidence", "source_documents", "attributes"]
+    with open(entities_path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=entity_fields)
+        writer.writeheader()
+        writer.writerows(entity_rows)
 
     # Relations
     relations_path = output_dir / "relations.csv"
@@ -149,12 +161,11 @@ def _export_csv(kg: KnowledgeGraph, output_dir: Path) -> Path:
             "source_document": data.get("source_document", ""),
         })
 
-    if relation_rows:
-        fieldnames = ["source", "target", "relation_type", "confidence", "evidence", "source_document"]
-        with open(relations_path, "w", newline="", encoding="utf-8") as f:
-            writer = csv.DictWriter(f, fieldnames=fieldnames)
-            writer.writeheader()
-            writer.writerows(relation_rows)
+    relation_fields = ["source", "target", "relation_type", "confidence", "evidence", "source_document"]
+    with open(relations_path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=relation_fields)
+        writer.writeheader()
+        writer.writerows(relation_rows)
 
     logger.info(
         f"CSV exported: {len(entity_rows)} entities, {len(relation_rows)} relations -> {output_dir}"

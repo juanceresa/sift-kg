@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 license = {text = "MIT"}
 authors = [
-    {name = "Civic Table", email = "hello@civictable.com"}
+    {name = "Juan Ceresa", email = "jcere@umich.edu"}
 ]
 keywords = ["knowledge-graph", "nlp", "llm", "document-processing", "entity-extraction"]
 classifiers = [

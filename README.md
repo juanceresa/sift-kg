@@ -4,61 +4,62 @@
 
 Domain-configurable entity extraction, human-in-the-loop entity resolution, and narrative generation — from the command line.
 
----
-
 ```bash
 pip install sift-kg
 
-sift extract ./documents/              # extract entities & relations
-sift review                            # approve/reject entity merges
-sift narrate                           # generate a narrative from the graph
+sift init                           # create .env.example with config
+sift extract ./documents/           # extract entities & relations
+sift build                          # build knowledge graph
+sift resolve                        # find duplicate entities
+sift review                         # approve/reject merges interactively
+sift apply-merges                   # apply your decisions
+sift narrate                        # generate narrative summary
+sift export graphml                 # export to Gephi, yEd, Cytoscape, etc.
 ```
 
-## Overview
-
-sift-kg is an end-to-end CLI tool for building knowledge graphs from unstructured document collections. It handles text extraction, LLM-powered entity and relation extraction, entity deduplication with human review, and narrative generation — in a single pipeline.
-
-### Pipeline
+## How It Works
 
 ```
-Documents (PDF, text, HTML, email)
-        |
-        v
-   Text Extraction (local, free)
-        |
-        v
-   Entity & Relation Extraction (LLM)
-        |
-        v
-   Knowledge Graph (persistent, with provenance)
-        |
-        v
-   Entity Resolution (ML clustering + human review)
-        |
-        v
-   Narrative Generation (LLM)
+Documents (PDF, text, HTML)
+       ↓
+  Text Extraction (pdfplumber, local)
+       ↓
+  Entity & Relation Extraction (LLM)
+       ↓
+  Knowledge Graph (NetworkX, JSON)
+       ↓
+  Entity Resolution (LLM proposes → you review)
+       ↓
+  Export (JSON, GraphML, GEXF, CSV)
+       ↓
+  Narrative Generation (LLM)
 ```
+
+Every entity and relation links back to the source document and passage. You control what gets merged. The graph is yours.
 
 ## Features
 
 - **Zero-config start** — point at a folder, get a knowledge graph
+- **Any LLM provider** — OpenAI, Anthropic, Ollama (local/private), or any LiteLLM-compatible provider
 - **Domain-configurable** — define custom entity types and relation types in YAML
-- **Human-in-the-loop entity resolution** — sift proposes entity merges, you approve or reject
+- **Human-in-the-loop** — sift proposes entity merges, you approve or reject in an interactive terminal UI
+- **Export anywhere** — GraphML (yEd, Cytoscape), GEXF (Gephi), CSV, or native JSON
 - **Narrative generation** — structured summaries tracing connections across your documents
-- **Source provenance** — every entity and relation links back to the source document and passage
-- **Multi-model** — OpenAI, Anthropic, Ollama (local/private), or any LiteLLM-compatible provider
+- **Source provenance** — every extraction links to the document and passage it came from
+- **Budget controls** — set `--max-cost` to cap LLM spending
 - **Runs locally** — your documents stay on your machine
 
 ## Use Cases
 
-- Investigative journalism — analyze FOIA releases, court filings, and document leaks
-- OSINT research — map entity networks from public records
-- Academic research — build structured datasets from historical archives and primary sources
-- Legal review — extract and connect entities across document collections
+- **Investigative journalism** — analyze FOIA releases, court filings, and document leaks
+- **OSINT research** — map entity networks from public records
+- **Academic research** — build structured datasets from historical archives
+- **Legal review** — extract and connect entities across document collections
+- **Genealogy** — trace family relationships across vital records
 
 ## Installation
 
-**Requirements:** Python 3.11 or higher
+Requires Python 3.11+.
 
 ```bash
 pip install sift-kg
@@ -67,64 +68,162 @@ pip install sift-kg
 For development:
 
 ```bash
-git clone https://github.com/civictable/sift-kg.git
+git clone https://github.com/juanceresa/sift-kg.git
 cd sift-kg
 pip install -e ".[dev]"
 ```
 
-### Shell Completion
-
-Install shell completion for your shell:
-
-```bash
-sift --install-completion
-```
-
-Then restart your terminal. Supports bash, zsh, fish, and PowerShell.
-
 ## Quick Start
 
+### 1. Initialize and configure
+
 ```bash
-# Show available commands
-sift --help
+sift init                     # creates .env.example
+cp .env.example .env          # copy and add your API key
+```
 
-# Initialize a project (coming in Phase 1)
-sift init
+Set your API key in `.env`:
+```
+SIFT_OPENAI_API_KEY=sk-...
+SIFT_DEFAULT_MODEL=openai/gpt-4o-mini
+```
 
-# Extract entities and relations (coming in Phase 3)
-sift extract ./documents/
+Or use Anthropic, Ollama, or any LiteLLM provider:
+```
+SIFT_ANTHROPIC_API_KEY=sk-ant-...
+SIFT_DEFAULT_MODEL=anthropic/claude-haiku-4-5-20251001
+```
 
-# Review entity merges (coming in Phase 5)
-sift review
+### 2. Extract entities and relations
 
-# Generate narrative summaries (coming in Phase 6)
+```bash
+sift extract ./my-documents/
+```
+
+Reads PDFs, text files, and HTML. Extracts entities and relations using your configured LLM. Results saved as JSON in `output/extractions/`.
+
+### 3. Build the knowledge graph
+
+```bash
+sift build
+```
+
+Constructs a NetworkX graph from all extractions. Flags low-confidence relations for review. Saves to `output/graph_data.json`.
+
+### 4. Find and resolve duplicates
+
+```bash
+sift resolve                  # LLM proposes entity merges
+sift review                   # interactive terminal review
+sift apply-merges             # apply confirmed merges
+```
+
+Or edit `output/merge_proposals.yaml` directly — change `status: DRAFT` to `CONFIRMED` or `REJECTED`.
+
+### 5. Export
+
+```bash
+sift export graphml           # → output/graph.graphml (Gephi, yEd, Cytoscape)
+sift export gexf              # → output/graph.gexf (Gephi native)
+sift export csv               # → output/csv/entities.csv + relations.csv
+sift export json              # → output/graph.json
+```
+
+### 6. Generate narrative
+
+```bash
 sift narrate
 ```
 
-**Note:** All commands currently show placeholder warnings until respective phases are completed. The CLI structure and installation are functional as of v0.2.0.
+Produces `output/narrative.md` — a structured summary with entity profiles tracing connections across your documents.
 
-## Status
-
-Under active development. Phase 1 (scaffolding) in progress.
-
-Current functionality:
-- ✅ Package installation via pip
-- ✅ CLI command structure with `sift` entry point
-- ✅ Shell completion support
-- ⏳ Project initialization (Plan 01-02)
-- ⏳ Document extraction (Phase 3)
-- ⏳ Entity resolution (Phase 5)
-- ⏳ Narrative generation (Phase 6)
-
-<!--
 ## Domain Configuration
 
-Coming soon.
+sift-kg ships with two bundled domains:
 
-## Examples
+```bash
+sift domains                  # list available domains
+```
 
-Coming soon.
--->
+| Domain | Entity Types | Relation Types | Use Case |
+|--------|-------------|----------------|----------|
+| `default` | PERSON, ORGANIZATION, LOCATION, EVENT, DOCUMENT | 9 general relations | Any document corpus |
+| `osint` | Adds SHELL_COMPANY, FINANCIAL_INSTRUMENT, GOVERNMENT_AGENCY | Adds BENEFICIAL_OWNER_OF, SANCTIONS_LISTED, etc. | Investigations, FOIA |
+
+Use a bundled domain:
+```bash
+sift extract ./docs/ --domain-name osint
+```
+
+Or create your own `domain.yaml`:
+```yaml
+name: My Domain
+entity_types:
+  PERSON:
+    description: People and individuals
+    extraction_hints:
+      - Look for full names with titles
+  COMPANY:
+    description: Business entities
+relation_types:
+  EMPLOYED_BY:
+    description: Employment relationship
+    source_types: [PERSON]
+    target_types: [COMPANY]
+  OWNS:
+    description: Ownership relationship
+    symmetric: false
+    review_required: true
+```
+
+```bash
+sift extract ./docs/ --domain path/to/domain.yaml
+```
+
+## Library API
+
+Use sift-kg from Python — Jupyter notebooks, scripts, web apps:
+
+```python
+from sift_kg import load_domain, run_extract, run_build, run_narrate, export_graph
+from sift_kg import KnowledgeGraph
+from pathlib import Path
+
+# Load domain and run extraction
+domain = load_domain()  # or load_domain(bundled_name="osint")
+results = run_extract(Path("./docs"), "openai/gpt-4o-mini", domain, Path("./output"))
+
+# Build graph
+kg = run_build(Path("./output"), domain)
+print(f"{kg.entity_count} entities, {kg.relation_count} relations")
+
+# Export
+export_graph(kg, Path("./output/graph.graphml"), "graphml")
+
+# Or run the full pipeline
+from sift_kg import run_pipeline
+run_pipeline(Path("./docs"), "openai/gpt-4o-mini", domain, Path("./output"))
+```
+
+## Project Structure
+
+After running the pipeline, your output directory contains:
+
+```
+output/
+├── extractions/          # Per-document extraction JSON
+│   ├── document1.json
+│   └── document2.json
+├── graph_data.json       # Knowledge graph (native format)
+├── merge_proposals.yaml  # Entity merge proposals (DRAFT/CONFIRMED/REJECTED)
+├── relation_review.yaml  # Flagged relations for review
+├── narrative.md          # Generated narrative summary
+├── graph.graphml         # GraphML export (if exported)
+├── graph.gexf            # GEXF export (if exported)
+└── csv/                  # CSV export (if exported)
+    ├── entities.csv
+    └── relations.csv
+```
 
 ## License
 

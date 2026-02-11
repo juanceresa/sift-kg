@@ -148,13 +148,15 @@ def apply_relation_rejections(
         if (source, target, rel_type) in rejection_keys:
             edges_to_remove.append((source, target, key))
 
+    removed = 0
     for source, target, key in edges_to_remove:
         try:
             kg.graph.remove_edge(source, target, key=key)
-        except Exception:
-            pass
+            removed += 1
+        except (KeyError, Exception) as e:
+            logger.warning(f"Could not remove edge {source} -> {target} (key={key}): {e}")
 
-    if edges_to_remove:
-        logger.info(f"Removed {len(edges_to_remove)} rejected relations")
+    if removed:
+        logger.info(f"Removed {removed} rejected relations")
 
-    return len(edges_to_remove)
+    return removed

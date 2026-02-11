@@ -49,9 +49,10 @@ class LLMClient:
             RuntimeError: If all retries exhausted
         """
         last_error = None
+        effective_system = system_message or self.system_message
         messages = []
-        if system_message:
-            messages.append({"role": "system", "content": system_message})
+        if effective_system:
+            messages.append({"role": "system", "content": effective_system})
         messages.append({"role": "user", "content": prompt})
 
         for attempt in range(self.max_retries):
@@ -79,7 +80,9 @@ class LLMClient:
                     if attempt < self.max_retries - 1:
                         time.sleep(1)
                         continue
-                    return ""
+                    raise RuntimeError(
+                        f"LLM returned empty response after {self.max_retries} attempts"
+                    )
 
                 return text
 
@@ -93,6 +96,8 @@ class LLMClient:
                 logger.warning(f"Timeout on attempt {attempt + 1}")
                 last_error = "Request timed out"
 
+            except KeyboardInterrupt:
+                raise
             except Exception as e:
                 logger.warning(f"LLM call failed: {e} (attempt {attempt + 1})")
                 last_error = str(e)
