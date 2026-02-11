@@ -444,14 +444,8 @@ def view(
         console.print("[yellow]No graph found.[/yellow] Run [cyan]sift build[/cyan] first.")
         raise typer.Exit(1)
 
-    try:
-        from sift_kg.visualize import generate_view
-    except ImportError:
-        console.print("[red]pyvis is required for visualization.[/red]")
-        console.print("Install it with: [cyan]pip install pyvis[/cyan]")
-        raise typer.Exit(1)
-
     from sift_kg.graph.knowledge_graph import KnowledgeGraph
+    from sift_kg.visualize import generate_view
 
     kg = KnowledgeGraph.load(graph_path)
     dest = Path(to) if to else output_dir / "graph.html"

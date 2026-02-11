@@ -37,6 +37,7 @@ dependencies = [
     "unidecode>=1.3.0",
     "semhash>=0.4.0",
     "inflect>=7.0.0",
+    "pyvis>=0.3.0",
 ]
 
 [project.optional-dependencies]
@@ -44,15 +45,12 @@ embeddings = [
     "sentence-transformers>=2.0.0",
     "scikit-learn>=1.3.0",
 ]
-viz = [
-    "pyvis>=0.3.0",
-]
 dev = [
     "pytest>=8.0",
     "ruff>=0.9.0",
 ]
 all = [
-    "sift-kg[embeddings,viz]",
+    "sift-kg[embeddings]",
 ]
 
 [project.scripts]

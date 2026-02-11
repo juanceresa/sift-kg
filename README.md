@@ -14,6 +14,7 @@ sift resolve                        # find duplicate entities
 sift review                         # approve/reject merges interactively
 sift apply-merges                   # apply your decisions
 sift narrate                        # generate narrative summary
+sift view                           # interactive graph in your browser
 sift export graphml                 # export to Gephi, yEd, Cytoscape, etc.
 ```
 
@@ -30,7 +31,7 @@ Documents (PDF, text, HTML)
        ↓
   Entity Resolution (LLM proposes → you review)
        ↓
-  Export (JSON, GraphML, GEXF, CSV)
+  Interactive Viewer (browser) / Export (GraphML, GEXF, CSV)
        ↓
   Narrative Generation (LLM)
 ```
@@ -43,7 +44,8 @@ Every entity and relation links back to the source document and passage. You con
 - **Any LLM provider** — OpenAI, Anthropic, Ollama (local/private), or any LiteLLM-compatible provider
 - **Domain-configurable** — define custom entity types and relation types in YAML
 - **Human-in-the-loop** — sift proposes entity merges, you approve or reject in an interactive terminal UI
-- **Export anywhere** — GraphML (yEd, Cytoscape), GEXF (Gephi), CSV, or native JSON
+- **Interactive viewer** — explore your graph in-browser with search, type toggles, and entity descriptions
+- **Export anywhere** — GraphML (yEd, Cytoscape), GEXF (Gephi), CSV, or native JSON for advanced analysis
 - **Narrative generation** — structured summaries tracing connections across your documents
 - **Source provenance** — every extraction links to the document and passage it came from
 - **Budget controls** — set `--max-cost` to cap LLM spending
@@ -120,7 +122,17 @@ Constructs a NetworkX graph from all extractions. Automatically deduplicates nea
 
 See [Entity Resolution Workflow](#entity-resolution-workflow) below for the full guide — especially important for genealogy, legal, and investigative use cases where accuracy matters.
 
-### 5. Export
+### 5. Explore and export
+
+**Interactive viewer** — for exploration and investigation:
+
+```bash
+sift view                     # → opens output/graph.html in your browser
+```
+
+Opens a force-directed graph in your browser with entity descriptions, color-coded types, search, type toggles, and a detail sidebar. This is the intended way to explore your graph — click on entities, trace connections, read the evidence.
+
+**Static exports** — for analysis tools where you want custom layout, filtering, or styling:
 
 ```bash
 sift export graphml           # → output/graph.graphml (Gephi, yEd, Cytoscape)
@@ -128,6 +140,8 @@ sift export gexf              # → output/graph.gexf (Gephi native)
 sift export csv               # → output/csv/entities.csv + relations.csv
 sift export json              # → output/graph.json
 ```
+
+Use GraphML/GEXF when you want to control node sizing, edge weighting, custom color schemes, or apply graph algorithms (centrality, community detection) in dedicated tools.
 
 ### 6. Generate narrative
 
