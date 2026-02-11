@@ -1,10 +1,6 @@
-"""CLI interface for sift-kg using Typer.
+"""CLI interface for sift-kg."""
 
-This module defines the main command-line interface for the sift-kg tool.
-Commands are registered with the Typer app and provide placeholder
-implementations until respective phases are completed.
-"""
-
+import logging
 from pathlib import Path
 
 import typer
@@ -13,7 +9,6 @@ from rich.table import Table
 
 from sift_kg.config import SiftConfig
 
-# Initialize Typer app with configuration
 app = typer.Typer(
     name="sift",
     help="Document-to-knowledge-graph pipeline",
@@ -21,139 +16,402 @@ app = typer.Typer(
     rich_markup_mode="rich",
 )
 
-# Rich console for colored output
 console = Console()
+
+
+def _load_domain(config: SiftConfig):
+    """Load domain config from user path or bundled default."""
+    from sift_kg.domains.loader import DomainLoader
+
+    loader = DomainLoader()
+    if config.domain_path:
+        return loader.load_from_path(config.domain_path)
+    return loader.load_bundled("default")
+
+
+def _setup_logging(verbose: bool = False) -> None:
+    """Configure logging level."""
+    level = logging.DEBUG if verbose else logging.INFO
+    logging.basicConfig(
+        level=level,
+        format="%(levelname)s: %(message)s",
+    )
+    # Suppress noisy libraries
+    logging.getLogger("litellm").setLevel(logging.WARNING)
+    logging.getLogger("httpx").setLevel(logging.WARNING)
+
+
+# ============================================================================
+# Pipeline Commands
+# ============================================================================
 
 
 @app.command()
 def extract(
     directory: str = typer.Argument(..., help="Directory containing documents to process"),
-    model: str = typer.Option("openai/gpt-4o-mini", help="LLM model to use"),
+    model: str = typer.Option(None, help="LLM model (e.g. openai/gpt-4o-mini)"),
+    domain: str | None = typer.Option(None, help="Path to custom domain YAML"),
+    max_cost: float | None = typer.Option(None, help="Maximum cost budget in USD"),
+    output: str | None = typer.Option(None, "-o", help="Output directory"),
+    verbose: bool = typer.Option(False, "-v", "--verbose", help="Verbose logging"),
 ) -> None:
-    """Extract entities and relations from documents using LLM.
-
-    Process all documents in the specified directory and extract
-    structured knowledge (entities, relations, dates) into a graph.
-    """
-    # Load and validate configuration
+    """Extract entities and relations from documents."""
+    _setup_logging(verbose)
     config = SiftConfig()
+    effective_model = model or config.default_model
+
     try:
-        config.validate_api_keys(model)
+        config.validate_api_keys(effective_model)
     except ValueError as e:
         console.print(f"[red]Error:[/red] {e}")
+        raise typer.Exit(1) from None
+
+    # Load domain
+    if domain:
+        config.domain_path = Path(domain)
+    domain_config = _load_domain(config)
+
+    # Output dir
+    output_dir = Path(output) if output else config.output_dir
+
+    # Discover documents
+    from sift_kg.ingest.reader import discover_documents
+
+    doc_dir = Path(directory)
+    if not doc_dir.is_dir():
+        console.print(f"[red]Error:[/red] Not a directory: {directory}")
         raise typer.Exit(1)
 
-    console.print("[yellow]⚠️  Not implemented yet (Phase 3)[/yellow]")
-    console.print(f"Would process directory: {directory}")
-    console.print(f"Would use model: {model}")
-    raise typer.Exit(0)
+    docs = discover_documents(doc_dir)
+    if not docs:
+        console.print(f"[yellow]No supported documents found in {directory}[/yellow]")
+        raise typer.Exit(0)
+
+    console.print(f"[cyan]Domain:[/cyan] {domain_config.name}")
+    console.print(f"[cyan]Model:[/cyan] {effective_model}")
+    console.print(f"[cyan]Documents:[/cyan] {len(docs)}")
+    if max_cost:
+        console.print(f"[cyan]Budget:[/cyan] ${max_cost:.2f}")
+    console.print()
+
+    # Set up LLM client and run extraction
+    from sift_kg.extract.extractor import extract_all
+    from sift_kg.extract.llm_client import LLMClient
+
+    llm = LLMClient(model=effective_model)
+    results = extract_all(docs, llm, domain_config, output_dir, max_cost=max_cost)
+
+    # Summary
+    successful = [r for r in results if not r.error]
+    total_entities = sum(len(r.entities) for r in successful)
+    total_relations = sum(len(r.relations) for r in successful)
+
+    console.print()
+    console.print("[green]Extraction complete![/green]")
+    console.print(f"  Documents processed: {len(successful)}/{len(docs)}")
+    console.print(f"  Entities extracted: {total_entities}")
+    console.print(f"  Relations extracted: {total_relations}")
+    console.print(f"  Total cost: ${llm.total_cost_usd:.4f}")
+    console.print(f"  Output: {output_dir / 'extractions'}")
+    console.print()
+    console.print("Next: [cyan]sift build[/cyan] to construct the knowledge graph")
 
 
 @app.command()
-def review() -> None:
-    """Review and merge duplicate entities interactively.
+def build(
+    domain: str | None = typer.Option(None, help="Path to custom domain YAML"),
+    output: str | None = typer.Option(None, "-o", help="Output directory"),
+    review_threshold: float = typer.Option(0.7, help="Flag relations below this confidence"),
+    no_postprocess: bool = typer.Option(False, help="Skip redundancy removal"),
+    verbose: bool = typer.Option(False, "-v", "--verbose", help="Verbose logging"),
+) -> None:
+    """Build knowledge graph from extraction results."""
+    _setup_logging(verbose)
+    config = SiftConfig()
+    output_dir = Path(output) if output else config.output_dir
 
-    Launch an interactive TUI for reviewing entity merge candidates
-    and confirming or rejecting proposed merges.
-    """
-    console.print("[yellow]⚠️  Not implemented yet (Phase 5)[/yellow]")
-    raise typer.Exit(0)
+    # Load domain config to check review_required relation types
+    if domain:
+        config.domain_path = Path(domain)
+    domain_config = _load_domain(config)
+
+    from sift_kg.graph.builder import build_graph, flag_relations_for_review, load_extractions
+
+    extractions = load_extractions(output_dir)
+    if not extractions:
+        console.print(f"[yellow]No extractions found in {output_dir / 'extractions'}[/yellow]")
+        console.print("Run [cyan]sift extract[/cyan] first.")
+        raise typer.Exit(1)
+
+    console.print(f"[cyan]Loading:[/cyan] {len(extractions)} extraction files")
+
+    kg = build_graph(extractions, postprocess=not no_postprocess)
+
+    # Save graph
+    graph_path = output_dir / "graph_data.json"
+    kg.save(graph_path)
+
+    # Flag relations for review
+    review_types = {
+        name for name, cfg in domain_config.relation_types.items()
+        if cfg.review_required
+    }
+    flagged = flag_relations_for_review(kg, review_threshold, review_types)
+
+    if flagged:
+        from sift_kg.resolve.io import write_relation_review
+        from sift_kg.resolve.models import RelationReviewEntry, RelationReviewFile
+
+        entries = [RelationReviewEntry(**f) for f in flagged]
+        review_file = RelationReviewFile(
+            review_threshold=review_threshold, relations=entries
+        )
+        review_path = output_dir / "relation_review.yaml"
+        write_relation_review(review_file, review_path)
+
+    console.print()
+    console.print("[green]Graph built![/green]")
+    console.print(f"  Entities: {kg.entity_count}")
+    console.print(f"  Relations: {kg.relation_count}")
+    if flagged:
+        console.print(f"  Flagged for review: {len(flagged)} relations")
+    console.print(f"  Output: {graph_path}")
+    console.print()
+    console.print("Next: [cyan]sift resolve[/cyan] to find duplicate entities")
 
 
 @app.command()
-def narrate() -> None:
-    """Generate narrative summaries from the knowledge graph.
+def resolve(
+    model: str = typer.Option(None, help="LLM model for entity resolution"),
+    output: str | None = typer.Option(None, "-o", help="Output directory"),
+    verbose: bool = typer.Option(False, "-v", "--verbose", help="Verbose logging"),
+) -> None:
+    """Find duplicate entities using LLM-based resolution."""
+    _setup_logging(verbose)
+    config = SiftConfig()
+    effective_model = model or config.default_model
+    output_dir = Path(output) if output else config.output_dir
 
-    Create human-readable summaries and timelines from extracted
-    entities and relations.
-    """
-    console.print("[yellow]⚠️  Not implemented yet (Phase 6)[/yellow]")
-    raise typer.Exit(0)
+    try:
+        config.validate_api_keys(effective_model)
+    except ValueError as e:
+        console.print(f"[red]Error:[/red] {e}")
+        raise typer.Exit(1) from None
+
+    graph_path = output_dir / "graph_data.json"
+    if not graph_path.exists():
+        console.print("[yellow]No graph found.[/yellow] Run [cyan]sift build[/cyan] first.")
+        raise typer.Exit(1)
+
+    from sift_kg.extract.llm_client import LLMClient
+    from sift_kg.graph.knowledge_graph import KnowledgeGraph
+    from sift_kg.resolve.io import write_proposals
+    from sift_kg.resolve.resolver import find_merge_candidates
+
+    kg = KnowledgeGraph.load(graph_path)
+    console.print(f"[cyan]Graph:[/cyan] {kg.entity_count} entities, {kg.relation_count} relations")
+
+    llm = LLMClient(model=effective_model)
+    merge_file = find_merge_candidates(kg, llm)
+
+    if not merge_file.proposals:
+        console.print("[green]No duplicates found![/green]")
+        return
+
+    proposals_path = output_dir / "merge_proposals.yaml"
+    write_proposals(merge_file, proposals_path)
+
+    console.print()
+    console.print(f"[green]Found {len(merge_file.proposals)} merge proposals[/green]")
+    console.print(f"  Cost: ${llm.total_cost_usd:.4f}")
+    console.print(f"  Output: {proposals_path}")
+    console.print()
+    console.print("Next steps:")
+    console.print(f"  1. Review [cyan]{proposals_path}[/cyan]")
+    console.print("     Change status: DRAFT → CONFIRMED (accept) or REJECTED (reject)")
+    console.print("  2. Run [cyan]sift apply-merges[/cyan] to apply confirmed merges")
+
+
+@app.command(name="apply-merges")
+def apply_merges_cmd(
+    output: str | None = typer.Option(None, "-o", help="Output directory"),
+    verbose: bool = typer.Option(False, "-v", "--verbose", help="Verbose logging"),
+) -> None:
+    """Apply confirmed entity merges and relation rejections."""
+    _setup_logging(verbose)
+    config = SiftConfig()
+    output_dir = Path(output) if output else config.output_dir
+
+    graph_path = output_dir / "graph_data.json"
+    if not graph_path.exists():
+        console.print("[yellow]No graph found.[/yellow] Run [cyan]sift build[/cyan] first.")
+        raise typer.Exit(1)
+
+    from sift_kg.graph.knowledge_graph import KnowledgeGraph
+    from sift_kg.resolve.engine import apply_merges, apply_relation_rejections
+    from sift_kg.resolve.io import read_proposals, read_relation_review
+
+    kg = KnowledgeGraph.load(graph_path)
+    console.print(f"[cyan]Graph:[/cyan] {kg.entity_count} entities, {kg.relation_count} relations")
+
+    # Apply entity merges
+    proposals_path = output_dir / "merge_proposals.yaml"
+    merge_stats = {"merges_applied": 0}
+    if proposals_path.exists():
+        merge_file = read_proposals(proposals_path)
+        confirmed_count = len(merge_file.confirmed)
+        if confirmed_count:
+            merge_stats = apply_merges(kg, merge_file)
+            console.print(f"  Entity merges applied: {merge_stats['merges_applied']}")
+        else:
+            console.print("  No confirmed entity merges found")
+    else:
+        console.print("  No merge proposals file found")
+
+    # Apply relation rejections
+    review_path = output_dir / "relation_review.yaml"
+    rejected_count = 0
+    if review_path.exists():
+        review_file = read_relation_review(review_path)
+        rejected_count = apply_relation_rejections(kg, review_file)
+        if rejected_count:
+            console.print(f"  Relations rejected: {rejected_count}")
+
+    if merge_stats.get("merges_applied", 0) or rejected_count:
+        kg.save(graph_path)
+        console.print()
+        console.print("[green]Graph updated![/green]")
+        console.print(f"  Entities: {kg.entity_count}")
+        console.print(f"  Relations: {kg.relation_count}")
+    else:
+        console.print()
+        console.print("[yellow]No changes to apply.[/yellow]")
+        console.print("Edit merge_proposals.yaml or relation_review.yaml first.")
+
+    console.print()
+    console.print("Next: [cyan]sift narrate[/cyan] to generate narrative summary")
+
+
+# ============================================================================
+# Utility Commands
+# ============================================================================
+
+
+@app.command()
+def narrate(
+    model: str = typer.Option(None, help="LLM model for narrative generation"),
+    domain: str | None = typer.Option(None, help="Path to custom domain YAML"),
+    output: str | None = typer.Option(None, "-o", help="Output directory"),
+    no_descriptions: bool = typer.Option(False, help="Skip per-entity descriptions"),
+    max_cost: float | None = typer.Option(None, help="Maximum cost budget in USD"),
+    verbose: bool = typer.Option(False, "-v", "--verbose", help="Verbose logging"),
+) -> None:
+    """Generate narrative summary from the knowledge graph."""
+    _setup_logging(verbose)
+    config = SiftConfig()
+    effective_model = model or config.default_model
+    output_dir = Path(output) if output else config.output_dir
+
+    try:
+        config.validate_api_keys(effective_model)
+    except ValueError as e:
+        console.print(f"[red]Error:[/red] {e}")
+        raise typer.Exit(1) from None
+
+    graph_path = output_dir / "graph_data.json"
+    if not graph_path.exists():
+        console.print("[yellow]No graph found.[/yellow] Run [cyan]sift build[/cyan] first.")
+        raise typer.Exit(1)
+
+    # Load domain for system context
+    if domain:
+        config.domain_path = Path(domain)
+    domain_config = _load_domain(config)
+    system_context = domain_config.system_context or ""
+
+    from sift_kg.extract.llm_client import LLMClient
+    from sift_kg.graph.knowledge_graph import KnowledgeGraph
+    from sift_kg.narrate.generator import generate_narrative
+
+    kg = KnowledgeGraph.load(graph_path)
+    console.print(f"[cyan]Graph:[/cyan] {kg.entity_count} entities, {kg.relation_count} relations")
+    console.print(f"[cyan]Model:[/cyan] {effective_model}")
+    if max_cost:
+        console.print(f"[cyan]Budget:[/cyan] ${max_cost:.2f}")
+    console.print()
+
+    llm = LLMClient(model=effective_model)
+    narrative_path = generate_narrative(
+        kg=kg,
+        llm=llm,
+        output_dir=output_dir,
+        system_context=system_context,
+        include_entity_descriptions=not no_descriptions,
+        max_cost=max_cost,
+    )
+
+    console.print()
+    console.print("[green]Narrative generated![/green]")
+    console.print(f"  Output: {narrative_path}")
+    console.print(f"  Cost: ${llm.total_cost_usd:.4f}")
+    console.print()
+    console.print("Pipeline complete! Review the narrative at:")
+    console.print(f"  [cyan]{narrative_path}[/cyan]")
 
 
 @app.command()
 def init() -> None:
-    """Initialize a new sift-kg project in the current directory.
-
-    Create configuration files and directory structure for a new
-    document processing project.
-    """
+    """Initialize a new sift-kg project in the current directory."""
     env_example_path = Path(".env.example")
 
-    # Check if .env.example already exists
     if env_example_path.exists():
         overwrite = typer.confirm("Overwrite existing .env.example?")
         if not overwrite:
             raise typer.Exit(0)
 
-    # .env.example template content
     env_template = """# sift-kg Configuration
 # Copy this file to .env and fill in your API keys
 
 # === LLM API Keys ===
-# At least one provider required. Get keys from:
-# - OpenAI: https://platform.openai.com/api-keys
-# - Anthropic: https://console.anthropic.com/settings/keys
-# - Ollama: No key needed (local models)
-
-SIFT_OPENAI_API_KEY=sk-...
-SIFT_ANTHROPIC_API_KEY=sk-ant-...
+# At least one required. Ollama needs no key (local models).
+SIFT_OPENAI_API_KEY=
+SIFT_ANTHROPIC_API_KEY=
 
 # === Model Configuration ===
 # Format: provider/model-name
-# Examples: openai/gpt-4o-mini, anthropic/claude-haiku, ollama/llama3.3
-
 SIFT_DEFAULT_MODEL=openai/gpt-4o-mini
 
 # === Output Configuration ===
-# Directory for all output files (extractions, graph, narrative)
-
 SIFT_OUTPUT_DIR=output
 
 # === Domain Configuration (Optional) ===
-# Path to custom domain YAML file (default domain used if not set)
-
 # SIFT_DOMAIN_PATH=path/to/custom/domain.yaml
 """
-
-    # Write .env.example
     env_example_path.write_text(env_template)
-    console.print("[green]✓[/green] Created .env.example")
-
-    # Print next steps
-    console.print("\n[cyan]Next steps:[/cyan]")
-    console.print("  1. Copy .env.example to .env")
-    console.print("  2. Add your API keys to .env")
-    console.print("  3. Run: [bold]sift extract ./docs/[/bold]")
-
+    console.print("[green]Created .env.example[/green]")
+    console.print("\nNext steps:")
+    console.print("  1. cp .env.example .env")
+    console.print("  2. Add your API key to .env")
+    console.print("  3. sift extract ./docs/")
     raise typer.Exit(0)
 
 
 @app.command()
 def info() -> None:
-    """Display project information and configuration.
-
-    Show the current project's configuration, domain schema,
-    and processing status.
-    """
-    # Load configuration
+    """Display project configuration and processing stats."""
     config = SiftConfig()
+    domain_config = _load_domain(config)
 
-    # Check if output directory exists
-    if not config.output_dir.exists():
-        console.print("[yellow]No output directory found. Run 'sift extract' first.[/yellow]")
-        raise typer.Exit(0)
-
-    # Create stats table
-    table = Table(title="Project Information", show_header=True, header_style="bold cyan")
+    table = Table(title="sift-kg Project Info", show_header=True, header_style="bold cyan")
     table.add_column("Metric", style="dim")
     table.add_column("Value")
 
-    # Configuration stats
-    table.add_row("Output Directory", str(config.output_dir))
+    table.add_row("Domain", domain_config.name)
+    table.add_row("Entity Types", ", ".join(domain_config.get_entity_type_names()))
+    table.add_row("Relation Types", str(len(domain_config.get_relation_type_names())))
     table.add_row("Default Model", config.default_model)
+    table.add_row("Output Directory", str(config.output_dir))
 
-    # Processing stats
     extractions_dir = config.output_dir / "extractions"
     if extractions_dir.exists():
         doc_count = len(list(extractions_dir.glob("*.json")))
@@ -161,19 +419,39 @@ def info() -> None:
     else:
         table.add_row("Documents Processed", "0")
 
-    # Output file stats
-    graph_exists = "Yes" if (config.output_dir / "graph_data.json").exists() else "No"
-    table.add_row("Graph File Exists", graph_exists)
+    graph_path = config.output_dir / "graph_data.json"
+    if graph_path.exists():
+        from sift_kg.graph.knowledge_graph import KnowledgeGraph
 
-    narrative_exists = "Yes" if (config.output_dir / "narrative.md").exists() else "No"
-    table.add_row("Narrative File Exists", narrative_exists)
+        kg = KnowledgeGraph.load(graph_path)
+        table.add_row("Graph", f"{kg.entity_count} entities, {kg.relation_count} relations")
+    else:
+        table.add_row("Graph", "Not built")
 
-    # Placeholder stats for future phases
-    table.add_row("Entities Extracted", "Not available (run after Phase 4)")
-    table.add_row("Relations Extracted", "Not available (run after Phase 4)")
-    table.add_row("Total Cost Spent", "Not tracked yet (Phase 3+)")
+    # Check merge/review status
+    proposals_path = config.output_dir / "merge_proposals.yaml"
+    if proposals_path.exists():
+        from sift_kg.resolve.io import read_proposals
 
-    # Display table
+        mf = read_proposals(proposals_path)
+        table.add_row(
+            "Merge Proposals",
+            f"{len(mf.confirmed)} confirmed, {len(mf.draft)} draft, {len(mf.rejected)} rejected"
+        )
+
+    review_path = config.output_dir / "relation_review.yaml"
+    if review_path.exists():
+        from sift_kg.resolve.io import read_relation_review
+
+        rf = read_relation_review(review_path)
+        table.add_row(
+            "Relation Review",
+            f"{len(rf.confirmed)} confirmed, {len(rf.draft)} draft, {len(rf.rejected)} rejected"
+        )
+
+    narrative_exists = (config.output_dir / "narrative.md").exists()
+    table.add_row("Narrative Generated", "Yes" if narrative_exists else "No")
+
     console.print(table)
     raise typer.Exit(0)
 
