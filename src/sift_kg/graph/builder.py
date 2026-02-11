@@ -12,6 +12,7 @@ from unidecode import unidecode
 from sift_kg.extract.models import DocumentExtraction
 from sift_kg.graph.knowledge_graph import KnowledgeGraph
 from sift_kg.graph.postprocessor import prune_isolated_entities, remove_redundant_edges
+from sift_kg.graph.prededup import prededup_entities
 
 logger = logging.getLogger(__name__)
 
@@ -62,6 +63,9 @@ def build_graph(
     # Entity name → ID lookup (for resolving relation endpoints)
     name_to_id: dict[str, str] = {}
 
+    # Pre-dedup: merge near-identical entity names deterministically
+    canonical_map = prededup_entities(extractions)
+
     for extraction in extractions:
         if extraction.error:
             logger.warning(f"Skipping {extraction.document_id} (error: {extraction.error})")
@@ -82,11 +86,14 @@ def build_graph(
 
         # Add entities
         for entity in extraction.entities:
-            eid = _make_entity_id(entity.name, entity.entity_type)
+            entity_name = canonical_map.get(
+                (entity.entity_type, entity.name), entity.name
+            )
+            eid = _make_entity_id(entity_name, entity.entity_type)
             kg.add_entity(
                 entity_id=eid,
                 entity_type=entity.entity_type,
-                name=entity.name,
+                name=entity_name,
                 confidence=entity.confidence,
                 source_documents=[doc_id],
                 attributes=entity.attributes,
@@ -94,8 +101,9 @@ def build_graph(
             )
             stats["entities_added"] += 1
 
-            # Track name → ID for relation resolution
+            # Track name → ID for relation resolution (both original and canonical)
             name_to_id[entity.name.lower().strip()] = eid
+            name_to_id[entity_name.lower().strip()] = eid
 
             # Add MENTIONED_IN relation to document
             kg.add_relation(

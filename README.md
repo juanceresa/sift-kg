@@ -65,6 +65,12 @@ Requires Python 3.11+.
 pip install sift-kg
 ```
 
+For semantic clustering during entity resolution (optional, ~2GB for PyTorch):
+
+```bash
+pip install sift-kg[embeddings]
+```
+
 For development:
 
 ```bash
@@ -108,17 +114,11 @@ Reads PDFs, text files, and HTML. Extracts entities and relations using your con
 sift build
 ```
 
-Constructs a NetworkX graph from all extractions. Flags low-confidence relations for review. Saves to `output/graph_data.json`.
+Constructs a NetworkX graph from all extractions. Automatically deduplicates near-identical entity names (plurals, Unicode variants, case differences) before they become graph nodes. Flags low-confidence relations for review. Saves to `output/graph_data.json`.
 
-### 4. Find and resolve duplicates
+### 4. Resolve duplicate entities
 
-```bash
-sift resolve                  # LLM proposes entity merges
-sift review                   # interactive terminal review
-sift apply-merges             # apply confirmed merges
-```
-
-Or edit `output/merge_proposals.yaml` directly — change `status: DRAFT` to `CONFIRMED` or `REJECTED`.
+See [Entity Resolution Workflow](#entity-resolution-workflow) below for the full guide — especially important for genealogy, legal, and investigative use cases where accuracy matters.
 
 ### 5. Export
 
@@ -224,6 +224,182 @@ output/
     ├── entities.csv
     └── relations.csv
 ```
+
+## Entity Resolution Workflow
+
+When you're building a knowledge graph from family records, legal filings, or any documents where accuracy matters, you want full control over which entities get merged. sift-kg never merges anything without your approval.
+
+The workflow has three layers, each catching different kinds of duplicates:
+
+### Layer 1: Automatic Pre-Dedup (during `sift build`)
+
+Before entities become graph nodes, sift deterministically collapses names that are obviously the same. No LLM involved, no cost, no review needed:
+
+- **Unicode normalization** — "Jose Garcia" and "Jose Garcia" become one node
+- **Singularization** — "Companies" and "Company" merge
+- **Fuzzy string matching** — [SemHash](https://github.com/MinishLab/semhash) at 0.95 threshold catches near-identical strings like "MacAulay" vs "Mac Aulay"
+
+This happens automatically every time you run `sift build`. These are the trivial cases — spelling variants that would clutter your graph without adding information.
+
+### Layer 2: LLM Proposes Merges (during `sift resolve`)
+
+The LLM sees batches of entities and identifies ones that likely refer to the same real-world thing. It produces a `merge_proposals.yaml` file where every proposal starts as `DRAFT`:
+
+```bash
+sift resolve
+```
+
+This generates proposals like:
+
+```yaml
+proposals:
+- canonical_id: person:samuel_benjamin_bankman_fried
+  canonical_name: Samuel Benjamin Bankman-Fried
+  entity_type: PERSON
+  status: DRAFT                    # ← you decide
+  members:
+  - id: person:bankman_fried
+    name: Bankman-Fried
+    confidence: 0.99
+  reason: Same person referenced with full name vs. surname only.
+
+- canonical_id: person:stephen_curry
+  canonical_name: Stephen Curry
+  entity_type: PERSON
+  status: DRAFT                    # ← you decide
+  members:
+  - id: person:steph_curry
+    name: Steph Curry
+    confidence: 0.99
+  reason: Same basketball player referenced with nickname 'Steph' and full name 'Stephen'.
+```
+
+**Nothing is merged yet.** The LLM is proposing, not deciding.
+
+### Layer 3: You Review and Decide
+
+You have two options for reviewing proposals:
+
+**Option A: Interactive terminal review**
+
+```bash
+sift review
+```
+
+Walks through each `DRAFT` proposal one by one. For each, you see the canonical entity, the proposed merge members, the LLM's confidence and reasoning. You approve, reject, or skip.
+
+High-confidence proposals (>0.85 by default) can be auto-approved:
+```bash
+sift review --auto-approve 0.90    # auto-confirm proposals above 90% confidence
+sift review --auto-approve 1.0     # disable auto-approve, review everything manually
+```
+
+**Option B: Edit the YAML directly**
+
+Open `output/merge_proposals.yaml` in any text editor. Change `status: DRAFT` to `CONFIRMED` or `REJECTED`:
+
+```yaml
+- canonical_id: person:stephen_curry
+  canonical_name: Stephen Curry
+  entity_type: PERSON
+  status: CONFIRMED                # ← approve this merge
+  members:
+  - id: person:steph_curry
+    name: Steph Curry
+    confidence: 0.99
+  reason: Same basketball player...
+
+- canonical_id: person:winklevoss_twins
+  canonical_name: Winklevoss twins
+  entity_type: PERSON
+  status: REJECTED                 # ← these are distinct people, don't merge
+  members:
+  - id: person:cameron_winklevoss
+    name: Cameron Winklevoss
+    confidence: 0.95
+  reason: ...
+```
+
+**For high-accuracy use cases** (genealogy, legal review), we recommend editing the YAML directly so you can study each proposal carefully. The file is designed to be human-readable.
+
+### Layer 3b: Relation Review
+
+During `sift build`, relations below the confidence threshold (default 0.7) or of types marked `review_required` in your domain config get flagged in `output/relation_review.yaml`:
+
+```yaml
+review_threshold: 0.7
+relations:
+- source_name: Alice Smith
+  target_name: Acme Corp
+  relation_type: WORKS_FOR
+  confidence: 0.45
+  evidence: "Alice mentioned she used to work near the Acme building."
+  status: DRAFT                    # ← you decide: CONFIRMED or REJECTED
+  flag_reason: Low confidence (0.45 < 0.7)
+```
+
+Same workflow: review with `sift review` or edit the YAML, then apply.
+
+### Layer 4: Apply Your Decisions
+
+Once you've reviewed everything:
+
+```bash
+sift apply-merges
+```
+
+This does three things:
+1. **Confirmed entity merges** — member entities are absorbed into the canonical entity. All their relations are rewired. Source documents are combined. The member nodes are removed.
+2. **Rejected relations** — removed from the graph entirely.
+3. **DRAFT proposals** — left untouched. You can come back to them later.
+
+The graph is saved back to `output/graph_data.json`. You can re-export, narrate, or visualize the cleaned graph.
+
+### Iterating
+
+Entity resolution isn't always one-pass. After merging, new duplicates may become apparent. You can re-run:
+
+```bash
+sift resolve                  # find new duplicates in the cleaned graph
+sift review                   # review the new proposals
+sift apply-merges             # apply again
+```
+
+Each run is additive — previous `CONFIRMED`/`REJECTED` decisions in `merge_proposals.yaml` are preserved.
+
+### Recommended Workflow by Use Case
+
+| Use Case | Suggested Approach |
+|---|---|
+| **Quick exploration** | `sift review --auto-approve 0.85` — approve high-confidence, review the rest |
+| **Genealogy / family records** | Edit YAML manually, `--auto-approve 1.0` — review every single merge |
+| **Legal / investigative** | Edit YAML manually, use `sift view` to inspect the graph between rounds |
+| **Large corpus (1000+ entities)** | `sift resolve --embeddings` for better batching, then interactive review |
+
+## Deduplication Internals
+
+The pre-dedup and LLM batching techniques are inspired by [KGGen](https://github.com/stochastic-sisyphus/KGGen) (NeurIPS 2025) by [@stochastic-sisyphus](https://github.com/stochastic-sisyphus). KGGen uses SemHash for deterministic entity deduplication and embedding-based clustering for grouping entities before LLM comparison. sift-kg adapts these into its human-in-the-loop review workflow.
+
+### Embedding-Based Clustering (optional)
+
+By default, `sift resolve` sorts entities alphabetically and splits them into overlapping batches for LLM comparison. This works well when duplicates have similar spelling — but "Robert Smith" (R) and "Bob Smith" (B) end up in different batches and never get compared.
+
+```bash
+pip install sift-kg[embeddings]    # sentence-transformers + scikit-learn (~2GB, pulls PyTorch)
+sift resolve --embeddings
+```
+
+This replaces alphabetical batching with KMeans clustering on sentence embeddings (all-MiniLM-L6-v2). Semantically similar names cluster together regardless of spelling.
+
+| | Default (alphabetical) | `--embeddings` |
+|---|---|---|
+| Install size | Included | ~2GB (PyTorch) |
+| First-run overhead | None | ~90MB model download |
+| Per-run overhead | Sorting only | Encoding (<1s for hundreds of entities) |
+| Cross-alphabet duplicates | Missed if in different batches | Caught |
+| Small graphs (<100/type) | Same result | Same result |
+
+Falls back to alphabetical batching if dependencies aren't installed or clustering fails.
 
 ## License
 

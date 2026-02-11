@@ -190,6 +190,9 @@ def resolve(
     model: str = typer.Option(None, help="LLM model for entity resolution"),
     concurrency: int = typer.Option(4, "-c", "--concurrency", help="Concurrent LLM calls"),
     rpm: int = typer.Option(40, "--rpm", help="Max requests per minute"),
+    use_embeddings: bool = typer.Option(
+        False, "--embeddings", help="Use semantic clustering (requires: pip install sift-kg[embeddings])"
+    ),
     output: str | None = typer.Option(None, "-o", help="Output directory"),
     verbose: bool = typer.Option(False, "-v", "--verbose", help="Verbose logging"),
 ) -> None:
@@ -219,7 +222,7 @@ def resolve(
     console.print(f"[cyan]Graph:[/cyan] {kg.entity_count} entities, {kg.relation_count} relations")
 
     llm = LLMClient(model=effective_model, rpm=rpm)
-    merge_file = find_merge_candidates(kg, llm, concurrency=concurrency)
+    merge_file = find_merge_candidates(kg, llm, concurrency=concurrency, use_embeddings=use_embeddings)
 
     if not merge_file.proposals:
         console.print("[green]No duplicates found![/green]")
