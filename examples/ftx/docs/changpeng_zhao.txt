@@ -1,0 +1,77 @@
+Changpeng Zhao (Chinese: 赵长鹏; pinyin: Zhào Chángpéng; born 1977), commonly known as CZ, is a businessman who is known for co-founding cryptocurrency companies, such as Binance and Blockchain.com. He has also served as CTO of OKCoin and CEO of Binance.
+He resigned as the CEO of Binance in November 2023 after the U.S Department of Justice alleged he violated the Bank Secrecy Act and the International Emergency Economic Powers Act. He pleaded guilty and was sentenced to four months in prison in April 2024. Zhao completed his sentence by September of the same year. In October 2025, Zhao was given a presidential pardon by President Donald Trump. 
+According to Forbes, Zhao is the richest Canadian and the 21st-richest person in the world, with a net worth estimated at $88.0 billion as of October 2025.
+
+
+== Early life and education ==
+Changpeng Zhao was born in Lianyungang in China's Jiangsu province. His parents were both schoolteachers in China. His father Zhao Shengkai worked as a university instructor before he was branded a "pro-bourgeois intellect" and exiled to rural areas shortly after Zhao's birth. In late 1989, when he was 12 years old, he acquired a Canadian visa in 1989 and emigrated with his family to Canada after Tiananmen Square protests and massacre. They settled down in Vancouver, British Columbia. During his teenage years in Canada, Zhao helped to support his family by holding down a number of service jobs, including working as a fast-food clerk at a McDonald's restaurant and a gas station.
+Zhao attended McGill University in Montreal, Quebec, where he majored in computer science.
+
+
+== Career ==
+After graduating from McGill, Zhao was selected for an internship in Tokyo working for a subcontractor of the Tokyo Stock Exchange, developing software for matching trade orders. He later went to work full-time for four years at Bloomberg Tradebook, where he was a developer of futures trading software.
+In 2005, Zhao moved to Shanghai to launch his business career, where he established his first technology startup company called Fusion Systems, which was known for "some of the fastest automated high-frequency trading platforms and systems for stockbrokers." Zhao first heard of bitcoin in 2013 when playing poker with Bobby Lee (brother of Charlie Lee) who would later go on to found BTCC. Lee advised Zhao to put 10% of his money into bitcoin. Zhao instead "went all in" and sold his apartment in Shanghai and invested all of his wealth in bitcoin, much to his family's dismay.
+In 2013, Zhao was a member of the team that developed Blockchain.info and he also served as Chief Technology Officer of OKCoin.
+In 2022, Zhao invested $500 million through Binance to finance the acquisition of Twitter by Elon Musk.
+On April 7, 2024, he was appointed by the Pakistan Ministry of Finance as a strategic advisor to the Pakistan Crypto Council.
+On May 3, 2025, he was appointed as an advisor to the president of Kyrgyzstan, Sadyr Japarov, on the development of digital assets.
+
+
+=== Binance ===
+After its launch in July 2017, the Binance cryptocurrency exchange was able to raise $15 million in an initial coin offering, and trading began on the exchange eleven days later. In less than eight months, Zhao grew Binance into the world's largest cryptocurrency exchange by trading volume (as of April 2018). Zhao also launched Binance Coin in 2017, a utility token that gives its owners various benefits, such as discounts on trading fees. In April 2019, Binance launched Binance Smart Chain, which has smart contract functionality and is an Ethereum competitor.
+In February 2018, Forbes placed him third on their list of "The Richest People In Cryptocurrency," with an estimated net worth of $1.1-2 billion.
+In 2019, Zhao launched Binance's U.S. affiliate, Binance.US. Binance withdrew its application to run a Singapore-based crypto exchange in 2021.
+
+
+== Legal troubles ==
+
+
+=== Civil lawsuits ===
+On March 27, 2023, the Commodity Futures Trading Commission (CFTC) filed a lawsuit against Binance and Zhao in the United States District Court for the Northern District of Illinois, claiming willful evasion of US law and allegedly breaching derivatives rules. The agency accused Binance of breaking rules intended to thwart money laundering operations, pointing to internal communications describing transactions by Palestinian militant organization Hamas and suspected criminals.
+In June 2023, the U.S. Securities and Exchange Commission (SEC) sued Zhao and Binance on 13 charges for alleged violations of US securities rules.
+In November 2024, FTX filed a lawsuit against Binance Holdings Ltd., Zhao, and other Binance executives, seeking to recover nearly $1.8 billion that FTX alleges was fraudulently transferred. The case centers on a July 2021 stock repurchase transaction in which Binance sold its stakes—approximately 20% of FTX's international unit and 18.4% of its U.S.-based entity—to FTX co-founder Sam Bankman-Fried.
+
+
+=== Criminal allegations and sanctions ===
+In November 2023, Zhao agreed to resign from Binance and pay a $50 million fine as part of a guilty plea to U.S. federal charges. Binance also agreed to plead guilty, and to pay $4.3 billion in fines. Zhao was replaced as CEO by Richard Teng.
+Zhao pled guilty to violating the American Bank Secrecy Act by prioritizing Binance's growth over compliance with the Financial Crimes Enforcement Network's anti-money laundering requirements. Although Zhao only personally pled guilty to a single criminal charge, as part of plea bargain negotiations, Zhao agreed for Binance to also admit to operating an unlicensed money transmitting business and to violating the International Emergency Economic Powers Act. Zhao's defense attorneys noted that BitMEX founder Arthur Hayes only received probation for a similar crime and argued that Zhao's ineligibility for minimum-security imprisonment put his safety at risk.
+In April 2024, Zhao was sentenced to four months in prison after pleading guilty to charges of enabling money laundering at his crypto exchange at a federal court in Seattle. He served his sentence at the Federal Correctional Institution, Lompoc I. According to records with the United States Federal Bureau of Prisons (BOP), Zhao was released from custody on September 27, 2024.
+
+
+=== Pardon by President Donald Trump ===
+
+In March 2025, The Wall Street Journal uncovered that Binance was in talks with the family of Donald Trump about business dealings. In August 2025, The Wall Street Journal found that Binance was quietly administering a trading platform for the Trump family's World Liberty Financial. That same month, the New York Times reported that Zhao was campaigning to receive a pardon from President Trump. Binance had spent $800,000 on lobbying for clemency and other U.S. policy issues. In October 2025, a lobbyist hired by Zhao, Ches McDowell, met with Trump to talk about a pardon for Zhao after being introduced by Donald Trump Jr. The pardon was granted by Trump later that month on October 23, 2025. White House spokesperson Karoline Leavitt gave the following explanation for the pardon:
+
+Mr. Zhao ... was prosecuted by the Biden Administration in their war on cryptocurrency .... In their desire to punish the cryptocurrency industry, the Biden administration pursued Mr. Zhao despite no allegations of fraud or identifiable victims.  The Biden administration sought to imprison Mr. Zhao for three years, a sentence so outside sentencing guidelines that even the judge said he had never heard of this in his 30-year career. These actions by the Biden Administration severely damaged the United States' reputation as a global leader in technology and innovation.
+Zhao thanked Trump, saying "Deeply grateful for today's pardon and to President Trump for upholding America's commitment to fairness, innovation, and justice. 🙏🙏🙏🙏." Binance also thanked Trump, describing the pardon as "incredible news." 
+In an interview with 60 Minutes on October 31, 2025 (more than a week after he granted the pardon), Trump was asked about the pardon and stated that he had "no idea who [Zhao] is".  Then he added, "I know he got a four-month sentence or something like that. And I heard it was a Biden witch hunt".
+The pardon was criticized by Democrats, as well as some Republicans, who characterized it as brazen corruption.
+Zhao's lawyer, Teresa Goody Guillén, described criticisms of the pardon for Zhao as "an unlawful attempt to usurp the pardon power" of the U.S. president.
+
+
+== Views on cryptocurrency ==
+In an interview with The New York Times, Zhao said people are getting into crypto as they see it grow, "trade it and make money off it as opposed to using it," but that the market will always self-correct. On April 6, 2021, Zhao told Bloomberg Markets that nearly 100% of his liquid net worth was in the form of cryptocurrency.
+
+
+== Personal life ==
+In 2005, he moved back to China, eventually owning an apartment in Shanghai. In 2015, he sold his Shanghai apartment and used the funds to purchase bitcoin. Zhao stayed in China until the Chinese government banned crypto exchanges in late 2017. He lives in Abu Dhabi, United Arab Emirates. 
+Zhao met his wife Yang Weiqing in 1999 and they married in 2003. They have two children. They divorced when their eldest daughter was two years old, around 2005. Zhao has been in a "life partner" relationship with his business partner and fellow Binance co-founder, Yi He, since they met in 2014. They have three children together.
+
+
+=== Citizenship ===
+Zhao is a Canadian, and UAE citizen. In 2022, Zhao said that he had acquired Canadian citizenship some 30 years before, around 1992 shortly after immigrating to the country with his family.
+
+
+=== Political views ===
+With regards to his political beliefs, Zhao stated in 2021 in Singapore, "I am not a complete libertarian, I'm not an anarchist... I don't believe human civilization is advanced enough to live in a world with no rules."
+
+
+=== Philanthropy ===
+Zhao has said he plans to donate up to 99% of his wealth, following the philanthropic examples of other global business magnates and investors such as Bill Gates and Warren Buffett. "I intend to donate most of my wealth, as many other entrepreneurs or founders have done, from Peabody to today. I intend to donate 90%, 95%, or 99% of my wealth."
+
+
+== See also ==
+List of people granted executive clemency in the second Trump presidency
+
+
+== References ==

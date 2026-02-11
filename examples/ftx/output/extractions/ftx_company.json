@@ -1,0 +1,2872 @@
+{
+  "document_id": "ftx_company",
+  "document_path": "test-docs/ftx_company.txt",
+  "chunks_processed": 7,
+  "entities": [
+    {
+      "name": "FTX Trading Ltd.",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "also_known_as": "FTX (Futures Exchange)",
+        "type": "cryptocurrency exchange and crypto hedge fund",
+        "status": "bankrupt",
+        "founded": "2019",
+        "founders": [
+          "Sam Bankman-Fried",
+          "Gary Wang"
+        ],
+        "incorporation": "Antigua and Barbuda",
+        "headquarters": "Bahamas",
+        "peak_users": "over one million (July 2021)",
+        "peak_ranking": "third-largest cryptocurrency exchange by volume",
+        "valuation_november_2022": "$32 billion",
+        "trading_volume_november_2022": "US$10 billion"
+      },
+      "confidence": 0.99,
+      "context": "FTX Trading Ltd., trading as FTX (Futures Exchange), is a bankrupt company that formerly operated a cryptocurrency exchange and crypto hedge fund."
+    },
+    {
+      "name": "Sam Bankman-Fried",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "founder of FTX",
+        "co_founder": "Gary Wang",
+        "also_founded": "Alameda Research",
+        "arrest_date": "December 12, 2022",
+        "arrest_location": "Bahamas",
+        "charges": "financial offences",
+        "involvement": "perpetrated massive fraud"
+      },
+      "confidence": 0.99,
+      "context": "The exchange was founded in 2019 by Sam Bankman-Fried and Gary Wang and collapsed in 2022 after massive fraud perpetrated by Bankman-Fried"
+    },
+    {
+      "name": "Gary Wang",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "co-founder of FTX",
+        "full_name": "Zixiao \"Gary\" Wang",
+        "founded_date": "May 2019"
+      },
+      "confidence": 0.99,
+      "context": "Sam Bankman-Fried and Zixiao \"Gary\" Wang founded FTX in May 2019."
+    },
+    {
+      "name": "Caroline Ellison",
+      "entity_type": "PERSON",
+      "attributes": {
+        "title": "CEO of Alameda",
+        "charges": "wire fraud and money laundering",
+        "plea": "guilty",
+        "cooperation": "cooperating with federal prosecutors",
+        "sentencing_date": "September 24, 2024",
+        "sentence": "two years in prison"
+      },
+      "confidence": 0.99,
+      "context": "Caroline Ellison, who had served as Alameda's CEO, pleaded guilty to multiple charges"
+    },
+    {
+      "name": "John J. Ray III",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "CEO/liquidator",
+        "experience": "Enron, Residential Capital, Nortel, Overseas Shipholding bankruptcies"
+      },
+      "confidence": 0.99,
+      "context": "John J. Ray III, the CEO brought in as a liquidator"
+    },
+    {
+      "name": "Changpeng Zhao",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "CEO of Binance",
+        "investment": "purchased 20% stake in FTX for approximately $100 million"
+      },
+      "confidence": 0.95,
+      "context": "Changpeng Zhao of Binance purchased a 20% stake in FTX for approximately $100 million"
+    },
+    {
+      "name": "Brett Harrison",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "FTX.US president",
+        "tenure_start": "May 2021",
+        "resignation_date": "September 27, 2022",
+        "new_role": "advisory capacity"
+      },
+      "confidence": 0.95,
+      "context": "On September 27, 2022, FTX.US President Brett Harrison announced he would be stepping down from an active role"
+    },
+    {
+      "name": "Alameda Research",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "subsidiary of FTX",
+        "loan_to_bankman_fried": "$1 billion"
+      },
+      "confidence": 0.99,
+      "context": "its subsidiary Alameda Research had on September 30 lent $1 billion to Bankman-Fried"
+    },
+    {
+      "name": "Binance",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency exchange",
+        "CEO": "Changpeng Zhao",
+        "actions": "signed letter of intent to acquire FTX, withdrew offer next day"
+      },
+      "confidence": 0.95,
+      "context": "rival exchange Binance's CEO Changpeng Zhao announced that Binance would sell its holdings"
+    },
+    {
+      "name": "FTX.US",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "separate cryptocurrency exchange",
+        "availability": "US residents only",
+        "relationship": "closely associated with FTX",
+        "president": "Brett Harrison (until September 27, 2022)"
+      },
+      "confidence": 0.95,
+      "context": "FTX is closely associated with FTX.US, a separate exchange available to US residents."
+    },
+    {
+      "name": "FTX Ventures",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "venture fund",
+        "announced": "January 14, 2022",
+        "funding": "$400 million in Series C funding",
+        "valuation": "$32 billion",
+        "website_status": "went offline in November 2022"
+      },
+      "confidence": 0.9,
+      "context": "On January 14, 2022, FTX announced a $2 billion venture fund named FTX Ventures"
+    },
+    {
+      "name": "Blockfolio",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency portfolio tracking app",
+        "acquisition_date": "August 2020",
+        "acquisition_price": "$150 million"
+      },
+      "confidence": 0.9,
+      "context": "In August 2020, FTX acquired Blockfolio, a cryptocurrency portfolio tracking app, for $150 million."
+    },
+    {
+      "name": "BlockFi",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency lender",
+        "status": "bankruptcy filing"
+      },
+      "confidence": 0.99,
+      "context": "BlockFi, a cryptocurrency lender, was reportedly taking steps to file for bankruptcy"
+    },
+    {
+      "name": "Voyager Digital",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "bankrupt crypto brokerage",
+        "auction_date": "September 26, 2022",
+        "winning_bidder": "FTX.US",
+        "deal_value": "approximately $1.42 billion",
+        "cryptocurrency_value": "$1.31 billion",
+        "additional_consideration": "$111 million"
+      },
+      "confidence": 0.9,
+      "context": "On September 26, 2022, FTX.US won its bid at auction for the digital assets of bankrupt crypto brokerage Voyager Digital."
+    },
+    {
+      "name": "Jane Street",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "trading firm",
+        "relationship": "former employees founded Alameda Research"
+      },
+      "confidence": 0.85,
+      "context": "other former employees of Jane Street in 2017"
+    },
+    {
+      "name": "Softbank",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "investment firm",
+        "investment": "participated in July 2021 funding round"
+      },
+      "confidence": 0.85,
+      "context": "In July 2021, the venture raised $900 million at an $18 billion valuation from over 60 investors, including Softbank, Sequoia Capital"
+    },
+    {
+      "name": "Sequoia Capital",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "venture capital firm",
+        "relationship_with_FTX": "institutional investor with stake in FTX",
+        "writedown_date": "November 9",
+        "writedown_amount": "$214 million",
+        "action": "wrote down equity in FTX to $0"
+      },
+      "confidence": 0.95,
+      "context": "Sequoia Capital wrote down its equity in FTX to $0 on November 9, losing some $214 million"
+    },
+    {
+      "name": "Federal Deposit Insurance Corporation",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "abbreviation": "FDIC",
+        "type": "US government agency",
+        "action": "issued cease-and-desist order to FTX",
+        "action_date": "August 2022",
+        "reason": "false and misleading representations about FDIC insurance coverage"
+      },
+      "confidence": 0.95,
+      "context": "In August 2022, the Federal Deposit Insurance Corporation (FDIC) issued a cease-and-desist order to FTX"
+    },
+    {
+      "name": "CoinDesk",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "news organization",
+        "role": "reported on Alameda's FTT holdings"
+      },
+      "confidence": 0.9,
+      "context": "on November 2, 2022, CoinDesk reported that a significant portion of Alameda Research's assets were held in FTT"
+    },
+    {
+      "name": "Bahamas",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "country",
+        "relationship": "FTX headquarters location, arrest location of Sam Bankman-Fried"
+      },
+      "confidence": 0.99,
+      "context": "FTX is incorporated in Antigua and Barbuda and headquartered in the Bahamas."
+    },
+    {
+      "name": "Antigua and Barbuda",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "country",
+        "relationship": "FTX incorporation location"
+      },
+      "confidence": 0.95,
+      "context": "FTX is incorporated in Antigua and Barbuda"
+    },
+    {
+      "name": "Berkeley, California",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "city, state",
+        "relationship": "location where Alameda Research was founded"
+      },
+      "confidence": 0.95,
+      "context": "in Berkeley, California. FTX is an abbreviation"
+    },
+    {
+      "name": "Hong Kong",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "city/country",
+        "context_note": "FTX former headquarters location"
+      },
+      "confidence": 0.99,
+      "context": "the location of the company's former headquarters"
+    },
+    {
+      "name": "Texas",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "US state",
+        "event": "FTX investigation for unregistered securities"
+      },
+      "confidence": 0.95,
+      "context": "In October 2022, it was reported that FTX was under investigation in Texas for allegedly selling unregistered securities"
+    },
+    {
+      "name": "Chapter 11 bankruptcy proceedings",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal/financial event",
+        "date": "November 11, 2022",
+        "participant": "FTX",
+        "jurisdiction": "US court system"
+      },
+      "confidence": 0.95,
+      "context": "Since November 11, 2022, FTX has been in Chapter 11 bankruptcy proceedings in the US court system."
+    },
+    {
+      "name": "FTX collapse and fraud revelation",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "financial/legal event",
+        "date": "2022",
+        "cause": "massive fraud perpetrated by Bankman-Fried and Caroline Ellison",
+        "outcome": "Chapter 11 bankruptcy filing"
+      },
+      "confidence": 0.95,
+      "context": "collapsed in 2022 after massive fraud perpetrated by Bankman-Fried and his partner Caroline Ellison forced the company to file for Chapter 11 bankruptcy."
+    },
+    {
+      "name": "Sam Bankman-Fried arrest",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal event",
+        "date": "December 12, 2022",
+        "location": "Bahamas",
+        "charges": "financial offences",
+        "arresting_authority": "Bahamian authorities",
+        "requested_by": "US government"
+      },
+      "confidence": 0.99,
+      "context": "On December 12, 2022, founder Sam Bankman-Fried was arrested by the Bahamian authorities for financial offences, at the request of the US government."
+    },
+    {
+      "name": "Binance letter of intent and withdrawal",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "financial/business event",
+        "date": "November 2022",
+        "participant": "Binance",
+        "action": "signed letter of intent to acquire FTX, withdrew offer next day",
+        "reason_for_withdrawal": "reports of mishandled customer funds and U.S. agency investigations"
+      },
+      "confidence": 0.9,
+      "context": "Binance signed a letter of intent to acquire the firm, with due diligence to follow, to ensure that customers could recover their assets from FTX in a timely manner, but Binance withdrew its offer the next day"
+    },
+    {
+      "name": "FTX.US Voyager Digital acquisition",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "financial/business event",
+        "date": "September 26, 2022",
+        "participant": "FTX.US",
+        "action": "won bid at auction for digital assets of Voyager Digital",
+        "deal_value": "approximately $1.42 billion"
+      },
+      "confidence": 0.9,
+      "context": "On September 26, 2022, FTX.US won its bid at auction for the digital assets of bankrupt crypto brokerage Voyager Digital."
+    },
+    {
+      "name": "Brett Harrison resignation",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "personnel event",
+        "date": "September 27, 2022",
+        "participant": "Brett Harrison",
+        "action": "announced stepping down from active role",
+        "new_role": "advisory capacity"
+      },
+      "confidence": 0.9,
+      "context": "On September 27, 2022, FTX.US President Brett Harrison announced he would be stepping down from an active role at the exchange but would stay on in an advisory capacity."
+    },
+    {
+      "name": "FDIC cease-and-desist order",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "regulatory event",
+        "date": "August 2022",
+        "issuing_authority": "Federal Deposit Insurance Corporation (FDIC)",
+        "target": "FTX",
+        "reason": "false and misleading representations about FDIC insurance coverage"
+      },
+      "confidence": 0.9,
+      "context": "In August 2022, the Federal Deposit Insurance Corporation (FDIC) issued a cease-and-desist order to FTX for making \"false and misleading representations\""
+    },
+    {
+      "name": "FTX Series C funding round",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "financial event",
+        "date": "July 2021",
+        "amount": "$900 million",
+        "valuation": "$18 billion",
+        "number_of_investors": "over 60"
+      },
+      "confidence": 0.9,
+      "context": "In July 2021, the venture raised $900 million at an $18 billion valuation from over 60 investors"
+    },
+    {
+      "name": "FTX Ventures announcement",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "business event",
+        "date": "January 14, 2022",
+        "announcement": "FTX Ventures venture fund",
+        "funding": "$400 million in Series C funding",
+        "valuation": "$32 billion"
+      },
+      "confidence": 0.85,
+      "context": "On January 14, 2022, FTX announced a $2 billion venture fund named FTX Ventures"
+    },
+    {
+      "name": "FTX.US stock trading announcement",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "business event",
+        "date": "February 11, 2022",
+        "participant": "FTX.US",
+        "announcement": "company would soon begin offering stock trading to US customers"
+      },
+      "confidence": 0.85,
+      "context": "On February 11, 2022, FTX.US announced that the company would soon begin offering stock trading to its US customers."
+    },
+    {
+      "name": "FTX gaming division creation",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "business event",
+        "date": "February 2022",
+        "announcement": "FTX creating gaming division",
+        "purpose": "help developers add cryptocurrency, NFTs, and blockchain-related assets into video games"
+      },
+      "confidence": 0.85,
+      "context": "In February 2022, it was reported that FTX was creating a gaming division that would help developers add cryptocurrency, NFTs, and other blockchain-related assets into video games."
+    },
+    {
+      "name": "FTX BlockFi deal",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "financial/business event",
+        "date": "July 2022",
+        "participant": "FTX",
+        "action": "finalized deal giving option to buy BlockFi",
+        "deal_value": "about $240 million",
+        "credit_facility": "$400 million"
+      },
+      "confidence": 0.85,
+      "context": "In July 2022, FTX finalized a deal giving it the option to buy BlockFi for about $240 million."
+    },
+    {
+      "name": "FTX headquarters relocation",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "business event",
+        "date": "September 2021",
+        "from": "Hong Kong",
+        "to": "The Bahamas"
+      },
+      "confidence": 0.85,
+      "context": "In September of that year, FTX moved its headquarters from Hong Kong to The Bahamas."
+    },
+    {
+      "name": "Changpeng Zhao stake buyout",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "financial event",
+        "participant": "Sam Bankman-Fried",
+        "action": "bought out Zhao's stake",
+        "amount": "approximately $2 billion"
+      },
+      "confidence": 0.85,
+      "context": "Bankman-Fried bought out Zhao's stake for approximately $2 billion."
+    },
+    {
+      "name": "Blockfolio acquisition",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "financial/business event",
+        "date": "August 2020",
+        "acquirer": "FTX",
+        "target": "Blockfolio",
+        "price": "$150 million"
+      },
+      "confidence": 0.9,
+      "context": "In August 2020, FTX acquired Blockfolio, a cryptocurrency portfolio tracking app, for $150 million."
+    },
+    {
+      "name": "FTX Texas investigation",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal/regulatory event",
+        "date": "October 2022",
+        "location": "Texas",
+        "subject": "FTX",
+        "allegation": "allegedly selling unregistered securities"
+      },
+      "confidence": 0.85,
+      "context": "In October 2022, it was reported that FTX was under investigation in Texas for allegedly selling unregistered securities."
+    },
+    {
+      "name": "Voyager",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency company",
+        "status": "assets sold"
+      },
+      "confidence": 0.9,
+      "context": "subsidiary of Binance won the bid to buy the assets of Voyager for approximately $1 billion"
+    },
+    {
+      "name": "FTX",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency exchange",
+        "status": "bankruptcy",
+        "headquarters_former": "Hong Kong"
+      },
+      "confidence": 0.99,
+      "context": "The funds taken from FTX were mostly stablecoins"
+    },
+    {
+      "name": "Nishad Singh",
+      "entity_type": "PERSON",
+      "attributes": {
+        "title": "FTX former engineering director",
+        "charges": "six different charges, including three counts of conspiracy to commit fraud",
+        "relationship": "childhood friend of Bankman-Fried's brother",
+        "prior_employment": "Alameda Research",
+        "plea": "guilty",
+        "sentencing_date": "October 30, 2024",
+        "sentence": "time served and three years of supervised release"
+      },
+      "confidence": 0.99,
+      "context": "FTX's former engineering director, Nishad Singh pleaded guilty to six different charges"
+    },
+    {
+      "name": "Bloomberg",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "news organization"
+      },
+      "confidence": 0.99,
+      "context": "Sources told Bloomberg that the company was FTX"
+    },
+    {
+      "name": "The Wall Street Journal",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "news organization",
+        "role": "reported on $10 billion loan to Alameda"
+      },
+      "confidence": 0.9,
+      "context": "According to anonymous sources cited by The Wall Street Journal, FTX had lent $10 billion of its customers' assets to Alameda Research in 2022"
+    },
+    {
+      "name": "The New York Times",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "publication"
+      },
+      "confidence": 0.99,
+      "context": "compared to the bankruptcy of Lehman Brothers in publications such as The New York Times"
+    },
+    {
+      "name": "TechCrunch",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "news organization",
+        "role": "reported on FTT price impact"
+      },
+      "confidence": 0.9,
+      "context": "Bloomberg and TechCrunch reported that any sale by Binance would likely have an outsized impact on FTT's price"
+    },
+    {
+      "name": "Brett Harrison resignation announcement",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "personnel change",
+        "person": "Brett Harrison",
+        "organization": "FTX.US",
+        "outcome": "stepping down from active role, staying in advisory capacity"
+      },
+      "confidence": 0.95,
+      "context": "On September 27, 2022, FTX.US President Brett Harrison announced he would be stepping down from an active role at the exchange but would stay on in an advisory capacity"
+    },
+    {
+      "name": "Bloomberg report on FTX-Alameda relationship",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "news report",
+        "organization": "Bloomberg",
+        "subject": "close relationship between Alameda Research and FTX"
+      },
+      "confidence": 0.9,
+      "context": "In September 2022, Bloomberg reported on the close relationship between Alameda Research and FTX"
+    },
+    {
+      "name": "CoinDesk report on Alameda FTT holdings",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "news report",
+        "organization": "CoinDesk",
+        "subject": "Alameda's significant FTT token holdings"
+      },
+      "confidence": 0.95,
+      "context": "on November 2, 2022, CoinDesk reported that a significant portion of Alameda Research's assets were held in FTT"
+    },
+    {
+      "name": "Binance announces FTT sale",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "financial/market event",
+        "organization": "Binance",
+        "person": "Changpeng Zhao",
+        "action": "announced intention to sell all FTT holdings"
+      },
+      "confidence": 0.95,
+      "context": "on November 6, Binance CEO Changpeng Zhao said on Twitter that his firm intended to sell all its holdings of FTT"
+    },
+    {
+      "name": "Binance announces non-binding acquisition agreement for FTX",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "financial/acquisition event",
+        "acquirer": "Binance",
+        "target": "FTX",
+        "person": "Changpeng Zhao",
+        "status": "non-binding agreement",
+        "reason": "liquidity crisis at FTX"
+      },
+      "confidence": 0.95,
+      "context": "On November 8, Zhao announced that Binance had entered into a non-binding agreement to purchase FTX due to what he referred to as a 'liquidity crisis' at FTX"
+    },
+    {
+      "name": "Bloomberg reports FTX acquisition unlikely",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "news report",
+        "organization": "Bloomberg",
+        "subject": "Binance acquisition of FTX deemed unlikely"
+      },
+      "confidence": 0.9,
+      "context": "On November 9, Bloomberg called the acquisition of FTX by Binance 'unlikely' due to the poor state of FTX's finances"
+    },
+    {
+      "name": "FTX plans to restart cryptocurrency trading services",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "business plan",
+        "organization": "FTX",
+        "action": "plans to restart cryptocurrency trading services after restructuring"
+      },
+      "confidence": 0.85,
+      "context": "In August 2023, it was reported that the company plans to restart offering cryptocurrency trading services after a restructuring of the bankrupt company is completed"
+    },
+    {
+      "name": "Zhao",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Executive at Binance",
+        "action": "Announced acquisition attempt and decision to withdraw"
+      },
+      "confidence": 0.85,
+      "context": "Zhao announced on Twitter that the company would complete due diligence soon"
+    },
+    {
+      "name": "Ryne Miller",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "General counsel of FTX US"
+      },
+      "confidence": 0.9,
+      "context": "Ryne Miller, FTX US's general counsel, characterized as 'unauthorized transactions'"
+    },
+    {
+      "name": "Kraken",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency exchange"
+      },
+      "confidence": 0.99,
+      "context": "Kraken offered to assist in identifying the perpetrator"
+    },
+    {
+      "name": "FTX Future Fund",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Charitable organization",
+        "founder": "Bankman-Fried",
+        "commitments": "$160 million in charitable grants and investments by September 1",
+        "status": "Team resigned on November 10"
+      },
+      "confidence": 0.9,
+      "context": "the team running the FTX Future Fund, an ostensibly charitable group bankrolled by Bankman-Fried, announced that they had resigned earlier that day"
+    },
+    {
+      "name": "FTX Digital Markets Ltd",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "FTX subsidiary",
+        "location": "Bahamas",
+        "status": "Assets frozen by Securities Commission of the Bahamas on November 10"
+      },
+      "confidence": 0.9,
+      "context": "the Securities Commission of the Bahamas froze the assets of one of FTX's subsidiaries, FTX Digital Markets Ltd"
+    },
+    {
+      "name": "Embed Financial Technologies",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Stock-clearing company",
+        "status": "Assets sold by FTX employees on November 10"
+      },
+      "confidence": 0.8,
+      "context": "These assets include stock-clearing company Embed Financial Technologies and the naming rights to FTX Arena"
+    },
+    {
+      "name": "Wall Street Journal",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "News organization",
+        "action": "Reported on Binance withdrawal and Alameda debt"
+      },
+      "confidence": 0.9,
+      "context": "the Wall Street Journal reported that Binance would not move forward with the deal to acquire FTX"
+    },
+    {
+      "name": "New York Times",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "News organization",
+        "action": "Reported on unauthorized fund transfers"
+      },
+      "confidence": 0.9,
+      "context": "An anonymous source cited by the New York Times on November 14 said the same"
+    },
+    {
+      "name": "Axios",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "News organization",
+        "action": "Reported on FTX-Kraken rescue discussions"
+      },
+      "confidence": 0.85,
+      "context": "Axios cited anonymous sources who said that FTX approached Kraken for a potential rescue deal"
+    },
+    {
+      "name": "United States Securities and Exchange Commission",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Government agency",
+        "action": "Investigating FTX"
+      },
+      "confidence": 0.95,
+      "context": "the United States Securities and Exchange Commission and Commodity Futures Trading Commission were investigating the nature of FTX's connections"
+    },
+    {
+      "name": "Commodity Futures Trading Commission",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government agency",
+        "abbreviation": "CFTC"
+      },
+      "confidence": 0.99,
+      "context": "Rostin Behnam, the Chairman of the Commodity Futures Trading Commission"
+    },
+    {
+      "name": "Securities Commission of the Bahamas",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Government regulatory body",
+        "action": "Froze FTX Digital Markets Ltd assets on November 10"
+      },
+      "confidence": 0.9,
+      "context": "the Securities Commission of the Bahamas froze the assets of one of FTX's subsidiaries"
+    },
+    {
+      "name": "Japan's Financial Services Agency",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Government regulatory body",
+        "action": "Ordered FTX Japan to suspend operations"
+      },
+      "confidence": 0.9,
+      "context": "Japan's Financial Services Agency ordered FTX Japan to suspend operations"
+    },
+    {
+      "name": "Enron",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "company",
+        "event": "scandal caused by fraud"
+      },
+      "confidence": 0.99,
+      "context": "compared the collapse to the Enron scandal, caused by fraud perpetrated by Enron executives"
+    },
+    {
+      "name": "Delaware",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "U.S. state",
+        "significance": "Jurisdiction where FTX filed for bankruptcy"
+      },
+      "confidence": 0.95,
+      "context": "FTX, FTX.US, Alameda Research, and more than 100 affiliates filed for bankruptcy in Delaware"
+    },
+    {
+      "name": "Japan",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "Country",
+        "significance": "Location of FTX Japan subsidiary"
+      },
+      "confidence": 0.9,
+      "context": "Japan's Financial Services Agency ordered FTX Japan to suspend operations"
+    },
+    {
+      "name": "Australia",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "Country",
+        "significance": "Location of FTX Australian subsidiary"
+      },
+      "confidence": 0.85,
+      "context": "The company's Australian subsidiary was placed under administration"
+    },
+    {
+      "name": "FTX Arena",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "sports stadium",
+        "location": "Miami",
+        "team": "Miami Heat",
+        "former_name": "Miami Heat basketball stadium"
+      },
+      "confidence": 0.99,
+      "context": "the naming rights to the Miami Heat's basketball stadium, renaming it FTX Arena"
+    },
+    {
+      "name": "FTX Bankruptcy Filing",
+      "entity_type": "DOCUMENT",
+      "attributes": {
+        "date": "November 11",
+        "jurisdiction": "Delaware",
+        "entities_involved": "FTX, FTX.US, Alameda Research, and more than 100 affiliates"
+      },
+      "confidence": 0.95,
+      "context": "FTX, FTX.US, Alameda Research, and more than 100 affiliates filed for bankruptcy in Delaware"
+    },
+    {
+      "name": "Binance Acquisition Announcement",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "November 8 (announcement), November 9 (withdrawal)",
+        "participants": "Binance, FTX, Zhao",
+        "outcome": "Deal withdrawn due to FTX's financial issues and pending investigations",
+        "type": "Financial/Business transaction"
+      },
+      "confidence": 0.95,
+      "context": "the Wall Street Journal reported that Binance would not move forward with the deal to acquire FTX"
+    },
+    {
+      "name": "FTT Price Collapse",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "Day of Zhao's announcement (November 8)",
+        "impact": "80% price drop, $2 billion in value erased",
+        "type": "Financial event"
+      },
+      "confidence": 0.9,
+      "context": "On the day of that announcement, FTT price dropped by 80 percent, erasing $2 billion in value"
+    },
+    {
+      "name": "FTX Withdrawal Halt",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "November 9",
+        "announcement": "FTX website stated it was not processing withdrawals",
+        "type": "Business/Financial event"
+      },
+      "confidence": 0.9,
+      "context": "On November 9, FTX's website said that it was not processing withdrawals at that time"
+    },
+    {
+      "name": "Unauthorized Transactions/Hack",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "Late November 11",
+        "amount": "Over $473 million",
+        "type": "Cybersecurity/Fraud event",
+        "method": "Funds converted to stablecoins then Ether",
+        "reporter": "Ryne Miller, FTX US general counsel"
+      },
+      "confidence": 0.9,
+      "context": "Late on November 11, over $473 million in funds were siphoned from FTX through what Ryne Miller, FTX US's general counsel, characterized as 'unauthorized transactions'"
+    },
+    {
+      "name": "FTX Future Fund Resignation",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "November 10",
+        "organization": "FTX Future Fund",
+        "type": "Personnel/Organizational event"
+      },
+      "confidence": 0.85,
+      "context": "the team running the FTX Future Fund, an ostensibly charitable group bankrolled by Bankman-Fried, announced that they had resigned earlier that day"
+    },
+    {
+      "name": "Alameda Research Closure",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "November 10",
+        "announcement": "Bankman-Fried announced Alameda would cease trading and end operations",
+        "type": "Business/Organizational event"
+      },
+      "confidence": 0.9,
+      "context": "Bankman-Fried also announced that Alameda Research would cease trading and end operations"
+    },
+    {
+      "name": "FTX Asset Freeze by Bahamas",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "November 10",
+        "organization": "Securities Commission of the Bahamas",
+        "target": "FTX Digital Markets Ltd and related parties",
+        "action": "Froze assets and provisionally appointed attorney as liquidator",
+        "type": "Legal/Regulatory event"
+      },
+      "confidence": 0.9,
+      "context": "the Securities Commission of the Bahamas froze the assets of one of FTX's subsidiaries, FTX Digital Markets Ltd, 'and related parties', and provisionally appointed an attorney as liquidator"
+    },
+    {
+      "name": "BlockFi Operations Suspension",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "November 10",
+        "organization": "BlockFi",
+        "reason": "FTX collapse",
+        "type": "Business event"
+      },
+      "confidence": 0.9,
+      "context": "Crypto lender BlockFi, which was affiliated with FTX, announced on November 10 that it was suspending operations as a result of FTX's collapse"
+    },
+    {
+      "name": "Bankman-Fried CEO Resignation",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "November 11",
+        "person": "Sam Bankman-Fried",
+        "replacement": "John J. Ray III",
+        "type": "Personnel/Leadership event"
+      },
+      "confidence": 0.95,
+      "context": "Bankman-Fried resigned as CEO and was replaced by John J. Ray III"
+    },
+    {
+      "name": "SEC and CFTC Investigation",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "Reported November 9",
+        "agencies": "United States Securities and Exchange Commission, Commodity Futures Trading Commission",
+        "focus": "FTX's connections to Bankman-Fried's other holdings and handling of client funds",
+        "type": "Legal/Regulatory event"
+      },
+      "confidence": 0.9,
+      "context": "the United States Securities and Exchange Commission and Commodity Futures Trading Commission were investigating the nature of FTX's connections to Bankman-Fried's other holdings and its handling of client funds"
+    },
+    {
+      "name": "Tether",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "stablecoin/cryptocurrency"
+      },
+      "confidence": 0.95,
+      "context": "The funds taken from FTX were mostly stablecoins such as Tether"
+    },
+    {
+      "name": "Ether",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency"
+      },
+      "confidence": 0.95,
+      "context": "were quickly exchanged for Ether, a method used by cryptocurrency thieves"
+    },
+    {
+      "name": "U.S. Department of Justice",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government agency",
+        "country": "United States"
+      },
+      "confidence": 0.99,
+      "context": "the U.S. Department of Justice indicted three individuals"
+    },
+    {
+      "name": "Royal Bahamas Police Force",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "law enforcement",
+        "location": "Bahamas"
+      },
+      "confidence": 0.99,
+      "context": "Authorities in the Bahamas, including the Royal Bahamas Police Force"
+    },
+    {
+      "name": "Kelsey Piper",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "journalist",
+        "publication": "Vox"
+      },
+      "confidence": 0.95,
+      "context": "In an interview with Kelsey Piper published November 16 by Vox"
+    },
+    {
+      "name": "Winklevoss twins",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "owners of Gemini exchange"
+      },
+      "confidence": 0.9,
+      "context": "Gemini, an exchange owned by the Winklevoss twins"
+    },
+    {
+      "name": "FTX Digital Markets",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "FTX subsidiary",
+        "location": "Bahamas",
+        "bankruptcy_filing": "Chapter 15"
+      },
+      "confidence": 0.99,
+      "context": "the Bahamas unit of FTX, FTX Digital Markets, officially filed for Chapter 15 bankruptcy protection"
+    },
+    {
+      "name": "Crypto.com",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency exchange"
+      },
+      "confidence": 0.99,
+      "context": "The exchange token of Crypto.com, Cronos, lost approximately $1 billion in value"
+    },
+    {
+      "name": "Cronos",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "exchange token",
+        "parent": "Crypto.com",
+        "value_loss": "$1 billion in November"
+      },
+      "confidence": 0.95,
+      "context": "The exchange token of Crypto.com, Cronos, lost approximately $1 billion in value in November"
+    },
+    {
+      "name": "Genesis",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency lender",
+        "parent": "Digital Currency Group"
+      },
+      "confidence": 0.99,
+      "context": "Another cryptocurrency lender, Genesis, a subsidiary of Digital Currency Group, halted withdrawals"
+    },
+    {
+      "name": "Digital Currency Group",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "holding company",
+        "subsidiaries": [
+          "Genesis",
+          "Grayscale"
+        ]
+      },
+      "confidence": 0.99,
+      "context": "Genesis, a subsidiary of Digital Currency Group"
+    },
+    {
+      "name": "Gemini",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency exchange",
+        "owners": "Winklevoss twins"
+      },
+      "confidence": 0.99,
+      "context": "Gemini, an exchange owned by the Winklevoss twins"
+    },
+    {
+      "name": "Grayscale",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "investment company",
+        "parent": "Digital Currency Group",
+        "flagship_product": "Grayscale Bitcoin Trust"
+      },
+      "confidence": 0.99,
+      "context": "Another Digital Currency Group subsidiary, Grayscale"
+    },
+    {
+      "name": "Grayscale Bitcoin Trust",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "publicly traded fund",
+        "parent": "Grayscale",
+        "value_decline": "20% over two weeks preceding November 17",
+        "discount": "42% below Bitcoin value as of November 14"
+      },
+      "confidence": 0.99,
+      "context": "the publicly traded Grayscale Bitcoin Trust, decline by 20%"
+    },
+    {
+      "name": "Reuters",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "news organization"
+      },
+      "confidence": 0.99,
+      "context": "Bankman-Fried told Reuters that he was still in the Bahamas"
+    },
+    {
+      "name": "Vox",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "news publication"
+      },
+      "confidence": 0.99,
+      "context": "In an interview with Kelsey Piper published November 16 by Vox"
+    },
+    {
+      "name": "Financial Times",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "news publication"
+      },
+      "confidence": 0.99,
+      "context": "The Financial Times reported that FTX's balance sheet"
+    },
+    {
+      "name": "House Committee on Financial Services",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government committee",
+        "country": "United States"
+      },
+      "confidence": 0.99,
+      "context": "Speaking to the House Committee on Financial Services"
+    },
+    {
+      "name": "QuickBooks",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "accounting software",
+        "description": "small-business accounting tool"
+      },
+      "confidence": 0.95,
+      "context": "the company used the small-business accounting tool QuickBooks"
+    },
+    {
+      "name": "November 12 questioning",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "police questioning",
+        "date": "November 12",
+        "participant": "Sam Bankman-Fried",
+        "authority": "Royal Bahamas Police Force"
+      },
+      "confidence": 0.95,
+      "context": "Authorities in the Bahamas, including the Royal Bahamas Police Force, questioned Bankman-Fried on November 12"
+    },
+    {
+      "name": "FTX bankruptcy",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "bankruptcy filing",
+        "date": "November 16",
+        "entity": "FTX Digital Markets",
+        "chapter": "Chapter 15"
+      },
+      "confidence": 0.99,
+      "context": "FTX Digital Markets, officially filed for Chapter 15 bankruptcy protection in the United States"
+    },
+    {
+      "name": "SIM swap scam indictment",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal indictment",
+        "date": "January 2024",
+        "perpetrators": "three individuals",
+        "amount_stolen": "over $400 million in virtual currency",
+        "target": "FTX"
+      },
+      "confidence": 0.9,
+      "context": "In January 2024, the U.S. Department of Justice indicted three individuals for running a SIM swap scam operation"
+    },
+    {
+      "name": "FTX hack",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "security breach",
+        "description": "unauthorized transactions",
+        "funds_stolen": "stablecoins (Tether) exchanged for Ether"
+      },
+      "confidence": 0.9,
+      "context": "A person speaking on behalf of FTX referred to the 'unauthorized transactions' as a 'hack'"
+    },
+    {
+      "name": "Grayscale Bitcoin Trust",
+      "entity_type": "DOCUMENT",
+      "attributes": {
+        "type": "publicly traded offering",
+        "value_decline": "20% over two weeks preceding November 17",
+        "discount": "42% below Bitcoin value as of November 14"
+      },
+      "confidence": 0.95,
+      "context": "the publicly traded Grayscale Bitcoin Trust, decline by 20% over the two weeks preceding November 17"
+    },
+    {
+      "name": "Silvergate Bank",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "bank",
+        "role": "gateway between cryptocurrency clients and wider financial world",
+        "relationship_with_FTX": "FTX was a depositor"
+      },
+      "confidence": 0.95,
+      "context": "Concerns have also been raised about Silvergate Bank, as FTX was a depositor"
+    },
+    {
+      "name": "Tiger Global Management",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "investment firm",
+        "relationship_with_FTX": "institutional investor with stake in FTX"
+      },
+      "confidence": 0.9,
+      "context": "Institutional investors that stand to lose money due to their stakes in FTX include Tiger Global Management"
+    },
+    {
+      "name": "Ontario Teachers' Pension Plan",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "pension plan",
+        "relationship_with_FTX": "institutional investor with stake in FTX"
+      },
+      "confidence": 0.9,
+      "context": "Institutional investors that stand to lose money due to their stakes in FTX include Tiger Global Management, the Ontario Teachers' Pension Plan"
+    },
+    {
+      "name": "SoftBank Group",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "company",
+        "relationship_with_FTX": "institutional investor with stake in FTX"
+      },
+      "confidence": 0.9,
+      "context": "Institutional investors that stand to lose money due to their stakes in FTX include Tiger Global Management, the Ontario Teachers' Pension Plan, SoftBank Group"
+    },
+    {
+      "name": "BlackRock",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "investment firm",
+        "relationship_with_FTX": "institutional investor with stake in FTX"
+      },
+      "confidence": 0.9,
+      "context": "Institutional investors that stand to lose money due to their stakes in FTX include Tiger Global Management, the Ontario Teachers' Pension Plan, SoftBank Group, BlackRock"
+    },
+    {
+      "name": "Lightspeed Venture Partners",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "venture capital firm",
+        "relationship_with_FTX": "institutional investor with stake in FTX"
+      },
+      "confidence": 0.9,
+      "context": "Institutional investors that stand to lose money due to their stakes in FTX include Tiger Global Management, the Ontario Teachers' Pension Plan, SoftBank Group, BlackRock, Lightspeed Venture Partners"
+    },
+    {
+      "name": "Temasek",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "investment company",
+        "relationship_with_FTX": "institutional investor with stake in FTX",
+        "action": "wrote down investment on November 16"
+      },
+      "confidence": 0.9,
+      "context": "Institutional investors that stand to lose money due to their stakes in FTX include Tiger Global Management, the Ontario Teachers' Pension Plan, SoftBank Group, BlackRock, Lightspeed Venture Partners, Temasek, and Sequoia Capital"
+    },
+    {
+      "name": "Tom Brady",
+      "entity_type": "PERSON",
+      "attributes": {
+        "occupation": "football player",
+        "relationship_with_FTX": "investor and received compensation for promoting the company"
+      },
+      "confidence": 0.95,
+      "context": "These include football player Tom Brady, basketball players Shaquille O'Neal and Stephen Curry"
+    },
+    {
+      "name": "Shaquille O'Neal",
+      "entity_type": "PERSON",
+      "attributes": {
+        "occupation": "basketball player",
+        "relationship_with_FTX": "investor and received compensation for promoting the company"
+      },
+      "confidence": 0.95,
+      "context": "basketball players Shaquille O'Neal and Stephen Curry"
+    },
+    {
+      "name": "Stephen Curry",
+      "entity_type": "PERSON",
+      "attributes": {
+        "occupation": "basketball player",
+        "relationship_with_FTX": "investor and received compensation for promoting the company"
+      },
+      "confidence": 0.95,
+      "context": "basketball players Shaquille O'Neal and Stephen Curry"
+    },
+    {
+      "name": "Gisele Bündchen",
+      "entity_type": "PERSON",
+      "attributes": {
+        "occupation": "model",
+        "relationship_with_FTX": "investor, received compensation for promoting the company, appointed ESG advisor",
+        "legal_action": "sued after bankruptcy for involvement in alleged scheme"
+      },
+      "confidence": 0.95,
+      "context": "model Gisele Bündchen, and businessman Kevin O'Leary. Gisele Bündchen was also appointed the ESG advisor for the cryptocurrency platform"
+    },
+    {
+      "name": "Kevin O'Leary",
+      "entity_type": "PERSON",
+      "attributes": {
+        "occupation": "businessman",
+        "relationship_with_FTX": "investor and received compensation for promoting the company"
+      },
+      "confidence": 0.95,
+      "context": "businessman Kevin O'Leary"
+    },
+    {
+      "name": "Anthony Scaramucci",
+      "entity_type": "PERSON",
+      "attributes": {
+        "occupation": "businessman",
+        "role": "founder of SkyBridge Capital",
+        "action": "announced firm was attempting to buy back 30% stake in FTX"
+      },
+      "confidence": 0.95,
+      "context": "Anthony Scaramucci, founder of SkyBridge Capital, announced the firm was attempting to buy back a 30% stake in the business owned by FTX"
+    },
+    {
+      "name": "SkyBridge Capital",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "investment firm",
+        "founder": "Anthony Scaramucci",
+        "action": "attempting to buy back 30% stake in FTX"
+      },
+      "confidence": 0.9,
+      "context": "Anthony Scaramucci, founder of SkyBridge Capital, announced the firm was attempting to buy back a 30% stake in the business owned by FTX"
+    },
+    {
+      "name": "Galois Capital",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency investment firm",
+        "relationship_with_FTX": "assets still held on FTX after bankruptcy"
+      },
+      "confidence": 0.9,
+      "context": "Cryptocurrency investment firms with assets still held on FTX after its bankruptcy include Galois Capital and Galaxy Digital"
+    },
+    {
+      "name": "Galaxy Digital",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency investment firm",
+        "relationship_with_FTX": "assets still held on FTX after bankruptcy"
+      },
+      "confidence": 0.9,
+      "context": "Cryptocurrency investment firms with assets still held on FTX after its bankruptcy include Galois Capital and Galaxy Digital"
+    },
+    {
+      "name": "Bitcoin",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency",
+        "price_action": "sank to its lowest price in two years"
+      },
+      "confidence": 0.95,
+      "context": "Bitcoin sank to its lowest price in two years"
+    },
+    {
+      "name": "Solana",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency",
+        "affiliation": "affiliated with Bankman-Fried",
+        "price_action": "declined"
+      },
+      "confidence": 0.95,
+      "context": "The price of Solana, which was affiliated with Bankman-Fried, declined as well"
+    },
+    {
+      "name": "Kris Marszalek",
+      "entity_type": "PERSON",
+      "attributes": {
+        "occupation": "CEO",
+        "organization": "Crypto.com",
+        "action": "provided assurances about firm's liquidity"
+      },
+      "confidence": 0.95,
+      "context": "CEO Kris Marszalek provided assurances that the firm was liquid"
+    },
+    {
+      "name": "The Block",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency news firm",
+        "relationship_with_FTX": "FTX secretly invested in the firm"
+      },
+      "confidence": 0.9,
+      "context": "FTX had secretly invested in The Block, a cryptocurrency news firm"
+    },
+    {
+      "name": "Michael McCaffrey",
+      "entity_type": "PERSON",
+      "attributes": {
+        "occupation": "CEO",
+        "organization": "The Block",
+        "action": "used LLC to buy an apartment, then resigned"
+      },
+      "confidence": 0.9,
+      "context": "to fund an LLC its CEO Michael McCaffrey used to buy an apartment. Its staff said they had no knowledge of the investments. McCaffrey then resigned"
+    },
+    {
+      "name": "Jim Chanos",
+      "entity_type": "PERSON",
+      "attributes": {
+        "occupation": "investment manager and short selling specialist",
+        "prediction_date": "November 2022",
+        "prediction": "collapse of FTX would lead to increased scrutiny and regulation over cryptocurrencies"
+      },
+      "confidence": 0.95,
+      "context": "Investment manager and short selling specialist Jim Chanos predicted in November 2022 the collapse of FTX would lead to \"increased scrutiny and regulation\""
+    },
+    {
+      "name": "Richard Handler",
+      "entity_type": "PERSON",
+      "attributes": {
+        "occupation": "CEO",
+        "organization": "Jefferies Group",
+        "action": "attempted to meet with Bankman-Fried in July and September",
+        "date_of_tweet": "November 10"
+      },
+      "confidence": 0.95,
+      "context": "Richard Handler, CEO of American financial firm Jefferies Group, tweeted on November 10 that he had attempted to meet with Bankman-Fried"
+    },
+    {
+      "name": "Jefferies Group",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "financial firm",
+        "country": "American",
+        "CEO": "Richard Handler"
+      },
+      "confidence": 0.95,
+      "context": "Richard Handler, CEO of American financial firm Jefferies Group"
+    },
+    {
+      "name": "Bankman-Fried",
+      "entity_type": "PERSON",
+      "attributes": {
+        "occupation": "CEO of FTX",
+        "characterization": "perceived to be in over his head"
+      },
+      "confidence": 0.95,
+      "context": "he had attempted to meet with Bankman-Fried in July and again in September, as he perceived the FTX CEO was \"in over his head\""
+    },
+    {
+      "name": "Lehman Brothers",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "financial institution",
+        "event": "bankruptcy"
+      },
+      "confidence": 0.99,
+      "context": "The sudden collapse of FTX has been compared to the bankruptcy of Lehman Brothers"
+    },
+    {
+      "name": "Lawrence Summers",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "analyst/commentator"
+      },
+      "confidence": 0.95,
+      "context": "Lawrence Summers acknowledged the comparisons to Lehman"
+    },
+    {
+      "name": "Rostin Behnam",
+      "entity_type": "PERSON",
+      "attributes": {
+        "title": "Chairman",
+        "organization": "Commodity Futures Trading Commission"
+      },
+      "confidence": 0.99,
+      "context": "Rostin Behnam, the Chairman of the Commodity Futures Trading Commission"
+    },
+    {
+      "name": "Congress",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government body",
+        "requested_action": "grant CFTC more power to regulate cryptocurrencies"
+      },
+      "confidence": 0.9,
+      "context": "called for Congress to grant the organization more power to regulate cryptocurrencies"
+    },
+    {
+      "name": "November 16",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "date",
+        "event": "Gemini halt on FTX"
+      },
+      "confidence": 0.85,
+      "context": "ls on November 16"
+    },
+    {
+      "name": "November 17",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "date",
+        "event": "Grayscale Bitcoin Trust value decline measurement"
+      },
+      "confidence": 0.85,
+      "context": "decline by 20% over the two weeks preceding November 17"
+    },
+    {
+      "name": "November 14",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "date",
+        "event": "Grayscale Bitcoin Trust discount measurement"
+      },
+      "confidence": 0.85,
+      "context": "as of November 14"
+    },
+    {
+      "name": "November 9",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "date",
+        "event": "Sequoia Capital writedown of FTX equity"
+      },
+      "confidence": 0.9,
+      "context": "Sequoia Capital wrote down its equity in FTX to $0 on November 9"
+    },
+    {
+      "name": "November 2022",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "date",
+        "event": "Jim Chanos prediction about FTX collapse"
+      },
+      "confidence": 0.85,
+      "context": "Jim Chanos predicted in November 2022"
+    },
+    {
+      "name": "November 10",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "date",
+        "event": "Richard Handler tweet about FTX CEO"
+      },
+      "confidence": 0.9,
+      "context": "tweeted on November 10"
+    },
+    {
+      "name": "July",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "date",
+        "event": "Richard Handler attempted meeting with Bankman-Fried"
+      },
+      "confidence": 0.8,
+      "context": "he had attempted to meet with Bankman-Fried in July"
+    },
+    {
+      "name": "September",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "date",
+        "event": "Richard Handler attempted meeting with Bankman-Fried"
+      },
+      "confidence": 0.8,
+      "context": "again in September"
+    },
+    {
+      "name": "December",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "date",
+        "event": "Emergence of FTX secret investments in The Block"
+      },
+      "confidence": 0.8,
+      "context": "In December, it emerged that FTX had secretly invested in The Block"
+    },
+    {
+      "name": "FTX collapse",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "financial/corporate event",
+        "date": "early November",
+        "outcome": "bankruptcy",
+        "participants": [
+          "institutional investors",
+          "cryptocurrency firms",
+          "public figures"
+        ]
+      },
+      "confidence": 0.99,
+      "context": "The sudden collapse of FTX has been compared to the bankruptcy of Lehman Brothers"
+    },
+    {
+      "name": "Avivah Litan",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Technology analyst"
+      },
+      "confidence": 0.95,
+      "context": "Technology analyst Avivah Litan commented on the cryptocurrency ecosystem"
+    },
+    {
+      "name": "Titan Grey",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "risk management firm"
+      },
+      "confidence": 0.95,
+      "context": "Risk management firm Titan Grey published a primer on the commencement and early motions practice of the FTX chapter 11 case"
+    },
+    {
+      "name": "United States Attorney for the Southern District of New York",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government agency",
+        "jurisdiction": "Southern District of New York"
+      },
+      "confidence": 0.99,
+      "context": "the office of the United States Attorney for the Southern District of New York had begun an investigation"
+    },
+    {
+      "name": "United States House Committee on Financial Services",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government committee"
+      },
+      "confidence": 0.99,
+      "context": "The United States House Committee on Financial Services announced it plans to conduct hearings"
+    },
+    {
+      "name": "The Information",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "publication"
+      },
+      "confidence": 0.95,
+      "context": "According to anonymous sources cited by The Information"
+    },
+    {
+      "name": "Palo Alto, California",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "city, state",
+        "country": "United States"
+      },
+      "confidence": 0.99,
+      "context": "ordered to remain under house arrest at his parents' home in Palo Alto, California"
+    },
+    {
+      "name": "Manhattan",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "city",
+        "country": "United States"
+      },
+      "confidence": 0.99,
+      "context": "He was arraigned in federal court in Manhattan on January 3, 2023"
+    },
+    {
+      "name": "Judge Lewis A. Kaplan",
+      "entity_type": "PERSON",
+      "attributes": {
+        "title": "Judge",
+        "role": "federal court judge"
+      },
+      "confidence": 0.99,
+      "context": "Judge Lewis A. Kaplan set the trial date for United States v. Bankman-Fried"
+    },
+    {
+      "name": "United States v. Bankman-Fried",
+      "entity_type": "DOCUMENT",
+      "attributes": {
+        "type": "legal case",
+        "trial_date": "October 2, 2023"
+      },
+      "confidence": 0.99,
+      "context": "Judge Lewis A. Kaplan set the trial date for United States v. Bankman-Fried for October 2, 2023"
+    },
+    {
+      "name": "Alameda",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "company",
+        "full_name": "Alameda Research"
+      },
+      "confidence": 0.99,
+      "context": "Caroline Ellison, who had served as Alameda's CEO"
+    },
+    {
+      "name": "Ryan Salame",
+      "entity_type": "PERSON",
+      "attributes": {
+        "title": "Former FTX executive",
+        "charges": "campaign finance law violation and operating an unlicensed money transmitting business",
+        "plea": "guilty",
+        "sentencing_date": "May 28, 2024",
+        "sentence": "7.5 years in prison",
+        "restitution": "more than $5 million",
+        "forfeiture": "$6 million",
+        "prison_start_date": "October 2024"
+      },
+      "confidence": 0.99,
+      "context": "Former FTX executive Ryan Salame pleaded guilty to both a campaign finance law violation"
+    },
+    {
+      "name": "FTX bankruptcy plan approval",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal/bankruptcy event",
+        "date": "October 7, 2024",
+        "judge": "U.S. Bankruptcy Judge John Dorsey",
+        "details": "repays customers with balances less than $50,000 their full balance in cryptocurrencies valued at the date of the collapse"
+      },
+      "confidence": 0.99,
+      "context": "On October 7, 2024, U.S. Bankruptcy Judge John Dorsey approved the FTX bankruptcy plan"
+    },
+    {
+      "name": "John Dorsey",
+      "entity_type": "PERSON",
+      "attributes": {
+        "title": "U.S. Bankruptcy Judge"
+      },
+      "confidence": 0.99,
+      "context": "U.S. Bankruptcy Judge John Dorsey approved the FTX bankruptcy plan"
+    },
+    {
+      "name": "FTX compensation order",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal/financial event",
+        "date": "August 2024",
+        "amount": "$12.7 billion",
+        "beneficiaries": "former customers and fraud victims",
+        "restitution": "$8.7 billion",
+        "disgorgement": "$4 billion",
+        "description": "largest such recovery in CFTC history"
+      },
+      "confidence": 0.99,
+      "context": "In August 2024, FTX was ordered by a US court to pay $12.7 billion in compensation to former customers and fraud victims"
+    },
+    {
+      "name": "Miami Heat",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "sports team",
+        "sport": "basketball"
+      },
+      "confidence": 0.99,
+      "context": "Deals included the naming rights to the Miami Heat's basketball stadium, renaming it FTX Arena"
+    },
+    {
+      "name": "Major League Baseball",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "sports organization",
+        "abbreviation": "MLB"
+      },
+      "confidence": 0.99,
+      "context": "a partnership with Major League Baseball to place the FTX logo on the uniforms of umpires"
+    },
+    {
+      "name": "Mercedes-AMG Petronas F1 Team",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "sports team",
+        "sport": "Formula 1 racing"
+      },
+      "confidence": 0.99,
+      "context": "a deal with Mercedes-AMG Petronas F1 Team to add the FTX logo to their cars and merchandise"
+    },
+    {
+      "name": "TSM",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "professional esports organization",
+        "former_name": "TSM FTX",
+        "sponsorship": "naming rights deal with FTX"
+      },
+      "confidence": 0.95,
+      "context": "The professional esports organization TSM also had a naming rights deal with FTX, thus the organization became TSM FTX"
+    },
+    {
+      "name": "MLB Home Run Derby X",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "baseball tournament",
+        "sponsor": "FTX",
+        "sponsorship_type": "title sponsorship",
+        "season": "first season"
+      },
+      "confidence": 0.9,
+      "context": "title sponsorships of the first season of MLB Home Run Derby X"
+    },
+    {
+      "name": "FTX Road to Miami",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "tournament",
+        "sponsor": "FTX",
+        "sponsorship_type": "title sponsorship"
+      },
+      "confidence": 0.9,
+      "context": "title sponsorship of the tournaments FTX Road to Miami"
+    },
+    {
+      "name": "FTX Crypto Cup",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "chess tournament",
+        "sponsor": "FTX",
+        "sponsorship_type": "title sponsorship",
+        "part_of": "Champions Chess Tour 2022"
+      },
+      "confidence": 0.9,
+      "context": "title sponsorship of the tournaments FTX Crypto Cup as part of the Champions Chess Tour 2022"
+    },
+    {
+      "name": "Champions Chess Tour 2022",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "chess tournament series",
+        "year": "2022"
+      },
+      "confidence": 0.9,
+      "context": "as part of the Champions Chess Tour 2022"
+    },
+    {
+      "name": "Taylor Swift",
+      "entity_type": "PERSON",
+      "attributes": {
+        "occupation": "American singer-songwriter",
+        "negotiation_period": "fall 2021 to spring 2022",
+        "proposed_deal_amount": "$100 million",
+        "deal_status": "broken off without agreement"
+      },
+      "confidence": 0.95,
+      "context": "FTX held talks with American singer-songwriter Taylor Swift starting in the fall of 2021 regarding a $100 million sponsorship deal but negotiations were broken off the following spring"
+    },
+    {
+      "name": "The Secret Story of FTX's Rise and Ruin",
+      "entity_type": "DOCUMENT",
+      "attributes": {
+        "type": "story series",
+        "publisher": "Reveal"
+      },
+      "confidence": 0.85,
+      "context": "\"The Secret Story of FTX's Rise and Ruin\"—story series by Reveal"
+    }
+  ],
+  "relations": [
+    {
+      "relation_type": "CREATED",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "FTX Trading Ltd.",
+      "confidence": 0.99,
+      "evidence": "The exchange was founded in 2019 by Sam Bankman-Fried and Gary Wang"
+    },
+    {
+      "relation_type": "CREATED",
+      "source_entity": "Gary Wang",
+      "target_entity": "FTX Trading Ltd.",
+      "confidence": 0.99,
+      "evidence": "The exchange was founded in 2019 by Sam Bankman-Fried and Gary Wang"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Caroline Ellison",
+      "confidence": 0.95,
+      "evidence": "collapsed in 2022 after massive fraud perpetrated by Bankman-Fried and his partner Caroline Ellison"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "FTX Trading Ltd.",
+      "target_entity": "FTX.US",
+      "confidence": 0.95,
+      "evidence": "FTX is closely associated with FTX.US, a separate exchange available to US residents"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "FTX Trading Ltd.",
+      "target_entity": "Alameda Research",
+      "confidence": 0.95,
+      "evidence": "FTX's partner firm Alameda Research held a significant portion of its assets in FTX's native token"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "FTX Trading Ltd.",
+      "target_entity": "Antigua and Barbuda",
+      "confidence": 0.95,
+      "evidence": "FTX is incorporated in Antigua and Barbuda"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "FTX Trading Ltd.",
+      "target_entity": "Bahamas",
+      "confidence": 0.95,
+      "evidence": "FTX is incorporated in Antigua and Barbuda and headquartered in the Bahamas"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "FTX Trading Ltd.",
+      "target_entity": "Chapter 11 bankruptcy proceedings",
+      "confidence": 0.99,
+      "evidence": "Since November 11, 2022, FTX has been in Chapter 11 bankruptcy proceedings in the US court system"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "John J. Ray III",
+      "target_entity": "FTX Trading Ltd.",
+      "confidence": 0.95,
+      "evidence": "The current CEO of FTX is John J. Ray III"
+    },
+    {
+      "relation_type": "CREATED",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Alameda Research",
+      "confidence": 0.95,
+      "evidence": "FTX began within Alameda Research, a trading firm founded by Bankman-Fried, Caroline Ellison, and other former employees of Jane Street in 2017"
+    },
+    {
+      "relation_type": "CREATED",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "Alameda Research",
+      "confidence": 0.95,
+      "evidence": "Alameda Research, a trading firm founded by Bankman-Fried, Caroline Ellison, and other former employees of Jane Street in 2017"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Alameda Research",
+      "target_entity": "Berkeley, California",
+      "confidence": 0.95,
+      "evidence": "a trading firm founded by Bankman-Fried, Caroline Ellison, and other former employees of Jane Street in 2017, in Berkeley, California"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Binance",
+      "confidence": 0.95,
+      "evidence": "Changpeng Zhao of Binance purchased a 20% stake in FTX"
+    },
+    {
+      "relation_type": "OWNS",
+      "source_entity": "FTX Trading Ltd.",
+      "target_entity": "Blockfolio",
+      "confidence": 0.95,
+      "evidence": "In August 2020, FTX acquired Blockfolio, a cryptocurrency portfolio tracking app, for $150 million"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "FTX Trading Ltd.",
+      "target_entity": "Softbank",
+      "confidence": 0.9,
+      "evidence": "In July 2021, the venture raised $900 million at an $18 billion valuation from over 60 investors, including Softbank, Sequoia Capital, and other firms"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "FTX Trading Ltd.",
+      "target_entity": "Sequoia Capital",
+      "confidence": 0.9,
+      "evidence": "In July 2021, the venture raised $900 million at an $18 billion valuation from over 60 investors, including Softbank, Sequoia Capital, and other firms"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "FTX Trading Ltd.",
+      "target_entity": "Hong Kong",
+      "confidence": 0.95,
+      "evidence": "In September of that year, FTX moved its headquarters from Hong Kong to The Bahamas"
+    },
+    {
+      "relation_type": "CREATED",
+      "source_entity": "FTX Trading Ltd.",
+      "target_entity": "FTX Ventures",
+      "confidence": 0.95,
+      "evidence": "On January 14, 2022, FTX announced a $2 billion venture fund named FTX Ventures"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "FTX Trading Ltd.",
+      "target_entity": "BlockFi",
+      "confidence": 0.9,
+      "evidence": "In July 2022, FTX finalized a deal giving it the option to buy BlockFi for about $240 million"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Brett Harrison",
+      "target_entity": "FTX.US",
+      "confidence": 0.95,
+      "evidence": "FTX.US President Brett Harrison announced he would be stepping down from an active role at the exchange"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Federal Deposit Insurance Corporation",
+      "target_entity": "FTX Trading Ltd.",
+      "confidence": 0.9,
+      "evidence": "the Federal Deposit Insurance Corporation (FDIC) issued a cease-and-desist order to FTX"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "CoinDesk",
+      "target_entity": "FTX Trading Ltd.",
+      "confidence": 0.9,
+      "evidence": "CoinDesk also raised concerns stating that FTX's partner firm Alameda Research held a significant portion of its assets in FTX's native token"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Sam Bankman-Fried arrest",
+      "confidence": 0.99,
+      "evidence": "On December 12, 2022, founder Sam Bankman-Fried was arrested by the Bahamian authorities for financial offences"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "FTX.US",
+      "target_entity": "FTX.US Voyager Digital acquisition",
+      "confidence": 0.95,
+      "evidence": "On September 26, 2022, FTX.US won its bid at auction for the digital assets of bankrupt crypto brokerage Voyager Digital"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "FTX Trading Ltd.",
+      "target_entity": "FTX Texas investigation",
+      "confidence": 0.9,
+      "evidence": "In October 2022, it was reported that FTX was under investigation in Texas for allegedly selling unregistered securities"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Alameda Research",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "Bloomberg reported on the close relationship between Alameda Research and FTX. Bloomberg noted that Alameda had functioned as a market maker for FTX early in the exchange's history"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Brett Harrison",
+      "target_entity": "FTX.US",
+      "confidence": 0.95,
+      "evidence": "FTX.US President Brett Harrison announced he would be stepping down from an active role at the exchange but would stay on in an advisory capacity. The company did not immediately announce a replacement for Harrison, who had been FTX.US president since May 2021"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "John J. Ray III",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "Ray, the new CEO of FTX, as a 'complete failure of corporate controls'"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "Alameda Research",
+      "confidence": 0.95,
+      "evidence": "Alameda CEO Caroline Ellison disclosed to other Alameda employees that she, Sam Bankman-Fried, Gary Wang, and Nishad Singh knew about that decision"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "Bankman-Fried defended FTX's use of Alameda as a liquidity provider"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Gary Wang",
+      "target_entity": "FTX",
+      "confidence": 0.9,
+      "evidence": "Alameda CEO Caroline Ellison disclosed to other Alameda employees that she, Sam Bankman-Fried, Gary Wang, and Nishad Singh knew about that decision"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Nishad Singh",
+      "target_entity": "FTX",
+      "confidence": 0.9,
+      "evidence": "Alameda CEO Caroline Ellison disclosed to other Alameda employees that she, Sam Bankman-Fried, Gary Wang, and Nishad Singh knew about that decision"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Binance",
+      "confidence": 0.95,
+      "evidence": "Binance CEO Changpeng Zhao said on Twitter that his firm intended to sell all its holdings of FTT"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "FTX",
+      "target_entity": "Bloomberg report on FTX-Alameda relationship",
+      "confidence": 0.95,
+      "evidence": "In September 2022, Bloomberg reported on the close relationship between Alameda Research and FTX"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "Alameda Research",
+      "target_entity": "CoinDesk report on Alameda FTT holdings",
+      "confidence": 0.95,
+      "evidence": "on November 2, 2022, CoinDesk reported that a significant portion of Alameda Research's assets were held in FTT"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "FTX",
+      "target_entity": "Binance announces FTT sale",
+      "confidence": 0.95,
+      "evidence": "on November 6, Binance CEO Changpeng Zhao said on Twitter that his firm intended to sell all its holdings of FTT"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "FTX",
+      "target_entity": "Binance announces non-binding acquisition agreement for FTX",
+      "confidence": 0.95,
+      "evidence": "On November 8, Zhao announced that Binance had entered into a non-binding agreement to purchase FTX"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "FTX",
+      "target_entity": "Texas",
+      "confidence": 0.85,
+      "evidence": "In October 2022, it was reported that FTX was under investigation in Texas for allegedly selling unregistered securities"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "Bankman-Fried said in a Slack message that FTX had learned through the press about Binance's concern and decision"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "Alameda Research",
+      "confidence": 0.95,
+      "evidence": "Alameda CEO Caroline Ellison disclosed to other Alameda employees that she, Sam Bankman-Fried, Gary Wang, and Nishad Singh knew that client deposits were transferred from FTX to Alameda"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Gary Wang",
+      "target_entity": "FTX",
+      "confidence": 0.9,
+      "evidence": "Caroline Ellison disclosed to other Alameda employees that she, Sam Bankman-Fried, Gary Wang, and Nishad Singh knew that client deposits were transferred from FTX to Alameda"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Nishad Singh",
+      "target_entity": "FTX",
+      "confidence": 0.9,
+      "evidence": "Caroline Ellison disclosed to other Alameda employees that she, Sam Bankman-Fried, Gary Wang, and Nishad Singh knew that client deposits were transferred from FTX to Alameda"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "John J. Ray III",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "Bankman-Fried resigned as CEO and was replaced by John J. Ray III, a corporate restructuring specialist"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Ryne Miller",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "Ryne Miller, FTX US's general counsel, characterized as 'unauthorized transactions'"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Alameda Research",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "Alameda Research owed FTX some $10 billion, as FTX had lent funds placed on the exchange for trading to Alameda"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "BlockFi",
+      "target_entity": "FTX",
+      "confidence": 0.9,
+      "evidence": "Crypto lender BlockFi, which was affiliated with FTX, announced on November 10 that it was suspending operations as a result of FTX's collapse"
+    },
+    {
+      "relation_type": "OWNS",
+      "source_entity": "FTX",
+      "target_entity": "FTX.US",
+      "confidence": 0.9,
+      "evidence": "include the sale of FTX.US"
+    },
+    {
+      "relation_type": "OWNS",
+      "source_entity": "FTX",
+      "target_entity": "Embed Financial Technologies",
+      "confidence": 0.85,
+      "evidence": "These assets include stock-clearing company Embed Financial Technologies and the naming rights to FTX Arena"
+    },
+    {
+      "relation_type": "OWNS",
+      "source_entity": "FTX",
+      "target_entity": "FTX Digital Markets Ltd",
+      "confidence": 0.9,
+      "evidence": "the Securities Commission of the Bahamas froze the assets of one of FTX's subsidiaries, FTX Digital Markets Ltd"
+    },
+    {
+      "relation_type": "OWNS",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "FTX Future Fund",
+      "confidence": 0.9,
+      "evidence": "the FTX Future Fund, an ostensibly charitable group bankrolled by Bankman-Fried"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "FTX",
+      "target_entity": "Bahamas",
+      "confidence": 0.85,
+      "evidence": "the Securities Commission of the Bahamas froze the assets of one of FTX's subsidiaries"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "FTX",
+      "target_entity": "Delaware",
+      "confidence": 0.9,
+      "evidence": "FTX, FTX.US, Alameda Research, and more than 100 affiliates filed for bankruptcy in Delaware"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Zhao",
+      "target_entity": "Binance Acquisition Announcement",
+      "confidence": 0.9,
+      "evidence": "Zhao announced on Twitter that the company would complete due diligence soon"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "FTX",
+      "target_entity": "Bloomberg",
+      "confidence": 0.9,
+      "evidence": "On November 9, Bloomberg called the acquisition of FTX by Binance 'unlikely'"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "FTX",
+      "target_entity": "Wall Street Journal",
+      "confidence": 0.9,
+      "evidence": "the Wall Street Journal reported that Binance would not move forward with the deal to acquire FTX"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "FTX",
+      "target_entity": "New York Times",
+      "confidence": 0.9,
+      "evidence": "An anonymous source cited by the New York Times on November 14 said the same"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "FTX",
+      "target_entity": "Axios",
+      "confidence": 0.9,
+      "evidence": "On November 10, Axios cited anonymous sources who said that FTX approached Kraken for a potential rescue deal"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "FTX",
+      "target_entity": "Tether",
+      "confidence": 0.95,
+      "evidence": "The funds taken from FTX were mostly stablecoins such as Tether"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "FTX",
+      "target_entity": "Ether",
+      "confidence": 0.95,
+      "evidence": "were quickly exchanged for Ether, a method used by cryptocurrency thieves to thwart attempts to retrieve stolen funds"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "FTX",
+      "target_entity": "Kraken",
+      "confidence": 0.9,
+      "evidence": "Kraken offered to assist in identifying the perpetrator"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "Bankman-Fried told Reuters that he was still in the Bahamas, though other high-ranking FTX employees had begun leaving"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Nishad Singh",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "FTX co-founder Nishad Singh"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "John J. Ray III",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "John J. Ray III, the CEO brought in as a liquidator"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "FTX",
+      "target_entity": "Bahamas",
+      "confidence": 0.9,
+      "evidence": "Bankman-Fried told Reuters that he was still in the Bahamas"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "FTX",
+      "target_entity": "Hong Kong",
+      "confidence": 0.85,
+      "evidence": "other high-ranking FTX employees had begun leaving for Hong Kong, the location of the company's former headquarters"
+    },
+    {
+      "relation_type": "MEMBER_OF",
+      "source_entity": "Alameda Research",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "its subsidiary Alameda Research"
+    },
+    {
+      "relation_type": "MEMBER_OF",
+      "source_entity": "FTX Digital Markets",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "the Bahamas unit of FTX, FTX Digital Markets"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "November 12 questioning",
+      "confidence": 0.95,
+      "evidence": "Authorities in the Bahamas, including the Royal Bahamas Police Force, questioned Bankman-Fried on November 12"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "FTX bankruptcy",
+      "confidence": 0.95,
+      "evidence": "Despite FTX's bankruptcy, Bankman-Fried continued to attempt to raise money for the firm"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Vox",
+      "confidence": 0.9,
+      "evidence": "In an interview with Kelsey Piper published November 16 by Vox, Bankman-Fried blamed an 'ex-employee'"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "FTX",
+      "target_entity": "Bloomberg",
+      "confidence": 0.9,
+      "evidence": "Sources told Bloomberg that the company was FTX"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "FTX",
+      "target_entity": "Reuters",
+      "confidence": 0.9,
+      "evidence": "Bankman-Fried told Reuters that he was still in the Bahamas"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "FTX",
+      "target_entity": "Financial Times",
+      "confidence": 0.9,
+      "evidence": "The Financial Times reported that FTX's balance sheet shortly before the bankruptcy showed"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Crypto.com",
+      "target_entity": "FTX",
+      "confidence": 0.85,
+      "evidence": "a decline attributed in part due to the collapse of FTX"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "BlockFi",
+      "target_entity": "FTX",
+      "confidence": 0.9,
+      "evidence": "The company disclosed 'significant exposure' to FTX on November 14"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Genesis",
+      "target_entity": "FTX",
+      "confidence": 0.85,
+      "evidence": "Another cryptocurrency lender, Genesis, a subsidiary of Digital Currency Group, halted withdrawals on November 16"
+    },
+    {
+      "relation_type": "MEMBER_OF",
+      "source_entity": "Genesis",
+      "target_entity": "Digital Currency Group",
+      "confidence": 0.95,
+      "evidence": "Genesis, a subsidiary of Digital Currency Group"
+    },
+    {
+      "relation_type": "MEMBER_OF",
+      "source_entity": "Grayscale",
+      "target_entity": "Digital Currency Group",
+      "confidence": 0.95,
+      "evidence": "Another Digital Currency Group subsidiary, Grayscale"
+    },
+    {
+      "relation_type": "OWNS",
+      "source_entity": "Winklevoss twins",
+      "target_entity": "Gemini",
+      "confidence": 0.95,
+      "evidence": "Gemini, an exchange owned by the Winklevoss twins"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Gemini",
+      "target_entity": "Genesis",
+      "confidence": 0.9,
+      "evidence": "to cease allowing redemptions for clients using a service provided through a partnership with Genesis"
+    },
+    {
+      "relation_type": "OWNS",
+      "source_entity": "Grayscale",
+      "target_entity": "Grayscale Bitcoin Trust",
+      "confidence": 0.95,
+      "evidence": "its flagship offering, the publicly traded Grayscale Bitcoin Trust"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Gemini",
+      "target_entity": "Genesis",
+      "confidence": 0.95,
+      "evidence": "Gemini, an exchange owned by the Winklevoss twins, to cease allowing redemptions for clients using a service provided through a partnership with Genesis"
+    },
+    {
+      "relation_type": "MEMBER_OF",
+      "source_entity": "Genesis",
+      "target_entity": "Digital Currency Group",
+      "confidence": 0.95,
+      "evidence": "Another Digital Currency Group subsidiary, Grayscale"
+    },
+    {
+      "relation_type": "MEMBER_OF",
+      "source_entity": "Grayscale",
+      "target_entity": "Digital Currency Group",
+      "confidence": 0.95,
+      "evidence": "Another Digital Currency Group subsidiary, Grayscale"
+    },
+    {
+      "relation_type": "CREATED",
+      "source_entity": "Grayscale",
+      "target_entity": "Grayscale Bitcoin Trust",
+      "confidence": 0.95,
+      "evidence": "Grayscale, saw the value of its flagship offering, the publicly traded Grayscale Bitcoin Trust"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "FTX",
+      "target_entity": "Silvergate Bank",
+      "confidence": 0.9,
+      "evidence": "FTX was a depositor and could have also been a source of credit exposure"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Tiger Global Management",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "Institutional investors that stand to lose money due to their stakes in FTX include Tiger Global Management"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Ontario Teachers' Pension Plan",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "Institutional investors that stand to lose money due to their stakes in FTX include Tiger Global Management, the Ontario Teachers' Pension Plan"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "SoftBank Group",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "Institutional investors that stand to lose money due to their stakes in FTX include Tiger Global Management, the Ontario Teachers' Pension Plan, SoftBank Group"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "BlackRock",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "Institutional investors that stand to lose money due to their stakes in FTX include Tiger Global Management, the Ontario Teachers' Pension Plan, SoftBank Group, BlackRock"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Lightspeed Venture Partners",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "Institutional investors that stand to lose money due to their stakes in FTX include Tiger Global Management, the Ontario Teachers' Pension Plan, SoftBank Group, BlackRock, Lightspeed Venture Partners"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Temasek",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "Institutional investors that stand to lose money due to their stakes in FTX include Tiger Global Management, the Ontario Teachers' Pension Plan, SoftBank Group, BlackRock, Lightspeed Venture Partners, Temasek, and Sequoia Capital"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Sequoia Capital",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "Institutional investors that stand to lose money due to their stakes in FTX include Tiger Global Management, the Ontario Teachers' Pension Plan, SoftBank Group, BlackRock, Lightspeed Venture Partners, Temasek, and Sequoia Capital"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Tom Brady",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "Several public figures also invested in FTX or received compensation for promoting the company. These include football player Tom Brady"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Shaquille O'Neal",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "Several public figures also invested in FTX or received compensation for promoting the company. These include football player Tom Brady, basketball players Shaquille O'Neal and Stephen Curry"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Stephen Curry",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "Several public figures also invested in FTX or received compensation for promoting the company. These include football player Tom Brady, basketball players Shaquille O'Neal and Stephen Curry"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Gisele Bündchen",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "Several public figures also invested in FTX or received compensation for promoting the company. These include football player Tom Brady, basketball players Shaquille O'Neal and Stephen Curry, model Gisele Bündchen"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Kevin O'Leary",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "Several public figures also invested in FTX or received compensation for promoting the company. These include football player Tom Brady, basketball players Shaquille O'Neal and Stephen Curry, model Gisele Bündchen, and businessman Kevin O'Leary"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Gisele Bündchen",
+      "target_entity": "FTX",
+      "confidence": 0.9,
+      "evidence": "Gisele Bündchen was also appointed the ESG advisor for the cryptocurrency platform"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Anthony Scaramucci",
+      "target_entity": "SkyBridge Capital",
+      "confidence": 0.95,
+      "evidence": "Anthony Scaramucci, founder of SkyBridge Capital"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "SkyBridge Capital",
+      "target_entity": "FTX",
+      "confidence": 0.9,
+      "evidence": "Anthony Scaramucci, founder of SkyBridge Capital, announced the firm was attempting to buy back a 30% stake in the business owned by FTX"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Galois Capital",
+      "target_entity": "FTX",
+      "confidence": 0.9,
+      "evidence": "Cryptocurrency investment firms with assets still held on FTX after its bankruptcy include Galois Capital and Galaxy Digital"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Galaxy Digital",
+      "target_entity": "FTX",
+      "confidence": 0.9,
+      "evidence": "Cryptocurrency investment firms with assets still held on FTX after its bankruptcy include Galois Capital and Galaxy Digital"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Solana",
+      "target_entity": "Bankman-Fried",
+      "confidence": 0.9,
+      "evidence": "The price of Solana, which was affiliated with Bankman-Fried, declined as well"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Crypto.com",
+      "target_entity": "Cronos",
+      "confidence": 0.9,
+      "evidence": "A decline in the value of Cronos, the token of exchange Crypto.com"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Kris Marszalek",
+      "target_entity": "Crypto.com",
+      "confidence": 0.95,
+      "evidence": "CEO Kris Marszalek provided assurances that the firm was liquid"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "FTX",
+      "target_entity": "The Block",
+      "confidence": 0.9,
+      "evidence": "In December, it emerged that FTX had secretly invested in The Block, a cryptocurrency news firm"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Michael McCaffrey",
+      "target_entity": "The Block",
+      "confidence": 0.95,
+      "evidence": "In December, it emerged that FTX had secretly invested in The Block, a cryptocurrency news firm, and to fund an LLC its CEO Michael McCaffrey used to buy an apartment"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Richard Handler",
+      "target_entity": "Jefferies Group",
+      "confidence": 0.95,
+      "evidence": "Richard Handler, CEO of American financial firm Jefferies Group"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Richard Handler",
+      "target_entity": "Bankman-Fried",
+      "confidence": 0.9,
+      "evidence": "Richard Handler, CEO of American financial firm Jefferies Group, tweeted on November 10 that he had attempted to meet with Bankman-Fried in July and again in September"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Rostin Behnam",
+      "target_entity": "Commodity Futures Trading Commission",
+      "confidence": 0.95,
+      "evidence": "Rostin Behnam, the Chairman of the Commodity Futures Trading Commission"
+    },
+    {
+      "relation_type": "RELATED_TO",
+      "source_entity": "FTX collapse",
+      "target_entity": "Lehman Brothers",
+      "confidence": 0.9,
+      "evidence": "The sudden collapse of FTX has been compared to the bankruptcy of Lehman Brothers in publications such as The New York Times and the Financial Times"
+    },
+    {
+      "relation_type": "RELATED_TO",
+      "source_entity": "FTX collapse",
+      "target_entity": "Enron",
+      "confidence": 0.9,
+      "evidence": "Lawrence Summers acknowledged the comparisons to Lehman and further compared the collapse to the Enron scandal"
+    },
+    {
+      "relation_type": "RELATED_TO",
+      "source_entity": "FTX",
+      "target_entity": "Lehman Brothers",
+      "confidence": 0.95,
+      "evidence": "The sudden collapse of FTX has been compared to the bankruptcy of Lehman Brothers in publications such as The New York Times and the Financial Times."
+    },
+    {
+      "relation_type": "RELATED_TO",
+      "source_entity": "FTX",
+      "target_entity": "Enron",
+      "confidence": 0.95,
+      "evidence": "Lawrence Summers acknowledged the comparisons to Lehman and further compared the collapse to the Enron scandal, caused by fraud perpetrated by Enron executives."
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "FTX",
+      "target_entity": "The New York Times",
+      "confidence": 0.9,
+      "evidence": "The sudden collapse of FTX has been compared to the bankruptcy of Lehman Brothers in publications such as The New York Times and the Financial Times."
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "FTX",
+      "target_entity": "Financial Times",
+      "confidence": 0.9,
+      "evidence": "The sudden collapse of FTX has been compared to the bankruptcy of Lehman Brothers in publications such as The New York Times and the Financial Times."
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "FTX",
+      "target_entity": "Bloomberg",
+      "confidence": 0.85,
+      "evidence": "Anonymous sources cited by Bloomberg said that the office of the United States Attorney for the Southern District of New York had begun an investigation into FTX's collapse as of November 14, 2022."
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "FTX",
+      "target_entity": "The Information",
+      "confidence": 0.85,
+      "evidence": "According to anonymous sources cited by The Information, some venture capital firms are considering suing Bankman-Fried."
+    },
+    {
+      "relation_type": "CREATED",
+      "source_entity": "Titan Grey",
+      "target_entity": "FTX",
+      "confidence": 0.85,
+      "evidence": "Risk management firm Titan Grey published a primer on the commencement and early motions practice of the FTX chapter 11 case, analyzing issues such as creditor privacy, relief from the automatic stay, proposed differential treatment of customers from other creditors, and others."
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "On December 13, 2022, FTX founder and CEO Sam Bankman-Fried was charged by the US attorney's office for the southern district of New York with fraud, conspiracy to commit money laundering, and conspiracy to defraud the US and violate campaign finance laws."
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Palo Alto, California",
+      "confidence": 0.9,
+      "evidence": "After being extradited from the Bahamas, Bankman-Fried was released on a $250 million bond and ordered to remain under house arrest at his parents' home in Palo Alto, California."
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Manhattan",
+      "confidence": 0.85,
+      "evidence": "He was arraigned in federal court in Manhattan on January 3, 2023, and entered a plea of not guilty to all counts."
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Gary Wang",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "Meanwhile, Gary Wang, co-founder of FTX, and Caroline Ellison, who had served as Alameda's CEO, pleaded guilty to multiple charges and began cooperating with federal prosecutors."
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "Alameda Research",
+      "confidence": 0.95,
+      "evidence": "Meanwhile, Gary Wang, co-founder of FTX, and Caroline Ellison, who had served as Alameda's CEO, pleaded guilty to multiple charges and began cooperating with federal prosecutors."
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Ryan Salame",
+      "target_entity": "FTX",
+      "confidence": 0.9,
+      "evidence": "Former FTX executive Ryan Salame pleaded guilty to both a campaign finance law violation and a charge of operating an unlicensed money transmitting business."
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Nishad Singh",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "FTX's former engineering director, Nishad Singh pleaded guilty to six different charges, including three counts of conspiracy to commit fraud."
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Nishad Singh",
+      "target_entity": "Alameda Research",
+      "confidence": 0.9,
+      "evidence": "Singh is a childhood friend of Bankman-Fried's brother and worked at Alameda Research before being brought into FTX."
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "FTX",
+      "target_entity": "Miami Heat",
+      "confidence": 0.9,
+      "evidence": "Deals included the naming rights to the Miami Heat's basketball stadium, renaming it FTX Arena, a partnership with Major League Baseball to place the FTX logo on the uniforms of umpires, and a deal with Mercedes-AMG Petronas F1 Team to add the FTX logo to their cars and merchandise."
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "FTX",
+      "target_entity": "Major League Baseball",
+      "confidence": 0.9,
+      "evidence": "Deals included the naming rights to the Miami Heat's basketball stadium, renaming it FTX Arena, a partnership with Major League Baseball to place the FTX logo on the uniforms of umpires, and a deal with Mercedes-AMG Petronas F1 Team to add the FTX logo to their cars and merchandise."
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "FTX",
+      "target_entity": "Mercedes-AMG Petronas F1 Team",
+      "confidence": 0.9,
+      "evidence": "Deals included the naming rights to the Miami Heat's basketball stadium, renaming it FTX Arena, a partnership with Major League Baseball to place the FTX logo on the uniforms of umpires, and a deal with Mercedes-AMG Petronas F1 Team to add the FTX logo to their cars and merchandise."
+    },
+    {
+      "relation_type": "OWNS",
+      "source_entity": "FTX",
+      "target_entity": "FTX Arena",
+      "confidence": 0.9,
+      "evidence": "Deals included the naming rights to the Miami Heat's basketball stadium, renaming it FTX Arena, a partnership with Major League Baseball to place the FTX logo on the uniforms of umpires, and a deal with Mercedes-AMG Petronas F1 Team to add the FTX logo to their cars and merchandise."
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "FTX",
+      "target_entity": "Miami Heat",
+      "confidence": 0.95,
+      "evidence": "Deals included the naming rights to the Miami Heat's basketball stadium, renaming it FTX Arena"
+    },
+    {
+      "relation_type": "OWNS",
+      "source_entity": "FTX",
+      "target_entity": "FTX Arena",
+      "confidence": 0.9,
+      "evidence": "renaming it FTX Arena"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "FTX",
+      "target_entity": "Major League Baseball",
+      "confidence": 0.95,
+      "evidence": "a partnership with Major League Baseball to place the FTX logo on the uniforms of umpires"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "FTX",
+      "target_entity": "Mercedes-AMG Petronas F1 Team",
+      "confidence": 0.95,
+      "evidence": "a deal with Mercedes-AMG Petronas F1 Team to add the FTX logo to their cars and merchandise"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "FTX",
+      "target_entity": "TSM",
+      "confidence": 0.95,
+      "evidence": "The professional esports organization TSM also had a naming rights deal with FTX, thus the organization became TSM FTX"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "FTX",
+      "target_entity": "MLB Home Run Derby X",
+      "confidence": 0.9,
+      "evidence": "title sponsorships of the first season of MLB Home Run Derby X"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "FTX",
+      "target_entity": "FTX Road to Miami",
+      "confidence": 0.95,
+      "evidence": "title sponsorship of the tournaments FTX Road to Miami"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "FTX",
+      "target_entity": "FTX Crypto Cup",
+      "confidence": 0.95,
+      "evidence": "title sponsorship of the tournaments FTX Crypto Cup as part of the Champions Chess Tour 2022"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "FTX",
+      "target_entity": "Taylor Swift",
+      "confidence": 0.85,
+      "evidence": "FTX held talks with American singer-songwriter Taylor Swift starting in the fall of 2021 regarding a $100 million sponsorship deal"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "FTX",
+      "target_entity": "The Secret Story of FTX's Rise and Ruin",
+      "confidence": 0.95,
+      "evidence": "\"The Secret Story of FTX's Rise and Ruin\"—story series by Reveal"
+    }
+  ],
+  "cost_usd": 0.22582199999999997,
+  "model_used": "anthropic/claude-haiku-4-5-20251001",
+  "error": null
+}

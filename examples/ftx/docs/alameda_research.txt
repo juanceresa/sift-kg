@@ -1,0 +1,31 @@
+Alameda Research was a cryptocurrency trading firm co-founded in September 2017 by Sam Bankman-Fried and Tara MacAulay. In November 2022, FTX, Alameda's sister cryptocurrency exchange, experienced a solvency crisis, and both FTX and Alameda filed for Chapter 11 bankruptcy. That same month, anonymous sources told The Wall Street Journal that FTX had lent more than half of its customers' funds to Alameda, which was explicitly forbidden by FTX's terms-of-service. 
+At Bankman-Fried's trial, Alameda CEO Caroline Ellison testified that she was one of Bankman-Fried's main accomplices in channeling FTX customer funds into Alameda's coffers. In December 2022, Ellison pleaded guilty to two counts of wire fraud and five conspiracy counts involving wire, securities and commodities fraud and money laundering, in relation to her activities at Alameda Research and FTX.
+
+
+== History ==
+
+
+=== Foundation ===
+In November 2017, Sam Bankman-Fried co-founded Alameda Research as a quantitative trading firm, after he left his job at Jane Street Capital. The firm was based in Berkeley, California, where Bankman-Fried moved that same year. He had recruited about 20 young effective altruists, most of whom had no experience trading in financial markets nor were aware of cryptocurrencies. Per a 2021 interview, the term 'research' was included in the name to avoid scrutiny, with Bankman-Fried saying, "if you named your company like We Do Cryptocurrency Bitcoin Arbitrage Multinational Stuff, no one's going to give you a bank account".
+In January 2018, Bankman-Fried organized an arbitrage trade to take advantage of the higher price of bitcoin in Japan versus in America. The company earned between $10 million and $30 million before the price gap closed in early 2018. In early 2019, the firm moved its headquarters from California to Hong Kong. As of August 2021, Bankman-Fried owned approximately 90 percent of Alameda Research.
+
+
+=== Launch of FTX ===
+Sam Bankman-Fried started his own crypto exchange in April 2019 under the name FTX. Alameda Research played a significant role in the growth of FTX, as it acted as FTX's main market maker, available to buy and sell with other customers, sometimes taking trading losses to attract customers to the exchange. According to public data reviewed by The Wall Street Journal, between early 2021 and March 2022, Alameda Research amassed crypto tokens ahead of FTX listing them for trading, especially on the Ethereum blockchain, with a value of about $60 million.
+The Wall Street Journal, citing anonymous sources, reported that Alameda Research suffered a series of losses in May and June 2022 which were covered by FTX lending the trading firm more than half of its customer's funds; FTX CEO Sam Bankman-Fried reportedly described this as a poor judgment call. Pantheri Asset Management made $10.7 million as a counterparty of Alameda. In August 2022, Alameda co-CEO Sam Trabucco resigned, and Caroline Ellison became the firm's sole CEO.
+
+
+=== Bankruptcy ===
+On 8 November 2022, following a liquidity crisis at FTX, a large cryptocurrency exchange, Binance and FTX signed a letter of intent for FTX to be acquired by Binance.  The value of Alameda was affected, and was estimated to have dropped over 90 percent following the public disclosure of problems and the FTX acquisition deal. Alameda held a large quantity of FTT, the native token of the FTX exchange, as assets on its books. TechCrunch reported that "the exchange was unusually intertwined with its sister entity, Alameda Research." Principal shareholder Bankman-Fried had an estimated net worth of $10.5 billion in October 2022 and it dropped to approximately $1 billion according to the Bloomberg Billionaires Index following the crises and preliminary acquisition agreement on 8 November 2022.
+Late in the day on 9 November, The Wall Street Journal reported that Binance was walking away from the FTX acquisition, blaming FTX's mishandling of customer funds and pending investigations of FTX. On 9 November 2022, Alameda's website was taken down. The next day Bankman-Fried said Alameda Research was winding down trading and would close. Alameda Research, along with FTX and more than 130 affiliated entities, filed for Chapter 11 bankruptcy protection in November 2022.
+
+
+== Activities and donations ==
+As a quantitative trading firm specializing in cryptocurrencies, Alameda's strategies included arbitrage, market making, yield farming, and trading volatility. During the 2020 United States presidential election, Alameda gave $5 million to Future Forward USA, a liberal political action committee (PAC) in support of President Joe Biden. In 2022, Alameda reportedly donated $5 million to Guarding Against Pandemics, a PAC run by Sam Bankman-Fried's brother, Gabe. The company provided financial support to the Worldwide Online Olympiad Training program by the Art of Problem Solving.
+
+
+== References ==
+
+
+== External links ==
+Alameda Research website, as archived by the Internet Archive on 7 November 2022

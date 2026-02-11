@@ -1,0 +1,422 @@
+{
+  "document_id": "ryan_salame",
+  "document_path": "test-docs/ryan_salame.txt",
+  "chunks_processed": 1,
+  "entities": [
+    {
+      "name": "Ryan Salame",
+      "entity_type": "PERSON",
+      "attributes": {
+        "birth_year": 1993,
+        "nationality": "American",
+        "occupation": "entrepreneur",
+        "roles": [
+          "CEO of FTX Digital Markets",
+          "founder of American Dream Federal Action super PAC"
+        ],
+        "education": [
+          "Bachelor of Business Administration in accounting from Isenberg School of Management",
+          "Bachelor of Arts in economics from University of Massachusetts Amherst (2015)",
+          "Master's in finance from McDonough School of Business at Georgetown University (2019)"
+        ],
+        "legal_status": "pleaded guilty to conspiracy to make unlawful political contributions and conspiracy to operate an unlicensed money transmitting business",
+        "sentence": "7.5 years in federal prison (May 2024)",
+        "current_location": "FCI Cumberland in Maryland (as of October 2024)"
+      },
+      "confidence": 0.99,
+      "context": "Ryan Salame (born 1993 (1993)) is an American entrepreneur who plead guilty to conspiracy to make unlawful political contributions and conspiracy to operate an unlicensed money transmitting business."
+    },
+    {
+      "name": "FTX Digital Markets",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "subsidiary",
+        "parent_company": "FTX",
+        "location": "Bahamas",
+        "role_of_salame": "CEO and co-chief"
+      },
+      "confidence": 0.99,
+      "context": "He was the CEO of FTX Digital Markets, the FTX subsidiary based in the Bahamas."
+    },
+    {
+      "name": "American Dream Federal Action",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "super PAC",
+        "founder": "Ryan Salame"
+      },
+      "confidence": 0.95,
+      "context": "He was the founder of the American Dream Federal Action super PAC."
+    },
+    {
+      "name": "Alameda Research",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "company",
+        "location": "Hong Kong"
+      },
+      "confidence": 0.95,
+      "context": "In 2019, he started working for Alameda Research in Hong Kong."
+    },
+    {
+      "name": "Ernst & Young",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "company"
+      },
+      "confidence": 0.95,
+      "context": "Salame worked briefly for Ernst & Young."
+    },
+    {
+      "name": "FTX",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "company",
+        "status": "bankruptcy (2022)"
+      },
+      "confidence": 0.99,
+      "context": "During the 2022 bankruptcy proceedings of FTX, it was revealed that the company loaned Salame $55 million."
+    },
+    {
+      "name": "Isenberg School of Management",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "university school"
+      },
+      "confidence": 0.95,
+      "context": "He earned Bachelor of Business Administration in accounting from Isenberg School of Management"
+    },
+    {
+      "name": "University of Massachusetts Amherst",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "university"
+      },
+      "confidence": 0.95,
+      "context": "Bachelor of Arts in economics from the University of Massachusetts Amherst in 2015"
+    },
+    {
+      "name": "McDonough School of Business",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "university school",
+        "parent_institution": "Georgetown University"
+      },
+      "confidence": 0.95,
+      "context": "master's in finance from McDonough School of Business at Georgetown University in 2019"
+    },
+    {
+      "name": "Georgetown University",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "university"
+      },
+      "confidence": 0.95,
+      "context": "McDonough School of Business at Georgetown University in 2019"
+    },
+    {
+      "name": "FCI Cumberland",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "federal correctional institution",
+        "location": "Maryland"
+      },
+      "confidence": 0.95,
+      "context": "As of October 2024, he is incarcerated at FCI Cumberland in Maryland."
+    },
+    {
+      "name": "Sandisfield",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "town",
+        "state": "Massachusetts"
+      },
+      "confidence": 0.95,
+      "context": "Salame grew up in Sandisfield, Massachusetts."
+    },
+    {
+      "name": "Great Barrington",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "city",
+        "state": "Massachusetts"
+      },
+      "confidence": 0.95,
+      "context": "He attended high school at Monument Mountain Regional High School in Great Barrington."
+    },
+    {
+      "name": "Lenox",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "town",
+        "state": "Massachusetts"
+      },
+      "confidence": 0.95,
+      "context": "Salame invested over $6 million in Lenox, Massachusetts restaurants and real estate."
+    },
+    {
+      "name": "Potomac",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "city",
+        "state": "Maryland"
+      },
+      "confidence": 0.95,
+      "context": "In April 2023 the FBI raided Salame's Potomac, Maryland home."
+    },
+    {
+      "name": "Hong Kong",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "city/region"
+      },
+      "confidence": 0.95,
+      "context": "In 2019, he started working for Alameda Research in Hong Kong."
+    },
+    {
+      "name": "Bahamas",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "country"
+      },
+      "confidence": 0.95,
+      "context": "the FTX subsidiary based in the Bahamas"
+    },
+    {
+      "name": "Maryland",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "state"
+      },
+      "confidence": 0.95,
+      "context": "As of October 2024, he is incarcerated at FCI Cumberland in Maryland."
+    },
+    {
+      "name": "Michelle Bond",
+      "entity_type": "PERSON",
+      "attributes": {
+        "relationship_to_salame": "girlfriend",
+        "role": "received consulting fees from FTX Digital Markets",
+        "amount_received": "$400,000"
+      },
+      "confidence": 0.9,
+      "context": "Salame's girlfriend Michelle Bond received $400,000 in consulting fees from FTX Digital Markets."
+    },
+    {
+      "name": "Tucker Carlson",
+      "entity_type": "PERSON",
+      "attributes": {
+        "occupation": "media personality",
+        "platform": "YouTube channel"
+      },
+      "confidence": 0.95,
+      "context": "Salame gave an interview on Tucker Carlson's YouTube channel, claiming innocence. Carlson supported him."
+    },
+    {
+      "name": "Monument Mountain Regional High School",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "high school",
+        "location": "Great Barrington, Massachusetts"
+      },
+      "confidence": 0.95,
+      "context": "He attended high school at Monument Mountain Regional High School in Great Barrington."
+    },
+    {
+      "name": "2022 United States elections",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "political election",
+        "year": 2022,
+        "participant": "Ryan Salame",
+        "action": "donated millions of dollars to Republican candidates"
+      },
+      "confidence": 0.95,
+      "context": "During the primaries of the 2022 United States elections, Salame donated millions of dollars to Republican candidates."
+    },
+    {
+      "name": "2022 FTX bankruptcy proceedings",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal/financial event",
+        "year": 2022,
+        "organization": "FTX",
+        "revelation": "company loaned Salame $55 million"
+      },
+      "confidence": 0.95,
+      "context": "During the 2022 bankruptcy proceedings of FTX, it was revealed that the company loaned Salame $55 million."
+    },
+    {
+      "name": "April 2023 FBI raid",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal event",
+        "date": "April 2023",
+        "agency": "FBI",
+        "location": "Potomac, Maryland",
+        "subject": "Ryan Salame"
+      },
+      "confidence": 0.95,
+      "context": "In April 2023 the FBI raided Salame's Potomac, Maryland home."
+    },
+    {
+      "name": "September 2023 guilty plea",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal event",
+        "date": "September 2023",
+        "person": "Ryan Salame",
+        "charges": [
+          "violating campaign finance laws",
+          "operating an illegal money-transmitting business"
+        ]
+      },
+      "confidence": 0.95,
+      "context": "In September 2023, he pleaded guilty to violating campaign finance laws and operating an illegal money-transmitting business."
+    },
+    {
+      "name": "May 2024 sentencing",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal event",
+        "date": "May 2024",
+        "person": "Ryan Salame",
+        "sentence": "7.5 years in federal prison",
+        "prosecutor_recommendation": "5-7 years"
+      },
+      "confidence": 0.95,
+      "context": "in May 2024 Salame was sentenced to 7.5 years in federal prison."
+    }
+  ],
+  "relations": [
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Ryan Salame",
+      "target_entity": "FTX Digital Markets",
+      "confidence": 0.95,
+      "evidence": "He was the CEO of FTX Digital Markets, the FTX subsidiary based in the Bahamas. He later became co-chief of FTX Digital Markets, FTX's Bahamas unit."
+    },
+    {
+      "relation_type": "CREATED",
+      "source_entity": "Ryan Salame",
+      "target_entity": "American Dream Federal Action",
+      "confidence": 0.95,
+      "evidence": "He was the founder of the American Dream Federal Action super PAC."
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Ryan Salame",
+      "target_entity": "Sandisfield",
+      "confidence": 0.9,
+      "evidence": "Salame grew up in Sandisfield, Massachusetts."
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Ryan Salame",
+      "target_entity": "Monument Mountain Regional High School",
+      "confidence": 0.9,
+      "evidence": "He attended high school at Monument Mountain Regional High School in Great Barrington."
+    },
+    {
+      "relation_type": "MEMBER_OF",
+      "source_entity": "Ryan Salame",
+      "target_entity": "Isenberg School of Management",
+      "confidence": 0.85,
+      "evidence": "He earned Bachelor of Business Administration in accounting from Isenberg School of Management"
+    },
+    {
+      "relation_type": "MEMBER_OF",
+      "source_entity": "Ryan Salame",
+      "target_entity": "University of Massachusetts Amherst",
+      "confidence": 0.85,
+      "evidence": "Bachelor of Arts in economics from the University of Massachusetts Amherst in 2015."
+    },
+    {
+      "relation_type": "MEMBER_OF",
+      "source_entity": "Ryan Salame",
+      "target_entity": "McDonough School of Business",
+      "confidence": 0.85,
+      "evidence": "He later received a master's in finance from McDonough School of Business at Georgetown University in 2019."
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Ryan Salame",
+      "target_entity": "Ernst & Young",
+      "confidence": 0.9,
+      "evidence": "Salame worked briefly for Ernst & Young."
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Ryan Salame",
+      "target_entity": "Alameda Research",
+      "confidence": 0.9,
+      "evidence": "In 2019, he started working for Alameda Research in Hong Kong."
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Ryan Salame",
+      "target_entity": "2022 United States elections",
+      "confidence": 0.9,
+      "evidence": "During the primaries of the 2022 United States elections, Salame donated millions of dollars to Republican candidates."
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Ryan Salame",
+      "target_entity": "2022 FTX bankruptcy proceedings",
+      "confidence": 0.9,
+      "evidence": "During the 2022 bankruptcy proceedings of FTX, it was revealed that the company loaned Salame $55 million."
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Ryan Salame",
+      "target_entity": "Michelle Bond",
+      "confidence": 0.85,
+      "evidence": "Salame's girlfriend Michelle Bond received $400,000 in consulting fees from FTX Digital Markets."
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Ryan Salame",
+      "target_entity": "April 2023 FBI raid",
+      "confidence": 0.9,
+      "evidence": "In April 2023 the FBI raided Salame's Potomac, Maryland home."
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Ryan Salame",
+      "target_entity": "September 2023 guilty plea",
+      "confidence": 0.95,
+      "evidence": "In September 2023, he pleaded guilty to violating campaign finance laws and operating an illegal money-transmitting business."
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Ryan Salame",
+      "target_entity": "May 2024 sentencing",
+      "confidence": 0.95,
+      "evidence": "in May 2024 Salame was sentenced to 7.5 years in federal prison."
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Ryan Salame",
+      "target_entity": "FCI Cumberland",
+      "confidence": 0.9,
+      "evidence": "As of October 2024, he is incarcerated at FCI Cumberland in Maryland."
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Ryan Salame",
+      "target_entity": "Tucker Carlson",
+      "confidence": 0.85,
+      "evidence": "Before his incarceration, Salame gave an interview on Tucker Carlson's YouTube channel, claiming innocence. Carlson supported him."
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "FTX Digital Markets",
+      "target_entity": "Bahamas",
+      "confidence": 0.95,
+      "evidence": "He was the CEO of FTX Digital Markets, the FTX subsidiary based in the Bahamas."
+    }
+  ],
+  "cost_usd": 0.023712999999999984,
+  "model_used": "anthropic/claude-haiku-4-5-20251001",
+  "error": null
+}

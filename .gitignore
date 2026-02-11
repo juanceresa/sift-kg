@@ -212,3 +212,4 @@ __marimo__/
 
 # sift-kg project specific
 output/
+!examples/*/output/

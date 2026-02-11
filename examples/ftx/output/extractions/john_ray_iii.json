@@ -1,0 +1,433 @@
+{
+  "document_id": "john_ray_iii",
+  "document_path": "test-docs/john_ray_iii.txt",
+  "chunks_processed": 1,
+  "entities": [
+    {
+      "name": "John J. Ray III",
+      "entity_type": "PERSON",
+      "attributes": {
+        "birth_date": "January 1959",
+        "nationality": "American",
+        "occupation": "Attorney and CEO",
+        "specialization": "Recovering funds from failed corporations"
+      },
+      "confidence": 0.95,
+      "context": "John J. Ray III (born January 1959) is an American attorney and CEO who specializes in recovering funds from failed corporations."
+    },
+    {
+      "name": "John J. Ray Jr.",
+      "entity_type": "PERSON",
+      "attributes": {
+        "occupation": "Union plumber",
+        "relationship": "Father of John J. Ray III"
+      },
+      "confidence": 0.9,
+      "context": "He is the son of union plumber John J. Ray Jr. and his wife Florence."
+    },
+    {
+      "name": "Florence",
+      "entity_type": "PERSON",
+      "attributes": {
+        "relationship": "Mother of John J. Ray III"
+      },
+      "confidence": 0.85,
+      "context": "He is the son of union plumber John J. Ray Jr. and his wife Florence."
+    },
+    {
+      "name": "Sam Bankman-Fried",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Former CEO of FTX"
+      },
+      "confidence": 0.95,
+      "context": "Ray was appointed to succeed Sam Bankman-Fried as the company's CEO."
+    },
+    {
+      "name": "FTX",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Cryptocurrency exchange",
+        "event": "Chapter 11 bankruptcy declared November 11, 2022",
+        "current_ceo": "John J. Ray III",
+        "hourly_rate_for_ray": "$1,300 per hour",
+        "retainer_fee_for_ray": "$200,000"
+      },
+      "confidence": 0.95,
+      "context": "He was appointed CEO of cryptocurrency exchange FTX in the aftermath of its November 2022 collapse."
+    },
+    {
+      "name": "Enron Creditors Recovery Corp.",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Company",
+        "purpose": "Recovering creditor funds from Enron",
+        "chairman": "John J. Ray III"
+      },
+      "confidence": 0.95,
+      "context": "He previously served as chairman of Enron Creditors Recovery Corp., a company tasked with recovering creditor funds from Enron"
+    },
+    {
+      "name": "Enron",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Corporation",
+        "event": "Accounting scandal and collapse",
+        "chapter_11_emergence": "2004",
+        "creditor_recovery": "$828.9 million (approximately 52 cents on the dollar)"
+      },
+      "confidence": 0.95,
+      "context": "After Enron emerged from its Chapter 11 bankruptcy in 2004, Ray was appointed to chair the effort to recover assets for creditors"
+    },
+    {
+      "name": "Touche Ross",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Accounting firm",
+        "note": "Later merged into Deloitte"
+      },
+      "confidence": 0.9,
+      "context": "Ray started his career at Touche Ross, an accounting firm that later merged into Deloitte"
+    },
+    {
+      "name": "Deloitte",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Accounting firm",
+        "note": "Merged with Touche Ross"
+      },
+      "confidence": 0.9,
+      "context": "an accounting firm that later merged into Deloitte"
+    },
+    {
+      "name": "Mayer Brown",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Law firm",
+        "employee": "John J. Ray III (joined 1984)"
+      },
+      "confidence": 0.9,
+      "context": "before moving to the law firm Mayer Brown in 1984"
+    },
+    {
+      "name": "Waste Management",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Company"
+      },
+      "confidence": 0.85,
+      "context": "and then to Waste Management."
+    },
+    {
+      "name": "Fruit of the Loom",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Clothing company",
+        "event": "Chapter 11 bankruptcy reorganization",
+        "general_counsel": "John J. Ray III (hired 1998)"
+      },
+      "confidence": 0.9,
+      "context": "Soon after he was hired as general counsel of Fruit of the Loom in 1998, the clothing company posted massive losses and filed for Chapter 11 bankruptcy reorganization"
+    },
+    {
+      "name": "Avidity Partners LLC",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Firm",
+        "founder": "John J. Ray III",
+        "specialization": "Receiver, trustee and claims agent in insolvency proceedings"
+      },
+      "confidence": 0.9,
+      "context": "Ray formed Avidity Partners LLC, a firm specializing in serving as a receiver, trustee and claims agent in insolvency proceedings."
+    },
+    {
+      "name": "AbitibiBowater",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Company",
+        "client_of": "Avidity Partners LLC"
+      },
+      "confidence": 0.85,
+      "context": "Clients included AbitibiBowater, National Century Financial Enterprises, and Pac-West Telecomm."
+    },
+    {
+      "name": "National Century Financial Enterprises",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Company",
+        "client_of": "Avidity Partners LLC"
+      },
+      "confidence": 0.85,
+      "context": "Clients included AbitibiBowater, National Century Financial Enterprises, and Pac-West Telecomm."
+    },
+    {
+      "name": "Pac-West Telecomm",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Company",
+        "client_of": "Avidity Partners LLC"
+      },
+      "confidence": 0.85,
+      "context": "Clients included AbitibiBowater, National Century Financial Enterprises, and Pac-West Telecomm."
+    },
+    {
+      "name": "Greylock Partners",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Firm",
+        "founder": "John J. Ray III",
+        "specialization": "Receiver, trustee and claims agent services",
+        "name_change": "Changed name to Owl Hill Advisory in 2019"
+      },
+      "confidence": 0.9,
+      "context": "He formed a new firm, Greylock Partners, providing similar services to Nortel, Residential Capital, Overseas Shipholding and others. In 2019, Greylock changed its name to Owl Hill Advisory."
+    },
+    {
+      "name": "Owl Hill Advisory",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Firm",
+        "former_name": "Greylock Partners",
+        "name_change_date": "2019"
+      },
+      "confidence": 0.9,
+      "context": "In 2019, Greylock changed its name to Owl Hill Advisory."
+    },
+    {
+      "name": "Nortel",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Canadian telecommunications company",
+        "status": "Bankrupt",
+        "principal_officer": "John J. Ray III (starting 2010)"
+      },
+      "confidence": 0.9,
+      "context": "Starting in 2010, Ray was the principal officer of the bankrupt Canadian telecommunications company Nortel."
+    },
+    {
+      "name": "GT Advanced Technologies",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Company",
+        "board_member": "John J. Ray III (independent, appointed 2014)"
+      },
+      "confidence": 0.9,
+      "context": "In 2014, Ray was appointed as an independent board member for GT Advanced Technologies."
+    },
+    {
+      "name": "Residential Capital",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Subprime mortgage services company",
+        "status": "Bankrupt",
+        "asset_liquidation_manager": "John J. Ray III (2016)"
+      },
+      "confidence": 0.9,
+      "context": "In 2016, Ray managed a trust which liquidated the assets of the major subprime mortgage services company Residential Capital."
+    },
+    {
+      "name": "Overseas Shipholding",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Company",
+        "client_of": "Greylock Partners"
+      },
+      "confidence": 0.85,
+      "context": "providing similar services to Nortel, Residential Capital, Overseas Shipholding and others."
+    },
+    {
+      "name": "Pittsfield, Massachusetts",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "City",
+        "country": "United States",
+        "resident": "John J. Ray III (grew up)"
+      },
+      "confidence": 0.95,
+      "context": "Ray grew up in Pittsfield, Massachusetts."
+    },
+    {
+      "name": "University of Massachusetts Amherst",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "University",
+        "graduate": "John J. Ray III (cum laude)"
+      },
+      "confidence": 0.9,
+      "context": "He graduated from the University of Massachusetts Amherst cum laude"
+    },
+    {
+      "name": "Drake University Law School",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Law school",
+        "graduate": "John J. Ray III (second in class, Dean's List)"
+      },
+      "confidence": 0.9,
+      "context": "Drake University Law School second in his class making the Dean's List."
+    },
+    {
+      "name": "United States Bankruptcy Court for the District of Delaware",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Government body",
+        "jurisdiction": "Delaware, United States"
+      },
+      "confidence": 0.9,
+      "context": "in a filing with the United States Bankruptcy Court for the District of Delaware"
+    },
+    {
+      "name": "FTX Chapter 11 Bankruptcy Filing",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "November 11, 2022",
+        "organization": "FTX",
+        "type": "Bankruptcy declaration",
+        "outcome": "John J. Ray III appointed CEO"
+      },
+      "confidence": 0.95,
+      "context": "When cryptocurrency company FTX declared Chapter 11 bankruptcy on November 11, 2022, Ray was appointed to succeed Sam Bankman-Fried as the company's CEO."
+    },
+    {
+      "name": "Enron Chapter 11 Emergence",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "2004",
+        "organization": "Enron",
+        "type": "Bankruptcy emergence",
+        "outcome": "Ray appointed to chair creditor recovery effort"
+      },
+      "confidence": 0.9,
+      "context": "After Enron emerged from its Chapter 11 bankruptcy in 2004, Ray was appointed to chair the effort to recover assets for creditors"
+    },
+    {
+      "name": "Fruit of the Loom Chapter 11 Bankruptcy",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "1998",
+        "organization": "Fruit of the Loom",
+        "type": "Bankruptcy reorganization",
+        "outcome": "Ray managed asset sale"
+      },
+      "confidence": 0.85,
+      "context": "Soon after he was hired as general counsel of Fruit of the Loom in 1998, the clothing company posted massive losses and filed for Chapter 11 bankruptcy reorganization"
+    }
+  ],
+  "relations": [
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "John J. Ray III",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "He was appointed CEO of cryptocurrency exchange FTX in the aftermath of its November 2022 collapse."
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "John J. Ray III",
+      "target_entity": "Enron Creditors Recovery Corp.",
+      "confidence": 0.95,
+      "evidence": "He previously served as chairman of Enron Creditors Recovery Corp., a company tasked with recovering creditor funds from Enron"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "John J. Ray III",
+      "target_entity": "Pittsfield, Massachusetts",
+      "confidence": 0.9,
+      "evidence": "Ray grew up in Pittsfield, Massachusetts."
+    },
+    {
+      "relation_type": "RELATED_TO",
+      "source_entity": "John J. Ray III",
+      "target_entity": "John J. Ray Jr.",
+      "confidence": 0.95,
+      "evidence": "He is the son of union plumber John J. Ray Jr. and his wife Florence."
+    },
+    {
+      "relation_type": "RELATED_TO",
+      "source_entity": "John J. Ray III",
+      "target_entity": "Florence",
+      "confidence": 0.95,
+      "evidence": "He is the son of union plumber John J. Ray Jr. and his wife Florence."
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "John J. Ray III",
+      "target_entity": "Touche Ross",
+      "confidence": 0.9,
+      "evidence": "Ray started his career at Touche Ross, an accounting firm"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "John J. Ray III",
+      "target_entity": "Mayer Brown",
+      "confidence": 0.9,
+      "evidence": "moving to the law firm Mayer Brown in 1984"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "John J. Ray III",
+      "target_entity": "Waste Management",
+      "confidence": 0.9,
+      "evidence": "and then to Waste Management"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "John J. Ray III",
+      "target_entity": "Fruit of the Loom",
+      "confidence": 0.9,
+      "evidence": "he was hired as general counsel of Fruit of the Loom in 1998"
+    },
+    {
+      "relation_type": "OWNS",
+      "source_entity": "John J. Ray III",
+      "target_entity": "Avidity Partners LLC",
+      "confidence": 0.9,
+      "evidence": "Ray formed Avidity Partners LLC, a firm specializing in serving as a receiver, trustee and claims agent"
+    },
+    {
+      "relation_type": "OWNS",
+      "source_entity": "John J. Ray III",
+      "target_entity": "Greylock Partners",
+      "confidence": 0.9,
+      "evidence": "He formed a new firm, Greylock Partners, providing similar services"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "John J. Ray III",
+      "target_entity": "FTX Chapter 11 Bankruptcy Filing",
+      "confidence": 0.95,
+      "evidence": "When cryptocurrency company FTX declared Chapter 11 bankruptcy on November 11, 2022, Ray was appointed to succeed Sam Bankman-Fried as the company's CEO."
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "John J. Ray III",
+      "target_entity": "Enron Chapter 11 Emergence",
+      "confidence": 0.9,
+      "evidence": "After Enron emerged from its Chapter 11 bankruptcy in 2004, Ray was appointed to chair the effort to recover assets for creditors"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "John J. Ray III",
+      "target_entity": "Fruit of the Loom Chapter 11 Bankruptcy",
+      "confidence": 0.9,
+      "evidence": "Soon after he was hired as general counsel of Fruit of the Loom in 1998, the clothing company posted massive losses and filed for Chapter 11 bankruptcy reorganization, with Ray managing the sale of the firm's assets."
+    },
+    {
+      "relation_type": "RELATED_TO",
+      "source_entity": "John J. Ray III",
+      "target_entity": "Sam Bankman-Fried",
+      "confidence": 0.9,
+      "evidence": "Ray was appointed to succeed Sam Bankman-Fried as the company's CEO"
+    },
+    {
+      "relation_type": "RELATED_TO",
+      "source_entity": "Touche Ross",
+      "target_entity": "Deloitte",
+      "confidence": 0.9,
+      "evidence": "Touche Ross, an accounting firm that later merged into Deloitte"
+    }
+  ],
+  "cost_usd": 0.026123000000000007,
+  "model_used": "anthropic/claude-haiku-4-5-20251001",
+  "error": null
+}

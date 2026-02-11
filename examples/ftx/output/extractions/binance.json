@@ -1,0 +1,3833 @@
+{
+  "document_id": "binance",
+  "document_path": "test-docs/binance.txt",
+  "chunks_processed": 7,
+  "entities": [
+    {
+      "name": "Binance Holdings Ltd.",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "also_known_as": "Binance",
+        "type": "cryptocurrency exchange",
+        "founded": "2017",
+        "founder": "Changpeng Zhao",
+        "description": "largest cryptocurrency exchange in terms of daily trading volume",
+        "digital_assets": "over $200 billion"
+      },
+      "confidence": 0.99,
+      "context": "Binance Holdings Ltd., branded Binance, is the largest cryptocurrency exchange in terms of daily trading volume of cryptocurrencies."
+    },
+    {
+      "name": "Changpeng Zhao",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "CEO and founder of Binance",
+        "also_known_as": "Zhao",
+        "founded_companies": [
+          "Fusion Systems",
+          "Binance"
+        ],
+        "previous_positions": [
+          "CTO at OKCoin",
+          "member at Blockchain.info"
+        ],
+        "pardon_date": "October 2025",
+        "pardon_by": "President Trump"
+      },
+      "confidence": 0.99,
+      "context": "Binance was founded in 2017 by Changpeng Zhao. In October 2025, President Trump pardoned Zhao."
+    },
+    {
+      "name": "Arkham Intelligence",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "data analytics company"
+      },
+      "confidence": 1.0,
+      "context": "Arkham Intelligence provided data in January 2023 that identified \"an alleged nexus of money laundering\""
+    },
+    {
+      "name": "China",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "relationship_to_binance": "initial location, later moved away"
+      },
+      "confidence": 0.99,
+      "context": "Binance was initially based in China, then moved to Japan"
+    },
+    {
+      "name": "Japan",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "country"
+      },
+      "confidence": 1.0,
+      "context": "=== Japan ==="
+    },
+    {
+      "name": "Malta",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "relationship_to_binance": "current operational location"
+      },
+      "confidence": 0.99,
+      "context": "subsequently left Japan for Malta"
+    },
+    {
+      "name": "Shanghai",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "country": "China",
+        "relationship": "location where Fusion Systems was founded"
+      },
+      "confidence": 0.95,
+      "context": "CEO Changpeng Zhao founded Fusion Systems in 2005 in Shanghai"
+    },
+    {
+      "name": "United Kingdom",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "country"
+      },
+      "confidence": 1.0,
+      "context": "=== United Kingdom ==="
+    },
+    {
+      "name": "United States",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "country"
+      },
+      "confidence": 1.0,
+      "context": "=== United States ==="
+    },
+    {
+      "name": "Bermuda",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "relationship": "memorandum of understanding signed"
+      },
+      "confidence": 0.95,
+      "context": "In April 2018, Binance signed a memorandum of understanding with the government of Bermuda."
+    },
+    {
+      "name": "Jersey",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "relationship": "location of Binance Jersey exchange"
+      },
+      "confidence": 0.95,
+      "context": "In 2019, the company announced Binance Jersey, a Jersey-based exchange"
+    },
+    {
+      "name": "Israel",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "country"
+      },
+      "confidence": 0.99,
+      "context": "2023 Hamas-led attack on Israel"
+    },
+    {
+      "name": "Blockchain.info",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency wallet company",
+        "relationship_to_zhao": "Changpeng Zhao was third team member"
+      },
+      "confidence": 0.95,
+      "context": "In 2013, he joined Blockchain.info as the third member of the cryptocurrency wallet's team."
+    },
+    {
+      "name": "OKCoin",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency trading platform",
+        "description": "platform for spot trading between fiat and digital assets",
+        "relationship_to_zhao": "Changpeng Zhao was CTO"
+      },
+      "confidence": 0.95,
+      "context": "He also worked at OKCoin as CTO for less than a year, a platform for spot trading between fiat and digital assets."
+    },
+    {
+      "name": "Yi He",
+      "entity_type": "PERSON",
+      "attributes": {
+        "title": "co-CEO of Binance",
+        "appointment_date": "December 3, 2025"
+      },
+      "confidence": 0.95,
+      "context": "On December 3, 2025 Yi He was appointed as co-CEO"
+    },
+    {
+      "name": "Fusion Systems",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "high-frequency trading systems company",
+        "founded": "2005",
+        "location": "Shanghai",
+        "founder": "Changpeng Zhao"
+      },
+      "confidence": 0.95,
+      "context": "CEO Changpeng Zhao founded Fusion Systems in 2005 in Shanghai; the company built high-frequency trading systems for stockbrokers."
+    },
+    {
+      "name": "Coinbase",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency exchange",
+        "relationship": "competitor to Binance"
+      },
+      "confidence": 0.95,
+      "context": "a title it had retained as late as April 2021, despite competition from Coinbase, among others."
+    },
+    {
+      "name": "Chiliz",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "sports blockchain company",
+        "funding_event": "June 2018",
+        "funding_amount": "$65 million",
+        "investors": "Binance and three other firms"
+      },
+      "confidence": 0.95,
+      "context": "In June 2018, Binance and three other firms raised $65 million for sports blockchain company Chiliz."
+    },
+    {
+      "name": "Trust Wallet",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "decentralized cryptocurrency wallet",
+        "acquisition_date": "July 2018",
+        "acquired_by": "Binance"
+      },
+      "confidence": 0.95,
+      "context": "In July 2018, Binance acquired Trust Wallet, a decentralized cryptocurrency wallet for an undisclosed sum"
+    },
+    {
+      "name": "Terra",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "stablecoin project",
+        "funding_event": "August 2018",
+        "funding_amount": "$32 million",
+        "investors": "Binance and three other large exchanges"
+      },
+      "confidence": 0.95,
+      "context": "In August 2018, Binance along with three other large exchanges raised $32 million to fund the stablecoin project Terra."
+    },
+    {
+      "name": "Simplex",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "payment processor",
+        "location": "Israel",
+        "partnership_date": "January 2019",
+        "partner": "Binance"
+      },
+      "confidence": 0.95,
+      "context": "In January 2019, Binance announced that it had partnered with Israel-based payment processor Simplex"
+    },
+    {
+      "name": "WazirX",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency exchange",
+        "owner": "Binance",
+        "country": "India"
+      },
+      "confidence": 1.0,
+      "context": "India's Enforcement Directorate froze the assets of WazirX, an exchange owned by Binance"
+    },
+    {
+      "name": "Malta Financial Services Authority",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "abbreviation": "MFSA",
+        "type": "government regulatory authority",
+        "country": "Malta"
+      },
+      "confidence": 0.98,
+      "context": "the Malta Financial Services Authority (MFSA) issued a public statement"
+    },
+    {
+      "name": "Malta Stock Exchange",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "stock exchange",
+        "country": "Malta",
+        "relationship": "memorandum signed with Binance"
+      },
+      "confidence": 0.95,
+      "context": "a similar memorandum was signed with the Malta Stock Exchange to develop a platform for trading security tokens."
+    },
+    {
+      "name": "Financial Conduct Authority",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "abbreviation": "FCA",
+        "type": "regulatory authority",
+        "country": "United Kingdom"
+      },
+      "confidence": 0.95,
+      "context": "The UK's Financial Conduct Authority ordered Binance to stop all regulated activity in the United Kingdom in June 2021."
+    },
+    {
+      "name": "Wall Street Journal",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "news publication",
+        "reporting_events": [
+          "March 2025 Trump family business talks",
+          "August 2025 World Liberty Financial platform"
+        ]
+      },
+      "confidence": 0.99,
+      "context": "In March 2025, Wall Street Journal uncovered that the company was in talks with the family of Donald Trump"
+    },
+    {
+      "name": "Donald Trump",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "President of the United States",
+        "relationship": "business dealings with Binance, granted pardon to Changpeng Zhao"
+      },
+      "confidence": 0.99,
+      "context": "In March 2025, Wall Street Journal uncovered that the company was in talks with the family of Donald Trump about business dealings."
+    },
+    {
+      "name": "World Liberty Financial",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "trading platform",
+        "owner": "Trump family",
+        "administrator": "Binance"
+      },
+      "confidence": 0.95,
+      "context": "In August 2025, Wall Street Journal found that Binance was quietly administering a trading platform for the Trump family's World Liberty Financial."
+    },
+    {
+      "name": "Forbes",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "media company",
+        "investment_from_binance": "$200 million",
+        "investment_date": "February 2022"
+      },
+      "confidence": 0.97,
+      "context": "In February 2022, Binance took a $200 million stake in Forbes"
+    },
+    {
+      "name": "Binance Jersey",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency exchange",
+        "location": "Jersey",
+        "parent_company": "Binance",
+        "offerings": "fiat-to-cryptocurrency pairs including Euro and British pound"
+      },
+      "confidence": 0.95,
+      "context": "In 2019, the company announced Binance Jersey, a Jersey-based exchange which offers fiat-to-cryptocurrency pairs"
+    },
+    {
+      "name": "Binance.US",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency exchange",
+        "parent_company": "Binance",
+        "country": "United States"
+      },
+      "confidence": 1.0,
+      "context": "In response, Binance and other investors opened Binance.US, a separate exchange designed to comply with all applicable US federal laws"
+    },
+    {
+      "name": "Binance pled guilty to violating U.S. anti-moneylaundering rules",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "21 November 2023",
+        "participant": "Binance",
+        "violation": "U.S. anti-moneylaundering rules",
+        "outcome": "paid $4.3 billion fine"
+      },
+      "confidence": 0.99,
+      "context": "On 21 November 2023, Binance pled guilty to violating U.S. anti-moneylaundering rules and paid a $4.3 billion dollar fine."
+    },
+    {
+      "name": "Binance security breach",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "7 May 2019",
+        "type": "security breach",
+        "amount_stolen": "7,000 bitcoin worth around $40 million",
+        "response": "halted all transactions for one week, pledged reimbursement from emergency fund"
+      },
+      "confidence": 0.99,
+      "context": "On 7 May 2019, Binance revealed that it had been the victim of a \"large scale security breach\" in which hackers had stolen 7,000 bitcoin worth around $40 million at the time."
+    },
+    {
+      "name": "UK Financial Conduct Authority ban",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "June 2021",
+        "type": "regulatory ban",
+        "issuing_authority": "UK Financial Conduct Authority",
+        "action": "ordered Binance to stop all regulated activity in the United Kingdom"
+      },
+      "confidence": 0.99,
+      "context": "The UK's Financial Conduct Authority ordered Binance to stop all regulated activity in the United Kingdom in June 2021."
+    },
+    {
+      "name": "Trump pardon of Changpeng Zhao",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "October 2025",
+        "type": "presidential pardon",
+        "recipient": "Changpeng Zhao",
+        "grantor": "President Trump"
+      },
+      "confidence": 0.99,
+      "context": "In October 2025, President Trump pardoned Zhao."
+    },
+    {
+      "name": "TaiChi document",
+      "entity_type": "DOCUMENT",
+      "attributes": {
+        "alleged_source": "Binance",
+        "title": "TaiChi",
+        "leaked_by": "Forbes",
+        "leak_date": "2023",
+        "content": "proposed regulatory solution to reduce US regulatory risk"
+      },
+      "confidence": 0.85,
+      "context": "Later in 2023, Forbes leaked a document allegedly from Binance titled \"TaiChi\" that proposed this regulatory solution to reduce US regulatory risk."
+    },
+    {
+      "name": "Binance",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency exchange company",
+        "headquarters": "not specified in text"
+      },
+      "confidence": 1.0,
+      "context": "minary investigation for illegal canvassing of clients and money-laundering. In January 2025, French authorities opened a judicial investigation into Binance"
+    },
+    {
+      "name": "Zhao",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "founder and CEO of Binance",
+        "fine": "$50 million",
+        "prison_sentence": "four months",
+        "release_date": "September 2024"
+      },
+      "confidence": 0.99,
+      "context": "Zhao agreed to pay a $50 million fine and step down as CEO"
+    },
+    {
+      "name": "State-owned Assets Supervision and Administration Commission of the State Council",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Chinese state-owned enterprise",
+        "country": "China",
+        "partnership_with": "Binance",
+        "partnership_date": "July 2020"
+      },
+      "confidence": 0.92,
+      "context": "Binance announced a 'strategic partnership' with a Chinese state-owned enterprise under the State-owned Assets Supervision and Administration Commission of the State Council"
+    },
+    {
+      "name": "Belt and Road Initiative",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "economic initiative",
+        "country": "China",
+        "participants": "Binance"
+      },
+      "confidence": 0.85,
+      "context": "Binance had joined a group 'aiming to facilitate' the Belt and Road Initiative"
+    },
+    {
+      "name": "Internal Revenue Service",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government agency",
+        "country": "United States",
+        "abbreviation": "IRS"
+      },
+      "confidence": 1.0,
+      "context": "Binance was under investigation by the United States Department of Justice and Internal Revenue Service for money laundering and tax evasion"
+    },
+    {
+      "name": "United States Department of Justice",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government agency",
+        "country": "United States"
+      },
+      "confidence": 1.0,
+      "context": "Binance was under investigation by the United States Department of Justice and Internal Revenue Service for money laundering and tax evasion"
+    },
+    {
+      "name": "Forbes Global Media Holdings",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "media company",
+        "action": "halted plans to go public via merger",
+        "date": "May 2022"
+      },
+      "confidence": 0.93,
+      "context": "In May 2022, Forbes Global Media Holdings halted plans to go public via a merger with Magnum Opus Acquisition Ltd"
+    },
+    {
+      "name": "Magnum Opus Acquisition Ltd",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "special-purpose acquisition company",
+        "location": "Hong Kong",
+        "merger_partner": "Forbes Global Media Holdings"
+      },
+      "confidence": 0.9,
+      "context": "Forbes Global Media Holdings halted plans to go public via a merger with Magnum Opus Acquisition Ltd, a Hong Kong-based special-purpose acquisition company"
+    },
+    {
+      "name": "Russia",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "country",
+        "events": "2022 Russian invasion of Ukraine, Binance service restrictions"
+      },
+      "confidence": 0.99,
+      "context": "amidst the 2022 Russian invasion of Ukraine, Zhao refused to ban users from Russia"
+    },
+    {
+      "name": "Ukraine",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "country",
+        "event": "2022 Russian invasion",
+        "binance_donation": "$10 million for humanitarian needs"
+      },
+      "confidence": 0.99,
+      "context": "Binance later softened the tone of their opposition but not their policy, and also pointed to their donation of $10 million for humanitarian needs in Ukraine"
+    },
+    {
+      "name": "Reuters",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "news organization"
+      },
+      "confidence": 1.0,
+      "context": "In February 2023, Reuters reported that over the first three months of 2021, Binance transferred over $404 million"
+    },
+    {
+      "name": "Hydra",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Russian darknet market",
+        "country": "Russia",
+        "funds_laundered_through_binance": "$780 million"
+      },
+      "confidence": 0.88,
+      "context": "$780 million laundered from the Russian darknet market Hydra"
+    },
+    {
+      "name": "Lazarus Group",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "hacking group",
+        "country": "North Korea",
+        "activity": "money laundering through Binance"
+      },
+      "confidence": 0.9,
+      "context": "Binance had been used by the Lazarus Group to launder funds stolen by North Korea to support its weapons program"
+    },
+    {
+      "name": "Alexei Navalny",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Russian opposition leader",
+        "status": "late",
+        "country": "Russia",
+        "event": "Binance shared information about funds raised by his network with Rosfinmonitoring"
+      },
+      "confidence": 0.92,
+      "context": "Binance shared information with Rosfinmonitoring about funds raised by late Russian opposition leader Alexei Navalny's network"
+    },
+    {
+      "name": "Rosfinmonitoring",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Russian financial monitoring agency",
+        "country": "Russia",
+        "information_received_from": "Binance"
+      },
+      "confidence": 0.88,
+      "context": "Binance shared information with Rosfinmonitoring about funds raised by late Russian opposition leader Alexei Navalny's network"
+    },
+    {
+      "name": "CommEX",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency platform",
+        "country": "Russia",
+        "acquired_binance_business": "September 2023",
+        "shutdown_date": "10 May 2024"
+      },
+      "confidence": 0.92,
+      "context": "In September 2023, Binance announced it was leaving Russia and selling its business to the CommEX platform"
+    },
+    {
+      "name": "Italy",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "country"
+      },
+      "confidence": 1.0,
+      "context": "=== Italy ==="
+    },
+    {
+      "name": "Switzerland",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "country",
+        "event": "Binance seeking registration"
+      },
+      "confidence": 0.9,
+      "context": "the company was also seeking registration in more European countries, such as Switzerland, Sweden, Spain, Netherlands, Portugal, and Austria"
+    },
+    {
+      "name": "Sweden",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "country",
+        "event": "Binance seeking registration, registered in January 2023"
+      },
+      "confidence": 0.92,
+      "context": "Binance registered to operate in Spain in July 2022, and in Sweden in January 2023"
+    },
+    {
+      "name": "Spain",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "country",
+        "event": "Binance registered to operate",
+        "date": "July 2022"
+      },
+      "confidence": 0.95,
+      "context": "Binance registered to operate in Spain in July 2022"
+    },
+    {
+      "name": "Netherlands",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "country"
+      },
+      "confidence": 1.0,
+      "context": "=== Netherlands ==="
+    },
+    {
+      "name": "Portugal",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "country",
+        "event": "Binance seeking registration"
+      },
+      "confidence": 0.9,
+      "context": "the company was also seeking registration in more European countries, such as Switzerland, Sweden, Spain, Netherlands, Portugal, and Austria"
+    },
+    {
+      "name": "Austria",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "country",
+        "event": "Binance seeking registration"
+      },
+      "confidence": 0.9,
+      "context": "the company was also seeking registration in more European countries, such as Switzerland, Sweden, Spain, Netherlands, Portugal, and Austria"
+    },
+    {
+      "name": "Africa Cup of Nations",
+      "entity_type": "EVENT",
+      "attributes": {
+        "year": 2021,
+        "sponsor": "Binance",
+        "type": "sports event"
+      },
+      "confidence": 0.95,
+      "context": "Binance sponsored the Africa Cup of Nations in 2021"
+    },
+    {
+      "name": "Elon Musk",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Twitter acquirer",
+        "transaction_date": "October 2022"
+      },
+      "confidence": 0.99,
+      "context": "the acquisition of Twitter by Elon Musk that completed in October 2022"
+    },
+    {
+      "name": "Twitter",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "social media company",
+        "acquisition_by": "Elon Musk",
+        "investment_from_binance": "$500 million",
+        "acquisition_completion_date": "October 2022"
+      },
+      "confidence": 0.98,
+      "context": "Binance invested US$500 million towards the acquisition of Twitter by Elon Musk that completed in October 2022"
+    },
+    {
+      "name": "Binance acquisition of WazirX",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "financial transaction",
+        "date": "November 2019",
+        "acquirer": "Binance",
+        "target": "WazirX",
+        "dispute": "Binance founder Zhao claimed the deal was never signed in August 2022"
+      },
+      "confidence": 0.93,
+      "context": "In November 2019, Binance announced it was acquiring Indian bitcoin exchange WazirX, which became disputed in August 2022 when Binance founder Zhao claimed the deal was never signed"
+    },
+    {
+      "name": "MFSA public statement on Binance",
+      "entity_type": "DOCUMENT",
+      "attributes": {
+        "type": "regulatory statement",
+        "issuing_authority": "Malta Financial Services Authority",
+        "date": "21 February 2020",
+        "subject": "Binance regulatory status"
+      },
+      "confidence": 0.92,
+      "context": "On 21 February 2020, the Malta Financial Services Authority (MFSA) issued a public statement responding to media reports referring to Binance as a Malta-based cryptocurrency company"
+    },
+    {
+      "name": "Forbes leaked documents",
+      "entity_type": "DOCUMENT",
+      "attributes": {
+        "type": "leaked corporate documents",
+        "release_date": "28 October 2020",
+        "released_by": "Forbes staff",
+        "subject": "Binance corporate structure and regulatory deception"
+      },
+      "confidence": 0.9,
+      "context": "On 28 October 2020, Forbes staff released leaked documents showing that Binance and its CEO, Changpeng Zhao, created an elaborate corporate structure designed to intentionally deceive United States regulators"
+    },
+    {
+      "name": "2022 Russian invasion of Ukraine",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "military conflict",
+        "date": "2022",
+        "countries_involved": [
+          "Russia",
+          "Ukraine"
+        ],
+        "binance_response": "Zhao refused to ban Russian users citing financial freedom"
+      },
+      "confidence": 0.95,
+      "context": "In March 2022, amidst the 2022 Russian invasion of Ukraine, Zhao refused to ban users from Russia"
+    },
+    {
+      "name": "Bitcoin withdrawal suspension",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "operational decision",
+        "date": "13 June 2022",
+        "organization": "Binance",
+        "reason": "serious declines in cryptocurrency value",
+        "duration": "unspecified period, resumed same day"
+      },
+      "confidence": 0.9,
+      "context": "On 13 June 2022, Binance announced that for an unspecified period of time users would not be unable to withdraw their funds held in bitcoin"
+    },
+    {
+      "name": "FTX",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency exchange",
+        "status": "rival exchange with liquidity crunch",
+        "binance_acquisition_attempt_date": "8 November 2022",
+        "deal_status": "backed out next day"
+      },
+      "confidence": 0.98,
+      "context": "Binance offered to buy rival cryptocurrency exchange FTX's non-US operations (FTX.com)"
+    },
+    {
+      "name": "Sakura Exchange",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency exchange",
+        "acquisition_date": "30 November 2022",
+        "acquired_by": "Binance",
+        "location": "Japan"
+      },
+      "confidence": 0.95,
+      "context": "On 30 November 2022, Binance purchased Sakura Exchange"
+    },
+    {
+      "name": "The Wall Street Journal",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "news publication",
+        "reports": "Binance workforce cuts, internal investigation, Trump family talks"
+      },
+      "confidence": 0.99,
+      "context": "The Wall Street Journal reported that Binance had cut its global workforce"
+    },
+    {
+      "name": "CNBC",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "news network",
+        "report": "Binance staff cuts estimate"
+      },
+      "confidence": 0.98,
+      "context": "CNBC reported that the number of staff cuts could total 3,000 by the end of 2023"
+    },
+    {
+      "name": "Richard Teng",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "CEO",
+        "organization": "Binance"
+      },
+      "confidence": 1.0,
+      "context": "Binance's CEO, Richard Teng, claimed that officials sought a bribe"
+    },
+    {
+      "name": "SEC",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government agency",
+        "full_name": "Securities and Exchange Commission",
+        "country": "United States"
+      },
+      "confidence": 0.99,
+      "context": "the SEC said it was suing Binance and Zhao on 13 charges"
+    },
+    {
+      "name": "DWF Labs",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "trading and investment firm",
+        "status": "VIP client of Binance",
+        "allegations": "market manipulation, pump and dump schemes, wash trading"
+      },
+      "confidence": 0.95,
+      "context": "a VIP client of the company, a trading and investment firm named DWF Labs"
+    },
+    {
+      "name": "University of Texas at Austin",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "university",
+        "notable_researcher": "John Griffin"
+      },
+      "confidence": 0.95,
+      "context": "John Griffin, a finance professor at the University of Texas at Austin"
+    },
+    {
+      "name": "John Griffin",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "finance professor",
+        "affiliation": "University of Texas at Austin",
+        "research": "Binance use in pig butchering scams"
+      },
+      "confidence": 0.95,
+      "context": "According to a 2024 study by John Griffin, a finance professor at the University of Texas at Austin"
+    },
+    {
+      "name": "FTX bankruptcy court",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "court",
+        "location": "Delaware",
+        "case": "FTX bankruptcy litigation"
+      },
+      "confidence": 0.9,
+      "context": "The lawsuit is one of many filed by FTX against its former investors, affiliates and clients in the bankruptcy court of Delaware"
+    },
+    {
+      "name": "Anthony Scaramucci",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "former White House communications officer",
+        "legal_status": "defendant in FTX lawsuit"
+      },
+      "confidence": 0.95,
+      "context": "Other defendants include former White House communications officer Anthony Scaramucci"
+    },
+    {
+      "name": "Crypto.com",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "digital-asset exchange",
+        "legal_status": "defendant in FTX lawsuit"
+      },
+      "confidence": 0.95,
+      "context": "digital-asset exchange Crypto.com"
+    },
+    {
+      "name": "FWD.US",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "political group",
+        "founder": "Mark Zuckerberg",
+        "legal_status": "defendant in FTX lawsuit"
+      },
+      "confidence": 0.9,
+      "context": "political groups such as the Mark Zuckerberg-founded FWD.US"
+    },
+    {
+      "name": "Mark Zuckerberg",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "founder of FWD.US"
+      },
+      "confidence": 0.95,
+      "context": "the Mark Zuckerberg-founded FWD.US"
+    },
+    {
+      "name": "Nigeria",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "country"
+      },
+      "confidence": 1.0,
+      "context": "=== Nigeria ==="
+    },
+    {
+      "name": "Mubadala",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "sovereign-wealth fund",
+        "country": "UAE",
+        "investment": "$2 billion stake in Binance",
+        "investment_date": "2025"
+      },
+      "confidence": 0.95,
+      "context": "the UAE government's sovereign-wealth fund Mubadala bought a $2 billion stake in Binance"
+    },
+    {
+      "name": "Abu Dhabi",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "city/emirate",
+        "country": "UAE",
+        "regulatory_action": "allowed Binance to operate",
+        "action_date": "December 2025"
+      },
+      "confidence": 0.95,
+      "context": "Abu Dhabi's financial regulator allowed Binance to operate from Abu Dhabi"
+    },
+    {
+      "name": "Steve Witkoff",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Trump advisor",
+        "involvement": "alleged involvement in Binance-Trump family talks",
+        "status": "denied by his office"
+      },
+      "confidence": 0.85,
+      "context": "Trump advisor Steve Witkoff was involved, although his office denied this"
+    },
+    {
+      "name": "MGX Fund Management Limited",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "investment fund",
+        "backing": "Abu Dhabi government",
+        "investment": "$2 billion minority stake in Binance",
+        "investment_date": "March 12, 2025"
+      },
+      "confidence": 0.95,
+      "context": "the Abu Dhabi government-backed investment fund MGX Fund Management Limited had made a minority $2 billion investment in Binance"
+    },
+    {
+      "name": "Karoline Leavitt",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "White House press secretary",
+        "statement_date": "October 23, 2025"
+      },
+      "confidence": 0.95,
+      "context": "White House press secretary Karoline Leavitt saying that Zhao had been the victim of persecution"
+    },
+    {
+      "name": "Joe Biden",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "former President",
+        "administration": "Biden administration"
+      },
+      "confidence": 0.99,
+      "context": "the victim of persecution by the Joe Biden administration"
+    },
+    {
+      "name": "Binance conviction",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "21 November 2023",
+        "defendant": "Binance",
+        "charges": "violations of the Bank Secrecy Act, money laundering schemes, unlicensed money transmitting, and sanctions violations",
+        "penalty": "$4 billion in fines",
+        "ceo_resignation": "Changpeng Zhao with $50 million fine"
+      },
+      "confidence": 0.99,
+      "context": "On 21 November 2023, a US judge convicted Binance on multiple charges"
+    },
+    {
+      "name": "Binance pardon",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "October 23, 2025",
+        "recipient": "Changpeng Zhao",
+        "grantor": "President Trump",
+        "crime_pardoned": "felony conviction"
+      },
+      "confidence": 0.99,
+      "context": "On October 23, 2025, Trump pardoned Zhao"
+    },
+    {
+      "name": "October 7 attacks",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "October 7",
+        "type": "terrorist attack",
+        "victims": "families filed lawsuit in November 2025"
+      },
+      "confidence": 0.9,
+      "context": "families of victims of the October 7 attacks filed a lawsuit against Binance"
+    },
+    {
+      "name": "Hamas",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Palestinian militant organization"
+      },
+      "confidence": 1.0,
+      "context": "internal communications describing transactions by Palestinian militant organization Hamas"
+    },
+    {
+      "name": "Hezbollah",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "militant organization",
+        "allegation": "received funds transferred through Binance"
+      },
+      "confidence": 0.9,
+      "context": "alleging that the company helped to transfer funds for Hamas and Hezbollah"
+    },
+    {
+      "name": "BNB",
+      "entity_type": "DOCUMENT",
+      "attributes": {
+        "full_name": "Build'N'Build",
+        "original_name": "Binance Coin",
+        "type": "cryptocurrency token",
+        "launch_date": "July 2017",
+        "blockchain": "BNB Smart Chain",
+        "market_position_2021": "third highest market capitalization among cryptocurrencies"
+      },
+      "confidence": 0.95,
+      "context": "BNB (Build'N'Build) is a token on the BNB Smart Chain. It was originally called Binance Coin when it was launched in July 2017"
+    },
+    {
+      "name": "Ethereum",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "blockchain network"
+      },
+      "confidence": 0.95,
+      "context": "The token was initially on the Ethereum network"
+    },
+    {
+      "name": "BNB Smart Chain",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "blockchain network",
+        "launch_date": "September 2020",
+        "previous_name": "Binance Smart Chain",
+        "renamed_date": "February 2022",
+        "validators": "44 as of October 2022"
+      },
+      "confidence": 0.95,
+      "context": "moved to BNB Smart Chain when it was released in September 2020"
+    },
+    {
+      "name": "Binance USD",
+      "entity_type": "DOCUMENT",
+      "attributes": {
+        "abbreviation": "BUSD",
+        "type": "stablecoin",
+        "peg": "US dollar",
+        "issuer": "Paxos on behalf of Binance",
+        "market_position_2022": "third largest stablecoin by market capitalization",
+        "discontinuation_date": "September 1, 2023"
+      },
+      "confidence": 0.95,
+      "context": "Binance USD (BUSD) was a US dollar-pegged stablecoin issued by Paxos on the behalf of Binance"
+    },
+    {
+      "name": "Paxos",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "financial services company",
+        "role": "issuer of BUSD"
+      },
+      "confidence": 0.95,
+      "context": "issued by Paxos on the behalf of Binance"
+    },
+    {
+      "name": "Bloomberg",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "news and financial information company"
+      },
+      "confidence": 0.95,
+      "context": "In January 2023, Bloomberg reported"
+    },
+    {
+      "name": "Tether",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "stablecoin issuer",
+        "token": "USDT"
+      },
+      "confidence": 0.95,
+      "context": "following Tether (USDT) and USD Coin (USDC)"
+    },
+    {
+      "name": "USD Coin",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "stablecoin issuer",
+        "abbreviation": "USDC"
+      },
+      "confidence": 0.95,
+      "context": "following Tether (USDT) and USD Coin (USDC)"
+    },
+    {
+      "name": "New York Department of Financial Services",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government regulatory agency",
+        "jurisdiction": "New York",
+        "action": "issued order to Paxos to stop minting BUSD tokens in February 2023"
+      },
+      "confidence": 0.95,
+      "context": "The New York Department of Financial Services issued an order to Paxos"
+    },
+    {
+      "name": "BEP-20 Token Standard",
+      "entity_type": "DOCUMENT",
+      "attributes": {
+        "type": "token standard",
+        "blockchain": "Binance Smart Chain",
+        "based_on": "ERC-20 from Ethereum"
+      },
+      "confidence": 0.95,
+      "context": "BEP-20 is a token standard on the Binance Smart Chain (BSC), based on ERC-20 from Ethereum"
+    },
+    {
+      "name": "Australia",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "country"
+      },
+      "confidence": 0.95,
+      "context": "On 6 April 2023, the Australian Securities & Investments Commission"
+    },
+    {
+      "name": "Australian Securities & Investments Commission",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government regulatory agency",
+        "jurisdiction": "Australia",
+        "action": "cancelled financial services licence of Binance Australia Derivatives on April 6, 2023"
+      },
+      "confidence": 0.95,
+      "context": "the Australian Securities & Investments Commission cancelled the Australian financial services licence"
+    },
+    {
+      "name": "Oztures Trading Pty Ltd",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "company",
+        "trading_name": "Binance Australia Derivatives",
+        "licence_status": "cancelled April 6, 2023"
+      },
+      "confidence": 0.9,
+      "context": "Oztures Trading Pty Ltd trading as Binance Australia Derivatives"
+    },
+    {
+      "name": "PayID",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "payment system",
+        "jurisdiction": "Australia"
+      },
+      "confidence": 0.9,
+      "context": "lost access to Australia's PayID payment system"
+    },
+    {
+      "name": "Westpac",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "bank",
+        "jurisdiction": "Australia",
+        "action": "banned customers from transacting with Binance on May 18, 2023"
+      },
+      "confidence": 0.95,
+      "context": "Westpac bank banned Australian customers transacting with Binance"
+    },
+    {
+      "name": "Belgium",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "country"
+      },
+      "confidence": 0.95,
+      "context": "Belgium's Financial Services and Markets Authority"
+    },
+    {
+      "name": "Belgium Financial Services and Markets Authority",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government regulatory agency",
+        "jurisdiction": "Belgium",
+        "action": "ordered Binance to cease virtual currency services on June 23, 2023"
+      },
+      "confidence": 0.95,
+      "context": "Belgium's Financial Services and Markets Authority ordered Binance"
+    },
+    {
+      "name": "European Economic Area",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "economic region"
+      },
+      "confidence": 0.9,
+      "context": "from countries that are not members of the European Economic Area"
+    },
+    {
+      "name": "Canada",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "country"
+      },
+      "confidence": 0.95,
+      "context": "Binance announced it would withdraw from the Canadian market"
+    },
+    {
+      "name": "Ontario Securities Commission",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government regulatory agency",
+        "jurisdiction": "Ontario, Canada",
+        "actions": [
+          "received undertaking from Binance on March 17, 2022",
+          "issued investigation order on May 30, 2023"
+        ]
+      },
+      "confidence": 0.95,
+      "context": "Ontario Securities Commission"
+    },
+    {
+      "name": "Ontario",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "province",
+        "country": "Canada"
+      },
+      "confidence": 0.95,
+      "context": "users in Ontario"
+    },
+    {
+      "name": "FINTRAC",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government financial intelligence agency",
+        "jurisdiction": "Canada",
+        "action": "imposed $4.32 million fine on Binance in May 2024"
+      },
+      "confidence": 0.95,
+      "context": "FINTRAC announced that it had imposed a $4.32 million fine on Binance"
+    },
+    {
+      "name": "France",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "country"
+      },
+      "confidence": 1.0,
+      "context": "In January 2025, French authorities opened a judicial investigation into Binance"
+    },
+    {
+      "name": "Paris prosecutor's office",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government law enforcement agency",
+        "jurisdiction": "Paris, France",
+        "action": "announced preliminary investigation into Binance in June 2023"
+      },
+      "confidence": 0.95,
+      "context": "the Paris prosecutor's office announced that Binance was under preliminary investigation"
+    },
+    {
+      "name": "Germany",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "country"
+      },
+      "confidence": 1.0,
+      "context": "=== Germany ==="
+    },
+    {
+      "name": "Federal Financial Supervisory Authority",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government agency",
+        "country": "Germany"
+      },
+      "confidence": 1.0,
+      "context": "the Federal Financial Supervisory Authority in Germany warned that the company risked fines"
+    },
+    {
+      "name": "Binance pardon event",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "October 23, 2025",
+        "type": "presidential pardon",
+        "person_pardoned": "Changpeng Zhao",
+        "authority": "President Trump",
+        "context": "pardon would simplify revival of Binance's US presence"
+      },
+      "confidence": 0.95,
+      "context": "On October 23, 2025, Trump pardoned Zhao"
+    },
+    {
+      "name": "MGX Fund investment event",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "March 12, 2025",
+        "type": "financial investment",
+        "investor": "MGX Fund Management Limited",
+        "investee": "Binance",
+        "amount": "$2 billion",
+        "investment_type": "minority investment"
+      },
+      "confidence": 0.95,
+      "context": "On March 12, 2025, it was announced that the Abu Dhabi government-backed investment fund MGX Fund Management Limited had made a minority $2 billion investment in Binance"
+    },
+    {
+      "name": "Binance lawsuit event",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "November 2025",
+        "type": "legal action",
+        "plaintiffs": "families of victims of October 7 attacks",
+        "defendant": "Binance",
+        "allegations": "helped transfer funds for Hamas and Hezbollah"
+      },
+      "confidence": 0.9,
+      "context": "In November 2025, families of victims of the October 7 attacks filed a lawsuit against Binance"
+    },
+    {
+      "name": "Yi He appointment event",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "December 3, 2025",
+        "type": "personnel appointment",
+        "person": "Yi He",
+        "position": "co-CEO",
+        "organization": "Binance"
+      },
+      "confidence": 0.95,
+      "context": "On December 3, 2025 Yi He was appointed as co-CEO"
+    },
+    {
+      "name": "BNB name change event",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "February 2022",
+        "type": "corporate rebranding",
+        "old_name": "Binance Coin",
+        "new_name": "Build'N'Build",
+        "organization": "Binance"
+      },
+      "confidence": 0.95,
+      "context": "In February 2022, the company changed the token's name to Build'N'Build"
+    },
+    {
+      "name": "BNB Chain renaming event",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "February 2022",
+        "type": "corporate rebranding",
+        "old_name": "Binance Smart Chain",
+        "new_name": "BNB Chain",
+        "organization": "Binance"
+      },
+      "confidence": 0.95,
+      "context": "Binance Smart Chain was also renamed to BNB Chain"
+    },
+    {
+      "name": "BUSD discontinuation event",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "September 1, 2023",
+        "type": "product discontinuation",
+        "product": "Binance USD (BUSD)",
+        "organization": "Binance"
+      },
+      "confidence": 0.95,
+      "context": "In a formal statement issued on September 1, 2023, Binance announced it would discontinue support for BUSD"
+    },
+    {
+      "name": "Paxos BUSD minting halt event",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "February 2023",
+        "type": "regulatory order",
+        "authority": "New York Department of Financial Services",
+        "target": "Paxos",
+        "action": "ordered to stop minting new BUSD tokens"
+      },
+      "confidence": 0.95,
+      "context": "The New York Department of Financial Services issued an order to Paxos to stop minting new BUSD tokens in February 2023"
+    },
+    {
+      "name": "Binance Australia licence cancellation event",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "April 6, 2023",
+        "type": "regulatory action",
+        "authority": "Australian Securities & Investments Commission",
+        "target": "Oztures Trading Pty Ltd (Binance Australia Derivatives)",
+        "action": "cancelled financial services licence"
+      },
+      "confidence": 0.95,
+      "context": "On 6 April 2023, the Australian Securities & Investments Commission cancelled the Australian financial services licence"
+    },
+    {
+      "name": "Binance Australia PayID access loss event",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "May 18, 2023",
+        "type": "service disruption",
+        "organization": "Binance Australia",
+        "impact": "lost access to PayID payment system"
+      },
+      "confidence": 0.9,
+      "context": "On 18 May 2023, Binance Australia announced that it had lost access to Australia's PayID payment system"
+    },
+    {
+      "name": "Westpac Binance ban event",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "May 18, 2023",
+        "type": "business restriction",
+        "organization": "Westpac",
+        "action": "banned Australian customers from transacting with Binance"
+      },
+      "confidence": 0.95,
+      "context": "The same day, Westpac bank banned Australian customers transacting with Binance"
+    },
+    {
+      "name": "Belgium Binance service halt event",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "June 23, 2023",
+        "type": "regulatory order",
+        "authority": "Belgium Financial Services and Markets Authority",
+        "target": "Binance",
+        "action": "ordered to cease virtual currency services"
+      },
+      "confidence": 0.95,
+      "context": "On June 23, 2023, Belgium's Financial Services and Markets Authority ordered Binance to cease"
+    },
+    {
+      "name": "Binance Ontario undertaking event",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "March 17, 2022",
+        "type": "regulatory compliance",
+        "authority": "Ontario Securities Commission",
+        "target": "Binance",
+        "action": "confirmed undertaking to stop opening new accounts and halt trading for Ontario users"
+      },
+      "confidence": 0.95,
+      "context": "On 17 March 2022, Binance has confirmed in an undertaking to the Ontario Securities Commission"
+    },
+    {
+      "name": "Binance Canada withdrawal event",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "May 2023",
+        "type": "business decision",
+        "organization": "Binance",
+        "action": "announced withdrawal from Canadian market due to stricter rules"
+      },
+      "confidence": 0.95,
+      "context": "In May 2023, Binance announced it would withdraw from the Canadian market"
+    },
+    {
+      "name": "Ontario Securities Commission investigation event",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "May 30, 2023",
+        "type": "regulatory investigation",
+        "authority": "Ontario Securities Commission",
+        "target": "Binance",
+        "investigation_focus": "whether Binance circumvented Ontario securities law prior to withdrawal"
+      },
+      "confidence": 0.95,
+      "context": "On May 30, 2023, it was reported that the Ontario Securities Commission had issued an investigation order"
+    },
+    {
+      "name": "FINTRAC Binance fine event",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "May 2024",
+        "type": "regulatory penalty",
+        "authority": "FINTRAC",
+        "target": "Binance",
+        "fine_amount": "$4.32 million",
+        "violation": "money laundering and terrorist financing laws"
+      },
+      "confidence": 0.95,
+      "context": "In May 2024, FINTRAC announced that it had imposed a $4.32 million fine on Binance"
+    },
+    {
+      "name": "Binance France regulatory approval event",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "May 2022",
+        "type": "regulatory approval",
+        "jurisdiction": "France",
+        "target": "Binance",
+        "significance": "first European country to give Binance regulatory approval"
+      },
+      "confidence": 0.95,
+      "context": "In May 2022, Binance gained regulatory approval in France"
+    },
+    {
+      "name": "Paris Binance preliminary investigation event",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "June 2023",
+        "type": "legal investigation",
+        "authority": "Paris prosecutor's office",
+        "target": "Binance",
+        "allegations": "illegal canvassing of clients and money-laundering"
+      },
+      "confidence": 0.95,
+      "context": "In June 2023, the Paris prosecutor's office announced that Binance was under preliminary investigation"
+    },
+    {
+      "name": "French judicial investigation into Binance event",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "January 2025",
+        "type": "judicial investigation",
+        "authority": "French authorities",
+        "target": "Binance",
+        "allegations": "money laundering, drug trafficking, and tax fraud within EU from 2019 to 2024"
+      },
+      "confidence": 0.95,
+      "context": "In January 2025, French authorities opened a judicial investigation into Binance"
+    },
+    {
+      "name": "German Federal Financial Supervisory Authority warning event",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "April 2021",
+        "type": "regulatory warning",
+        "authority": "Federal Financial Supervisory Authority",
+        "jurisdiction": "Germany",
+        "target": "Binance",
+        "warning": "risked fines for not releasing investor prospectus for stock tokens"
+      },
+      "confidence": 0.95,
+      "context": "In April 2021, the Federal Financial Supervisory Authority in Germany warned"
+    },
+    {
+      "name": "Commissione Nazionale per le Società e la Borsa",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government agency",
+        "country": "Italy"
+      },
+      "confidence": 1.0,
+      "context": "Italy's Commissione Nazionale per le Società e la Borsa ordered Binance to be blocked"
+    },
+    {
+      "name": "India",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "country"
+      },
+      "confidence": 1.0,
+      "context": "=== India ==="
+    },
+    {
+      "name": "Enforcement Directorate",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government agency",
+        "country": "India"
+      },
+      "confidence": 1.0,
+      "context": "India's Enforcement Directorate froze the assets of WazirX"
+    },
+    {
+      "name": "Nischal Shetty",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "co-founder",
+        "organization": "WazirX"
+      },
+      "confidence": 1.0,
+      "context": "The co-founder of WazirX, Nischal Shetty, disputed Zhao's claims"
+    },
+    {
+      "name": "Zanmai Labs",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "operating entity",
+        "operates": "WazirX"
+      },
+      "confidence": 1.0,
+      "context": "Zanmai Labs—the operating entity of WazirX"
+    },
+    {
+      "name": "Financial Intelligence Unit (India)",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government agency",
+        "country": "India"
+      },
+      "confidence": 1.0,
+      "context": "Financial Intelligence Unit (India) recommended blocking the URLs of nine crypto entities"
+    },
+    {
+      "name": "Prevention of Money Laundering Act, 2002",
+      "entity_type": "DOCUMENT",
+      "attributes": {
+        "type": "legislation",
+        "country": "India",
+        "year": 2002
+      },
+      "confidence": 1.0,
+      "context": "non compliance to the provisions of the Prevention of Money Laundering Act, 2002 (PMLA)"
+    },
+    {
+      "name": "Financial Services Agency",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government agency",
+        "country": "Japan",
+        "abbreviation": "FSA"
+      },
+      "confidence": 1.0,
+      "context": "Japan's Financial Services Agency warned Binance that it was not registered"
+    },
+    {
+      "name": "Dutch central bank",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government agency",
+        "country": "Netherlands"
+      },
+      "confidence": 1.0,
+      "context": "the Dutch central bank announced a €3.3m fine for Binance"
+    },
+    {
+      "name": "Securities and Exchange Commission",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government agency",
+        "country": "Nigeria"
+      },
+      "confidence": 1.0,
+      "context": "Nigeria's Securities and Exchange Commission recently deemed Binance's activities in the country as \"illegal\""
+    },
+    {
+      "name": "Binance Nigeria Limited",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "subsidiary",
+        "parent": "Binance",
+        "country": "Nigeria"
+      },
+      "confidence": 1.0,
+      "context": "Binance Nigeria Limited, a subsidiary of Binance, was operating unlawfully"
+    },
+    {
+      "name": "Nadeem Anjarwalla",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Binance executive",
+        "organization": "Binance",
+        "event": "detained in Nigeria"
+      },
+      "confidence": 1.0,
+      "context": "two Binance executives, Nadeem Anjarwalla and Tigran Gambaryan, were detained by Nigeria's government"
+    },
+    {
+      "name": "Tigran Gambaryan",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Binance executive",
+        "organization": "Binance",
+        "event": "detained in Nigeria"
+      },
+      "confidence": 1.0,
+      "context": "two Binance executives, Nadeem Anjarwalla and Tigran Gambaryan, were detained by Nigeria's government"
+    },
+    {
+      "name": "Nigeria's House of Representatives",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government body",
+        "country": "Nigeria"
+      },
+      "confidence": 1.0,
+      "context": "Nigeria's House of Representatives denied the allegations"
+    },
+    {
+      "name": "Philippines",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "country"
+      },
+      "confidence": 1.0,
+      "context": "=== Philippines ==="
+    },
+    {
+      "name": "National Telecommunications Commission",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government agency",
+        "country": "Philippines",
+        "abbreviation": "NTC"
+      },
+      "confidence": 1.0,
+      "context": "the SEC to seek assistance from the National Telecommunications Commission (NTC)"
+    },
+    {
+      "name": "Emilio Aquino",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "SEC Chair",
+        "organization": "Securities and Exchange Commission (Philippines)"
+      },
+      "confidence": 1.0,
+      "context": "SEC Chair Emilio Aquino emphasized the potential threat to investors' security"
+    },
+    {
+      "name": "Google",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "technology company"
+      },
+      "confidence": 1.0,
+      "context": "the SEC has collaborated with major tech companies like Google and Meta"
+    },
+    {
+      "name": "Meta",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "technology company"
+      },
+      "confidence": 1.0,
+      "context": "the SEC has collaborated with major tech companies like Google and Meta"
+    },
+    {
+      "name": "Thailand",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "country"
+      },
+      "confidence": 1.0,
+      "context": "=== Thailand ==="
+    },
+    {
+      "name": "Thailand's Securities and Exchange Commission",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government agency",
+        "country": "Thailand"
+      },
+      "confidence": 1.0,
+      "context": "Thailand's Securities and Exchange Commission filed a criminal complaint against Binance"
+    },
+    {
+      "name": "Emergency Decree on Digital Asset Business B.E. 2561",
+      "entity_type": "DOCUMENT",
+      "attributes": {
+        "type": "legislation",
+        "country": "Thailand",
+        "year": 2018
+      },
+      "confidence": 1.0,
+      "context": "Emergency Decree on Digital Asset Business B.E. 2561 (2018)"
+    },
+    {
+      "name": "January 2025 French Investigation",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "judicial investigation",
+        "date": "January 2025",
+        "location": "France",
+        "subject": "Binance",
+        "allegations": "money laundering, drug trafficking, tax fraud",
+        "period_under_investigation": "2019 to 2024"
+      },
+      "confidence": 1.0,
+      "context": "In January 2025, French authorities opened a judicial investigation into Binance for potential involvement in money laundering, drug trafficking, and tax fraud within the European Union from 2019 to 2024"
+    },
+    {
+      "name": "April 2021 Germany Warning",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "regulatory warning",
+        "date": "April 2021",
+        "location": "Germany",
+        "subject": "Binance",
+        "authority": "Federal Financial Supervisory Authority"
+      },
+      "confidence": 1.0,
+      "context": "In April 2021, the Federal Financial Supervisory Authority in Germany warned that the company risked fines"
+    },
+    {
+      "name": "July 2021 Italy Blocking Order",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "regulatory order",
+        "date": "July 2021",
+        "location": "Italy",
+        "subject": "Binance",
+        "action": "ordered to be blocked from operating"
+      },
+      "confidence": 1.0,
+      "context": "In July 2021, Italy's Commissione Nazionale per le Società e la Borsa ordered Binance to be blocked from operating"
+    },
+    {
+      "name": "May 2022 Italy Regulatory Approval",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "regulatory approval",
+        "date": "May 2022",
+        "location": "Italy",
+        "subject": "Binance"
+      },
+      "confidence": 1.0,
+      "context": "In May 2022, Binance gained regulatory approval in Italy"
+    },
+    {
+      "name": "August 2022 WazirX Asset Freeze",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "regulatory action",
+        "date": "August 2022",
+        "location": "India",
+        "subject": "WazirX",
+        "action": "assets frozen",
+        "reason": "money laundering investigation"
+      },
+      "confidence": 1.0,
+      "context": "In August 2022, India's Enforcement Directorate froze the assets of WazirX"
+    },
+    {
+      "name": "28 December Financial Intelligence Unit Recommendation",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "regulatory recommendation",
+        "date": "28 December",
+        "location": "India",
+        "subject": "Binance and other crypto entities",
+        "action": "recommended blocking URLs"
+      },
+      "confidence": 0.8,
+      "context": "On 28 December, Financial Intelligence Unit (India) recommended blocking the URLs of nine crypto entities, including Binance"
+    },
+    {
+      "name": "12 January 2024 App Store Removal",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "regulatory action",
+        "date": "12 January 2024",
+        "location": "India",
+        "subject": "Binance",
+        "action": "application removed from istore and Google Play Store"
+      },
+      "confidence": 1.0,
+      "context": "On 12 January 2024, The Binance application was removed from istore and Google Play Store"
+    },
+    {
+      "name": "June 2024 India Fine",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "financial penalty",
+        "date": "June 2024",
+        "location": "India",
+        "subject": "Binance",
+        "amount": "US$2.25 million",
+        "reason": "operating in violation of local anti-money laundering regulations"
+      },
+      "confidence": 1.0,
+      "context": "In June 2024, Binance was imposed with a fine of US$2.25 million by the Financial Intelligence Unit"
+    },
+    {
+      "name": "25 June 2021 Japan FSA Warning",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "regulatory warning",
+        "date": "25 June 2021",
+        "location": "Japan",
+        "subject": "Binance",
+        "authority": "Financial Services Agency"
+      },
+      "confidence": 1.0,
+      "context": "On 25 June 2021, Japan's Financial Services Agency warned Binance that it was not registered"
+    },
+    {
+      "name": "23 March 2018 Japan FSA Warning",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "regulatory warning",
+        "date": "23 March 2018",
+        "location": "Japan",
+        "subject": "Binance",
+        "authority": "Financial Services Agency"
+      },
+      "confidence": 1.0,
+      "context": "a similar warning was issued on 23 March 2018"
+    },
+    {
+      "name": "April 2022 Netherlands Fine",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "financial penalty",
+        "date": "April 2022",
+        "location": "Netherlands",
+        "subject": "Binance",
+        "amount": "€3.3m",
+        "reason": "offering services without being registered"
+      },
+      "confidence": 1.0,
+      "context": "In April 2022, the Dutch central bank announced a €3.3m fine for Binance"
+    },
+    {
+      "name": "August 2021 Netherlands Warning",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "regulatory warning",
+        "date": "August 2021",
+        "location": "Netherlands",
+        "subject": "Binance"
+      },
+      "confidence": 1.0,
+      "context": "an official warning was issued to the company during August 2021"
+    },
+    {
+      "name": "June 2023 Netherlands Exit",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "business decision",
+        "date": "June 2023",
+        "location": "Netherlands",
+        "subject": "Binance",
+        "action": "announced leaving the Netherlands"
+      },
+      "confidence": 1.0,
+      "context": "In June 2023, Binance announced that it was leaving the Netherlands"
+    },
+    {
+      "name": "June 2023 Nigeria Illegal Declaration",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "regulatory declaration",
+        "date": "June 2023",
+        "location": "Nigeria",
+        "subject": "Binance",
+        "action": "deemed activities as illegal"
+      },
+      "confidence": 1.0,
+      "context": "In June 2023, Nigeria's Securities and Exchange Commission recently deemed Binance's activities in the country as \"illegal\""
+    },
+    {
+      "name": "28 February 2024 Nigeria Executive Detention",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal action",
+        "date": "28 February 2024",
+        "location": "Nigeria",
+        "subject": "Nadeem Anjarwalla and Tigran Gambaryan",
+        "action": "detained",
+        "allegations": "illegal operations and forex manipulation"
+      },
+      "confidence": 1.0,
+      "context": "On 28 February 2024, two Binance executives, Nadeem Anjarwalla and Tigran Gambaryan, were detained by Nigeria's government"
+    },
+    {
+      "name": "March 2024 Anjarwalla Escape",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal event",
+        "date": "March 2024",
+        "location": "Nigeria",
+        "subject": "Nadeem Anjarwalla",
+        "action": "escaped custody"
+      },
+      "confidence": 1.0,
+      "context": "Anjarwalla escaped custody in March"
+    },
+    {
+      "name": "8 March 2024 Naira Services Disabled",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "business action",
+        "date": "8 March 2024",
+        "location": "Nigeria",
+        "subject": "Binance",
+        "action": "disabled Naira services"
+      },
+      "confidence": 1.0,
+      "context": "Binance disabled its Naira services on 8 March 2024"
+    },
+    {
+      "name": "May 2024 Bribe Allegation",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "allegation",
+        "date": "May 2024",
+        "location": "Nigeria",
+        "subject": "Binance",
+        "claim": "officials sought a bribe of cryptocurrency"
+      },
+      "confidence": 1.0,
+      "context": "In May, Binance's CEO, Richard Teng, claimed that officials sought a bribe of cryptocurrency"
+    },
+    {
+      "name": "October 2024 Gambaryan Release",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal resolution",
+        "date": "October 2024",
+        "location": "Nigeria",
+        "subject": "Tigran Gambaryan",
+        "action": "released",
+        "reason": "charges dropped"
+      },
+      "confidence": 1.0,
+      "context": "In October 2024, Gambaryan was released after the Nigerian government dropped charges against him"
+    },
+    {
+      "name": "25 March 2024 Philippines SEC Website Block",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "regulatory action",
+        "date": "25 March 2024",
+        "location": "Philippines",
+        "subject": "Binance",
+        "action": "SEC moved forward with plans to block website"
+      },
+      "confidence": 1.0,
+      "context": "On Monday, 25 March 2024, the Securities and Exchange Commission (SEC) of the Philippines has moved forward with plans to block Binance's website"
+    },
+    {
+      "name": "November 2023 Philippines SEC Warning",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "regulatory warning",
+        "date": "November 2023",
+        "location": "Philippines",
+        "subject": "Binance",
+        "authority": "SEC"
+      },
+      "confidence": 0.9,
+      "context": "Despite issuing warnings since November of the previous year"
+    },
+    {
+      "name": "2 July 2021 Thailand Criminal Complaint",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal action",
+        "date": "2 July 2021",
+        "location": "Thailand",
+        "subject": "Binance",
+        "action": "criminal complaint filed",
+        "authority": "Thailand's Securities and Exchange Commission"
+      },
+      "confidence": 1.0,
+      "context": "Thailand's Securities and Exchange Commission filed a criminal complaint against Binance on 2 July 2021"
+    },
+    {
+      "name": "Gulf Binance",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency exchange",
+        "joint_venture": "Binance and Gulf Innova",
+        "country": "Thailand"
+      },
+      "confidence": 1.0,
+      "context": "In May 2023, Thailand's Ministry of Finance issued a cryptocurrency exchange license to Gulf Binance, the joint venture of Binance and Gulf Innova"
+    },
+    {
+      "name": "Gulf Innova",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "subsidiary",
+        "parent_company": "Gulf Energy Development",
+        "country": "Thailand"
+      },
+      "confidence": 1.0,
+      "context": "Gulf Binance, the joint venture of Binance and Gulf Innova, a subsidiary of Thai billionaire Sarath Ratanavadi's Gulf Energy Development"
+    },
+    {
+      "name": "Gulf Energy Development",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "company",
+        "country": "Thailand",
+        "owner": "Sarath Ratanavadi"
+      },
+      "confidence": 1.0,
+      "context": "a subsidiary of Thai billionaire Sarath Ratanavadi's Gulf Energy Development"
+    },
+    {
+      "name": "Sarath Ratanavadi",
+      "entity_type": "PERSON",
+      "attributes": {
+        "title": "Thai billionaire",
+        "affiliation": "Gulf Energy Development"
+      },
+      "confidence": 1.0,
+      "context": "Thai billionaire Sarath Ratanavadi's Gulf Energy Development"
+    },
+    {
+      "name": "UK's Financial Conduct Authority",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government regulatory body",
+        "country": "United Kingdom",
+        "abbreviation": "FCA"
+      },
+      "confidence": 1.0,
+      "context": "In January 2021, the UK's Financial Conduct Authority began requiring firms dealing with cryptoassets to register"
+    },
+    {
+      "name": "Binance Markets Limited",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "subsidiary of Binance",
+        "country": "United Kingdom"
+      },
+      "confidence": 1.0,
+      "context": "In June 2023, the FCA canceled unused permissions granted to Binance Markets Limited"
+    },
+    {
+      "name": "United States Securities and Exchange Commission",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government regulatory body",
+        "country": "United States",
+        "abbreviation": "SEC"
+      },
+      "confidence": 1.0,
+      "context": "the United States Securities and Exchange Commission launched an enquiry into Binance to determine if the company's 2017 ICO of BNB tokens amounted to an illegal sale of a security"
+    },
+    {
+      "name": "Voyager Digital",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency exchange"
+      },
+      "confidence": 1.0,
+      "context": "Binance.US announced that it would acquire Voyager Digital's assets in a $1.02 billion deal"
+    },
+    {
+      "name": "Bitzlato",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency exchange"
+      },
+      "confidence": 1.0,
+      "context": "Arkham Intelligence provided data in January 2023 that identified \"an alleged nexus of money laundering\" from a much smaller exchange called Bitzlato"
+    },
+    {
+      "name": "Silvergate Bank",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "bank"
+      },
+      "confidence": 1.0,
+      "context": "Binance transferred over $404 million from a Binance.US account at Silvergate Bank to Merit Peak Ltd."
+    },
+    {
+      "name": "Merit Peak Ltd.",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "company",
+        "manager": "Zhao"
+      },
+      "confidence": 1.0,
+      "context": "Binance transferred over $404 million from a Binance.US account at Silvergate Bank to Merit Peak Ltd., a company managed by Zhao"
+    },
+    {
+      "name": "Catherine Coley",
+      "entity_type": "PERSON",
+      "attributes": {
+        "title": "CEO of Binance US",
+        "status": "former"
+      },
+      "confidence": 1.0,
+      "context": "Catherine Coley, then-CEO of Binance US, was quoted in messages to another Binance executive"
+    },
+    {
+      "name": "Elizabeth Warren",
+      "entity_type": "PERSON",
+      "attributes": {
+        "title": "US Senator"
+      },
+      "confidence": 1.0,
+      "context": "US Senators Elizabeth Warren, Chris Van Hollen, and Roger Marshall wrote a letter to Binance"
+    },
+    {
+      "name": "Chris Van Hollen",
+      "entity_type": "PERSON",
+      "attributes": {
+        "title": "US Senator"
+      },
+      "confidence": 1.0,
+      "context": "US Senators Elizabeth Warren, Chris Van Hollen, and Roger Marshall wrote a letter to Binance"
+    },
+    {
+      "name": "Roger Marshall",
+      "entity_type": "PERSON",
+      "attributes": {
+        "title": "US Senator"
+      },
+      "confidence": 1.0,
+      "context": "US Senators Elizabeth Warren, Chris Van Hollen, and Roger Marshall wrote a letter to Binance"
+    },
+    {
+      "name": "Commodity Futures Trading Commission",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government regulatory body",
+        "country": "United States",
+        "abbreviation": "CFTC"
+      },
+      "confidence": 1.0,
+      "context": "the Commodity Futures Trading Commission (CFTC) filed a lawsuit against Binance and Zhao"
+    },
+    {
+      "name": "United States District Court for the Northern District of Illinois",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "court",
+        "country": "United States",
+        "jurisdiction": "Northern District of Illinois"
+      },
+      "confidence": 1.0,
+      "context": "the Commodity Futures Trading Commission (CFTC) filed a lawsuit against Binance and Zhao in the United States District Court for the Northern District of Illinois"
+    },
+    {
+      "name": "Radix Trading",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "trading firm",
+        "status": "VIP client of Binance"
+      },
+      "confidence": 1.0,
+      "context": "three unidentified trading firms cited as VIP clients of Binance were revealed to be Radix Trading, Jane Street Capital, and Tower Research Capital"
+    },
+    {
+      "name": "Jane Street Capital",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "trading firm",
+        "status": "VIP client of Binance"
+      },
+      "confidence": 1.0,
+      "context": "three unidentified trading firms cited as VIP clients of Binance were revealed to be Radix Trading, Jane Street Capital, and Tower Research Capital"
+    },
+    {
+      "name": "Tower Research Capital",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "trading firm",
+        "status": "VIP client of Binance"
+      },
+      "confidence": 1.0,
+      "context": "three unidentified trading firms cited as VIP clients of Binance were revealed to be Radix Trading, Jane Street Capital, and Tower Research Capital"
+    },
+    {
+      "name": "Brian Shroder",
+      "entity_type": "PERSON",
+      "attributes": {
+        "title": "CEO of Binance.US",
+        "status": "resigned",
+        "resignation_date": "12 September 2023"
+      },
+      "confidence": 1.0,
+      "context": "On 12 September 2023, Binance.US announced the resignation of CEO Brian Shroder"
+    },
+    {
+      "name": "Emergency Decree on Digital Asset Business B.E. 2561 (2018)",
+      "entity_type": "DOCUMENT",
+      "attributes": {
+        "type": "legal decree",
+        "country": "Thailand",
+        "year": "2018"
+      },
+      "confidence": 1.0,
+      "context": "\"for commission of offence under the Emergency Decree on Digital Asset Business B.E. 2561 (2018)\""
+    },
+    {
+      "name": "Digital Asset Businesses Emergency Decree",
+      "entity_type": "DOCUMENT",
+      "attributes": {
+        "type": "legal decree",
+        "country": "Thailand",
+        "section_cited": "Section 26"
+      },
+      "confidence": 1.0,
+      "context": "a violation of Section 26 of the Digital Asset Businesses Emergency Decree"
+    },
+    {
+      "name": "BNB tokens ICO 2017",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "initial coin offering",
+        "company": "Binance",
+        "year": "2017",
+        "token": "BNB"
+      },
+      "confidence": 1.0,
+      "context": "the company's 2017 ICO of BNB tokens amounted to an illegal sale of a security"
+    },
+    {
+      "name": "Binance criminal complaint filing",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal action",
+        "date": "2 July 2021",
+        "jurisdiction": "Thailand",
+        "defendant": "Binance"
+      },
+      "confidence": 1.0,
+      "context": "Thailand's Securities and Exchange Commission filed a criminal complaint against Binance on 2 July 2021"
+    },
+    {
+      "name": "Gulf Binance license issuance",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "regulatory approval",
+        "date": "May 2023",
+        "jurisdiction": "Thailand",
+        "recipient": "Gulf Binance"
+      },
+      "confidence": 1.0,
+      "context": "In May 2023, Thailand's Ministry of Finance issued a cryptocurrency exchange license to Gulf Binance"
+    },
+    {
+      "name": "FCA cryptoasset registration requirement",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "regulatory action",
+        "date": "January 2021",
+        "jurisdiction": "United Kingdom"
+      },
+      "confidence": 1.0,
+      "context": "In January 2021, the UK's Financial Conduct Authority began requiring firms dealing with cryptoassets to register"
+    },
+    {
+      "name": "FCA order to stop regulated activity",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "regulatory action",
+        "date": "June 2021",
+        "jurisdiction": "United Kingdom",
+        "defendant": "Binance"
+      },
+      "confidence": 1.0,
+      "context": "In June 2021, Binance was ordered by the FCA to stop all regulated activity in the United Kingdom"
+    },
+    {
+      "name": "FCA cancellation of Binance Markets Limited permissions",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "regulatory action",
+        "date": "June 2023",
+        "jurisdiction": "United Kingdom",
+        "defendant": "Binance Markets Limited"
+      },
+      "confidence": 1.0,
+      "context": "In June 2023, the FCA canceled unused permissions granted to Binance Markets Limited"
+    },
+    {
+      "name": "Binance US ban",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "regulatory action",
+        "date": "2019",
+        "jurisdiction": "United States",
+        "defendant": "Binance"
+      },
+      "confidence": 1.0,
+      "context": "In 2019, Binance was banned in the United States on regulatory grounds"
+    },
+    {
+      "name": "Binance.US opening",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "business event",
+        "date": "2019",
+        "jurisdiction": "United States"
+      },
+      "confidence": 1.0,
+      "context": "In response, Binance and other investors opened Binance.US, a separate exchange designed to comply with all applicable US federal laws"
+    },
+    {
+      "name": "DOJ and IRS investigation of Binance",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "investigation",
+        "date": "May 2021",
+        "jurisdiction": "United States",
+        "agencies": [
+          "Department of Justice",
+          "Internal Revenue Service"
+        ],
+        "charges": [
+          "money laundering",
+          "tax evasion"
+        ]
+      },
+      "confidence": 1.0,
+      "context": "In May 2021, Bloomberg News reported that Binance was under investigation by the United States Department of Justice and Internal Revenue Service for money laundering and tax evasion"
+    },
+    {
+      "name": "SEC inquiry into Binance BNB ICO",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "investigation",
+        "date": "June 2022",
+        "jurisdiction": "United States",
+        "defendant": "Binance"
+      },
+      "confidence": 1.0,
+      "context": "In June 2022, the United States Securities and Exchange Commission launched an enquiry into Binance to determine if the company's 2017 ICO of BNB tokens amounted to an illegal sale of a security"
+    },
+    {
+      "name": "Binance.US acquisition of Voyager Digital assets",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "financial transaction",
+        "date": "December 2022",
+        "amount": "$1.02 billion",
+        "buyer": "Binance.US",
+        "seller": "Voyager Digital"
+      },
+      "confidence": 1.0,
+      "context": "In December 2022, Binance's American entity Binance.US announced that it would acquire Voyager Digital's assets in a $1.02 billion deal"
+    },
+    {
+      "name": "Binance.US cancellation of Voyager Digital acquisition",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "financial transaction cancellation",
+        "date": "April 2023",
+        "reason": "hostile and uncertain regulatory climate"
+      },
+      "confidence": 1.0,
+      "context": "This deal was called off in April 2023 due to what Binance.US called a \"hostile and uncertain regulatory climate\""
+    },
+    {
+      "name": "Arkham Intelligence money laundering report",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "investigation report",
+        "date": "January 2023",
+        "subject": "alleged nexus of money laundering from Bitzlato through Binance"
+      },
+      "confidence": 1.0,
+      "context": "Arkham Intelligence provided data in January 2023 that identified \"an alleged nexus of money laundering\" from a much smaller exchange called Bitzlato"
+    },
+    {
+      "name": "Reuters report on Binance transfers",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "news report",
+        "date": "February 2023",
+        "subject": "transfers from Binance.US to Merit Peak Ltd."
+      },
+      "confidence": 1.0,
+      "context": "In February 2023, Reuters reported that over the first three months of 2021, Binance transferred over $404 million"
+    },
+    {
+      "name": "Senate letter to Binance",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal action",
+        "date": "1 March 2023",
+        "senders": [
+          "Elizabeth Warren",
+          "Chris Van Hollen",
+          "Roger Marshall"
+        ],
+        "recipient": "Binance"
+      },
+      "confidence": 1.0,
+      "context": "On 1 March 2023, US Senators Elizabeth Warren, Chris Van Hollen, and Roger Marshall wrote a letter to Binance"
+    },
+    {
+      "name": "CFTC lawsuit against Binance",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal action",
+        "date": "27 March 2023",
+        "plaintiff": "Commodity Futures Trading Commission",
+        "defendants": [
+          "Binance",
+          "Zhao"
+        ],
+        "court": "United States District Court for the Northern District of Illinois",
+        "charges": [
+          "willful evasion of US law",
+          "breaching derivatives rules"
+        ]
+      },
+      "confidence": 1.0,
+      "context": "On 27 March 2023, the Commodity Futures Trading Commission (CFTC) filed a lawsuit against Binance and Zhao in the United States District Court for the Northern District of Illinois"
+    },
+    {
+      "name": "SEC lawsuit against Binance",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal action",
+        "date": "June 2023",
+        "plaintiff": "Securities and Exchange Commission",
+        "defendants": [
+          "Binance",
+          "Zhao"
+        ],
+        "charges": "13 charges for alleged violations of US securities rules"
+      },
+      "confidence": 1.0,
+      "context": "In June 2023, the SEC said it was suing Binance and Zhao on 13 charges for alleged violations of US securities rules"
+    },
+    {
+      "name": "Binance.US CEO resignation and workforce reduction",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "business event",
+        "date": "12 September 2023",
+        "person": "Brian Shroder",
+        "position": "CEO",
+        "workforce_reduction": "approximately 100 positions (one-third of total staff)"
+      },
+      "confidence": 1.0,
+      "context": "On 12 September 2023, Binance.US announced the resignation of CEO Brian Shroder and a reduction of the exchange's workforce by around 100 positions"
+    },
+    {
+      "name": "Department of Justice",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government agency",
+        "country": "United States"
+      },
+      "confidence": 0.95,
+      "context": "calling for the Department of Justice to crack down on the exchange"
+    },
+    {
+      "name": "Cynthia Lummis",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "US senator",
+        "country": "United States"
+      },
+      "confidence": 0.95,
+      "context": "US senator Cynthia Lummis and US Representative French Hill"
+    },
+    {
+      "name": "French Hill",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "US Representative",
+        "country": "United States"
+      },
+      "confidence": 0.95,
+      "context": "US senator Cynthia Lummis and US Representative French Hill"
+    },
+    {
+      "name": "SEC civil suit",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal action",
+        "plaintiff": "SEC",
+        "defendant": "Binance and Zhao",
+        "charges": "13 charges for alleged violations of US securities rules",
+        "date": "June 2023"
+      },
+      "confidence": 0.99,
+      "context": "In June 2023, the SEC said it was suing Binance and Zhao on 13 charges"
+    },
+    {
+      "name": "Binance guilty plea and fine",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal settlement",
+        "date": "21 November 2023",
+        "fine": "$4.3 billion",
+        "violations": "Bank Secrecy Act violations, failure to register as money transmitting business, International Emergency Economic Powers Act"
+      },
+      "confidence": 0.99,
+      "context": "On 21 November 2023, Binance pled guilty and paid a $4.3 billion dollar fine"
+    },
+    {
+      "name": "Binance Hamas funding lawsuit",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "civil lawsuit",
+        "date": "31 January 2024",
+        "plaintiffs": "US victims of 2023 Hamas-led attack on Israel and families",
+        "defendant": "Binance",
+        "location": "Manhattan federal court",
+        "allegations": "facilitating Hamas terrorist activities"
+      },
+      "confidence": 0.95,
+      "context": "On 31 January 2024, Binance was sued by the US victims of the 2023 Hamas-led attack on Israel"
+    },
+    {
+      "name": "Zhao sentencing",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "criminal sentencing",
+        "date": "April 2024",
+        "sentence": "four months in prison",
+        "charge": "violating US money laundering laws"
+      },
+      "confidence": 0.99,
+      "context": "In April 2024, Zhao was sentenced to four months in prison"
+    },
+    {
+      "name": "Zhao prison release",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "release from custody",
+        "date": "September 2024"
+      },
+      "confidence": 0.95,
+      "context": "In September 2024, Zhao was released from prison"
+    },
+    {
+      "name": "Binance Hamas attack lawsuit (North Dakota)",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "civil lawsuit",
+        "date": "November 2025",
+        "plaintiffs": "306 American victims of Hamas's attack on Israel",
+        "defendant": "Binance and founder",
+        "location": "federal court in North Dakota",
+        "allegations": "helping Hamas finance the attack"
+      },
+      "confidence": 0.95,
+      "context": "In November 2025, 306 American victims of Hamas's attack on Israel filed a suit against Binance"
+    },
+    {
+      "name": "Manhattan",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "city",
+        "country": "United States"
+      },
+      "confidence": 0.95,
+      "context": "in Manhattan federal court"
+    },
+    {
+      "name": "North Dakota",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "state",
+        "country": "United States"
+      },
+      "confidence": 0.95,
+      "context": "federal court in North Dakota"
+    },
+    {
+      "name": "Kindred, North Dakota",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "city",
+        "state": "North Dakota",
+        "country": "United States"
+      },
+      "confidence": 0.85,
+      "context": "online addresses in Kindred, North Dakota"
+    },
+    {
+      "name": "Gaza",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "region"
+      },
+      "confidence": 0.95,
+      "context": "coinciding with the outbreak of the Gaza war"
+    },
+    {
+      "name": "Bank Secrecy Act",
+      "entity_type": "DOCUMENT",
+      "attributes": {
+        "type": "US legislation",
+        "country": "United States"
+      },
+      "confidence": 0.95,
+      "context": "violations of the US Bank Secrecy Act"
+    },
+    {
+      "name": "International Emergency Economic Powers Act",
+      "entity_type": "DOCUMENT",
+      "attributes": {
+        "type": "US legislation",
+        "country": "United States"
+      },
+      "confidence": 0.95,
+      "context": "International Emergency Economic Powers Act"
+    }
+  ],
+  "relations": [
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Binance Holdings Ltd.",
+      "confidence": 0.95,
+      "evidence": "Binance was founded in 2017 by Changpeng Zhao"
+    },
+    {
+      "relation_type": "CREATED",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Binance Holdings Ltd.",
+      "confidence": 0.95,
+      "evidence": "Binance was founded in 2017 by Changpeng Zhao"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Binance Holdings Ltd.",
+      "target_entity": "China",
+      "confidence": 0.9,
+      "evidence": "Binance was initially based in China"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Binance Holdings Ltd.",
+      "target_entity": "Japan",
+      "confidence": 0.9,
+      "evidence": "then moved to Japan"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Binance Holdings Ltd.",
+      "target_entity": "Malta",
+      "confidence": 0.9,
+      "evidence": "subsequently left Japan for Malta"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance Holdings Ltd.",
+      "target_entity": "Arkham Intelligence",
+      "confidence": 0.85,
+      "evidence": "According to data from blockchain analytics company Arkham Intelligence, Binance is the largest crypto-holding entity in the world"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Blockchain.info",
+      "confidence": 0.9,
+      "evidence": "In 2013, he joined Blockchain.info as the third member of the cryptocurrency wallet's team"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "OKCoin",
+      "confidence": 0.9,
+      "evidence": "He also worked at OKCoin as CTO for less than a year"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Yi He",
+      "target_entity": "OKCoin",
+      "confidence": 0.85,
+      "evidence": "He was hired at this position in 2014 by Yi He"
+    },
+    {
+      "relation_type": "CREATED",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Fusion Systems",
+      "confidence": 0.9,
+      "evidence": "CEO Changpeng Zhao founded Fusion Systems in 2005 in Shanghai"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Fusion Systems",
+      "target_entity": "Shanghai",
+      "confidence": 0.9,
+      "evidence": "CEO Changpeng Zhao founded Fusion Systems in 2005 in Shanghai"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance Holdings Ltd.",
+      "target_entity": "Coinbase",
+      "confidence": 0.8,
+      "evidence": "despite competition from Coinbase, among others"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance Holdings Ltd.",
+      "target_entity": "Chiliz",
+      "confidence": 0.85,
+      "evidence": "In June 2018, Binance and three other firms raised $65 million for sports blockchain company Chiliz"
+    },
+    {
+      "relation_type": "OWNS",
+      "source_entity": "Binance Holdings Ltd.",
+      "target_entity": "Trust Wallet",
+      "confidence": 0.9,
+      "evidence": "In July 2018, Binance acquired Trust Wallet, a decentralized cryptocurrency wallet"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance Holdings Ltd.",
+      "target_entity": "Terra",
+      "confidence": 0.85,
+      "evidence": "In August 2018, Binance along with three other large exchanges raised $32 million to fund the stablecoin project Terra"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance Holdings Ltd.",
+      "target_entity": "Simplex",
+      "confidence": 0.85,
+      "evidence": "In January 2019, Binance announced that it had partnered with Israel-based payment processor Simplex"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance Holdings Ltd.",
+      "target_entity": "WazirX",
+      "confidence": 0.85,
+      "evidence": "In November 2019, Binance announced it was acquiring Indian bitcoin exchange WazirX"
+    },
+    {
+      "relation_type": "MEMBER_OF",
+      "source_entity": "Binance Jersey",
+      "target_entity": "Binance Holdings Ltd.",
+      "confidence": 0.9,
+      "evidence": "In 2019, the company announced Binance Jersey, a Jersey-based exchange"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Binance Jersey",
+      "target_entity": "Jersey",
+      "confidence": 0.9,
+      "evidence": "Binance Jersey, a Jersey-based exchange"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance Holdings Ltd.",
+      "target_entity": "World Liberty Financial",
+      "confidence": 0.85,
+      "evidence": "Binance was quietly administering a trading platform for the Trump family's World Liberty Financial"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Donald Trump",
+      "confidence": 0.85,
+      "evidence": "The company paid lobbyists $800,000 to lobby for a pardon from Trump for Binance founder Changpeng Zhao. In October 2025, President Trump pardoned Zhao"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "Binance Holdings Ltd.",
+      "target_entity": "Wall Street Journal",
+      "confidence": 0.85,
+      "evidence": "In March 2025, Wall Street Journal uncovered that the company was in talks with the family of Donald Trump"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance Holdings Ltd.",
+      "target_entity": "Malta Financial Services Authority",
+      "confidence": 0.8,
+      "evidence": "On 21 February 2020, the Malta Financial Services Authority (MFSA) issued a public statement responding to media reports referring to Binance as a Malta-based cryptocurrency company"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance Holdings Ltd.",
+      "target_entity": "Malta Stock Exchange",
+      "confidence": 0.85,
+      "evidence": "a similar memorandum was signed with the Malta Stock Exchange to develop a platform for trading security tokens"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance Holdings Ltd.",
+      "target_entity": "Financial Conduct Authority",
+      "confidence": 0.85,
+      "evidence": "The UK's Financial Conduct Authority ordered Binance to stop all regulated activity in the United Kingdom in June 2021"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "Binance Holdings Ltd.",
+      "target_entity": "Forbes",
+      "confidence": 0.8,
+      "evidence": "Later in 2023, Forbes leaked a document allegedly from Binance titled \"TaiChi\""
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Yi He",
+      "confidence": 0.85,
+      "evidence": "with whom he co-founded Binance several years later"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance",
+      "target_entity": "WazirX",
+      "confidence": 0.95,
+      "evidence": "In November 2019, Binance announced it was acquiring Indian bitcoin exchange WazirX"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Binance",
+      "confidence": 0.95,
+      "evidence": "Binance and its CEO, Changpeng Zhao"
+    },
+    {
+      "relation_type": "RELATED_TO",
+      "source_entity": "Zhao",
+      "target_entity": "Changpeng Zhao",
+      "confidence": 0.9,
+      "evidence": "Binance founder Zhao claimed the deal was never signed"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "Binance",
+      "target_entity": "MFSA public statement on Binance",
+      "confidence": 0.95,
+      "evidence": "the Malta Financial Services Authority (MFSA) issued a public statement responding to media reports referring to Binance"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance",
+      "target_entity": "Belt and Road Initiative",
+      "confidence": 0.9,
+      "evidence": "Binance had joined a group 'aiming to facilitate' the Belt and Road Initiative"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "Binance",
+      "target_entity": "Forbes leaked documents",
+      "confidence": 0.95,
+      "evidence": "Forbes staff released leaked documents showing that Binance and its CEO, Changpeng Zhao, created an elaborate corporate structure"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance",
+      "target_entity": "Forbes",
+      "confidence": 0.9,
+      "evidence": "In February 2022, Binance took a $200 million stake in Forbes"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance",
+      "target_entity": "Hydra",
+      "confidence": 0.85,
+      "evidence": "$780 million laundered from the Russian darknet market Hydra"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance",
+      "target_entity": "Lazarus Group",
+      "confidence": 0.85,
+      "evidence": "Binance had been used by the Lazarus Group to launder funds stolen by North Korea"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance",
+      "target_entity": "CommEX",
+      "confidence": 0.9,
+      "evidence": "Binance announced it was leaving Russia and selling its business to the CommEX platform"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Binance",
+      "target_entity": "Africa Cup of Nations",
+      "confidence": 0.9,
+      "evidence": "Binance sponsored the Africa Cup of Nations in 2021"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance",
+      "target_entity": "Twitter",
+      "confidence": 0.9,
+      "evidence": "Binance invested US$500 million towards the acquisition of Twitter by Elon Musk"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Binance",
+      "target_entity": "Italy",
+      "confidence": 0.9,
+      "evidence": "Binance announced the registration of its legal entity in Italy"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Binance",
+      "target_entity": "Spain",
+      "confidence": 0.9,
+      "evidence": "Binance registered to operate in Spain in July 2022"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Binance",
+      "target_entity": "Sweden",
+      "confidence": 0.9,
+      "evidence": "Binance registered to operate in Sweden in January 2023"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance",
+      "target_entity": "Africa Cup of Nations",
+      "confidence": 0.95,
+      "evidence": "Binance sponsored the Africa Cup of Nations in 2021."
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance",
+      "target_entity": "Twitter",
+      "confidence": 0.95,
+      "evidence": "Binance invested US$500 million towards the acquisition of Twitter by Elon Musk that completed in October 2022."
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "On 8 November 2022, Binance offered to buy rival cryptocurrency exchange FTX's non-US operations (FTX.com) to help cover the latter's liquidity crunch."
+    },
+    {
+      "relation_type": "OWNS",
+      "source_entity": "Binance",
+      "target_entity": "Sakura Exchange",
+      "confidence": 0.95,
+      "evidence": "On 30 November 2022, Binance purchased Sakura Exchange."
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Binance",
+      "confidence": 0.95,
+      "evidence": "Changpeng Zhao stepped down as CEO with a $50 million fine."
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Richard Teng",
+      "target_entity": "Binance",
+      "confidence": 0.95,
+      "evidence": "Zhao was succeeded by Richard Teng."
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance",
+      "target_entity": "DWF Labs",
+      "confidence": 0.9,
+      "evidence": "a VIP client of the company, a trading and investment firm named DWF Labs, had previously advertised its ability to manipulate the market"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "Binance",
+      "target_entity": "The Wall Street Journal",
+      "confidence": 0.95,
+      "evidence": "The Wall Street Journal reported that Binance had cut its global workforce by as many as 1,000 staff."
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "Binance",
+      "target_entity": "CNBC",
+      "confidence": 0.95,
+      "evidence": "CNBC reported that the number of staff cuts could total 3,000 by the end of 2023."
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance",
+      "target_entity": "SEC",
+      "confidence": 0.95,
+      "evidence": "In June 2023, Binance had 790 million US dollars in outflows after the SEC announced its lawsuit"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Binance",
+      "target_entity": "Binance conviction",
+      "confidence": 0.95,
+      "evidence": "On 21 November 2023, a US judge convicted Binance on multiple charges—including violations of the Bank Secrecy Act, money laundering schemes, unlicensed money transmitting, and sanctions violations."
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "John Griffin",
+      "target_entity": "University of Texas at Austin",
+      "confidence": 0.95,
+      "evidence": "John Griffin, a finance professor at the University of Texas at Austin"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance",
+      "target_entity": "Nigeria",
+      "confidence": 0.9,
+      "evidence": "Nigerian authorities filed a lawsuit suing Binance for $81.5 billion for economic losses and back taxes, alleging the company has a significant presence in the country"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Mubadala",
+      "target_entity": "Binance",
+      "confidence": 0.95,
+      "evidence": "In 2025, the UAE government's sovereign-wealth fund Mubadala bought a $2 billion stake in Binance."
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Binance",
+      "target_entity": "Abu Dhabi",
+      "confidence": 0.95,
+      "evidence": "Later that year, in December 2025, Abu Dhabi's financial regulator allowed Binance to operate from Abu Dhabi."
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "World Liberty Financial",
+      "target_entity": "Binance",
+      "confidence": 0.9,
+      "evidence": "The family of Donald Trump through World Liberty Financial had entered into talks with Binance to acquire a stake in the US arm of the business."
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Steve Witkoff",
+      "target_entity": "Binance",
+      "confidence": 0.75,
+      "evidence": "Trump advisor Steve Witkoff was involved, although his office denied this."
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "MGX Fund Management Limited",
+      "target_entity": "Binance",
+      "confidence": 0.95,
+      "evidence": "the Abu Dhabi government-backed investment fund MGX Fund Management Limited had made a minority $2 billion investment in Binance."
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Binance pardon",
+      "confidence": 0.95,
+      "evidence": "On October 23, 2025, Trump pardoned Zhao"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "Binance",
+      "target_entity": "Wall Street Journal",
+      "confidence": 0.95,
+      "evidence": "According to the Wall Street Journal, a pardon from President Trump would simplify a revival of Binance's presence in the US."
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "MGX Fund Management Limited",
+      "target_entity": "Abu Dhabi",
+      "confidence": 0.95,
+      "evidence": "the Abu Dhabi government-backed investment fund MGX Fund Management Limited"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "MGX Fund Management Limited",
+      "target_entity": "MGX Fund investment event",
+      "confidence": 0.95,
+      "evidence": "On March 12, 2025, it was announced that the Abu Dhabi government-backed investment fund MGX Fund Management Limited had made a minority $2 billion investment in Binance."
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Binance pardon event",
+      "confidence": 0.95,
+      "evidence": "On October 23, 2025, Trump pardoned Zhao"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Karoline Leavitt",
+      "target_entity": "Binance",
+      "confidence": 0.85,
+      "evidence": "White House press secretary Karoline Leavitt saying that Zhao had been the victim of persecution"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Yi He",
+      "target_entity": "Yi He appointment event",
+      "confidence": 0.95,
+      "evidence": "On December 3, 2025 Yi He was appointed as co-CEO."
+    },
+    {
+      "relation_type": "RELATED_TO",
+      "source_entity": "Binance",
+      "target_entity": "Hamas",
+      "confidence": 0.9,
+      "evidence": "In November 2025, families of victims of the October 7 attacks filed a lawsuit against Binance, alleging that the company helped to transfer funds for Hamas and Hezbollah."
+    },
+    {
+      "relation_type": "RELATED_TO",
+      "source_entity": "Binance",
+      "target_entity": "Hezbollah",
+      "confidence": 0.9,
+      "evidence": "In November 2025, families of victims of the October 7 attacks filed a lawsuit against Binance, alleging that the company helped to transfer funds for Hamas and Hezbollah."
+    },
+    {
+      "relation_type": "CREATED",
+      "source_entity": "Binance",
+      "target_entity": "BNB",
+      "confidence": 0.95,
+      "evidence": "BNB (Build'N'Build) is a token on the BNB Smart Chain. It was originally called Binance Coin when it was launched in July 2017"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "BNB",
+      "target_entity": "BNB Smart Chain",
+      "confidence": 0.95,
+      "evidence": "BNB (Build'N'Build) is a token on the BNB Smart Chain."
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "BNB",
+      "target_entity": "Ethereum",
+      "confidence": 0.95,
+      "evidence": "The token was initially on the Ethereum network, then moved to BNB Smart Chain when it was released in September 2020."
+    },
+    {
+      "relation_type": "CREATED",
+      "source_entity": "Binance",
+      "target_entity": "Binance USD",
+      "confidence": 0.95,
+      "evidence": "Binance USD (BUSD) was a US dollar-pegged stablecoin issued by Paxos on the behalf of Binance."
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance USD",
+      "target_entity": "Paxos",
+      "confidence": 0.95,
+      "evidence": "Binance USD (BUSD) was a US dollar-pegged stablecoin issued by Paxos on the behalf of Binance."
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "Binance USD",
+      "target_entity": "Bloomberg",
+      "confidence": 0.95,
+      "evidence": "In January 2023, Bloomberg reported that Binance-Peg BUSD"
+    },
+    {
+      "relation_type": "RELATED_TO",
+      "source_entity": "Binance USD",
+      "target_entity": "Tether",
+      "confidence": 0.9,
+      "evidence": "In 2022, BUSD became the third largest stablecoin by market capitalization, following Tether (USDT) and USD Coin (USDC)."
+    },
+    {
+      "relation_type": "RELATED_TO",
+      "source_entity": "Binance USD",
+      "target_entity": "USD Coin",
+      "confidence": 0.9,
+      "evidence": "In 2022, BUSD became the third largest stablecoin by market capitalization, following Tether (USDT) and USD Coin (USDC)."
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "New York Department of Financial Services",
+      "target_entity": "Paxos",
+      "confidence": 0.95,
+      "evidence": "The New York Department of Financial Services issued an order to Paxos to stop minting new BUSD tokens in February 2023."
+    },
+    {
+      "relation_type": "CREATED",
+      "source_entity": "Binance",
+      "target_entity": "BEP-20 Token Standard",
+      "confidence": 0.95,
+      "evidence": "BEP-20 is a token standard on the Binance Smart Chain (BSC)"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "BEP-20 Token Standard",
+      "target_entity": "Ethereum",
+      "confidence": 0.95,
+      "evidence": "BEP-20 is a token standard on the Binance Smart Chain (BSC), based on ERC-20 from Ethereum."
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Oztures Trading Pty Ltd",
+      "target_entity": "Australia",
+      "confidence": 0.95,
+      "evidence": "the Australian Securities & Investments Commission cancelled the Australian financial services licence held by Oztures Trading Pty Ltd trading as Binance Australia"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Australian Securities & Investments Commission",
+      "target_entity": "Oztures Trading Pty Ltd",
+      "confidence": 0.95,
+      "evidence": "On 6 April 2023, the Australian Securities & Investments Commission cancelled the Australian financial services licence held by Oztures Trading Pty Ltd"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance",
+      "target_entity": "PayID",
+      "confidence": 0.9,
+      "evidence": "On 18 May 2023, Binance Australia announced that it had lost access to Australia's PayID payment system"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Westpac",
+      "target_entity": "Binance",
+      "confidence": 0.9,
+      "evidence": "The same day, Westpac bank banned Australian customers transacting with Binance."
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Belgium Financial Services and Markets Authority",
+      "target_entity": "Binance",
+      "confidence": 0.95,
+      "evidence": "On June 23, 2023, Belgium's Financial Services and Markets Authority ordered Binance to \"cease, with immediate effect, offering or providing any and all\" virtual currency services in the country."
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Belgium Financial Services and Markets Authority",
+      "target_entity": "Belgium",
+      "confidence": 0.95,
+      "evidence": "Belgium's Financial Services and Markets Authority"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Ontario Securities Commission",
+      "target_entity": "Binance",
+      "confidence": 0.95,
+      "evidence": "On 17 March 2022, Binance has confirmed in an undertaking to the Ontario Securities Commission"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Ontario Securities Commission",
+      "target_entity": "Ontario",
+      "confidence": 0.95,
+      "evidence": "Ontario Securities Commission"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "FINTRAC",
+      "target_entity": "Binance",
+      "confidence": 0.95,
+      "evidence": "In May 2024, FINTRAC announced that it had imposed a $4.32 million fine on Binance"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "FINTRAC",
+      "target_entity": "Canada",
+      "confidence": 0.95,
+      "evidence": "FINTRAC announced that it had imposed a $4.32 million fine on Binance for violating Canadian money laundering"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Paris prosecutor's office",
+      "target_entity": "Binance",
+      "confidence": 0.95,
+      "evidence": "In June 2023, the Paris prosecutor's office announced that Binance was under preliminary investigation"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Paris prosecutor's office",
+      "target_entity": "France",
+      "confidence": 0.95,
+      "evidence": "the Paris prosecutor's office"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Federal Financial Supervisory Authority",
+      "target_entity": "Binance",
+      "confidence": 0.95,
+      "evidence": "In April 2021, the Federal Financial Supervisory Authority in Germany warned that the company"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Federal Financial Supervisory Authority",
+      "target_entity": "Germany",
+      "confidence": 0.95,
+      "evidence": "the Federal Financial Supervisory Authority in Germany"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Binance",
+      "target_entity": "France",
+      "confidence": 0.95,
+      "evidence": "In January 2025, French authorities opened a judicial investigation into Binance"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Federal Financial Supervisory Authority",
+      "target_entity": "Germany",
+      "confidence": 0.95,
+      "evidence": "the Federal Financial Supervisory Authority in Germany warned"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Binance",
+      "target_entity": "Italy",
+      "confidence": 0.95,
+      "evidence": "Italy's Commissione Nazionale per le Società e la Borsa ordered Binance to be blocked from operating"
+    },
+    {
+      "relation_type": "OWNS",
+      "source_entity": "Binance",
+      "target_entity": "WazirX",
+      "confidence": 0.85,
+      "evidence": "WazirX, an exchange owned by Binance"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Zhao",
+      "target_entity": "Binance",
+      "confidence": 0.9,
+      "evidence": "CEO Zhao claimed that they never owned WazirX"
+    },
+    {
+      "relation_type": "MEMBER_OF",
+      "source_entity": "Nischal Shetty",
+      "target_entity": "WazirX",
+      "confidence": 0.9,
+      "evidence": "The co-founder of WazirX, Nischal Shetty"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Binance",
+      "target_entity": "India",
+      "confidence": 0.95,
+      "evidence": "Financial Intelligence Unit (India) recommended blocking the URLs of nine crypto entities, including Binance"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Binance",
+      "target_entity": "Japan",
+      "confidence": 0.95,
+      "evidence": "Japan's Financial Services Agency warned Binance that it was not registered to do business in Japan"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Binance",
+      "target_entity": "Netherlands",
+      "confidence": 0.95,
+      "evidence": "the Dutch central bank announced a €3.3m fine for Binance due to offering services within the Netherlands"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Binance",
+      "target_entity": "Nigeria",
+      "confidence": 0.95,
+      "evidence": "Nigeria's Securities and Exchange Commission recently deemed Binance's activities in the country as 'illegal'"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Nadeem Anjarwalla",
+      "target_entity": "Binance",
+      "confidence": 0.9,
+      "evidence": "two Binance executives, Nadeem Anjarwalla and Tigran Gambaryan, were detained"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Tigran Gambaryan",
+      "target_entity": "Binance",
+      "confidence": 0.9,
+      "evidence": "two Binance executives, Nadeem Anjarwalla and Tigran Gambaryan, were detained"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Richard Teng",
+      "target_entity": "Binance",
+      "confidence": 0.9,
+      "evidence": "Binance's CEO, Richard Teng, claimed that officials sought a bribe"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Binance",
+      "target_entity": "Philippines",
+      "confidence": 0.95,
+      "evidence": "the Securities and Exchange Commission (SEC) of the Philippines has moved forward with plans to block Binance's website"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Binance",
+      "target_entity": "Thailand",
+      "confidence": 0.95,
+      "evidence": "Thailand's Securities and Exchange Commission filed a criminal complaint against Binance on 2 July 2021"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance",
+      "target_entity": "January 2025 French Investigation",
+      "confidence": 0.95,
+      "evidence": "In January 2025, French authorities opened a judicial investigation into Binance for potential involvement in money laundering, drug trafficking, and tax fraud"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance",
+      "target_entity": "August 2022 WazirX Asset Freeze",
+      "confidence": 0.9,
+      "evidence": "In August 2022, India's Enforcement Directorate froze the assets of WazirX, an exchange owned by Binance"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance",
+      "target_entity": "June 2024 India Fine",
+      "confidence": 0.95,
+      "evidence": "In June 2024, Binance was imposed with a fine of US$2.25 million by the Financial Intelligence Unit"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance",
+      "target_entity": "Google",
+      "confidence": 0.9,
+      "evidence": "the SEC has collaborated with major tech companies like Google and Meta to halt Binance's digital advertising efforts"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance",
+      "target_entity": "Meta",
+      "confidence": 0.9,
+      "evidence": "the SEC has collaborated with major tech companies like Google and Meta to halt Binance's digital advertising efforts"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Thailand's Securities and Exchange Commission",
+      "target_entity": "Binance criminal complaint filing",
+      "confidence": 0.95,
+      "evidence": "Thailand's Securities and Exchange Commission filed a criminal complaint against Binance on 2 July 2021"
+    },
+    {
+      "relation_type": "MEMBER_OF",
+      "source_entity": "Gulf Binance",
+      "target_entity": "Binance",
+      "confidence": 0.9,
+      "evidence": "Gulf Binance, the joint venture of Binance and Gulf Innova"
+    },
+    {
+      "relation_type": "MEMBER_OF",
+      "source_entity": "Gulf Binance",
+      "target_entity": "Gulf Innova",
+      "confidence": 0.9,
+      "evidence": "Gulf Binance, the joint venture of Binance and Gulf Innova"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Sarath Ratanavadi",
+      "target_entity": "Gulf Energy Development",
+      "confidence": 0.85,
+      "evidence": "Thai billionaire Sarath Ratanavadi's Gulf Energy Development"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Gulf Innova",
+      "target_entity": "Gulf Energy Development",
+      "confidence": 0.85,
+      "evidence": "Gulf Innova, a subsidiary of Thai billionaire Sarath Ratanavadi's Gulf Energy Development"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "UK's Financial Conduct Authority",
+      "target_entity": "FCA order to stop regulated activity",
+      "confidence": 0.95,
+      "evidence": "Binance was ordered by the FCA to stop all regulated activity in the United Kingdom"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "UK's Financial Conduct Authority",
+      "target_entity": "FCA cancellation of Binance Markets Limited permissions",
+      "confidence": 0.95,
+      "evidence": "the FCA canceled unused permissions granted to Binance Markets Limited"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance",
+      "target_entity": "Binance.US",
+      "confidence": 0.95,
+      "evidence": "Binance and other investors opened Binance.US, a separate exchange"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "United States Department of Justice",
+      "target_entity": "DOJ and IRS investigation of Binance",
+      "confidence": 0.95,
+      "evidence": "Binance was under investigation by the United States Department of Justice and Internal Revenue Service"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Internal Revenue Service",
+      "target_entity": "DOJ and IRS investigation of Binance",
+      "confidence": 0.95,
+      "evidence": "Binance was under investigation by the United States Department of Justice and Internal Revenue Service"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "United States Securities and Exchange Commission",
+      "target_entity": "SEC inquiry into Binance BNB ICO",
+      "confidence": 0.95,
+      "evidence": "the United States Securities and Exchange Commission launched an enquiry into Binance to determine if the company's 2017 ICO of BNB tokens amounted to an illegal sale of a security"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Binance.US",
+      "target_entity": "Binance.US acquisition of Voyager Digital assets",
+      "confidence": 0.95,
+      "evidence": "Binance.US announced that it would acquire Voyager Digital's assets in a $1.02 billion deal"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Binance.US",
+      "target_entity": "Binance.US cancellation of Voyager Digital acquisition",
+      "confidence": 0.95,
+      "evidence": "This deal was called off in April 2023"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Arkham Intelligence",
+      "target_entity": "Arkham Intelligence money laundering report",
+      "confidence": 0.95,
+      "evidence": "Arkham Intelligence provided data in January 2023 that identified 'an alleged nexus of money laundering'"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Bitzlato",
+      "target_entity": "Binance",
+      "confidence": 0.85,
+      "evidence": "money laundering from a much smaller exchange called Bitzlato through intermediate wallets of Binance"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Reuters",
+      "target_entity": "Reuters report on Binance transfers",
+      "confidence": 0.95,
+      "evidence": "In February 2023, Reuters reported that over the first three months of 2021, Binance transferred over $404 million"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Silvergate Bank",
+      "target_entity": "Binance.US",
+      "confidence": 0.85,
+      "evidence": "Binance transferred over $404 million from a Binance.US account at Silvergate Bank"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Merit Peak Ltd.",
+      "target_entity": "Zhao",
+      "confidence": 0.9,
+      "evidence": "Merit Peak Ltd., a company managed by Zhao"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Catherine Coley",
+      "target_entity": "Binance.US",
+      "confidence": 0.9,
+      "evidence": "Catherine Coley, then-CEO of Binance US"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Elizabeth Warren",
+      "target_entity": "Senate letter to Binance",
+      "confidence": 0.95,
+      "evidence": "US Senators Elizabeth Warren, Chris Van Hollen, and Roger Marshall wrote a letter to Binance"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Chris Van Hollen",
+      "target_entity": "Senate letter to Binance",
+      "confidence": 0.95,
+      "evidence": "US Senators Elizabeth Warren, Chris Van Hollen, and Roger Marshall wrote a letter to Binance"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Roger Marshall",
+      "target_entity": "Senate letter to Binance",
+      "confidence": 0.95,
+      "evidence": "US Senators Elizabeth Warren, Chris Van Hollen, and Roger Marshall wrote a letter to Binance"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Commodity Futures Trading Commission",
+      "target_entity": "CFTC lawsuit against Binance",
+      "confidence": 0.95,
+      "evidence": "the Commodity Futures Trading Commission (CFTC) filed a lawsuit against Binance and Zhao"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance",
+      "target_entity": "Hamas",
+      "confidence": 0.85,
+      "evidence": "internal communications describing transactions by Palestinian militant organization Hamas"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance",
+      "target_entity": "Radix Trading",
+      "confidence": 0.8,
+      "evidence": "three unidentified trading firms cited as VIP clients of Binance were revealed to be Radix Trading, Jane Street Capital, and Tower Research Capital"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance",
+      "target_entity": "Jane Street Capital",
+      "confidence": 0.8,
+      "evidence": "three unidentified trading firms cited as VIP clients of Binance were revealed to be Radix Trading, Jane Street Capital, and Tower Research Capital"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance",
+      "target_entity": "Tower Research Capital",
+      "confidence": 0.8,
+      "evidence": "three unidentified trading firms cited as VIP clients of Binance were revealed to be Radix Trading, Jane Street Capital, and Tower Research Capital"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "United States Securities and Exchange Commission",
+      "target_entity": "SEC lawsuit against Binance",
+      "confidence": 0.95,
+      "evidence": "the SEC said it was suing Binance and Zhao on 13 charges for alleged violations of US securities rules"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Brian Shroder",
+      "target_entity": "Binance.US",
+      "confidence": 0.9,
+      "evidence": "Binance.US announced the resignation of CEO Brian Shroder"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Gulf Binance",
+      "target_entity": "Thailand",
+      "confidence": 0.9,
+      "evidence": "Thailand's Ministry of Finance issued a cryptocurrency exchange license to Gulf Binance"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "Binance",
+      "target_entity": "Emergency Decree on Digital Asset Business B.E. 2561 (2018)",
+      "confidence": 0.9,
+      "evidence": "for commission of offence under the Emergency Decree on Digital Asset Business B.E. 2561 (2018)"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Brian Shroder",
+      "target_entity": "Binance.US",
+      "confidence": 0.95,
+      "evidence": "Binance.US announced the resignation of CEO Brian Shroder"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Zhao",
+      "target_entity": "Binance",
+      "confidence": 0.95,
+      "evidence": "Zhao agreed to pay a $50 million fine and step down as CEO of the company"
+    },
+    {
+      "relation_type": "OWNS",
+      "source_entity": "Zhao",
+      "target_entity": "Binance",
+      "confidence": 0.95,
+      "evidence": "was allowed to maintain his ownership as part of the deal"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Binance",
+      "target_entity": "SEC civil suit",
+      "confidence": 0.95,
+      "evidence": "the SEC said it was suing Binance and Zhao on 13 charges for alleged violations of US securities rules"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Zhao",
+      "target_entity": "SEC civil suit",
+      "confidence": 0.95,
+      "evidence": "the SEC said it was suing Binance and Zhao on 13 charges"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Binance",
+      "target_entity": "Binance guilty plea and fine",
+      "confidence": 0.95,
+      "evidence": "Binance pled guilty and paid a $4.3 billion dollar fine in relation to violations of the US Bank Secrecy Act"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Zhao",
+      "target_entity": "Zhao sentencing",
+      "confidence": 0.95,
+      "evidence": "Zhao was sentenced to four months in prison after pleading guilty to violating US money laundering laws"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Zhao",
+      "target_entity": "Zhao prison release",
+      "confidence": 0.95,
+      "evidence": "In September 2024, Zhao was released from prison"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Binance",
+      "target_entity": "Binance Hamas funding lawsuit",
+      "confidence": 0.95,
+      "evidence": "Binance was sued by the US victims of the 2023 Hamas-led attack on Israel for allegedly facilitating Hamas's terrorist activities"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Binance",
+      "target_entity": "Binance Hamas attack lawsuit (North Dakota)",
+      "confidence": 0.95,
+      "evidence": "306 American victims of Hamas's attack on Israel filed a suit against Binance in a federal court in North Dakota"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Binance Hamas funding lawsuit",
+      "target_entity": "Manhattan",
+      "confidence": 0.95,
+      "evidence": "Binance was sued in Manhattan federal court"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Binance Hamas attack lawsuit (North Dakota)",
+      "target_entity": "North Dakota",
+      "confidence": 0.95,
+      "evidence": "filed a suit against Binance in a federal court in North Dakota"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "Cynthia Lummis",
+      "target_entity": "Binance",
+      "confidence": 0.9,
+      "evidence": "Binance and Tether were described as a source of terrorist funding by US senator Cynthia Lummis"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "French Hill",
+      "target_entity": "Binance",
+      "confidence": 0.9,
+      "evidence": "Binance and Tether were described as a source of terrorist funding by US Representative French Hill"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance",
+      "target_entity": "Tether",
+      "confidence": 0.85,
+      "evidence": "Binance and Tether were described as a source of terrorist funding"
+    }
+  ],
+  "cost_usd": 0.257621,
+  "model_used": "anthropic/claude-haiku-4-5-20251001",
+  "error": null
+}

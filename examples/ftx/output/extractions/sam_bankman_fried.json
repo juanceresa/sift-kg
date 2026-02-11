@@ -1,0 +1,3100 @@
+{
+  "document_id": "sam_bankman_fried",
+  "document_path": "test-docs/sam_bankman_fried.txt",
+  "chunks_processed": 8,
+  "entities": [
+    {
+      "name": "Samuel Benjamin Bankman-Fried",
+      "entity_type": "PERSON",
+      "attributes": {
+        "aliases": [
+          "SBF",
+          "Sam Bankman-Fried"
+        ],
+        "birth_date": "March 5, 1992",
+        "nationality": "American",
+        "occupation": "entrepreneur",
+        "conviction": "fraud and related crimes",
+        "conviction_date": "November 2023",
+        "sentence": "25 years in prison",
+        "sentencing_date": "March 28, 2024",
+        "forfeiture_amount": "$11 billion",
+        "net_worth_ranking": "41st-richest American (Forbes 400)"
+      },
+      "confidence": 0.99,
+      "context": "Samuel Benjamin Bankman-Fried (born March 5, 1992), commonly known as SBF, is an American entrepreneur who was convicted of fraud and related crimes in November 2023."
+    },
+    {
+      "name": "FTX",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency exchange",
+        "founder": "Samuel Benjamin Bankman-Fried",
+        "founded": "April 2019",
+        "international_affiliates": "130+",
+        "status": "bankruptcy (November 2022)",
+        "headquarters_location": "Bahamas (from September 2021)"
+      },
+      "confidence": 0.99,
+      "context": "Bankman-Fried founded the FTX cryptocurrency exchange and was celebrated as a 'poster boy' for crypto, with FTX having a global reach with more than 130 international affiliates."
+    },
+    {
+      "name": "Alameda Research",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "trading firm",
+        "status": "declared bankruptcy",
+        "bankruptcy_date": "November 11, 2022",
+        "CEO": "Caroline Ellison"
+      },
+      "confidence": 0.99,
+      "context": "On November 11, 2022, FTX, Alameda Research, and more than 130 associated legal entities declared bankruptcy"
+    },
+    {
+      "name": "Barbara Fried",
+      "entity_type": "PERSON",
+      "attributes": {
+        "relationship": "mother of Samuel Benjamin Bankman-Fried",
+        "occupation": "professor at Stanford Law School"
+      },
+      "confidence": 0.95,
+      "context": "His parents are Barbara Fried and Joseph Bankman, both professors at Stanford Law School."
+    },
+    {
+      "name": "Joseph Bankman",
+      "entity_type": "PERSON",
+      "attributes": {
+        "relationship": "father of Samuel Benjamin Bankman-Fried",
+        "occupation": "professor at Stanford Law School"
+      },
+      "confidence": 0.95,
+      "context": "His parents are Barbara Fried and Joseph Bankman, both professors at Stanford Law School."
+    },
+    {
+      "name": "Gabriel Bankman-Fried",
+      "entity_type": "PERSON",
+      "attributes": {
+        "birth_year": "1995",
+        "relationship": "younger brother of Samuel Benjamin Bankman-Fried",
+        "occupations": [
+          "legislative assistant",
+          "Wall Street trader",
+          "director of Guarding Against Pandemics"
+        ]
+      },
+      "confidence": 0.95,
+      "context": "Sam's younger brother, Gabriel (b. 1995), had been a legislative assistant and a Wall Street trader. He became director of the nonprofit Guarding Against Pandemics."
+    },
+    {
+      "name": "Adrienne Fried Block",
+      "entity_type": "PERSON",
+      "attributes": {
+        "relationship": "maternal grandmother of Samuel Benjamin Bankman-Fried",
+        "occupation": "musicologist"
+      },
+      "confidence": 0.92,
+      "context": "His maternal grandmother, Adrienne Fried Block, was a noted musicologist."
+    },
+    {
+      "name": "George Fried",
+      "entity_type": "PERSON",
+      "attributes": {
+        "relationship": "maternal grandfather of Samuel Benjamin Bankman-Fried",
+        "occupation": "administrator with the New York State Supreme Court probation department"
+      },
+      "confidence": 0.92,
+      "context": "His maternal grandfather, George Fried, was an administrator with the New York State Supreme Court probation department."
+    },
+    {
+      "name": "Linda P. Fried",
+      "entity_type": "PERSON",
+      "attributes": {
+        "relationship": "aunt of Samuel Benjamin Bankman-Fried",
+        "occupation": "dean of Columbia University Mailman School of Public Health"
+      },
+      "confidence": 0.92,
+      "context": "His aunt Linda P. Fried was the dean of Columbia University Mailman School of Public Health."
+    },
+    {
+      "name": "Anthony Scaramucci",
+      "entity_type": "PERSON",
+      "attributes": {
+        "occupation": "financier",
+        "statement": "termed Bankman-Fried 'the Bernie Madoff of crypto'"
+      },
+      "confidence": 0.9,
+      "context": "the financier Anthony Scaramucci termed Bankman-Fried 'the Bernie Madoff of crypto'."
+    },
+    {
+      "name": "Jaan Tallinn",
+      "entity_type": "PERSON",
+      "attributes": {
+        "occupation": "billionaire computer programmer",
+        "role": "investor in Alameda Research"
+      },
+      "confidence": 0.88,
+      "context": "following fund injections from billionaire computer programmer Jaan Tallinn and investor Luke Ding"
+    },
+    {
+      "name": "Luke Ding",
+      "entity_type": "PERSON",
+      "attributes": {
+        "occupation": "investor",
+        "role": "investor in Alameda Research"
+      },
+      "confidence": 0.85,
+      "context": "following fund injections from billionaire computer programmer Jaan Tallinn and investor Luke Ding"
+    },
+    {
+      "name": "Tara Hedley",
+      "entity_type": "PERSON",
+      "attributes": {
+        "former_name": "Tara Mac Aulay",
+        "role": "cofounder of Alameda Research",
+        "affiliation": "Centre for Effective Altruism"
+      },
+      "confidence": 0.88,
+      "context": "Bankman-Fried and CEA's Tara Hedley (née Mac Aulay) cofounded the quantitative trading firm Alameda Research."
+    },
+    {
+      "name": "Gary Wang",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "FTX Executive",
+        "testimony": "Prosecution witness; testified about misappropriating $65 billion from FTX customers",
+        "plea_deal": true
+      },
+      "confidence": 0.99,
+      "context": "Wang testified that \"with some simple tweaks to computer code,\" he helped Alameda Research misappropriate as much as $65 billion from FTX customers"
+    },
+    {
+      "name": "Stanford University",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "university",
+        "location": "Stanford, California",
+        "affiliation": "Stanford Law School (employers of Barbara Fried and Joseph Bankman)"
+      },
+      "confidence": 0.95,
+      "context": "both professors at Stanford Law School"
+    },
+    {
+      "name": "Massachusetts Institute of Technology",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "university",
+        "abbreviation": "MIT",
+        "affiliation": "Bankman-Fried graduated in 2014"
+      },
+      "confidence": 0.98,
+      "context": "He graduated from the Massachusetts Institute of Technology in 2014 with a bachelor's degree in physics and a minor in mathematics."
+    },
+    {
+      "name": "Jane Street Capital",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "proprietary trading firm",
+        "affiliation": "Bankman-Fried worked as intern (2013) and full-time employee"
+      },
+      "confidence": 0.95,
+      "context": "Bankman-Fried worked as an intern at Jane Street Capital, a proprietary trading firm, trading international ETFs."
+    },
+    {
+      "name": "Centre for Effective Altruism",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "nonprofit organization",
+        "abbreviation": "CEA",
+        "location": "Berkeley, California",
+        "affiliation": "Bankman-Fried worked as director of development (October-November 2017)"
+      },
+      "confidence": 0.95,
+      "context": "he worked briefly at the Centre for Effective Altruism (CEA) as director of development from October to November 2017."
+    },
+    {
+      "name": "Guarding Against Pandemics",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "nonprofit organization",
+        "director": "Gabriel Bankman-Fried",
+        "associated_pac": true
+      },
+      "confidence": 0.9,
+      "context": "He became director of the nonprofit Guarding Against Pandemics and its associated political action committee."
+    },
+    {
+      "name": "Emergent Fidelity Technologies Ltd.",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "company",
+        "ownership": "majority owned by Samuel Benjamin Bankman-Fried",
+        "acquisition": "7.6 percent of Robinhood Markets stock (May 12, 2022)"
+      },
+      "confidence": 0.92,
+      "context": "Emergent Fidelity Technologies Ltd., which was majority owned by Bankman-Fried, had bought 7.6 percent of Robinhood Markets stock."
+    },
+    {
+      "name": "Robinhood Markets",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "company",
+        "stake_acquired": "7.6 percent by Emergent Fidelity Technologies Ltd. (May 12, 2022)"
+      },
+      "confidence": 0.92,
+      "context": "Emergent Fidelity Technologies Ltd., which was majority owned by Bankman-Fried, had bought 7.6 percent of Robinhood Markets stock."
+    },
+    {
+      "name": "Columbia University Mailman School of Public Health",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "university school",
+        "affiliation": "Linda P. Fried was dean"
+      },
+      "confidence": 0.92,
+      "context": "His aunt Linda P. Fried was the dean of Columbia University Mailman School of Public Health."
+    },
+    {
+      "name": "Committee on Financial Services",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government committee",
+        "event": "testimony on cryptocurrency industry regulation (December 8, 2021)"
+      },
+      "confidence": 0.9,
+      "context": "Bankman-Fried, along with other industry executives, testified before the Committee on Financial Services about regulating the cryptocurrency industry."
+    },
+    {
+      "name": "Eastern Caribbean Supreme Court",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "court",
+        "jurisdiction": "Eastern Caribbean"
+      },
+      "confidence": 0.88,
+      "context": "In a November 2022 affidavit before the Eastern Caribbean Supreme Court"
+    },
+    {
+      "name": "Stanford, California",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "city",
+        "country": "United States",
+        "significance": "birthplace of Samuel Benjamin Bankman-Fried"
+      },
+      "confidence": 0.95,
+      "context": "Sam Bankman-Fried was born on March 5, 1992, to upper-middle class Jewish parents in Stanford, California."
+    },
+    {
+      "name": "Hillsborough, California",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "city",
+        "country": "United States",
+        "significance": "location of Crystal Springs Uplands School"
+      },
+      "confidence": 0.92,
+      "context": "He attended high school at Crystal Springs Uplands School in Hillsborough, California."
+    },
+    {
+      "name": "Berkeley, California",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "city",
+        "country": "United States",
+        "significance": "location where Bankman-Fried worked at CEA"
+      },
+      "confidence": 0.92,
+      "context": "Bankman-Fried left Jane Street and moved to Berkeley, California, where he worked briefly at the Centre for Effective Altruism"
+    },
+    {
+      "name": "Hong Kong",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "city",
+        "country": "Hong Kong",
+        "significance": "location where Bankman-Fried moved after Macau conference (late 2018); FTX headquarters before moving to Bahamas (September 2021)"
+      },
+      "confidence": 0.95,
+      "context": "After attending a cryptocurrency conference in Macau in late 2018, he moved to Hong Kong. In September 2021, Bankman-Fried and the entire senior staff of FTX moved from Hong Kong to the Bahamas."
+    },
+    {
+      "name": "Macau",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "city",
+        "country": "China",
+        "significance": "location of cryptocurrency conference attended by Bankman-Fried (late 2018)"
+      },
+      "confidence": 0.9,
+      "context": "After attending a cryptocurrency conference in Macau in late 2018, he moved to Hong Kong."
+    },
+    {
+      "name": "Bahamas",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "country"
+      },
+      "confidence": 0.99,
+      "context": "in his apartment complex in New Providence, Bahamas"
+    },
+    {
+      "name": "United States",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "country"
+      },
+      "confidence": 0.99,
+      "context": "extradited to the United States to face trial"
+    },
+    {
+      "name": "New York State",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "state",
+        "country": "United States",
+        "significance": "location of George Fried's employment"
+      },
+      "confidence": 0.9,
+      "context": "George Fried, was an administrator with the New York State Supreme Court probation department."
+    },
+    {
+      "name": "Japan",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "country",
+        "significance": "location with higher bitcoin prices compared to United States (arbitrage trade, January 2018)"
+      },
+      "confidence": 0.88,
+      "context": "he organized an arbitrage trade, moving up to $25 million per day to take advantage of the higher price of bitcoin in Japan compared to the United States."
+    },
+    {
+      "name": "United States v. Bankman-Fried",
+      "entity_type": "DOCUMENT",
+      "attributes": {
+        "type": "legal case",
+        "defendant": "Samuel Benjamin Bankman-Fried",
+        "charges": [
+          "wire fraud",
+          "commodities fraud",
+          "securities fraud",
+          "money laundering",
+          "campaign finance law violations"
+        ],
+        "number_of_counts": "7",
+        "verdict": "convicted of all seven counts",
+        "sentencing_date": "March 28, 2024",
+        "sentence": "25 years in prison",
+        "forfeiture": "$11 billion"
+      },
+      "confidence": 0.99,
+      "context": "In the case of United States v. Bankman-Fried, he was convicted of all seven counts of fraud, conspiracy, and money laundering. On March 28, 2024, he was sentenced to 25 years in prison and ordered to forfeit $11 billion."
+    },
+    {
+      "name": "Forbes 400",
+      "entity_type": "DOCUMENT",
+      "attributes": {
+        "type": "publication/ranking",
+        "publisher": "Forbes",
+        "ranking": "Bankman-Fried ranked 41st-richest American"
+      },
+      "confidence": 0.92,
+      "context": "he was ranked the 41st-richest American in the Forbes 400."
+    },
+    {
+      "name": "Forbes 30 Under 30",
+      "entity_type": "DOCUMENT",
+      "attributes": {
+        "type": "publication/list",
+        "publisher": "Forbes",
+        "year": "2021",
+        "inclusion": "Bankman-Fried was included"
+      },
+      "confidence": 0.92,
+      "context": "Bankman-Fried was included on the 2021 list of Forbes 30 Under 30"
+    },
+    {
+      "name": "Forbes 2023 Hall of Shame",
+      "entity_type": "DOCUMENT",
+      "attributes": {
+        "type": "publication/list",
+        "publisher": "Forbes",
+        "year": "2023",
+        "inclusion": "Bankman-Fried was included",
+        "description": "ten picks the publication wishes it could take back"
+      },
+      "confidence": 0.92,
+      "context": "was also included on Forbes 2023 Hall of Shame list, featuring ten picks the publication wishes it could take back."
+    },
+    {
+      "name": "Crystal Springs Uplands School",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "high school",
+        "location": "Hillsborough, California",
+        "affiliation": "Bankman-Fried attended"
+      },
+      "confidence": 0.92,
+      "context": "He attended high school at Crystal Springs Uplands School in Hillsborough, California."
+    },
+    {
+      "name": "Canada/USA Mathcamp",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "summer program",
+        "description": "for mathematically talented high-school students",
+        "affiliation": "Bankman-Fried attended"
+      },
+      "confidence": 0.9,
+      "context": "Bankman-Fried attended Canada/USA Mathcamp, a summer program for mathematically talented high-school students."
+    },
+    {
+      "name": "Epsilon Theta",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "coeducational group house",
+        "location": "MIT",
+        "affiliation": "Bankman-Fried lived there as MIT student"
+      },
+      "confidence": 0.88,
+      "context": "As an MIT student, he lived in a coeducational group house called Epsilon Theta."
+    },
+    {
+      "name": "FTX bankruptcy",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "financial event",
+        "date": "November 2022",
+        "cause": "evidence of potential fraud; depositor withdrawals",
+        "organization": "FTX"
+      },
+      "confidence": 0.98,
+      "context": "In November 2022, as evidence of potential fraud began to surface, depositors quickly withdrew their assets from FTX, forcing the company into bankruptcy."
+    },
+    {
+      "name": "Bankman-Fried arrest",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal event",
+        "date": "December 12, 2022",
+        "location": "Bahamas",
+        "person": "Samuel Benjamin Bankman-Fried",
+        "outcome": "arrested and extradited to United States"
+      },
+      "confidence": 0.99,
+      "context": "On December 12, 2022, Bankman-Fried was arrested in the Bahamas and extradited to the United States"
+    },
+    {
+      "name": "Bankman-Fried indictment",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal event",
+        "date": "December 2022",
+        "person": "Samuel Benjamin Bankman-Fried",
+        "charges": [
+          "wire fraud",
+          "commodities fraud",
+          "securities fraud",
+          "money laundering",
+          "campaign finance law violations"
+        ],
+        "number_of_charges": "7"
+      },
+      "confidence": 0.98,
+      "context": "he was indicted on seven criminal charges, including wire fraud, commodities fraud, securities fraud, money laundering, and campaign finance law violations."
+    },
+    {
+      "name": "Bankman-Fried conviction",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal event",
+        "date": "November 2023",
+        "person": "Samuel Benjamin Bankman-Fried",
+        "verdict": "convicted of all seven counts of fraud, conspiracy, and money laundering"
+      },
+      "confidence": 0.99,
+      "context": "was convicted of fraud and related crimes in November 2023"
+    },
+    {
+      "name": "Bankman-Fried sentencing",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal event",
+        "date": "March 28, 2024",
+        "person": "Samuel Benjamin Bankman-Fried",
+        "sentence": "25 years in prison",
+        "forfeiture": "$11 billion"
+      },
+      "confidence": 0.99,
+      "context": "On March 28, 2024, he was sentenced to 25 years in prison and ordered to forfeit $11 billion."
+    },
+    {
+      "name": "FTX founding",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "business event",
+        "date": "April 2019",
+        "founder": "Samuel Benjamin Bankman-Fried",
+        "organization": "FTX",
+        "opening_date": "May 2019"
+      },
+      "confidence": 0.98,
+      "context": "Bankman-Fried founded the FTX cryptocurrency derivatives exchange in April 2019; it opened for business the following month."
+    },
+    {
+      "name": "Alameda Research founding",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "business event",
+        "date": "November 2017",
+        "cofounders": [
+          "Samuel Benjamin Bankman-Fried",
+          "Tara Hedley"
+        ],
+        "organization": "Alameda Research"
+      },
+      "confidence": 0.98,
+      "context": "Bankman-Fried and CEA's Tara Hedley (née Mac Aulay) cofounded the quantitative trading firm Alameda Research."
+    },
+    {
+      "name": "Bankman-Fried testimony before Committee on Financial Services",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "political/legal event",
+        "date": "December 8, 2021",
+        "person": "Samuel Benjamin Bankman-Fried",
+        "organization": "Committee on Financial Services",
+        "topic": "regulating the cryptocurrency industry"
+      },
+      "confidence": 0.95,
+      "context": "On December 8, 2021, Bankman-Fried, along with other industry executives, testified before the Committee on Financial Services about regulating the cryptocurrency industry."
+    },
+    {
+      "name": "Emergent Fidelity Technologies Robinhood acquisition",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "financial event",
+        "date": "May 12, 2022",
+        "acquirer": "Emergent Fidelity Technologies Ltd.",
+        "target": "Robinhood Markets",
+        "stake": "7.6 percent"
+      },
+      "confidence": 0.95,
+      "context": "On May 12, 2022, it was disclosed that Emergent Fidelity Technologies Ltd., which was majority owned by Bankman-Fried, had bought 7.6 percent of Robinhood Markets stock."
+    },
+    {
+      "name": "FTX move to Bahamas",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "business event",
+        "date": "September 2021",
+        "organization": "FTX",
+        "from_location": "Hong Kong",
+        "to_location": "Bahamas",
+        "participants": [
+          "Samuel Benjamin Bankman-Fried",
+          "entire senior staff of FTX"
+        ]
+      },
+      "confidence": 0.98,
+      "context": "In September 2021, Bankman-Fried and the entire senior staff of FTX moved from Hong Kong to the Bahamas."
+    },
+    {
+      "name": "Bitcoin arbitrage trade",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "financial event",
+        "date": "January 2018",
+        "person": "Samuel Benjamin Bankman-Fried",
+        "amount": "up to $25 million per day",
+        "strategy": "arbitrage between Japan and United States bitcoin prices"
+      },
+      "confidence": 0.92,
+      "context": "In January 2018, Bankman-Fried organized an arbitrage trade, moving up to $25 million per day to take advantage of the higher price of bitcoin in Japan compared to the United States."
+    },
+    {
+      "name": "Sam Bankman-Fried",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "CEO of FTX",
+        "status": "arrested and charged",
+        "resignation_date": "November 11, 2022",
+        "arrest_date": "December 12, 2022"
+      },
+      "confidence": 0.99,
+      "context": "Bankman-Fried resigned as CEO of FTX on November 11, 2022"
+    },
+    {
+      "name": "Elon Musk",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Entrepreneur",
+        "known_for": "Twitter acquisition"
+      },
+      "confidence": 0.95,
+      "context": "Bankman-Fried's advisors had offered on his behalf to help fund Elon Musk's purchase of Twitter"
+    },
+    {
+      "name": "Michael Grimes",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Investment banker"
+      },
+      "confidence": 0.85,
+      "context": "investment banker Michael Grimes wrote that Bankman-Fried would be willing to commit up to $5 billion"
+    },
+    {
+      "name": "William MacAskill",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Scottish philosopher and author",
+        "affiliations": [
+          "Future Fund",
+          "effective altruism movement"
+        ],
+        "description": "One of the founders of the effective altruism movement"
+      },
+      "confidence": 0.9,
+      "context": "Scottish philosopher and author William MacAskill, one of the founders of the effective altruism movement"
+    },
+    {
+      "name": "Kelsey Piper",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Vox writer"
+      },
+      "confidence": 0.85,
+      "context": "Bankman-Fried participated in an interview with Vox writer Kelsey Piper over Twitter private messages"
+    },
+    {
+      "name": "Changpeng Zhao",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "CEO of Binance",
+        "affiliations": [
+          "Binance"
+        ]
+      },
+      "confidence": 0.95,
+      "context": "Binance CEO Changpeng Zhao revealed on Twitter that his firm intended to sell its holdings of FTT"
+    },
+    {
+      "name": "Anthropic",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Company",
+        "investment_received": "$500 million from Bankman-Fried"
+      },
+      "confidence": 0.85,
+      "context": "Bankman-Fried invested $500 million in Anthropic"
+    },
+    {
+      "name": "Sequoia Capital",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Investment firm",
+        "investment_amount": "over $200 million in FTX"
+      },
+      "confidence": 0.95,
+      "context": "attempting to secure an investment from Sequoia Capital"
+    },
+    {
+      "name": "Giving What We Can",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Charity organization",
+        "member": "Sam Bankman-Fried"
+      },
+      "confidence": 0.85,
+      "context": "He was a member of Giving What We Can"
+    },
+    {
+      "name": "Future Fund",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Charitable fund",
+        "founder": "Sam Bankman-Fried",
+        "team_members": [
+          "William MacAskill"
+        ],
+        "status": "All members resigned after FTX collapse",
+        "commitments": "Around $160 million to 110 nonprofits as of September 1, 2022"
+      },
+      "confidence": 0.9,
+      "context": "Bankman-Fried is the founder of Future Fund"
+    },
+    {
+      "name": "Binance",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Cryptocurrency exchange",
+        "CEO": "Changpeng Zhao",
+        "action": "Announced nonbinding agreement to purchase FTX, then withdrew"
+      },
+      "confidence": 0.95,
+      "context": "Binance CEO Changpeng Zhao revealed on Twitter that his firm intended to sell its holdings of FTT"
+    },
+    {
+      "name": "Jane Street",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Company"
+      },
+      "confidence": 0.9,
+      "context": "Bankman-Fried believed he had received higher bonuses while working at Jane Street"
+    },
+    {
+      "name": "Twitter",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Social media company",
+        "event": "Acquisition by Elon Musk"
+      },
+      "confidence": 0.9,
+      "context": "help fund Elon Musk's purchase of Twitter"
+    },
+    {
+      "name": "Vox",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Media company",
+        "employee": "Kelsey Piper"
+      },
+      "confidence": 0.85,
+      "context": "interview with Vox writer Kelsey Piper"
+    },
+    {
+      "name": "CoinDesk",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "News/media company",
+        "coverage": "Report on Alameda's FTT holdings"
+      },
+      "confidence": 0.85,
+      "context": "a report from CoinDesk stating that the bulk of the holdings of Alameda"
+    },
+    {
+      "name": "Bloomberg",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "news and financial data company"
+      },
+      "confidence": 0.95,
+      "context": "according to the Bloomberg Billionaires Index"
+    },
+    {
+      "name": "TechCrunch",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "News/media company",
+        "coverage": "FTT price impact reporting"
+      },
+      "confidence": 0.85,
+      "context": "Bloomberg and TechCrunch reported that any sale by Binance"
+    },
+    {
+      "name": "Wall Street Journal",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "news publication"
+      },
+      "confidence": 0.95,
+      "context": "the Wall Street Journal reported that Binance had decided not to acquire FTX"
+    },
+    {
+      "name": "Nauru",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "Island country",
+        "connection": "Bankman-Fried considered purchasing it as a bunker"
+      },
+      "confidence": 0.85,
+      "context": "allegations emerged that Bankman-Fried had considered \"purchasing\" the island country of Nauru"
+    },
+    {
+      "name": "Giving Pledge",
+      "entity_type": "DOCUMENT",
+      "attributes": {
+        "type": "Pledge/commitment document",
+        "signatory": "Sam Bankman-Fried",
+        "date_signed": "June 2022",
+        "date_removed": "December 2022"
+      },
+      "confidence": 0.85,
+      "context": "In June 2022, he signed the Giving Pledge; his name was removed from the list's website in December 2022"
+    },
+    {
+      "name": "Binance-FTX Nonbinding Agreement",
+      "entity_type": "DOCUMENT",
+      "attributes": {
+        "type": "Business agreement",
+        "date": "November 8, 2022",
+        "parties": [
+          "Binance",
+          "FTX"
+        ],
+        "status": "Withdrawn on November 9, 2022"
+      },
+      "confidence": 0.85,
+      "context": "On November 8, Zhao announced that Binance had entered into a nonbinding agreement to purchase FTX"
+    },
+    {
+      "name": "Twitter-Musk Acquisition Lawsuit",
+      "entity_type": "DOCUMENT",
+      "attributes": {
+        "type": "Legal document",
+        "parties": [
+          "Twitter",
+          "Elon Musk"
+        ],
+        "content": "Messages from Michael Grimes about Bankman-Fried's offer"
+      },
+      "confidence": 0.8,
+      "context": "According to messages released as part of the lawsuit between Twitter and Musk"
+    },
+    {
+      "name": "May 12, 2022 - Robinhood Stock Purchase Disclosure",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "Financial disclosure",
+        "date": "May 12, 2022",
+        "actor": "Emergent Fidelity Technologies Ltd.",
+        "action": "Purchased 7.6% of Robinhood Markets stock",
+        "owner": "Sam Bankman-Fried"
+      },
+      "confidence": 0.9,
+      "context": "On May 12, 2022, it was disclosed that Emergent Fidelity Technologies Ltd., which was majority owned by Bankman-Fried, had bought 7.6 percent of Robinhood Markets stock"
+    },
+    {
+      "name": "November 2022 - Eastern Caribbean Supreme Court Affidavit",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "Legal proceeding",
+        "date": "November 2022",
+        "participant": "Sam Bankman-Fried",
+        "court": "Eastern Caribbean Supreme Court",
+        "disclosure": "Borrowed $546 million from Alameda Research with Gary Wang"
+      },
+      "confidence": 0.85,
+      "context": "In a November 2022 affidavit before the Eastern Caribbean Supreme Court, and prior to his arrest, Bankman-Fried said he and FTX cofounder Gary Wang together borrowed over $546 million"
+    },
+    {
+      "name": "September 2022 - Twitter Acquisition Funding Offer",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "Financial offer",
+        "date": "September 2022",
+        "actor": "Sam Bankman-Fried's advisors",
+        "target": "Elon Musk's Twitter acquisition",
+        "amount_offered": "Up to $5 billion",
+        "outcome": "No investment took place"
+      },
+      "confidence": 0.85,
+      "context": "In September 2022, it was reported that Bankman-Fried's advisors had offered on his behalf to help fund Elon Musk's purchase of Twitter"
+    },
+    {
+      "name": "April 25, 2022 - Michael Grimes Message",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "Communication",
+        "date": "April 25, 2022",
+        "sender": "Michael Grimes",
+        "content": "Bankman-Fried willing to commit up to $5 billion for Twitter acquisition",
+        "context": "Twitter-Musk acquisition lawsuit"
+      },
+      "confidence": 0.8,
+      "context": "on April 25, 2022, investment banker Michael Grimes wrote that Bankman-Fried would be willing to commit up to $5 billion"
+    },
+    {
+      "name": "July 2023 - Nauru Purchase Allegations",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "Allegation",
+        "date": "July 2023",
+        "subject": "Sam Bankman-Fried",
+        "allegation": "Considered purchasing Nauru as apocalyptic bunker",
+        "description": "Misguided and sometimes dystopian project"
+      },
+      "confidence": 0.75,
+      "context": "In July 2023, allegations emerged that Bankman-Fried had considered \"purchasing\" the island country of Nauru"
+    },
+    {
+      "name": "November 2022 - Kelsey Piper Interview",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "Interview",
+        "date": "November 2022",
+        "participant": "Sam Bankman-Fried",
+        "interviewer": "Kelsey Piper",
+        "medium": "Twitter private messages",
+        "topics": [
+          "Crypto regulation sincerity",
+          "Ethics",
+          "ESG/CSR"
+        ]
+      },
+      "confidence": 0.85,
+      "context": "In November 2022, Bankman-Fried participated in an interview with Vox writer Kelsey Piper over Twitter private messages"
+    },
+    {
+      "name": "November 2022 - Binance FTT Sale Announcement",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "Financial announcement",
+        "date": "November 2022",
+        "actor": "Changpeng Zhao / Binance",
+        "action": "Announced intention to sell FTT holdings",
+        "consequence": "Triggered customer withdrawals from FTX"
+      },
+      "confidence": 0.9,
+      "context": "In November 2022, Binance CEO Changpeng Zhao revealed on Twitter that his firm intended to sell its holdings of FTT"
+    },
+    {
+      "name": "November 8, 2022 - Binance-FTX Acquisition Agreement",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "Business transaction",
+        "date": "November 8, 2022",
+        "parties": [
+          "Binance",
+          "FTX"
+        ],
+        "agreement_type": "Nonbinding agreement to purchase",
+        "reason": "FTX liquidity crisis",
+        "outcome": "FTT lost 80% of value on announcement day"
+      },
+      "confidence": 0.9,
+      "context": "On November 8, Zhao announced that Binance had entered into a nonbinding agreement to purchase FTX due to a liquidity crisis at FTX"
+    },
+    {
+      "name": "November 9, 2022 - Binance Withdrawal from FTX Deal",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "Business decision",
+        "date": "November 9, 2022",
+        "actor": "Binance",
+        "action": "Decided not to acquire FTX",
+        "reasons": [
+          "Mishandling of customer funds",
+          "Pending investigations"
+        ],
+        "source": "Wall Street Journal"
+      },
+      "confidence": 0.9,
+      "context": "On November 9, the Wall Street Journal reported that Binance had decided not to acquire FTX"
+    },
+    {
+      "name": "June 2022 - Giving Pledge Signing",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "Commitment",
+        "date": "June 2022",
+        "participant": "Sam Bankman-Fried",
+        "action": "Signed the Giving Pledge"
+      },
+      "confidence": 0.85,
+      "context": "In June 2022, he signed the Giving Pledge"
+    },
+    {
+      "name": "December 2022 - Giving Pledge Name Removal",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "Administrative action",
+        "date": "December 2022",
+        "subject": "Sam Bankman-Fried",
+        "action": "Name removed from Giving Pledge website",
+        "reason": "Following his arrest"
+      },
+      "confidence": 0.85,
+      "context": "his name was removed from the list's website in December 2022 following his arrest"
+    },
+    {
+      "name": "September 1, 2022 - Future Fund Commitments Report",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "Financial report",
+        "date": "September 1, 2022",
+        "organization": "Future Fund",
+        "commitments": "$160 million to 110 nonprofits"
+      },
+      "confidence": 0.85,
+      "context": "As of September 1, 2022, Future Fund stated it had committed around $160 million to 110 nonprofits"
+    },
+    {
+      "name": "FTX Collapse",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "Business failure",
+        "date": "November 2022",
+        "organization": "FTX",
+        "cause": "Liquidity crisis triggered by Binance FTT sale announcement",
+        "consequence": "All Future Fund members resigned"
+      },
+      "confidence": 0.9,
+      "context": "After the collapse of FTX, all members of Future Fund simultaneously resigned"
+    },
+    {
+      "name": "John J. Ray III",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "CEO of FTX (replacement)",
+        "previous_role": "chaired effort to recover Enron assets",
+        "previous_role_dates": "2004-2009"
+      },
+      "confidence": 0.98,
+      "context": "Bankman-Fried resigned as CEO of FTX on November 11, 2022, and was immediately replaced by John J. Ray III"
+    },
+    {
+      "name": "Caroline Ellison",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Chief Executive of Alameda Research"
+      },
+      "confidence": 0.95,
+      "context": "the Chief Executive of Alameda Research, Caroline Ellison, told employees that Bankman-Fried was aware"
+    },
+    {
+      "name": "Ryne Miller",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "FTX general counsel",
+        "previous_affiliation": "Sullivan & Cromwell law firm"
+      },
+      "confidence": 0.92,
+      "context": "pressured by FTX general counsel and former partner at the Sullivan & Cromwell law firm, Ryne Miller"
+    },
+    {
+      "name": "Philip Davis",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Prime Minister of the Bahamas"
+      },
+      "confidence": 0.95,
+      "context": "Philip Davis, the Prime Minister of the Bahamas, commented on the arrest"
+    },
+    {
+      "name": "Braden Perry",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "former senior trial lawyer",
+        "previous_affiliation": "Commodity Futures Trading Commission"
+      },
+      "confidence": 0.9,
+      "context": "Braden Perry, a former senior trial lawyer at the Commodity Futures Trading Commission, opined"
+    },
+    {
+      "name": "Securities and Exchange Commission",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government agency",
+        "abbreviation": "SEC",
+        "action": "investigating FTX"
+      },
+      "confidence": 0.98,
+      "context": "the Securities and Exchange Commission and Commodity Futures Trading Commission were investigating FTX"
+    },
+    {
+      "name": "Commodity Futures Trading Commission",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government agency",
+        "abbreviation": "CFTC",
+        "action": "investigating FTX"
+      },
+      "confidence": 0.98,
+      "context": "the Securities and Exchange Commission and Commodity Futures Trading Commission were investigating FTX"
+    },
+    {
+      "name": "Sullivan & Cromwell",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "law firm"
+      },
+      "confidence": 0.9,
+      "context": "former partner at the Sullivan & Cromwell law firm, Ryne Miller"
+    },
+    {
+      "name": "Royal Bahamas Police Force",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "law enforcement agency",
+        "action": "arrested Bankman-Fried"
+      },
+      "confidence": 0.95,
+      "context": "Bankman-Fried was arrested shortly after 6:00 p.m. in his apartment complex in New Providence, Bahamas, by the Royal Bahamas Police Force"
+    },
+    {
+      "name": "Southern District of New York",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "federal court",
+        "action": "charged Bankman-Fried"
+      },
+      "confidence": 0.95,
+      "context": "the Southern District of New York had charged Bankman-Fried with wire fraud"
+    },
+    {
+      "name": "U.S. House Committee on Financial Services",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government committee"
+      },
+      "confidence": 0.95,
+      "context": "scheduled to appear before the U.S. House Committee on Financial Services"
+    },
+    {
+      "name": "New Providence",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "city",
+        "country": "Bahamas"
+      },
+      "confidence": 0.95,
+      "context": "in his apartment complex in New Providence, Bahamas"
+    },
+    {
+      "name": "Nassau",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "country": "Bahamas",
+        "type": "City"
+      },
+      "confidence": 0.99,
+      "context": "Fox Hill Prison in Nassau"
+    },
+    {
+      "name": "California",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "state",
+        "country": "United States"
+      },
+      "confidence": 0.95,
+      "context": "he would stay at his parents' home in California"
+    },
+    {
+      "name": "Delaware",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "state",
+        "country": "United States"
+      },
+      "confidence": 0.9,
+      "context": "FTX and related entities filed for bankruptcy in Delaware"
+    },
+    {
+      "name": "Fox Hill Prison",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "city": "Nassau",
+        "country": "Bahamas",
+        "type": "Prison"
+      },
+      "confidence": 0.95,
+      "context": "After being held at Fox Hill Prison in Nassau for ten days"
+    },
+    {
+      "name": "Enron Bankruptcy case",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "bankruptcy proceeding",
+        "years": "2004-2009",
+        "participant": "John J. Ray III"
+      },
+      "confidence": 0.9,
+      "context": "from 2004 to 2009 had chaired the effort to recover Enron assets for creditors through litigation against numerous banks in the Enron Bankruptcy case"
+    },
+    {
+      "name": "FTX Bankruptcy Declaration",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "bankruptcy filing",
+        "date": "November 11, 2022",
+        "entities_involved": "FTX, Alameda Research, and more than 130 associated legal entities",
+        "jurisdiction": "Delaware"
+      },
+      "confidence": 0.99,
+      "context": "On November 11, 2022, FTX, Alameda Research, and more than 130 associated legal entities declared bankruptcy"
+    },
+    {
+      "name": "Bankman-Fried Charges",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "criminal charges",
+        "date": "December 12, 2022",
+        "charges": [
+          "wire fraud",
+          "wire fraud conspiracy",
+          "securities fraud",
+          "securities fraud conspiracy",
+          "money laundering"
+        ],
+        "charging_authority": "Southern District of New York"
+      },
+      "confidence": 0.99,
+      "context": "the Southern District of New York had charged Bankman-Fried with wire fraud, wire fraud conspiracy, securities fraud, securities fraud conspiracy, and money laundering"
+    },
+    {
+      "name": "Bankman-Fried Plea",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal proceeding",
+        "date": "January 3, 2023",
+        "plea": "not guilty"
+      },
+      "confidence": 0.98,
+      "context": "On January 3, 2023, Bankman-Fried pled \"not guilty\" to fraud and the other charges"
+    },
+    {
+      "name": "Binance-FTX Acquisition Decision",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "business decision",
+        "date": "November 9, 2022",
+        "decision": "Binance decided not to acquire FTX",
+        "reported_by": "Wall Street Journal"
+      },
+      "confidence": 0.95,
+      "context": "On November 9, the Wall Street Journal reported that Binance had decided not to acquire FTX"
+    },
+    {
+      "name": "Robinhood",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "financial services company"
+      },
+      "confidence": 0.85,
+      "context": "it was ostensibly backed by FTT and shares in Robinhood"
+    },
+    {
+      "name": "Reuters",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "news agency"
+      },
+      "confidence": 0.9,
+      "context": "Anonymous sources cited by Reuters stated"
+    },
+    {
+      "name": "Forbes",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "news and media company"
+      },
+      "confidence": 0.9,
+      "context": "Forbes obtained and published his prepared testimony"
+    },
+    {
+      "name": "Judge Lewis Kaplan",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Judge presiding over United States v. Bankman-Fried",
+        "actions": "Tightened bail conditions on February 1, 2023; Presided over trial beginning October 3, 2023"
+      },
+      "confidence": 0.99,
+      "context": "the judge presiding over his case, Judge Lewis Kaplan, tightened the bail conditions"
+    },
+    {
+      "name": "Nishad Singh",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "FTX Executive",
+        "testimony": "Prosecution witness as part of plea deal"
+      },
+      "confidence": 0.95,
+      "context": "FTX executives Caroline Ellison, Gary Wang, and Nishad Singh, as part of plea deals"
+    },
+    {
+      "name": "The Guardian",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "News Publication",
+        "coverage": "Trial coverage and summary"
+      },
+      "confidence": 0.95,
+      "context": "The Guardian summarized the trial as a question of \"whether Bankman-Fried is a crypto criminal mastermind or just an unlucky 'math nerd'\""
+    },
+    {
+      "name": "Manhattan",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "Borough",
+        "country": "United States",
+        "state": "New York",
+        "relevance": "Trial location"
+      },
+      "confidence": 0.95,
+      "context": "at the Daniel Patrick Moynihan United States Courthouse in Manhattan"
+    },
+    {
+      "name": "China",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "Country",
+        "relevance": "Recipient of illegal cryptocurrency transfers"
+      },
+      "confidence": 0.95,
+      "context": "transfer\" of at least $40 million in cryptocurrency to Chinese government officials"
+    },
+    {
+      "name": "Daniel Patrick Moynihan United States Courthouse",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "Federal Courthouse",
+        "location": "Manhattan",
+        "relevance": "Trial venue"
+      },
+      "confidence": 0.95,
+      "context": "at the Daniel Patrick Moynihan United States Courthouse in Manhattan"
+    },
+    {
+      "name": "Extradition from Bahamas",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "After 10 days at Fox Hill Prison",
+        "participant": "Sam Bankman-Fried",
+        "type": "Legal/Extradition",
+        "outcome": "Extradition granted to United States"
+      },
+      "confidence": 0.95,
+      "context": "After being held at Fox Hill Prison in Nassau for ten days, Bankman-Fried consented to his extradition from the Bahamas to the United States"
+    },
+    {
+      "name": "Plea of Not Guilty",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "January 3, 2023",
+        "participant": "Sam Bankman-Fried",
+        "type": "Legal",
+        "charges": "Fraud and other charges"
+      },
+      "confidence": 0.99,
+      "context": "On January 3, 2023, Bankman-Fried pled \"not guilty\" to fraud and the other charges"
+    },
+    {
+      "name": "Bail Conditions Tightened",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "February 1, 2023",
+        "judge": "Judge Lewis Kaplan",
+        "type": "Legal",
+        "restrictions": "Forbidden from contacting current or former FTX employees without attorneys present"
+      },
+      "confidence": 0.95,
+      "context": "On February 1, 2023, the judge presiding over his case, Judge Lewis Kaplan, tightened the bail conditions"
+    },
+    {
+      "name": "Additional Criminal Charges Announcement",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "February 23, 2023",
+        "defendant": "Sam Bankman-Fried",
+        "type": "Legal",
+        "charges": "Four additional criminal charges focused on illegal political donations (more than 300)"
+      },
+      "confidence": 0.95,
+      "context": "Four additional criminal charges levied against Bankman-Fried were announced on February 23, 2023"
+    },
+    {
+      "name": "Cryptocurrency Transfer Indictment",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "March 2023",
+        "defendant": "Sam Bankman-Fried and others",
+        "type": "Legal",
+        "charges": "Directing and causing transfer of at least $40 million in cryptocurrency to Chinese government officials",
+        "purpose": "To unfreeze accounts of Alameda Research"
+      },
+      "confidence": 0.95,
+      "context": "A March 2023 indictment accused Bankman-Fried and others that they had \"directed and caused the transfer\" of at least $40 million in cryptocurrency to Chinese government officials"
+    },
+    {
+      "name": "Campaign Finance Charge Dropped",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "July 2023",
+        "defendant": "Sam Bankman-Fried",
+        "type": "Legal",
+        "reason": "Treaty obligations to the Bahamas created by extradition"
+      },
+      "confidence": 0.9,
+      "context": "In July, prosecutors dropped a campaign finance charge filed against him due to treaty obligations to the Bahamas"
+    },
+    {
+      "name": "Illegal Campaign Finance Indictment",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "August 2023",
+        "defendant": "Sam Bankman-Fried",
+        "type": "Legal",
+        "charges": "Using $100 million in stolen FTX customer funds for 2022 U.S. elections campaign contributions"
+      },
+      "confidence": 0.95,
+      "context": "In a separate illegal campaign finance indictment in August, Bankman-Fried was accused of using $100 million in stolen funds of FTX customers towards 2022 U.S. elections campaign contributions"
+    },
+    {
+      "name": "Trial",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "October 3, 2023 - ongoing",
+        "defendant": "Sam Bankman-Fried",
+        "type": "Criminal Trial",
+        "charges": "Seven counts of fraud and conspiracy",
+        "judge": "Judge Lewis Kaplan",
+        "venue": "Daniel Patrick Moynihan United States Courthouse, Manhattan",
+        "prosecution_witnesses": "Caroline Ellison, Gary Wang, Nishad Singh, and over a dozen others",
+        "defense_witnesses": "Sam Bankman-Fried, risk management expert, Bahamian lawyer"
+      },
+      "confidence": 0.99,
+      "context": "The trial began on October 3, 2023, at the Daniel Patrick Moynihan United States Courthouse in Manhattan, presided over by Judge Lewis Kaplan"
+    },
+    {
+      "name": "Sam Mangel",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "prison consultant"
+      },
+      "confidence": 0.9,
+      "context": "Bankman-Fried engaged the services of prison consultant Sam Mangel."
+    },
+    {
+      "name": "Metropolitan Detention Center, Brooklyn",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "detention facility",
+        "abbreviation": "MDC Brooklyn",
+        "city": "Brooklyn"
+      },
+      "confidence": 0.95,
+      "context": "remanded into custody at the Metropolitan Detention Center, Brooklyn (MDC Brooklyn)"
+    },
+    {
+      "name": "New York",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "state/region",
+        "context": "federal appeals court location"
+      },
+      "confidence": 0.95,
+      "context": "a federal appeals court in New York heard an argument"
+    },
+    {
+      "name": "First Step Act",
+      "entity_type": "DOCUMENT",
+      "attributes": {
+        "type": "legislation",
+        "context": "time credit provisions"
+      },
+      "confidence": 0.9,
+      "context": "Under provisions of the First Step Act and in conjunction with other time credit programs"
+    },
+    {
+      "name": "Trial Conviction Event",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "November 2, 2023",
+        "type": "criminal trial verdict",
+        "participant": "Sam Bankman-Fried",
+        "outcome": "guilty on all seven counts"
+      },
+      "confidence": 0.99,
+      "context": "The trial ended on November 2, 2023, with the jury pronouncing Bankman-Fried guilty on all seven counts."
+    },
+    {
+      "name": "Sentencing Event",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "March 28, 2024",
+        "type": "criminal sentencing",
+        "participant": "Sam Bankman-Fried",
+        "sentence": "25 years in prison",
+        "forfeiture": "$11.02 billion"
+      },
+      "confidence": 0.99,
+      "context": "On March 28, 2024, the court sentenced Bankman-Fried to 25 years in prison."
+    },
+    {
+      "name": "Bail Revocation Event",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "August 11, 2023",
+        "type": "legal proceeding",
+        "reason": "witness tampering",
+        "judge": "Lewis Kaplan",
+        "outcome": "bail revoked, remanded to custody"
+      },
+      "confidence": 0.95,
+      "context": "On August 11, after Judge Kaplan concluded that witness tampering had likely occurred, he revoked Bankman-Fried's bail"
+    },
+    {
+      "name": "Witness Tampering Allegation Event",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "July 26, 2023",
+        "type": "legal allegation",
+        "allegation": "witness tampering",
+        "details": "gave reporter personal writings of Caroline Ellison"
+      },
+      "confidence": 0.9,
+      "context": "On July 26, 2023, prosecutors alleged witness tampering after Bankman-Fried gave a reporter personal writings of former Alameda Research CEO Caroline Ellison."
+    },
+    {
+      "name": "Appeal Event",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "April 11, 2024",
+        "type": "legal appeal",
+        "participant": "Sam Bankman-Fried",
+        "subject": "conviction and 25-year prison sentence"
+      },
+      "confidence": 0.95,
+      "context": "On April 11, 2024, Bankman-Fried appealed his conviction and the 25-year prison sentence."
+    },
+    {
+      "name": "New Trial Request Event",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "September 13, 2024",
+        "type": "legal motion",
+        "participant": "Sam Bankman-Fried",
+        "claim": "Judge bias",
+        "allegations": "judge mocked defense, criticized questioning, pressured jurors"
+      },
+      "confidence": 0.9,
+      "context": "On September 13, 2024, Bankman-Fried requested a new trial, claiming Judge Kaplan was biased."
+    },
+    {
+      "name": "Federal Appeals Court Hearing Event",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "November 4, 2025",
+        "type": "legal hearing",
+        "location": "New York",
+        "participant": "Sam Bankman-Fried",
+        "argument": "conviction should be overturned due to presumption of guilt",
+        "status": "ruling pending"
+      },
+      "confidence": 0.9,
+      "context": "On November 4, 2025, a federal appeals court in New York heard an argument by Bankman-Fried's attorney that his conviction for fraud should be overturned because he was \"presumed guilty.\""
+    },
+    {
+      "name": "Second Trial Dismissal Event",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "December 30, 2023",
+        "type": "legal decision",
+        "charges": "five counts including bank fraud and bribery",
+        "outcome": "prosecutors announced they would not proceed",
+        "reason": "strong public interest to promptly resolve case"
+      },
+      "confidence": 0.9,
+      "context": "Prosecutors announced on December 30, 2023, that they would not proceed to a second trial"
+    },
+    {
+      "name": "Extradition Event",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "December 2022",
+        "type": "legal proceeding",
+        "participant": "Sam Bankman-Fried",
+        "origin": "Bahamas",
+        "destination": "United States"
+      },
+      "confidence": 0.9,
+      "context": "Bankman-Fried was extradited from the Bahamas in December 2022"
+    },
+    {
+      "name": "Judge Kaplan",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Judge"
+      },
+      "confidence": 0.9,
+      "context": "Judge Kaplan concluded that witness tampering had likely occurred"
+    },
+    {
+      "name": "Sean Combs",
+      "entity_type": "PERSON",
+      "attributes": {
+        "location": "MDC Brooklyn dormitory-style cell"
+      },
+      "confidence": 0.95,
+      "context": "he was assigned to the same dormitory-style cell as Sean Combs"
+    },
+    {
+      "name": "Tucker Carlson",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Journalist/Interviewer"
+      },
+      "confidence": 0.95,
+      "context": "Tucker Carlson interviewed Bankman-Fried"
+    },
+    {
+      "name": "Donald Trump",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Political figure"
+      },
+      "confidence": 0.95,
+      "context": "indirect pitch to Mr. Trump to pardon his case"
+    },
+    {
+      "name": "Michael Bennet",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Political candidate"
+      },
+      "confidence": 0.9,
+      "context": "$1,000 contribution in 2010 to Michael Bennet"
+    },
+    {
+      "name": "Joe Biden",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Presidential candidate"
+      },
+      "confidence": 0.95,
+      "context": "Joe Biden 2020 presidential campaign"
+    },
+    {
+      "name": "Michael Bloomberg",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Political donor"
+      },
+      "confidence": 0.95,
+      "context": "after Michael Bloomberg"
+    },
+    {
+      "name": "Susan Collins",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Senator",
+        "state": "Maine"
+      },
+      "confidence": 0.95,
+      "context": "senators Susan Collins of Maine"
+    },
+    {
+      "name": "Mitt Romney",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Senator",
+        "state": "Utah"
+      },
+      "confidence": 0.95,
+      "context": "Mitt Romney of Utah"
+    },
+    {
+      "name": "Lisa Murkowski",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Senator",
+        "state": "Alaska"
+      },
+      "confidence": 0.95,
+      "context": "Lisa Murkowski of Alaska"
+    },
+    {
+      "name": "Ben Sasse",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Senator",
+        "state": "Nebraska"
+      },
+      "confidence": 0.95,
+      "context": "Ben Sasse of Nebraska"
+    },
+    {
+      "name": "Matthew Kassel",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Journalist"
+      },
+      "confidence": 0.9,
+      "context": "Journalist Matthew Kassel says"
+    },
+    {
+      "name": "George Soros",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Political donor"
+      },
+      "confidence": 0.95,
+      "context": "only behind George Soros"
+    },
+    {
+      "name": "Brendan Boyle",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Political figure"
+      },
+      "confidence": 0.9,
+      "context": "leadership PAC for Brendan Boyle"
+    },
+    {
+      "name": "Michael Lewis",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Author"
+      },
+      "confidence": 0.9,
+      "context": "Michael Lewis revealed"
+    },
+    {
+      "name": "Metropolitan Detention Center, Brooklyn",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "abbreviation": "MDC Brooklyn",
+        "type": "Detention facility"
+      },
+      "confidence": 0.95,
+      "context": "Metropolitan Detention Center, Brooklyn (MDC Brooklyn)"
+    },
+    {
+      "name": "Federal Correctional Institution, Terminal Island",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Federal prison",
+        "security_level": "low security"
+      },
+      "confidence": 0.95,
+      "context": "Federal Correctional Institution, Terminal Island, a low security federal prison"
+    },
+    {
+      "name": "Protect Our Future",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Democratic PAC"
+      },
+      "confidence": 0.95,
+      "context": "Protect Our Future, a Democratic PAC"
+    },
+    {
+      "name": "The Next 50 PAC",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "PAC"
+      },
+      "confidence": 0.9,
+      "context": "The Next 50 PAC"
+    },
+    {
+      "name": "Guarding Against Pandemics PAC",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "PAC"
+      },
+      "confidence": 0.9,
+      "context": "Guarding Against Pandemics PAC"
+    },
+    {
+      "name": "Congress",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Government body"
+      },
+      "confidence": 0.95,
+      "context": "lobbying Congress"
+    },
+    {
+      "name": "Brooklyn",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "City",
+        "country": "United States"
+      },
+      "confidence": 0.95,
+      "context": "Metropolitan Detention Center, Brooklyn"
+    },
+    {
+      "name": "Los Angeles",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "City",
+        "country": "United States"
+      },
+      "confidence": 0.95,
+      "context": "low security federal prison in Los Angeles"
+    },
+    {
+      "name": "Maine",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "State",
+        "country": "United States"
+      },
+      "confidence": 0.95,
+      "context": "Susan Collins of Maine"
+    },
+    {
+      "name": "Utah",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "State",
+        "country": "United States"
+      },
+      "confidence": 0.95,
+      "context": "Mitt Romney of Utah"
+    },
+    {
+      "name": "Alaska",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "State",
+        "country": "United States"
+      },
+      "confidence": 0.95,
+      "context": "Lisa Murkowski of Alaska"
+    },
+    {
+      "name": "Nebraska",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "State",
+        "country": "United States"
+      },
+      "confidence": 0.95,
+      "context": "Ben Sasse of Nebraska"
+    },
+    {
+      "name": "Going Infinite",
+      "entity_type": "DOCUMENT",
+      "attributes": {
+        "type": "Book",
+        "author": "Michael Lewis"
+      },
+      "confidence": 0.95,
+      "context": "Going Infinite, Michael Lewis revealed"
+    },
+    {
+      "name": "Digital Commodities Consumer Protection Act",
+      "entity_type": "DOCUMENT",
+      "attributes": {
+        "abbreviation": "DCCPA",
+        "type": "Proposed legislation"
+      },
+      "confidence": 0.95,
+      "context": "Digital Commodities Consumer Protection Act (DCCPA)"
+    },
+    {
+      "name": "Bail revocation and remand to custody",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "August 11",
+        "reason": "witness tampering",
+        "participant": "Sam Bankman-Fried",
+        "outcome": "remanded into custody at MDC Brooklyn"
+      },
+      "confidence": 0.95,
+      "context": "August 11, after Judge Kaplan concluded that witness tampering had likely occurred, he revoked Bankman-Fried's bail"
+    },
+    {
+      "name": "Diet and medication complaint",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "August 22, 2023",
+        "participant": "Sam Bankman-Fried",
+        "issue": "vegan diet and ADHD/depression medications"
+      },
+      "confidence": 0.9,
+      "context": "On August 22, 2023, Bankman-Fried's counsel averred that his client was not being provided a vegan diet"
+    },
+    {
+      "name": "Tucker Carlson interview",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "March 2025",
+        "participants": [
+          "Tucker Carlson",
+          "Sam Bankman-Fried"
+        ],
+        "outcome": "placed in solitary confinement, moved to Terminal Island",
+        "status": "unsanctioned by prison authorities"
+      },
+      "confidence": 0.95,
+      "context": "In March 2025, Tucker Carlson interviewed Bankman-Fried"
+    },
+    {
+      "name": "2020 U.S. elections",
+      "entity_type": "EVENT",
+      "attributes": {
+        "year": 2020,
+        "participant": "Sam Bankman-Fried",
+        "donation_amount": "$5.2 million"
+      },
+      "confidence": 0.95,
+      "context": "For the 2020 U.S. elections, he contributed $5.2 million"
+    },
+    {
+      "name": "2022 U.S. midterm elections",
+      "entity_type": "EVENT",
+      "attributes": {
+        "year": 2022,
+        "participant": "Sam Bankman-Fried",
+        "donation_amount": "$39.8 million"
+      },
+      "confidence": 0.95,
+      "context": "2022 U.S. midterm elections"
+    },
+    {
+      "name": "Kirsten Gillibrand",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Senator",
+        "action": "donated equal amounts to charitable organizations after FTX scandal"
+      },
+      "confidence": 0.9,
+      "context": "Elected officials doing so include Senator Kirsten Gillibrand"
+    },
+    {
+      "name": "Chuy García",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Representative",
+        "action": "donated equal amounts to charitable organizations after FTX scandal"
+      },
+      "confidence": 0.9,
+      "context": "Representatives Chuy García and Kevin Hern"
+    },
+    {
+      "name": "Kevin Hern",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Representative",
+        "action": "donated equal amounts to charitable organizations after FTX scandal"
+      },
+      "confidence": 0.9,
+      "context": "Representatives Chuy García and Kevin Hern"
+    },
+    {
+      "name": "Beto O'Rourke",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "former Texas gubernatorial candidate",
+        "donation_received": "$1 million from Bankman-Fried in October 2022, returned in early November"
+      },
+      "confidence": 0.9,
+      "context": "former Texas gubernatorial candidate Beto O'Rourke said that his campaign had received a $1 million donation from Bankman-Fried in October 2022 but returned the funds in early November"
+    },
+    {
+      "name": "Ryan Salame",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "co-CEO of FTX",
+        "action": "bought five-bedroom Bahamian penthouse where Bankman-Fried lived"
+      },
+      "confidence": 0.85,
+      "context": "a five-bedroom Bahamian penthouse bought by co-CEO of FTX Ryan Salame"
+    },
+    {
+      "name": "Matt Levine",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Bloomberg analyst",
+        "affiliation": "Bloomberg"
+      },
+      "confidence": 0.85,
+      "context": "Bloomberg's Matt Levine noted that \"'We lucked into enough money to pay everyone back' is not a legal defense to fraud\""
+    },
+    {
+      "name": "FTX Trading Ltd.",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "FTX subsidiary",
+        "role": "plaintiff in Insiders Avoidance Complaint"
+      },
+      "confidence": 0.9,
+      "context": "The plaintiffs were FTX Trading Ltd., Alameda Research LLC, Alameda Research Ltd., North Dimension Inc., Cottonwood Grove Ltd., and Realm Shires, Inc."
+    },
+    {
+      "name": "Alameda Research LLC",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "trading firm",
+        "role": "plaintiff in Insiders Avoidance Complaint"
+      },
+      "confidence": 0.9,
+      "context": "The plaintiffs were FTX Trading Ltd., Alameda Research LLC, Alameda Research Ltd."
+    },
+    {
+      "name": "Alameda Research Ltd.",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "trading firm",
+        "role": "plaintiff in Insiders Avoidance Complaint"
+      },
+      "confidence": 0.9,
+      "context": "The plaintiffs were FTX Trading Ltd., Alameda Research LLC, Alameda Research Ltd."
+    },
+    {
+      "name": "North Dimension Inc.",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "company",
+        "role": "plaintiff in Insiders Avoidance Complaint"
+      },
+      "confidence": 0.8,
+      "context": "The plaintiffs were FTX Trading Ltd., Alameda Research LLC, Alameda Research Ltd., North Dimension Inc., Cottonwood Grove Ltd., and Realm Shires, Inc."
+    },
+    {
+      "name": "Cottonwood Grove Ltd.",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "company",
+        "role": "plaintiff in Insiders Avoidance Complaint"
+      },
+      "confidence": 0.8,
+      "context": "The plaintiffs were FTX Trading Ltd., Alameda Research LLC, Alameda Research Ltd., North Dimension Inc., Cottonwood Grove Ltd., and Realm Shires, Inc."
+    },
+    {
+      "name": "Realm Shires, Inc.",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "company",
+        "role": "plaintiff in Insiders Avoidance Complaint"
+      },
+      "confidence": 0.8,
+      "context": "The plaintiffs were FTX Trading Ltd., Alameda Research LLC, Alameda Research Ltd., North Dimension Inc., Cottonwood Grove Ltd., and Realm Shires, Inc."
+    },
+    {
+      "name": "TOGETHER Trial",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "private international research consortium",
+        "purpose": "conducting clinical trials to test existing drugs as treatments for various conditions, including COVID-19",
+        "funding_received": "$18 million from FTX on May 15, 2022"
+      },
+      "confidence": 0.85,
+      "context": "FTX announced it had donated $18 million to support \"TOGETHER Trial,\" a private, international, research consortium conducting clinical trials"
+    },
+    {
+      "name": "The Washington Post",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "news organization",
+        "role": "conducted investigative report on pandemic prevention contributions"
+      },
+      "confidence": 0.9,
+      "context": "according to an investigative report by The Washington Post"
+    },
+    {
+      "name": "Texas",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "U.S. state",
+        "detail": "location of gubernatorial election"
+      },
+      "confidence": 0.9,
+      "context": "former Texas gubernatorial candidate Beto O'Rourke"
+    },
+    {
+      "name": "FTX.com",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency exchange platform",
+        "detail": "customers expected to receive over 90% of distributable value"
+      },
+      "confidence": 0.9,
+      "context": "customers of FTX.com and FTX US would receive, collectively, over 90% of distributable value worldwide"
+    },
+    {
+      "name": "FTX US",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency exchange platform",
+        "detail": "customers expected to receive over 90% of distributable value"
+      },
+      "confidence": 0.9,
+      "context": "customers of FTX.com and FTX US would receive, collectively, over 90% of distributable value worldwide"
+    },
+    {
+      "name": "Insiders Avoidance Complaint",
+      "entity_type": "DOCUMENT",
+      "attributes": {
+        "type": "legal complaint",
+        "date": "July 20, 2023",
+        "defendants": "Bankman-Fried and three former FTX/Alameda senior executives",
+        "purpose": "seeking to recover hundreds of millions of dollars that Defendants misappropriated"
+      },
+      "confidence": 0.9,
+      "context": "On July 20, 2023, an Insiders Avoidance Complaint was filed against Bankman-Fried and three former FTX/Alameda senior executives"
+    },
+    {
+      "name": "2024 Presidential Election",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "political election",
+        "date": "2024",
+        "participant": "Sam Bankman-Fried (planned spending)",
+        "detail": "Bankman-Fried planned to spend 'north of $100 million' with a 'soft ceiling' of $1 billion"
+      },
+      "confidence": 0.9,
+      "context": "In May 2022, Bankman-Fried stated that he planned to spend \"north of $100 million\" in the 2024 presidential election with a \"soft ceiling\" of $1 billion"
+    },
+    {
+      "name": "FTX Scandal",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "corporate scandal/collapse",
+        "consequence": "recipients of political campaign contributions donated equal amounts to charitable organizations"
+      },
+      "confidence": 0.9,
+      "context": "In the aftermath of the FTX scandal, recipients of Bankman-Fried's and other FTX executives' political campaign contributions have been donating equal amounts to charitable organizations"
+    },
+    {
+      "name": "FTX Bankruptcy Proceedings",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal/financial event",
+        "date": "commenced December 2022",
+        "action": "clawback of donations to politicians, celebrities, and charities",
+        "amount_recovered_by_April_2023": "$7.3 billion of $8 billion in missing funds"
+      },
+      "confidence": 0.9,
+      "context": "In December 2022, FTX's new management commenced efforts to \"claw back\" donations that had been made to politicians, celebrities, and charities as part of its bankruptcy proceedings"
+    },
+    {
+      "name": "FTX Customer-Property Settlement",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal settlement",
+        "date": "October 2023",
+        "detail": "proposed settlement of customer-property disputes, set to be presented for approval to bankruptcy court",
+        "expected_recovery": "over 90% of distributable value worldwide"
+      },
+      "confidence": 0.85,
+      "context": "In October 2023, FTX and its affiliated debtors revealed a proposed settlement of customer-property disputes, set to be presented for approval to the competent bankruptcy court"
+    },
+    {
+      "name": "Bankman-Fried Court Testimony",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal proceeding",
+        "date": "October 2023",
+        "witness": "Caroline Ellison",
+        "detail": "testified against Bankman-Fried regarding his appearance and image management"
+      },
+      "confidence": 0.85,
+      "context": "While testifying against him in court in October 2023, she claimed that his hairstyle and clothes were part of a \"well calculated\" image"
+    },
+    {
+      "name": "Financial Times",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Publication"
+      },
+      "confidence": 0.9,
+      "context": "An article in the Financial Times later characterized Bankman-Fried's \"win ratios\" in League of Legends"
+    },
+    {
+      "name": "The New Yorker",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Publication"
+      },
+      "confidence": 0.9,
+      "context": "In an e-mail to The New Yorker, his mother, Barbara Fried, denounced"
+    },
+    {
+      "name": "Court testimony",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "October 2023",
+        "participant": "Caroline Ellison",
+        "defendant": "Sam Bankman-Fried",
+        "type": "Legal proceeding"
+      },
+      "confidence": 0.9,
+      "context": "While testifying against him in court in October 2023"
+    },
+    {
+      "name": "Arrest",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "December 2022",
+        "subject": "Sam Bankman-Fried",
+        "type": "Legal event"
+      },
+      "confidence": 0.85,
+      "context": "In a December 2022 letter, around the time of the arrest"
+    },
+    {
+      "name": "Sentencing phase",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "February 2024",
+        "subject": "Sam Bankman-Fried",
+        "type": "Legal proceeding"
+      },
+      "confidence": 0.9,
+      "context": "She wrote a letter to the judge in February 2024 arguing for lenient sentencing"
+    }
+  ],
+  "relations": [
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Samuel Benjamin Bankman-Fried",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "Bankman-Fried founded the FTX cryptocurrency derivatives exchange in April 2019"
+    },
+    {
+      "relation_type": "CREATED",
+      "source_entity": "Samuel Benjamin Bankman-Fried",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "Bankman-Fried founded the FTX cryptocurrency derivatives exchange in April 2019"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Samuel Benjamin Bankman-Fried",
+      "target_entity": "Alameda Research",
+      "confidence": 0.95,
+      "evidence": "Bankman-Fried and CEA's Tara Hedley cofounded the quantitative trading firm Alameda Research"
+    },
+    {
+      "relation_type": "CREATED",
+      "source_entity": "Samuel Benjamin Bankman-Fried",
+      "target_entity": "Alameda Research",
+      "confidence": 0.95,
+      "evidence": "Bankman-Fried and CEA's Tara Hedley cofounded the quantitative trading firm Alameda Research"
+    },
+    {
+      "relation_type": "MEMBER_OF",
+      "source_entity": "Barbara Fried",
+      "target_entity": "Stanford University",
+      "confidence": 0.9,
+      "evidence": "His parents are Barbara Fried and Joseph Bankman, both professors at Stanford Law School"
+    },
+    {
+      "relation_type": "MEMBER_OF",
+      "source_entity": "Joseph Bankman",
+      "target_entity": "Stanford University",
+      "confidence": 0.9,
+      "evidence": "His parents are Barbara Fried and Joseph Bankman, both professors at Stanford Law School"
+    },
+    {
+      "relation_type": "RELATED_TO",
+      "source_entity": "Samuel Benjamin Bankman-Fried",
+      "target_entity": "Barbara Fried",
+      "confidence": 0.95,
+      "evidence": "His parents are Barbara Fried and Joseph Bankman"
+    },
+    {
+      "relation_type": "RELATED_TO",
+      "source_entity": "Samuel Benjamin Bankman-Fried",
+      "target_entity": "Joseph Bankman",
+      "confidence": 0.95,
+      "evidence": "His parents are Barbara Fried and Joseph Bankman"
+    },
+    {
+      "relation_type": "RELATED_TO",
+      "source_entity": "Samuel Benjamin Bankman-Fried",
+      "target_entity": "Gabriel Bankman-Fried",
+      "confidence": 0.95,
+      "evidence": "Sam's younger brother, Gabriel (b. 1995)"
+    },
+    {
+      "relation_type": "RELATED_TO",
+      "source_entity": "Barbara Fried",
+      "target_entity": "Adrienne Fried Block",
+      "confidence": 0.9,
+      "evidence": "His maternal grandmother, Adrienne Fried Block, was a noted musicologist"
+    },
+    {
+      "relation_type": "RELATED_TO",
+      "source_entity": "Barbara Fried",
+      "target_entity": "George Fried",
+      "confidence": 0.9,
+      "evidence": "His maternal grandfather, George Fried, was an administrator with the New York State Supreme Court probation department"
+    },
+    {
+      "relation_type": "RELATED_TO",
+      "source_entity": "Barbara Fried",
+      "target_entity": "Linda P. Fried",
+      "confidence": 0.9,
+      "evidence": "His aunt Linda P. Fried was the dean of Columbia University Mailman School of Public Health"
+    },
+    {
+      "relation_type": "MEMBER_OF",
+      "source_entity": "Linda P. Fried",
+      "target_entity": "Columbia University Mailman School of Public Health",
+      "confidence": 0.95,
+      "evidence": "His aunt Linda P. Fried was the dean of Columbia University Mailman School of Public Health"
+    },
+    {
+      "relation_type": "MEMBER_OF",
+      "source_entity": "Gabriel Bankman-Fried",
+      "target_entity": "Guarding Against Pandemics",
+      "confidence": 0.9,
+      "evidence": "He became director of the nonprofit Guarding Against Pandemics"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Samuel Benjamin Bankman-Fried",
+      "target_entity": "Jane Street Capital",
+      "confidence": 0.9,
+      "evidence": "In the summer of 2013, Bankman-Fried worked as an intern at Jane Street Capital"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Samuel Benjamin Bankman-Fried",
+      "target_entity": "Centre for Effective Altruism",
+      "confidence": 0.9,
+      "evidence": "he worked briefly at the Centre for Effective Altruism (CEA) as director of development from October to November 2017"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Samuel Benjamin Bankman-Fried",
+      "target_entity": "Massachusetts Institute of Technology",
+      "confidence": 0.9,
+      "evidence": "He graduated from the Massachusetts Institute of Technology in 2014 with a bachelor's degree in physics"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Samuel Benjamin Bankman-Fried",
+      "target_entity": "Jaan Tallinn",
+      "confidence": 0.85,
+      "evidence": "following fund injections from billionaire computer programmer Jaan Tallinn and investor Luke Ding, Bankman-Fried and CEA's Tara Hedley cofounded the quantitative trading firm Alameda Research"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Samuel Benjamin Bankman-Fried",
+      "target_entity": "Luke Ding",
+      "confidence": 0.85,
+      "evidence": "following fund injections from billionaire computer programmer Jaan Tallinn and investor Luke Ding, Bankman-Fried and CEA's Tara Hedley cofounded the quantitative trading firm Alameda Research"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Samuel Benjamin Bankman-Fried",
+      "target_entity": "Tara Hedley",
+      "confidence": 0.9,
+      "evidence": "Bankman-Fried and CEA's Tara Hedley (née Mac Aulay) cofounded the quantitative trading firm Alameda Research"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Samuel Benjamin Bankman-Fried",
+      "target_entity": "Gary Wang",
+      "confidence": 0.85,
+      "evidence": "Bankman-Fried, along with other industry executives, testified before the Committee on Financial Services and Bankman-Fried said he and FTX cofounder Gary Wang together borrowed over $546 million from Alameda Research"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Samuel Benjamin Bankman-Fried",
+      "target_entity": "Stanford, California",
+      "confidence": 0.9,
+      "evidence": "Sam Bankman-Fried was born on March 5, 1992, to upper-middle class Jewish parents in Stanford, California"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Samuel Benjamin Bankman-Fried",
+      "target_entity": "Bahamas",
+      "confidence": 0.9,
+      "evidence": "On December 12, 2022, Bankman-Fried was arrested in the Bahamas"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "FTX",
+      "target_entity": "Bahamas",
+      "confidence": 0.9,
+      "evidence": "In September 2021, Bankman-Fried and the entire senior staff of FTX moved from Hong Kong to the Bahamas"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "FTX",
+      "target_entity": "Hong Kong",
+      "confidence": 0.85,
+      "evidence": "In September 2021, Bankman-Fried and the entire senior staff of FTX moved from Hong Kong to the Bahamas"
+    },
+    {
+      "relation_type": "OWNS",
+      "source_entity": "Samuel Benjamin Bankman-Fried",
+      "target_entity": "Alameda Research",
+      "confidence": 0.9,
+      "evidence": "By 2021, Bankman-Fried owned approximately 90 percent of Alameda Research"
+    },
+    {
+      "relation_type": "OWNS",
+      "source_entity": "Samuel Benjamin Bankman-Fried",
+      "target_entity": "Emergent Fidelity Technologies Ltd.",
+      "confidence": 0.9,
+      "evidence": "Emergent Fidelity Technologies Ltd., which was majority owned by Bankman-Fried"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Samuel Benjamin Bankman-Fried",
+      "target_entity": "Bankman-Fried testimony before Committee on Financial Services",
+      "confidence": 0.95,
+      "evidence": "On December 8, 2021, Bankman-Fried, along with other industry executives, testified before the Committee on Financial Services"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "Samuel Benjamin Bankman-Fried",
+      "target_entity": "Forbes 400",
+      "confidence": 0.9,
+      "evidence": "At the peak of his net worth, he was ranked the 41st-richest American in the Forbes 400"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "Samuel Benjamin Bankman-Fried",
+      "target_entity": "Forbes 30 Under 30",
+      "confidence": 0.9,
+      "evidence": "Bankman-Fried was included on the 2021 list of Forbes 30 Under 30"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "Samuel Benjamin Bankman-Fried",
+      "target_entity": "Forbes 2023 Hall of Shame",
+      "confidence": 0.9,
+      "evidence": "was also included on Forbes 2023 Hall of Shame list"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "Samuel Benjamin Bankman-Fried",
+      "target_entity": "United States v. Bankman-Fried",
+      "confidence": 0.95,
+      "evidence": "In the case of United States v. Bankman-Fried, he was convicted of all seven counts of fraud, conspiracy, and money laundering"
+    },
+    {
+      "relation_type": "OWNS",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Emergent Fidelity Technologies Ltd.",
+      "confidence": 0.95,
+      "evidence": "Emergent Fidelity Technologies Ltd., which was majority owned by Bankman-Fried"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Gary Wang",
+      "target_entity": "FTX",
+      "confidence": 0.9,
+      "evidence": "FTX cofounder Gary Wang"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Gary Wang",
+      "confidence": 0.85,
+      "evidence": "he and FTX cofounder Gary Wang together borrowed over $546 million from Alameda Research"
+    },
+    {
+      "relation_type": "OWNS",
+      "source_entity": "Emergent Fidelity Technologies Ltd.",
+      "target_entity": "Robinhood Markets",
+      "confidence": 0.9,
+      "evidence": "Emergent Fidelity Technologies Ltd., which was majority owned by Bankman-Fried, had bought 7.6 percent of Robinhood Markets stock"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Elon Musk",
+      "confidence": 0.85,
+      "evidence": "Bankman-Fried's advisors had offered on his behalf to help fund Elon Musk's purchase of Twitter"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Michael Grimes",
+      "target_entity": "Sam Bankman-Fried",
+      "confidence": 0.85,
+      "evidence": "investment banker Michael Grimes wrote that Bankman-Fried would be willing to commit up to $5 billion"
+    },
+    {
+      "relation_type": "OWNS",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Anthropic",
+      "confidence": 0.9,
+      "evidence": "Bankman-Fried invested $500 million in Anthropic"
+    },
+    {
+      "relation_type": "OWNS",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Sequoia Capital",
+      "confidence": 0.85,
+      "evidence": "more than $500 million in venture capital firms, including $200 million in Sequoia Capital"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Sequoia Capital",
+      "target_entity": "FTX",
+      "confidence": 0.85,
+      "evidence": "Sequoia Capital, itself an investor in FTX"
+    },
+    {
+      "relation_type": "MEMBER_OF",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Giving What We Can",
+      "confidence": 0.9,
+      "evidence": "He was a member of Giving What We Can"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Jane Street",
+      "confidence": 0.85,
+      "evidence": "he donated around half of his Jane Street salary to charity"
+    },
+    {
+      "relation_type": "CREATED",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Future Fund",
+      "confidence": 0.95,
+      "evidence": "Bankman-Fried is the founder of Future Fund"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "William MacAskill",
+      "target_entity": "Future Fund",
+      "confidence": 0.9,
+      "evidence": "Future Fund, whose team included Scottish philosopher and author William MacAskill"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "FTX",
+      "target_entity": "Bahamas",
+      "confidence": 0.9,
+      "evidence": "The stated reason for FTX's relocation to the Bahamas was the friendly regulatory environment"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "November 2022 - Kelsey Piper Interview",
+      "confidence": 0.9,
+      "evidence": "In November 2022, Bankman-Fried participated in an interview with Vox writer Kelsey Piper"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Binance",
+      "confidence": 0.95,
+      "evidence": "Binance CEO Changpeng Zhao"
+    },
+    {
+      "relation_type": "OWNS",
+      "source_entity": "Binance",
+      "target_entity": "FTX",
+      "confidence": 0.85,
+      "evidence": "Binance received $529 million worth of FTT as part of a sale of its equity in FTX in 2021"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Alameda Research",
+      "target_entity": "Sam Bankman-Fried",
+      "confidence": 0.9,
+      "evidence": "Alameda, Bankman-Fried's trading firm"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Sam Bankman-Fried",
+      "confidence": 0.8,
+      "evidence": "disputes between Zhao and Bankman-Fried on Twitter"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "Bankman-Fried resigned as CEO of FTX on November 11, 2022"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Alameda Research",
+      "confidence": 0.95,
+      "evidence": "Bankman-Fried had transferred at least $4 billion from FTX to Alameda Research"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "Alameda Research",
+      "confidence": 0.95,
+      "evidence": "the Chief Executive of Alameda Research, Caroline Ellison"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "John J. Ray III",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "Bankman-Fried resigned as CEO of FTX on November 11, 2022, and was immediately replaced by John J. Ray III"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Ryne Miller",
+      "target_entity": "FTX",
+      "confidence": 0.9,
+      "evidence": "FTX general counsel and former partner at the Sullivan & Cromwell law firm, Ryne Miller"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Bankman-Fried Arrest",
+      "confidence": 0.95,
+      "evidence": "On December 12, 2022, Bankman-Fried was arrested shortly after 6:00 p.m. in his apartment complex in New Providence, Bahamas"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Bankman-Fried Charges",
+      "confidence": 0.95,
+      "evidence": "the Southern District of New York had charged Bankman-Fried with wire fraud, wire fraud conspiracy, securities fraud, securities fraud conspiracy, and money laundering"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Bankman-Fried Plea",
+      "confidence": 0.95,
+      "evidence": "On January 3, 2023, Bankman-Fried pled \"not guilty\" to fraud and the other charges"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "FTX",
+      "target_entity": "FTX Bankruptcy Declaration",
+      "confidence": 0.95,
+      "evidence": "On November 11, 2022, FTX, Alameda Research, and more than 130 associated legal entities declared bankruptcy"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Alameda Research",
+      "target_entity": "FTX Bankruptcy Declaration",
+      "confidence": 0.95,
+      "evidence": "On November 11, 2022, FTX, Alameda Research, and more than 130 associated legal entities declared bankruptcy"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Binance",
+      "target_entity": "Binance-FTX Acquisition Decision",
+      "confidence": 0.95,
+      "evidence": "On November 9, the Wall Street Journal reported that Binance had decided not to acquire FTX"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "John J. Ray III",
+      "target_entity": "Enron Bankruptcy case",
+      "confidence": 0.95,
+      "evidence": "John J. Ray III, who from 2004 to 2009 had chaired the effort to recover Enron assets for creditors through litigation against numerous banks in the Enron Bankruptcy case"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "New Providence",
+      "confidence": 0.9,
+      "evidence": "Bankman-Fried was arrested shortly after 6:00 p.m. in his apartment complex in New Providence, Bahamas"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "California",
+      "confidence": 0.9,
+      "evidence": "Among the conditions was that he would stay at his parents' home in California"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Wall Street Journal",
+      "confidence": 0.85,
+      "evidence": "An anonymous source cited by The Wall Street Journal stated that Bankman-Fried had disclosed that Alameda owed FTX about $10 billion"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Bloomberg",
+      "confidence": 0.85,
+      "evidence": "Amid the crisis, Bankman-Fried was no longer a billionaire, according to the Bloomberg Billionaires Index"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Reuters",
+      "confidence": 0.85,
+      "evidence": "Anonymous sources cited by Reuters stated that, earlier in 2022, Bankman-Fried had transferred at least $4 billion from FTX to Alameda Research"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "Senior engineers testified that they had added these features at the direction of their CEO. Bankman-Fried contended..."
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "FTX",
+      "confidence": 0.9,
+      "evidence": "Over a dozen witnesses testified for the prosecution, including FTX executives Caroline Ellison, Gary Wang, and Nishad Singh"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Gary Wang",
+      "target_entity": "FTX",
+      "confidence": 0.9,
+      "evidence": "Over a dozen witnesses testified for the prosecution, including FTX executives Caroline Ellison, Gary Wang, and Nishad Singh"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Nishad Singh",
+      "target_entity": "FTX",
+      "confidence": 0.9,
+      "evidence": "Over a dozen witnesses testified for the prosecution, including FTX executives Caroline Ellison, Gary Wang, and Nishad Singh"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Fox Hill Prison",
+      "target_entity": "Nassau",
+      "confidence": 0.95,
+      "evidence": "After being held at Fox Hill Prison in Nassau for ten days"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Nassau",
+      "target_entity": "Bahamas",
+      "confidence": 0.95,
+      "evidence": "After being held at Fox Hill Prison in Nassau for ten days, Bankman-Fried consented to his extradition from the Bahamas"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Daniel Patrick Moynihan United States Courthouse",
+      "target_entity": "Manhattan",
+      "confidence": 0.95,
+      "evidence": "The trial began on October 3, 2023, at the Daniel Patrick Moynihan United States Courthouse in Manhattan"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Trial",
+      "confidence": 0.95,
+      "evidence": "Nearly all the testimony for the defense was provided by the defendant"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Judge Lewis Kaplan",
+      "target_entity": "Trial",
+      "confidence": 0.95,
+      "evidence": "The trial began on October 3, 2023, at the Daniel Patrick Moynihan United States Courthouse in Manhattan, presided over by Judge Lewis Kaplan"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "Trial",
+      "confidence": 0.9,
+      "evidence": "Over a dozen witnesses testified for the prosecution, including FTX executives Caroline Ellison, Gary Wang, and Nishad Singh, as part of plea deals"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Gary Wang",
+      "target_entity": "Trial",
+      "confidence": 0.9,
+      "evidence": "Over a dozen witnesses testified for the prosecution, including FTX executives Caroline Ellison, Gary Wang, and Nishad Singh, as part of plea deals"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Nishad Singh",
+      "target_entity": "Trial",
+      "confidence": 0.9,
+      "evidence": "Over a dozen witnesses testified for the prosecution, including FTX executives Caroline Ellison, Gary Wang, and Nishad Singh, as part of plea deals"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "The Guardian",
+      "target_entity": "Trial",
+      "confidence": 0.85,
+      "evidence": "The Guardian summarized the trial as a question of 'whether Bankman-Fried is a crypto criminal mastermind or just an unlucky math nerd'"
+    },
+    {
+      "relation_type": "RELATED_TO",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Alameda Research",
+      "confidence": 0.95,
+      "evidence": "Bankman-Fried was accused of having 'stole[n] billions from thousands of people' by funnelling customers' money from FTX into Alameda"
+    },
+    {
+      "relation_type": "RELATED_TO",
+      "source_entity": "FTX",
+      "target_entity": "Alameda Research",
+      "confidence": 0.95,
+      "evidence": "The case revolved largely around two ways that Alameda was able to access the funds of other FTX customers"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "Bankman-Fried testified about FTX operations and 'at both businesses, Bankman-Fried was the only individual in charge'"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Alameda Research",
+      "confidence": 0.95,
+      "evidence": "'at both businesses, Bankman-Fried was the only individual in charge'"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "Alameda Research",
+      "confidence": 0.95,
+      "evidence": "Caroline Ellison described as 'former Alameda Research CEO'"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Sam Mangel",
+      "confidence": 0.9,
+      "evidence": "Bankman-Fried 'engaged the services of prison consultant Sam Mangel'"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Trial Conviction Event",
+      "confidence": 0.95,
+      "evidence": "The trial ended on November 2, 2023, with the jury pronouncing Bankman-Fried guilty on all seven counts"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Sentencing Event",
+      "confidence": 0.95,
+      "evidence": "On March 28, 2024, the court sentenced Bankman-Fried to 25 years in prison"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Witness Tampering Allegation Event",
+      "confidence": 0.95,
+      "evidence": "prosecutors alleged witness tampering after Bankman-Fried gave a reporter personal writings of former Alameda Research CEO Caroline Ellison"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Bail Revocation Event",
+      "confidence": 0.95,
+      "evidence": "On August 11, after Judge Kaplan concluded that witness tampering had likely occurred, he revoked Bankman-Fried's bail"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Appeal Event",
+      "confidence": 0.95,
+      "evidence": "On April 11, 2024, Bankman-Fried appealed his conviction and the 25-year prison sentence"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "New Trial Request Event",
+      "confidence": 0.95,
+      "evidence": "On September 13, 2024, Bankman-Fried requested a new trial, claiming Judge Kaplan was biased"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Federal Appeals Court Hearing Event",
+      "confidence": 0.95,
+      "evidence": "On November 4, 2025, a federal appeals court in New York heard an argument by Bankman-Fried's attorney"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Extradition Event",
+      "confidence": 0.95,
+      "evidence": "Bankman-Fried was extradited from the Bahamas in December 2022"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Metropolitan Detention Center, Brooklyn",
+      "confidence": 0.95,
+      "evidence": "Bankman-Fried was remanded into custody at the Metropolitan Detention Center, Brooklyn (MDC Brooklyn)"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Bahamas",
+      "confidence": 0.9,
+      "evidence": "Bankman-Fried was extradited from the Bahamas in December 2022"
+    },
+    {
+      "relation_type": "RELATED_TO",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "First Step Act",
+      "confidence": 0.85,
+      "evidence": "Under provisions of the First Step Act and in conjunction with other time credit programs, Bankman-Fried may actually serve approximately 18 years"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Judge Lewis Kaplan",
+      "target_entity": "Sam Bankman-Fried",
+      "confidence": 0.95,
+      "evidence": "Judge Kaplan concluded that witness tampering had likely occurred and revoked Bankman-Fried's bail; also presided over trial"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "2024 Presidential Election",
+      "confidence": 0.95,
+      "evidence": "In May 2022, Bankman-Fried stated that he planned to spend \"north of $100 million\" in the 2024 presidential election"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Going Infinite",
+      "confidence": 0.95,
+      "evidence": "in Going Infinite, Michael Lewis revealed that Bankman-Fried had begun to investigate the legality of directly paying Donald Trump"
+    },
+    {
+      "relation_type": "CREATED",
+      "source_entity": "Michael Lewis",
+      "target_entity": "Going Infinite",
+      "confidence": 0.95,
+      "evidence": "in Going Infinite, Michael Lewis revealed"
+    },
+    {
+      "relation_type": "RELATED_TO",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Donald Trump",
+      "confidence": 0.9,
+      "evidence": "Bankman-Fried had begun to investigate the legality of directly paying Donald Trump not to run for president in 2024"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "FTX executives' political campaign contributions"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "Alameda Research LLC",
+      "confidence": 0.95,
+      "evidence": "Bankman-Fried had a relationship with Alameda Research CEO Caroline Ellison"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Ryan Salame",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "co-CEO of FTX Ryan Salame"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Gabriel Bankman-Fried",
+      "confidence": 0.95,
+      "evidence": "Bankman-Fried and his younger brother, Gabriel, contributed toward pandemic prevention initiatives"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Gabriel Bankman-Fried",
+      "target_entity": "Guarding Against Pandemics PAC",
+      "confidence": 0.95,
+      "evidence": "One funding recipient was the Guarding Against Pandemics PAC, founded by Gabriel"
+    },
+    {
+      "relation_type": "OWNS",
+      "source_entity": "Ryan Salame",
+      "target_entity": "Bahamas",
+      "confidence": 0.85,
+      "evidence": "a five-bedroom Bahamian penthouse bought by co-CEO of FTX Ryan Salame"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Bahamas",
+      "confidence": 0.9,
+      "evidence": "he lived with approximately 10 roommates in a five-bedroom Bahamian penthouse"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Bankman-Fried Court Testimony",
+      "confidence": 0.9,
+      "evidence": "While testifying against him in court in October 2023"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "Insiders Avoidance Complaint",
+      "target_entity": "Sam Bankman-Fried",
+      "confidence": 0.95,
+      "evidence": "On July 20, 2023, an Insiders Avoidance Complaint was filed against Bankman-Fried"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "FTX",
+      "target_entity": "TOGETHER Trial",
+      "confidence": 0.95,
+      "evidence": "FTX announced it had donated $18 million to support \"TOGETHER Trial\""
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "Court testimony",
+      "confidence": 0.95,
+      "evidence": "While testifying against him in court in October 2023, she claimed that his hairstyle and clothes were part of a \"well calculated\" image"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Jane Street",
+      "confidence": 0.9,
+      "evidence": "Bankman-Fried believed he had received higher bonuses while working at Jane Street because of his hair"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "used his appearance as \"an important part\" of FTX's \"narrative and image\""
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Sequoia Capital",
+      "confidence": 0.9,
+      "evidence": "Bankman-Fried once played the video game League of Legends while on a call attempting to secure an investment from Sequoia Capital"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Financial Times",
+      "confidence": 0.85,
+      "evidence": "An article in the Financial Times later characterized Bankman-Fried's \"win ratios\" in League of Legends as \"average-to-bad\""
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "The New Yorker",
+      "confidence": 0.85,
+      "evidence": "In an e-mail to The New Yorker, his mother, Barbara Fried, denounced the actions of the prosecution"
+    },
+    {
+      "relation_type": "RELATED_TO",
+      "source_entity": "Barbara Fried",
+      "target_entity": "Sam Bankman-Fried",
+      "confidence": 0.95,
+      "evidence": "his mother, Barbara Fried"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Arrest",
+      "confidence": 0.9,
+      "evidence": "around the time of the arrest"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Brooklyn",
+      "confidence": 0.9,
+      "evidence": "his parents took turns traveling every Tuesday from California to be with him at the Brooklyn jail where he awaited the outcome of his trial"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Sentencing phase",
+      "confidence": 0.9,
+      "evidence": "awaited the outcome of his trial, and the sentencing phase"
+    }
+  ],
+  "cost_usd": 0.24016499999999963,
+  "model_used": "anthropic/claude-haiku-4-5-20251001",
+  "error": null
+}

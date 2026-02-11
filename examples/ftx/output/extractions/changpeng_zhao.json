@@ -1,0 +1,1585 @@
+{
+  "document_id": "changpeng_zhao",
+  "document_path": "test-docs/changpeng_zhao.txt",
+  "chunks_processed": 3,
+  "entities": [
+    {
+      "name": "Changpeng Zhao",
+      "entity_type": "PERSON",
+      "attributes": {
+        "also_known_as": "CZ",
+        "birth_year": "1977",
+        "chinese_name": "赵长鹏",
+        "pinyin": "Zhào Chángpéng",
+        "nationality": "Canadian",
+        "occupations": [
+          "businessman",
+          "co-founder",
+          "CTO",
+          "CEO"
+        ],
+        "net_worth": "$88.0 billion",
+        "net_worth_date": "October 2025",
+        "forbes_ranking": "21st-richest person in the world",
+        "richest_canadian": true
+      },
+      "confidence": 0.99,
+      "context": "Changpeng Zhao (Chinese: 赵长鹏; pinyin: Zhào Chángpéng; born 1977), commonly known as CZ, is a businessman"
+    },
+    {
+      "name": "Binance",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency exchange",
+        "founded": "July 2017",
+        "founder": "Changpeng Zhao",
+        "status": "world's largest cryptocurrency exchange by trading volume as of April 2018",
+        "initial_coin_offering": "$15 million",
+        "trading_began": "11 days after launch"
+      },
+      "confidence": 0.99,
+      "context": "After its launch in July 2017, the Binance cryptocurrency exchange was able to raise $15 million"
+    },
+    {
+      "name": "Blockchain.com",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency company",
+        "co-founder": "Changpeng Zhao"
+      },
+      "confidence": 0.95,
+      "context": "co-founding cryptocurrency companies, such as Binance and Blockchain.com"
+    },
+    {
+      "name": "OKCoin",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency exchange",
+        "cto": "Changpeng Zhao"
+      },
+      "confidence": 0.95,
+      "context": "He has also served as CTO of OKCoin"
+    },
+    {
+      "name": "U.S. Department of Justice",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government agency",
+        "country": "United States"
+      },
+      "confidence": 0.99,
+      "context": "the U.S Department of Justice alleged he violated the Bank Secrecy Act"
+    },
+    {
+      "name": "Lianyungang",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "city",
+        "country": "China",
+        "province": "Jiangsu"
+      },
+      "confidence": 0.99,
+      "context": "Changpeng Zhao was born in Lianyungang in China's Jiangsu province"
+    },
+    {
+      "name": "Jiangsu",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "province",
+        "country": "China"
+      },
+      "confidence": 0.99,
+      "context": "in China's Jiangsu province"
+    },
+    {
+      "name": "Canada",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "country"
+      },
+      "confidence": 0.99,
+      "context": "emigrated with his family to Canada after Tiananmen Square protests"
+    },
+    {
+      "name": "Vancouver",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "city",
+        "province": "British Columbia",
+        "country": "Canada"
+      },
+      "confidence": 0.99,
+      "context": "They settled down in Vancouver, British Columbia"
+    },
+    {
+      "name": "British Columbia",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "province",
+        "country": "Canada"
+      },
+      "confidence": 0.99,
+      "context": "Vancouver, British Columbia"
+    },
+    {
+      "name": "McGill University",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "university",
+        "location": "Montreal, Quebec",
+        "student": "Changpeng Zhao",
+        "major": "computer science"
+      },
+      "confidence": 0.99,
+      "context": "Zhao attended McGill University in Montreal, Quebec, where he majored in computer science"
+    },
+    {
+      "name": "Montreal",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "city",
+        "province": "Quebec",
+        "country": "Canada"
+      },
+      "confidence": 0.99,
+      "context": "McGill University in Montreal, Quebec"
+    },
+    {
+      "name": "Quebec",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "province",
+        "country": "Canada"
+      },
+      "confidence": 0.99,
+      "context": "Montreal, Quebec"
+    },
+    {
+      "name": "Tokyo",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "city",
+        "country": "Japan"
+      },
+      "confidence": 0.99,
+      "context": "an internship in Tokyo working for a subcontractor of the Tokyo Stock Exchange"
+    },
+    {
+      "name": "Tokyo Stock Exchange",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "stock exchange",
+        "location": "Tokyo, Japan"
+      },
+      "confidence": 0.99,
+      "context": "subcontractor of the Tokyo Stock Exchange"
+    },
+    {
+      "name": "Bloomberg Tradebook",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "financial software company",
+        "employee": "Changpeng Zhao",
+        "duration": "four years"
+      },
+      "confidence": 0.99,
+      "context": "he later went to work full-time for four years at Bloomberg Tradebook"
+    },
+    {
+      "name": "Shanghai",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "city",
+        "country": "China"
+      },
+      "confidence": 0.99,
+      "context": "In 2005, Zhao moved to Shanghai to launch his business career"
+    },
+    {
+      "name": "Fusion Systems",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "technology startup",
+        "founder": "Changpeng Zhao",
+        "founded": "2005",
+        "location": "Shanghai",
+        "specialization": "automated high-frequency trading platforms and systems"
+      },
+      "confidence": 0.99,
+      "context": "he established his first technology startup company called Fusion Systems"
+    },
+    {
+      "name": "Bobby Lee",
+      "entity_type": "PERSON",
+      "attributes": {
+        "relation": "brother of Charlie Lee",
+        "founder": "BTCC",
+        "interaction_with_zhao": "advised Zhao to invest in bitcoin"
+      },
+      "confidence": 0.95,
+      "context": "playing poker with Bobby Lee (brother of Charlie Lee) who would later go on to found BTCC"
+    },
+    {
+      "name": "Charlie Lee",
+      "entity_type": "PERSON",
+      "attributes": {
+        "relation": "brother of Bobby Lee"
+      },
+      "confidence": 0.95,
+      "context": "Bobby Lee (brother of Charlie Lee)"
+    },
+    {
+      "name": "BTCC",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency exchange",
+        "founder": "Bobby Lee"
+      },
+      "confidence": 0.95,
+      "context": "Bobby Lee (brother of Charlie Lee) who would later go on to found BTCC"
+    },
+    {
+      "name": "Blockchain.info",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "blockchain service",
+        "developer": "Changpeng Zhao",
+        "year": "2013"
+      },
+      "confidence": 0.95,
+      "context": "In 2013, Zhao was a member of the team that developed Blockchain.info"
+    },
+    {
+      "name": "Elon Musk",
+      "entity_type": "PERSON",
+      "attributes": {
+        "transaction": "Twitter acquisition",
+        "year": "2022"
+      },
+      "confidence": 0.99,
+      "context": "Zhao invested $500 million through Binance to finance the acquisition of Twitter by Elon Musk"
+    },
+    {
+      "name": "Twitter",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "social media company",
+        "acquirer": "Elon Musk",
+        "financing": "Binance investment of $500 million",
+        "year": "2022"
+      },
+      "confidence": 0.99,
+      "context": "acquisition of Twitter by Elon Musk"
+    },
+    {
+      "name": "Pakistan Ministry of Finance",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government ministry",
+        "country": "Pakistan"
+      },
+      "confidence": 0.95,
+      "context": "appointed by the Pakistan Ministry of Finance as a strategic advisor"
+    },
+    {
+      "name": "Pakistan Crypto Council",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "advisory council",
+        "country": "Pakistan",
+        "advisor": "Changpeng Zhao"
+      },
+      "confidence": 0.95,
+      "context": "strategic advisor to the Pakistan Crypto Council"
+    },
+    {
+      "name": "Sadyr Japarov",
+      "entity_type": "PERSON",
+      "attributes": {
+        "title": "President of Kyrgyzstan",
+        "advisor": "Changpeng Zhao"
+      },
+      "confidence": 0.95,
+      "context": "advisor to the president of Kyrgyzstan, Sadyr Japarov"
+    },
+    {
+      "name": "Kyrgyzstan",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "country"
+      },
+      "confidence": 0.99,
+      "context": "president of Kyrgyzstan"
+    },
+    {
+      "name": "Binance Coin",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "utility token",
+        "launched": "2017",
+        "issuer": "Binance",
+        "benefits": "discounts on trading fees"
+      },
+      "confidence": 0.99,
+      "context": "Zhao also launched Binance Coin in 2017, a utility token"
+    },
+    {
+      "name": "Binance Smart Chain",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "blockchain platform",
+        "launched": "April 2019",
+        "issuer": "Binance",
+        "features": "smart contract functionality",
+        "competitor": "Ethereum"
+      },
+      "confidence": 0.99,
+      "context": "In April 2019, Binance launched Binance Smart Chain, which has smart contract functionality"
+    },
+    {
+      "name": "Ethereum",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "blockchain platform",
+        "competitor": "Binance Smart Chain"
+      },
+      "confidence": 0.99,
+      "context": "Binance Smart Chain, which has smart contract functionality and is an Ethereum competitor"
+    },
+    {
+      "name": "Forbes",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "media/publishing company",
+        "ranking": "Zhao as 21st-richest person in the world"
+      },
+      "confidence": 0.99,
+      "context": "According to Forbes, Zhao is the richest Canadian"
+    },
+    {
+      "name": "Binance.US",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency exchange",
+        "parent": "Binance",
+        "launched": "2019",
+        "location": "United States"
+      },
+      "confidence": 0.99,
+      "context": "In 2019, Zhao launched Binance's U.S. affiliate, Binance.US"
+    },
+    {
+      "name": "Singapore",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "city-state",
+        "country": "Singapore"
+      },
+      "confidence": 0.99,
+      "context": "Binance withdrew its application to run a Singapore-based crypto exchange in 2021"
+    },
+    {
+      "name": "Commodity Futures Trading Commission",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government agency",
+        "country": "United States",
+        "abbreviation": "CFTC",
+        "action": "filed lawsuit against Binance and Zhao"
+      },
+      "confidence": 0.99,
+      "context": "the Commodity Futures Trading Commission (CFTC) filed a lawsuit against Binance and Zhao"
+    },
+    {
+      "name": "United States District Court for the Northern District of Illinois",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "court",
+        "country": "United States",
+        "jurisdiction": "Northern District of Illinois"
+      },
+      "confidence": 0.99,
+      "context": "United States District Court for the Northern District of Illinois"
+    },
+    {
+      "name": "Hamas",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Palestinian militant organization",
+        "mentioned_in": "CFTC lawsuit against Binance"
+      },
+      "confidence": 0.95,
+      "context": "internal communications describing transactions by Palestinian militant organization Hamas"
+    },
+    {
+      "name": "U.S. Securities and Exchange Commission",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "government agency",
+        "country": "United States",
+        "abbreviation": "SEC",
+        "action": "sued Zhao and Binance on 13 charges"
+      },
+      "confidence": 0.99,
+      "context": "the U.S. Securities and Exchange Commission (SEC) sued Zhao and Binance on 13 charges"
+    },
+    {
+      "name": "FTX",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency exchange",
+        "plaintiff": "FTX",
+        "lawsuit_date": "November 2024",
+        "defendant": "Binance Holdings Ltd., Zhao, and other Binance executives"
+      },
+      "confidence": 0.99,
+      "context": "In November 2024, FTX filed a lawsuit against Binance Holdings Ltd., Zhao"
+    },
+    {
+      "name": "Sam Bankman-Fried",
+      "entity_type": "PERSON",
+      "attributes": {
+        "title": "FTX co-founder",
+        "transaction": "stock repurchase with Binance"
+      },
+      "confidence": 0.99,
+      "context": "to FTX co-founder Sam Bankman-Fried"
+    },
+    {
+      "name": "Binance Holdings Ltd.",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "holding company",
+        "defendant": "FTX lawsuit"
+      },
+      "confidence": 0.99,
+      "context": "FTX filed a lawsuit against Binance Holdings Ltd., Zhao"
+    },
+    {
+      "name": "President Donald Trump",
+      "entity_type": "PERSON",
+      "attributes": {
+        "title": "President of the United States",
+        "action": "granted presidential pardon to Changpeng Zhao",
+        "date": "October 2025"
+      },
+      "confidence": 0.99,
+      "context": "Zhao was given a presidential pardon by President Donald Trump"
+    },
+    {
+      "name": "Zhao Shengkai",
+      "entity_type": "PERSON",
+      "attributes": {
+        "relation": "father of Changpeng Zhao",
+        "occupation": "university instructor",
+        "status": "branded a pro-bourgeois intellect and exiled"
+      },
+      "confidence": 0.95,
+      "context": "His father Zhao Shengkai worked as a university instructor"
+    },
+    {
+      "name": "Tiananmen Square protests and massacre",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "political event",
+        "year": "1989",
+        "location": "Beijing, China",
+        "consequence": "Zhao family emigrated to Canada"
+      },
+      "confidence": 0.99,
+      "context": "emigrated with his family to Canada after Tiananmen Square protests and massacre"
+    },
+    {
+      "name": "CEO resignation from Binance",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "business event",
+        "person": "Changpeng Zhao",
+        "date": "November 2023",
+        "reason": "U.S. Department of Justice allegations of violating Bank Secrecy Act and International Emergency Economic Powers Act"
+      },
+      "confidence": 0.99,
+      "context": "He resigned as the CEO of Binance in November 2023 after the U.S Department of Justice alleged"
+    },
+    {
+      "name": "Guilty plea and sentencing",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal event",
+        "person": "Changpeng Zhao",
+        "date": "April 2024",
+        "sentence": "four months in prison",
+        "plea": "guilty"
+      },
+      "confidence": 0.99,
+      "context": "He pleaded guilty and was sentenced to four months in prison in April 2024"
+    },
+    {
+      "name": "Sentence completion",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal event",
+        "person": "Changpeng Zhao",
+        "date": "September 2024"
+      },
+      "confidence": 0.99,
+      "context": "Zhao completed his sentence by September of the same year"
+    },
+    {
+      "name": "Presidential pardon",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal event",
+        "person": "Changpeng Zhao",
+        "date": "October 2025",
+        "grantor": "President Donald Trump"
+      },
+      "confidence": 0.99,
+      "context": "In October 2025, Zhao was given a presidential pardon by President Donald Trump"
+    },
+    {
+      "name": "CFTC lawsuit",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal event",
+        "date": "March 27, 2023",
+        "plaintiff": "Commodity Futures Trading Commission",
+        "defendant": "Binance and Changpeng Zhao",
+        "court": "United States District Court for the Northern District of Illinois",
+        "charges": "willful evasion of US law, breaching derivatives rules, breaking money laundering rules"
+      },
+      "confidence": 0.99,
+      "context": "On March 27, 2023, the Commodity Futures Trading Commission (CFTC) filed a lawsuit against Binance and Zhao"
+    },
+    {
+      "name": "SEC lawsuit",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal event",
+        "date": "June 2023",
+        "plaintiff": "U.S. Securities and Exchange Commission",
+        "defendant": "Changpeng Zhao and Binance",
+        "charges": "13 charges for alleged violations of US securities rules"
+      },
+      "confidence": 0.99,
+      "context": "In June 2023, the U.S. Securities and Exchange Commission (SEC) sued Zhao and Binance on 13 charges"
+    },
+    {
+      "name": "FTX lawsuit against Binance",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal event",
+        "date": "November 2024",
+        "plaintiff": "FTX",
+        "defendant": "Binance Holdings Ltd., Changpeng Zhao, and other Binance executives",
+        "amount": "$1.8 billion",
+        "basis": "fraudulent transfer in July 2021 stock repurchase transaction"
+      },
+      "confidence": 0.99,
+      "context": "In November 2024, FTX filed a lawsuit against Binance Holdings Ltd., Zhao, and other Binance executives"
+    },
+    {
+      "name": "Binance launch",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "business event",
+        "date": "July 2017",
+        "organization": "Binance",
+        "founder": "Changpeng Zhao",
+        "initial_coin_offering": "$15 million",
+        "trading_began": "11 days after launch"
+      },
+      "confidence": 0.99,
+      "context": "After its launch in July 2017, the Binance cryptocurrency exchange was able to raise $15 million"
+    },
+    {
+      "name": "Binance Smart Chain launch",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "business event",
+        "date": "April 2019",
+        "organization": "Binance",
+        "product": "Binance Smart Chain"
+      },
+      "confidence": 0.99,
+      "context": "In April 2019, Binance launched Binance Smart Chain"
+    },
+    {
+      "name": "Binance.US launch",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "business event",
+        "date": "2019",
+        "organization": "Binance",
+        "product": "Binance.US"
+      },
+      "confidence": 0.99,
+      "context": "In 2019, Zhao launched Binance's U.S. affiliate, Binance.US"
+    },
+    {
+      "name": "Binance Singapore exchange withdrawal",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "business event",
+        "date": "2021",
+        "organization": "Binance",
+        "action": "withdrew application"
+      },
+      "confidence": 0.99,
+      "context": "Binance withdrew its application to run a Singapore-based crypto exchange in 2021"
+    },
+    {
+      "name": "Pakistan Crypto Council advisor appointment",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "business event",
+        "date": "April 7, 2024",
+        "person": "Changpeng Zhao",
+        "organization": "Pakistan Ministry of Finance",
+        "position": "strategic advisor to the Pakistan Crypto Council"
+      },
+      "confidence": 0.99,
+      "context": "On April 7, 2024, he was appointed by the Pakistan Ministry of Finance as a strategic advisor"
+    },
+    {
+      "name": "Kyrgyzstan digital assets advisor appointment",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "business event",
+        "date": "May 3, 2025",
+        "person": "Changpeng Zhao",
+        "position": "advisor to the president of Kyrgyzstan",
+        "focus": "development of digital assets"
+      },
+      "confidence": 0.99,
+      "context": "On May 3, 2025, he was appointed as an advisor to the president of Kyrgyzstan"
+    },
+    {
+      "name": "Twitter acquisition financing",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "financial event",
+        "date": "2022",
+        "amount": "$500 million",
+        "investor": "Binance",
+        "acquirer": "Elon Musk",
+        "target": "Twitter"
+      },
+      "confidence": 0.99,
+      "context": "In 2022, Zhao invested $500 million through Binance to finance the acquisition of Twitter by Elon Musk"
+    },
+    {
+      "name": "Bank Secrecy Act",
+      "entity_type": "DOCUMENT",
+      "attributes": {
+        "type": "legislation",
+        "country": "United States",
+        "violation_by": "Changpeng Zhao"
+      },
+      "confidence": 0.95,
+      "context": "violated the Bank Secrecy Act"
+    },
+    {
+      "name": "International Emergency Economic Powers Act",
+      "entity_type": "DOCUMENT",
+      "attributes": {
+        "type": "legislation",
+        "country": "United States",
+        "violation_by": "Changpeng Zhao"
+      },
+      "confidence": 0.95,
+      "context": "violated the Bank Secrecy Act and the International Emergency Economic Powers Act"
+    },
+    {
+      "name": "Securities and Exchange Commission",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "abbreviation": "SEC",
+        "type": "U.S. Government Agency"
+      },
+      "confidence": 0.95,
+      "context": "ssion (SEC) sued Zhao and Binance on 13 charges"
+    },
+    {
+      "name": "Richard Teng",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "CEO of Binance",
+        "appointment_date": "November 2023"
+      },
+      "confidence": 0.95,
+      "context": "Zhao was replaced as CEO by Richard Teng"
+    },
+    {
+      "name": "Arthur Hayes",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "BitMEX founder",
+        "sentence": "Probation for similar crime"
+      },
+      "confidence": 0.9,
+      "context": "BitMEX founder Arthur Hayes only received probation for a similar crime"
+    },
+    {
+      "name": "Donald Trump",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "President of the United States",
+        "pardon_granted": "October 23, 2025",
+        "pardon_recipient": "Changpeng Zhao"
+      },
+      "confidence": 0.99,
+      "context": "The pardon was granted by Trump later that month on October 23, 2025"
+    },
+    {
+      "name": "Donald Trump Jr.",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Son of President Donald Trump",
+        "involvement": "Introduced lobbyist Ches McDowell to Trump"
+      },
+      "confidence": 0.95,
+      "context": "being introduced by Donald Trump Jr."
+    },
+    {
+      "name": "Ches McDowell",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Lobbyist hired by Changpeng Zhao",
+        "action": "Met with Trump to discuss pardon"
+      },
+      "confidence": 0.9,
+      "context": "a lobbyist hired by Zhao, Ches McDowell, met with Trump"
+    },
+    {
+      "name": "Karoline Leavitt",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "White House spokesperson",
+        "action": "Provided explanation for Zhao's pardon"
+      },
+      "confidence": 0.9,
+      "context": "White House spokesperson Karoline Leavitt gave the following explanation for the pardon"
+    },
+    {
+      "name": "Teresa Goody Guillén",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Lawyer for Changpeng Zhao"
+      },
+      "confidence": 0.9,
+      "context": "Zhao's lawyer, Teresa Goody Guillén, described criticisms"
+    },
+    {
+      "name": "Yang Weiqing",
+      "entity_type": "PERSON",
+      "attributes": {
+        "relationship_to_zhao": "Ex-wife",
+        "marriage_date": "2003",
+        "meeting_date": "1999",
+        "children_with_zhao": 2
+      },
+      "confidence": 0.9,
+      "context": "Zhao met his wife Yang Weiqing in 1999 and they married in 2003. They have two children."
+    },
+    {
+      "name": "Federal Correctional Institution, Lompoc I",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "Federal prison facility",
+        "inmate": "Changpeng Zhao"
+      },
+      "confidence": 0.95,
+      "context": "He served his sentence at the Federal Correctional Institution, Lompoc I"
+    },
+    {
+      "name": "Seattle",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "City",
+        "country": "United States",
+        "event": "Federal court sentencing of Changpeng Zhao"
+      },
+      "confidence": 0.95,
+      "context": "at a federal court in Seattle"
+    },
+    {
+      "name": "Abu Dhabi",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "City",
+        "country": "United Arab Emirates",
+        "resident": "Changpeng Zhao"
+      },
+      "confidence": 0.95,
+      "context": "He lives in Abu Dhabi, United Arab Emirates"
+    },
+    {
+      "name": "China",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "Country",
+        "event": "Banned crypto exchanges in late 2017"
+      },
+      "confidence": 0.95,
+      "context": "Zhao stayed in China until the Chinese government banned crypto exchanges in late 2017"
+    },
+    {
+      "name": "United Arab Emirates",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "Country",
+        "resident": "Changpeng Zhao"
+      },
+      "confidence": 0.95,
+      "context": "He lives in Abu Dhabi, United Arab Emirates"
+    },
+    {
+      "name": "SEC Lawsuit",
+      "entity_type": "DOCUMENT",
+      "attributes": {
+        "type": "Legal filing",
+        "charges": "13 charges for alleged violations of US securities rules",
+        "defendants": "Changpeng Zhao and Binance"
+      },
+      "confidence": 0.9,
+      "context": "SEC sued Zhao and Binance on 13 charges for alleged violations of US securities rules"
+    },
+    {
+      "name": "FTX Lawsuit",
+      "entity_type": "DOCUMENT",
+      "attributes": {
+        "type": "Legal filing",
+        "date": "November 2024",
+        "amount": "$1.8 billion",
+        "defendants": "Binance Holdings Ltd., Zhao, and other Binance executives",
+        "subject": "Fraudulently transferred funds from July 2021 stock repurchase transaction"
+      },
+      "confidence": 0.95,
+      "context": "In November 2024, FTX filed a lawsuit against Binance Holdings Ltd., Zhao, and other Binance executives"
+    },
+    {
+      "name": "SEC Guilty Plea and Settlement",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "Legal settlement",
+        "date": "November 2023",
+        "participant": "Changpeng Zhao",
+        "fine": "$50 million",
+        "outcome": "Zhao agreed to resign from Binance"
+      },
+      "confidence": 0.95,
+      "context": "In November 2023, Zhao agreed to resign from Binance and pay a $50 million fine as part of a guilty plea"
+    },
+    {
+      "name": "Binance Guilty Plea and Settlement",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "Legal settlement",
+        "date": "November 2023",
+        "participant": "Binance",
+        "fine": "$4.3 billion",
+        "charges": "Operating unlicensed money transmitting business, violating International Emergency Economic Powers Act"
+      },
+      "confidence": 0.95,
+      "context": "Binance also agreed to plead guilty, and to pay $4.3 billion in fines"
+    },
+    {
+      "name": "Zhao Sentencing",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "Legal sentencing",
+        "date": "April 2024",
+        "participant": "Changpeng Zhao",
+        "sentence": "Four months in prison",
+        "location": "Federal court in Seattle",
+        "charge": "Enabling money laundering"
+      },
+      "confidence": 0.95,
+      "context": "In April 2024, Zhao was sentenced to four months in prison after pleading guilty to charges of enabling money laundering"
+    },
+    {
+      "name": "Zhao Prison Release",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "Release from custody",
+        "date": "September 27, 2024",
+        "participant": "Changpeng Zhao",
+        "facility": "Federal Correctional Institution, Lompoc I"
+      },
+      "confidence": 0.95,
+      "context": "Zhao was released from custody on September 27, 2024"
+    },
+    {
+      "name": "Zhao Pardon",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "Presidential pardon",
+        "date": "October 23, 2025",
+        "grantor": "President Donald Trump",
+        "recipient": "Changpeng Zhao",
+        "lobbying_amount": "$800,000"
+      },
+      "confidence": 0.99,
+      "context": "The pardon was granted by Trump later that month on October 23, 2025"
+    },
+    {
+      "name": "Trump 60 Minutes Interview",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "Media interview",
+        "date": "October 31, 2025",
+        "participant": "President Donald Trump",
+        "topic": "Changpeng Zhao pardon"
+      },
+      "confidence": 0.9,
+      "context": "In an interview with 60 Minutes on October 31, 2025"
+    },
+    {
+      "name": "Binance-Trump Family Business Talks",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "Business negotiation",
+        "date": "March 2025",
+        "participants": "Binance, Trump family",
+        "source": "The Wall Street Journal"
+      },
+      "confidence": 0.85,
+      "context": "In March 2025, The Wall Street Journal uncovered that Binance was in talks with the family of Donald Trump"
+    },
+    {
+      "name": "Binance World Liberty Financial Platform",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "Business arrangement",
+        "date": "August 2025",
+        "participant": "Binance",
+        "platform": "World Liberty Financial trading platform for Trump family",
+        "source": "The Wall Street Journal"
+      },
+      "confidence": 0.85,
+      "context": "In August 2025, The Wall Street Journal found that Binance was quietly administering a trading platform for the Trump family's World Liberty Financial"
+    },
+    {
+      "name": "Zhao Pardon Campaign",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "Political campaign",
+        "date": "August 2025",
+        "participant": "Changpeng Zhao",
+        "action": "Campaigning to receive pardon from President Trump",
+        "source": "New York Times"
+      },
+      "confidence": 0.85,
+      "context": "That same month, the New York Times reported that Zhao was campaigning to receive a pardon from President Trump"
+    },
+    {
+      "name": "McDowell-Trump Meeting",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "Political meeting",
+        "date": "October 2025",
+        "participants": "Ches McDowell, President Donald Trump",
+        "topic": "Pardon for Changpeng Zhao",
+        "intermediary": "Donald Trump Jr."
+      },
+      "confidence": 0.9,
+      "context": "In October 2025, a lobbyist hired by Zhao, Ches McDowell, met with Trump to talk about a pardon for Zhao after being introduced by Donald Trump Jr."
+    },
+    {
+      "name": "Zhao Shanghai Apartment Sale",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "Real estate transaction",
+        "date": "2015",
+        "participant": "Changpeng Zhao",
+        "action": "Sold Shanghai apartment and purchased bitcoin"
+      },
+      "confidence": 0.85,
+      "context": "In 2015, he sold his Shanghai apartment and used the funds to purchase bitcoin"
+    },
+    {
+      "name": "The Wall Street Journal",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "News publication",
+        "reporting": "Binance-Trump family business dealings, Binance World Liberty Financial platform"
+      },
+      "confidence": 0.95,
+      "context": "The Wall Street Journal uncovered that Binance was in talks with the family of Donald Trump"
+    },
+    {
+      "name": "New York Times",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "News publication",
+        "reporting": "Zhao pardon campaign"
+      },
+      "confidence": 0.95,
+      "context": "the New York Times reported that Zhao was campaigning to receive a pardon from President Trump"
+    },
+    {
+      "name": "Bloomberg Markets",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "News/financial media",
+        "interview_date": "April 6, 2021",
+        "interviewee": "Changpeng Zhao"
+      },
+      "confidence": 0.9,
+      "context": "On April 6, 2021, Zhao told Bloomberg Markets that nearly 100% of his liquid net worth was in the form of cryptocurrency"
+    },
+    {
+      "name": "Financial Crimes Enforcement Network",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "U.S. Government Agency",
+        "abbreviation": "FinCEN",
+        "regulation": "Anti-money laundering requirements"
+      },
+      "confidence": 0.9,
+      "context": "violating the American Bank Secrecy Act by prioritizing Binance's growth over compliance with the Financial Crimes Enforcement Network's anti-money laundering requirements"
+    },
+    {
+      "name": "United States Federal Bureau of Prisons",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "U.S. Government Agency",
+        "abbreviation": "BOP",
+        "record": "Changpeng Zhao release date"
+      },
+      "confidence": 0.95,
+      "context": "According to records with the United States Federal Bureau of Prisons (BOP), Zhao was released from custody on September 27, 2024"
+    },
+    {
+      "name": "Yi He",
+      "entity_type": "PERSON",
+      "attributes": {
+        "relationship_to_zhao": "Life partner and business partner",
+        "role": "Binance co-founder",
+        "meeting_date": "2014",
+        "children_with_zhao": 3
+      },
+      "confidence": 0.9,
+      "context": "Zhao has been in a \"life partner\" relationship with his business partner and fellow Binance co-founder, Yi He, since they met in 2014. They have three children together."
+    },
+    {
+      "name": "Bill Gates",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Global business magnate and investor",
+        "context_reference": "Philanthropic example"
+      },
+      "confidence": 0.85,
+      "context": "following the philanthropic examples of other global business magnates and investors such as Bill Gates and Warren Buffett"
+    },
+    {
+      "name": "Warren Buffett",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Global business magnate and investor",
+        "context_reference": "Philanthropic example"
+      },
+      "confidence": 0.85,
+      "context": "following the philanthropic examples of other global business magnates and investors such as Bill Gates and Warren Buffett"
+    },
+    {
+      "name": "Zhao's apartment sale and bitcoin purchase",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "2015",
+        "type": "Financial transaction",
+        "description": "Sold Shanghai apartment and purchased bitcoin",
+        "participant": "Changpeng Zhao"
+      },
+      "confidence": 0.9,
+      "context": "In 2015, he sold his Shanghai apartment and used the funds to purchase bitcoin"
+    },
+    {
+      "name": "Chinese government crypto exchange ban",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "late 2017",
+        "type": "Government regulation",
+        "location": "China",
+        "description": "Ban on cryptocurrency exchanges"
+      },
+      "confidence": 0.9,
+      "context": "the Chinese government banned crypto exchanges in late 2017"
+    },
+    {
+      "name": "Zhao's marriage to Yang Weiqing",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "2003",
+        "type": "Personal/Marriage",
+        "participants": [
+          "Changpeng Zhao",
+          "Yang Weiqing"
+        ]
+      },
+      "confidence": 0.9,
+      "context": "Zhao met his wife Yang Weiqing in 1999 and they married in 2003"
+    },
+    {
+      "name": "Zhao's divorce from Yang Weiqing",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "around 2005",
+        "type": "Personal/Divorce",
+        "participants": [
+          "Changpeng Zhao",
+          "Yang Weiqing"
+        ]
+      },
+      "confidence": 0.85,
+      "context": "They divorced when their eldest daughter was two years old, around 2005"
+    }
+  ],
+  "relations": [
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Binance",
+      "confidence": 0.95,
+      "evidence": "He has also served as CTO of OKCoin and CEO of Binance"
+    },
+    {
+      "relation_type": "CREATED",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Binance",
+      "confidence": 0.95,
+      "evidence": "is a businessman who is known for co-founding cryptocurrency companies, such as Binance"
+    },
+    {
+      "relation_type": "CREATED",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Blockchain.com",
+      "confidence": 0.95,
+      "evidence": "is a businessman who is known for co-founding cryptocurrency companies, such as Binance and Blockchain.com"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "OKCoin",
+      "confidence": 0.95,
+      "evidence": "He has also served as CTO of OKCoin and CEO of Binance"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Lianyungang",
+      "confidence": 0.95,
+      "evidence": "Changpeng Zhao was born in Lianyungang in China's Jiangsu province"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Lianyungang",
+      "target_entity": "Jiangsu",
+      "confidence": 0.95,
+      "evidence": "Changpeng Zhao was born in Lianyungang in China's Jiangsu province"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Vancouver",
+      "confidence": 0.95,
+      "evidence": "They settled down in Vancouver, British Columbia"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Vancouver",
+      "target_entity": "British Columbia",
+      "confidence": 0.95,
+      "evidence": "They settled down in Vancouver, British Columbia"
+    },
+    {
+      "relation_type": "MEMBER_OF",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "McGill University",
+      "confidence": 0.95,
+      "evidence": "Zhao attended McGill University in Montreal, Quebec, where he majored in computer science"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "McGill University",
+      "target_entity": "Montreal",
+      "confidence": 0.95,
+      "evidence": "Zhao attended McGill University in Montreal, Quebec"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Montreal",
+      "target_entity": "Quebec",
+      "confidence": 0.95,
+      "evidence": "Zhao attended McGill University in Montreal, Quebec"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Tokyo Stock Exchange",
+      "confidence": 0.9,
+      "evidence": "Zhao was selected for an internship in Tokyo working for a subcontractor of the Tokyo Stock Exchange"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Bloomberg Tradebook",
+      "confidence": 0.95,
+      "evidence": "He later went to work full-time for four years at Bloomberg Tradebook, where he was a developer of futures trading software"
+    },
+    {
+      "relation_type": "CREATED",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Fusion Systems",
+      "confidence": 0.95,
+      "evidence": "he established his first technology startup company called Fusion Systems"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Fusion Systems",
+      "target_entity": "Shanghai",
+      "confidence": 0.95,
+      "evidence": "In 2005, Zhao moved to Shanghai to launch his business career, where he established his first technology startup company called Fusion Systems"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Bobby Lee",
+      "confidence": 0.9,
+      "evidence": "Zhao first heard of bitcoin in 2013 when playing poker with Bobby Lee (brother of Charlie Lee)"
+    },
+    {
+      "relation_type": "MEMBER_OF",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Blockchain.info",
+      "confidence": 0.95,
+      "evidence": "In 2013, Zhao was a member of the team that developed Blockchain.info"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Elon Musk",
+      "confidence": 0.85,
+      "evidence": "In 2022, Zhao invested $500 million through Binance to finance the acquisition of Twitter by Elon Musk"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Pakistan Ministry of Finance",
+      "confidence": 0.95,
+      "evidence": "On April 7, 2024, he was appointed by the Pakistan Ministry of Finance as a strategic advisor to the Pakistan Crypto Council"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Sadyr Japarov",
+      "confidence": 0.95,
+      "evidence": "On May 3, 2025, he was appointed as an advisor to the president of Kyrgyzstan, Sadyr Japarov, on the development of digital assets"
+    },
+    {
+      "relation_type": "CREATED",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Binance Coin",
+      "confidence": 0.95,
+      "evidence": "Zhao also launched Binance Coin in 2017, a utility token that gives its owners various benefits"
+    },
+    {
+      "relation_type": "CREATED",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Binance Smart Chain",
+      "confidence": 0.95,
+      "evidence": "In April 2019, Binance launched Binance Smart Chain"
+    },
+    {
+      "relation_type": "CREATED",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Binance.US",
+      "confidence": 0.95,
+      "evidence": "In 2019, Zhao launched Binance's U.S. affiliate, Binance.US"
+    },
+    {
+      "relation_type": "RELATED_TO",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "U.S. Department of Justice",
+      "confidence": 0.95,
+      "evidence": "He resigned as the CEO of Binance in November 2023 after the U.S Department of Justice alleged he violated the Bank Secrecy Act"
+    },
+    {
+      "relation_type": "RELATED_TO",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Commodity Futures Trading Commission",
+      "confidence": 0.95,
+      "evidence": "On March 27, 2023, the Commodity Futures Trading Commission (CFTC) filed a lawsuit against Binance and Zhao"
+    },
+    {
+      "relation_type": "RELATED_TO",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "U.S. Securities and Exchange Commission",
+      "confidence": 0.95,
+      "evidence": "In June 2023, the U.S. Securities and Exchange Commission (SEC) sued Zhao and Binance on 13 charges"
+    },
+    {
+      "relation_type": "RELATED_TO",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "President Donald Trump",
+      "confidence": 0.95,
+      "evidence": "In October 2025, Zhao was given a presidential pardon by President Donald Trump"
+    },
+    {
+      "relation_type": "RELATED_TO",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Zhao Shengkai",
+      "confidence": 0.95,
+      "evidence": "His father Zhao Shengkai worked as a university instructor"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Tiananmen Square protests and massacre",
+      "confidence": 0.85,
+      "evidence": "In late 1989, when he was 12 years old, he acquired a Canadian visa in 1989 and emigrated with his family to Canada after Tiananmen Square protests and massacre"
+    },
+    {
+      "relation_type": "RELATED_TO",
+      "source_entity": "Binance",
+      "target_entity": "FTX",
+      "confidence": 0.9,
+      "evidence": "In November 2024, FTX filed a lawsuit against Binance Holdings Ltd., Zhao, and other Binance executives"
+    },
+    {
+      "relation_type": "RELATED_TO",
+      "source_entity": "Binance",
+      "target_entity": "Sam Bankman-Fried",
+      "confidence": 0.9,
+      "evidence": "The case centers on a July 2021 stock repurchase transaction in which Binance sold its stakes to FTX co-founder Sam Bankman-Fried"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Binance",
+      "confidence": 0.95,
+      "evidence": "In November 2023, Zhao agreed to resign from Binance"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "SEC Lawsuit",
+      "confidence": 0.95,
+      "evidence": "SEC sued Zhao and Binance on 13 charges for alleged violations of US securities rules"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "FTX Lawsuit",
+      "confidence": 0.95,
+      "evidence": "FTX filed a lawsuit against Binance Holdings Ltd., Zhao, and other Binance executives"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Binance Guilty Plea and Settlement",
+      "confidence": 0.95,
+      "evidence": "In November 2023, Zhao agreed to resign from Binance and pay a $50 million fine as part of a guilty plea"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Zhao Sentencing",
+      "confidence": 0.95,
+      "evidence": "In April 2024, Zhao was sentenced to four months in prison after pleading guilty to charges of enabling money laundering"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Federal Correctional Institution, Lompoc I",
+      "confidence": 0.95,
+      "evidence": "He served his sentence at the Federal Correctional Institution, Lompoc I"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Zhao Prison Release",
+      "confidence": 0.95,
+      "evidence": "Zhao was released from custody on September 27, 2024"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Zhao Pardon",
+      "confidence": 0.95,
+      "evidence": "The pardon was granted by Trump later that month on October 23, 2025"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance",
+      "target_entity": "Donald Trump",
+      "confidence": 0.9,
+      "evidence": "Binance was in talks with the family of Donald Trump about business dealings"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Binance",
+      "target_entity": "Binance World Liberty Financial Platform",
+      "confidence": 0.9,
+      "evidence": "Binance was quietly administering a trading platform for the Trump family's World Liberty Financial"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Richard Teng",
+      "target_entity": "Binance",
+      "confidence": 0.95,
+      "evidence": "Zhao was replaced as CEO by Richard Teng"
+    },
+    {
+      "relation_type": "RELATED_TO",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Sam Bankman-Fried",
+      "confidence": 0.85,
+      "evidence": "Binance sold its stakes to FTX co-founder Sam Bankman-Fried in a July 2021 stock repurchase transaction"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Ches McDowell",
+      "target_entity": "Changpeng Zhao",
+      "confidence": 0.9,
+      "evidence": "a lobbyist hired by Zhao, Ches McDowell, met with Trump to talk about a pardon for Zhao"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Donald Trump Jr.",
+      "target_entity": "Ches McDowell",
+      "confidence": 0.9,
+      "evidence": "Ches McDowell met with Trump after being introduced by Donald Trump Jr."
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Abu Dhabi",
+      "confidence": 0.95,
+      "evidence": "He lives in Abu Dhabi, United Arab Emirates"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Shanghai",
+      "confidence": 0.9,
+      "evidence": "In 2005, he moved back to China, eventually owning an apartment in Shanghai"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Yang Weiqing",
+      "confidence": 0.95,
+      "evidence": "Zhao met his wife Yang Weiqing in 1999 and they married in 2003"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Teresa Goody Guillén",
+      "target_entity": "Changpeng Zhao",
+      "confidence": 0.9,
+      "evidence": "Zhao's lawyer, Teresa Goody Guillén, described criticisms of the pardon for Zhao"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Shanghai",
+      "confidence": 0.95,
+      "evidence": "eventually owning an apartment in Shanghai"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Abu Dhabi",
+      "confidence": 0.95,
+      "evidence": "He lives in Abu Dhabi, United Arab Emirates"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "United Arab Emirates",
+      "confidence": 0.95,
+      "evidence": "He lives in Abu Dhabi, United Arab Emirates"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Canada",
+      "confidence": 0.9,
+      "evidence": "Zhao is a Canadian, and UAE citizen"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Binance",
+      "confidence": 0.95,
+      "evidence": "fellow Binance co-founder, Yi He"
+    },
+    {
+      "relation_type": "MEMBER_OF",
+      "source_entity": "Yi He",
+      "target_entity": "Binance",
+      "confidence": 0.95,
+      "evidence": "fellow Binance co-founder, Yi He"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Yang Weiqing",
+      "confidence": 0.9,
+      "evidence": "Zhao met his wife Yang Weiqing in 1999 and they married in 2003"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Yi He",
+      "confidence": 0.9,
+      "evidence": "Zhao has been in a 'life partner' relationship with his business partner and fellow Binance co-founder, Yi He, since they met in 2014"
+    },
+    {
+      "relation_type": "RELATED_TO",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Bill Gates",
+      "confidence": 0.85,
+      "evidence": "following the philanthropic examples of other global business magnates and investors such as Bill Gates and Warren Buffett"
+    },
+    {
+      "relation_type": "RELATED_TO",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Warren Buffett",
+      "confidence": 0.85,
+      "evidence": "following the philanthropic examples of other global business magnates and investors such as Bill Gates and Warren Buffett"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Zhao's apartment sale and bitcoin purchase",
+      "confidence": 0.9,
+      "evidence": "In 2015, he sold his Shanghai apartment and used the funds to purchase bitcoin"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Chinese government crypto exchange ban",
+      "confidence": 0.85,
+      "evidence": "Zhao stayed in China until the Chinese government banned crypto exchanges in late 2017"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Zhao's marriage to Yang Weiqing",
+      "confidence": 0.95,
+      "evidence": "they married in 2003"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Changpeng Zhao",
+      "target_entity": "Zhao's divorce from Yang Weiqing",
+      "confidence": 0.95,
+      "evidence": "They divorced when their eldest daughter was two years old, around 2005"
+    }
+  ],
+  "cost_usd": 0.10114200000000001,
+  "model_used": "anthropic/claude-haiku-4-5-20251001",
+  "error": null
+}

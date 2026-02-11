@@ -1,0 +1,504 @@
+{
+  "document_id": "alameda_research",
+  "document_path": "test-docs/alameda_research.txt",
+  "chunks_processed": 2,
+  "entities": [
+    {
+      "name": "Alameda Research",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency trading firm",
+        "founded": "September 2017",
+        "co-founders": [
+          "Sam Bankman-Fried",
+          "Tara MacAulay"
+        ],
+        "headquarters": "Berkeley, California (moved to Hong Kong in early 2019)",
+        "status": "filed for Chapter 11 bankruptcy in November 2022"
+      },
+      "confidence": 0.99,
+      "context": "Alameda Research was a cryptocurrency trading firm co-founded in September 2017 by Sam Bankman-Fried and Tara MacAulay"
+    },
+    {
+      "name": "Sam Bankman-Fried",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "co-founder of Alameda Research, founder of FTX",
+        "occupation": "cryptocurrency trader, entrepreneur",
+        "net_worth_October_2022": "$10.5 billion",
+        "net_worth_November_2022": "approximately $1 billion",
+        "ownership": "approximately 90% of Alameda Research as of August 2021"
+      },
+      "confidence": 0.99,
+      "context": "Sam Bankman-Fried and Tara MacAulay"
+    },
+    {
+      "name": "Tara MacAulay",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "co-founder of Alameda Research"
+      },
+      "confidence": 0.95,
+      "context": "co-founded in September 2017 by Sam Bankman-Fried and Tara MacAulay"
+    },
+    {
+      "name": "Caroline Ellison",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "CEO of Alameda Research",
+        "legal_status": "pleaded guilty to wire fraud and conspiracy counts in December 2022",
+        "charges": "two counts of wire fraud and five conspiracy counts involving wire, securities and commodities fraud and money laundering"
+      },
+      "confidence": 0.99,
+      "context": "Alameda CEO Caroline Ellison testified that she was one of Bankman-Fried's main accomplices"
+    },
+    {
+      "name": "Sam Trabucco",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "co-CEO of Alameda Research",
+        "resignation_date": "August 2022"
+      },
+      "confidence": 0.95,
+      "context": "In August 2022, Alameda co-CEO Sam Trabucco resigned"
+    },
+    {
+      "name": "FTX",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency exchange",
+        "founder": "Sam Bankman-Fried",
+        "founded": "April 2019",
+        "relationship": "sister company to Alameda Research",
+        "status": "filed for Chapter 11 bankruptcy in November 2022"
+      },
+      "confidence": 0.99,
+      "context": "FTX, Alameda's sister cryptocurrency exchange, experienced a solvency crisis"
+    },
+    {
+      "name": "Jane Street Capital",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "financial company"
+      },
+      "confidence": 0.9,
+      "context": "after he left his job at Jane Street Capital"
+    },
+    {
+      "name": "Binance",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency exchange"
+      },
+      "confidence": 0.95,
+      "context": "Binance and FTX signed a letter of intent for FTX to be acquired by Binance"
+    },
+    {
+      "name": "The Wall Street Journal",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "news publication"
+      },
+      "confidence": 0.95,
+      "context": "anonymous sources told The Wall Street Journal"
+    },
+    {
+      "name": "TechCrunch",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "news publication"
+      },
+      "confidence": 0.95,
+      "context": "TechCrunch reported that"
+    },
+    {
+      "name": "Pantheri Asset Management",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "asset management company"
+      },
+      "confidence": 0.9,
+      "context": "Pantheri Asset Management made $10.7 million as a counterparty of Alameda"
+    },
+    {
+      "name": "Future Forward USA",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "political action committee (PAC)",
+        "political_alignment": "liberal",
+        "donation_from_alameda": "$5 million in 2020"
+      },
+      "confidence": 0.95,
+      "context": "Alameda gave $5 million to Future Forward USA, a liberal political action committee (PAC)"
+    },
+    {
+      "name": "Guarding Against Pandemics",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "political action committee (PAC)",
+        "run_by": "Gabe Bankman-Fried",
+        "donation_from_alameda": "$5 million in 2022"
+      },
+      "confidence": 0.95,
+      "context": "Alameda reportedly donated $5 million to Guarding Against Pandemics, a PAC run by Sam Bankman-Fried's brother, Gabe"
+    },
+    {
+      "name": "Art of Problem Solving",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "educational organization",
+        "program": "Worldwide Online Olympiad Training program"
+      },
+      "confidence": 0.95,
+      "context": "The company provided financial support to the Worldwide Online Olympiad Training program by the Art of Problem Solving"
+    },
+    {
+      "name": "Berkeley, California",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "city",
+        "country": "United States",
+        "significance": "initial headquarters of Alameda Research"
+      },
+      "confidence": 0.99,
+      "context": "The firm was based in Berkeley, California"
+    },
+    {
+      "name": "Hong Kong",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "city/region",
+        "significance": "headquarters of Alameda Research from early 2019"
+      },
+      "confidence": 0.99,
+      "context": "In early 2019, the firm moved its headquarters from California to Hong Kong"
+    },
+    {
+      "name": "Japan",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "country",
+        "significance": "location of higher bitcoin prices in 2018 arbitrage trade"
+      },
+      "confidence": 0.95,
+      "context": "arbitrage trade to take advantage of the higher price of bitcoin in Japan versus in America"
+    },
+    {
+      "name": "America",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "region/country",
+        "significance": "location of lower bitcoin prices in 2018 arbitrage trade"
+      },
+      "confidence": 0.95,
+      "context": "higher price of bitcoin in Japan versus in America"
+    },
+    {
+      "name": "Ethereum",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "blockchain network"
+      },
+      "confidence": 0.9,
+      "context": "especially on the Ethereum blockchain"
+    },
+    {
+      "name": "FTT",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency token",
+        "issuer": "FTX exchange"
+      },
+      "confidence": 0.9,
+      "context": "Alameda held a large quantity of FTT, the native token of the FTX exchange"
+    },
+    {
+      "name": "Gabe Bankman-Fried",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "runs Guarding Against Pandemics PAC",
+        "relationship": "brother of Sam Bankman-Fried"
+      },
+      "confidence": 0.95,
+      "context": "a PAC run by Sam Bankman-Fried's brother, Gabe"
+    },
+    {
+      "name": "President Joe Biden",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "U.S. President",
+        "political_support": "received $5 million donation from Alameda in 2020"
+      },
+      "confidence": 0.95,
+      "context": "in support of President Joe Biden"
+    },
+    {
+      "name": "Bankman-Fried's trial",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal proceeding",
+        "defendant": "Sam Bankman-Fried",
+        "witness": "Caroline Ellison"
+      },
+      "confidence": 0.9,
+      "context": "At Bankman-Fried's trial, Alameda CEO Caroline Ellison testified"
+    },
+    {
+      "name": "FTX solvency crisis",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "November 2022",
+        "type": "financial crisis",
+        "outcome": "Chapter 11 bankruptcy filing"
+      },
+      "confidence": 0.99,
+      "context": "In November 2022, FTX, Alameda's sister cryptocurrency exchange, experienced a solvency crisis"
+    },
+    {
+      "name": "Binance-FTX acquisition letter of intent",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "8 November 2022",
+        "type": "financial transaction",
+        "parties": [
+          "Binance",
+          "FTX"
+        ],
+        "outcome": "Binance withdrew from deal on 9 November 2022"
+      },
+      "confidence": 0.99,
+      "context": "On 8 November 2022, following a liquidity crisis at FTX, a large cryptocurrency exchange, Binance and FTX signed a letter of intent"
+    },
+    {
+      "name": "2020 United States presidential election",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "2020",
+        "type": "political event",
+        "alameda_donation": "$5 million to Future Forward USA"
+      },
+      "confidence": 0.95,
+      "context": "During the 2020 United States presidential election, Alameda gave $5 million to Future Forward USA"
+    },
+    {
+      "name": "Chapter 11 bankruptcy filing",
+      "entity_type": "EVENT",
+      "attributes": {
+        "date": "November 2022",
+        "type": "legal/financial event",
+        "entities_involved": [
+          "Alameda Research",
+          "FTX",
+          "more than 130 affiliated entities"
+        ]
+      },
+      "confidence": 0.99,
+      "context": "Alameda Research, along with FTX and more than 130 affiliated entities, filed for Chapter 11 bankruptcy protection in November 2022"
+    },
+    {
+      "name": "Joe Biden",
+      "entity_type": "PERSON",
+      "attributes": {
+        "title": "President",
+        "role": "supported candidate"
+      },
+      "confidence": 0.95,
+      "context": "in support of President Joe Biden"
+    },
+    {
+      "name": "Worldwide Online Olympiad Training program",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "educational program",
+        "operator": "Art of Problem Solving"
+      },
+      "confidence": 0.95,
+      "context": "The company provided financial support to the Worldwide Online Olympiad Training program by the Art of Problem Solving"
+    },
+    {
+      "name": "Internet Archive",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "digital archive organization"
+      },
+      "confidence": 0.95,
+      "context": "Alameda Research website, as archived by the Internet Archive on 7 November 2022"
+    },
+    {
+      "name": "Alameda Research website archive",
+      "entity_type": "DOCUMENT",
+      "attributes": {
+        "date_archived": "7 November 2022",
+        "archived_by": "Internet Archive"
+      },
+      "confidence": 0.9,
+      "context": "Alameda Research website, as archived by the Internet Archive on 7 November 2022"
+    }
+  ],
+  "relations": [
+    {
+      "relation_type": "CREATED",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Alameda Research",
+      "confidence": 0.95,
+      "evidence": "Alameda Research was a cryptocurrency trading firm co-founded in September 2017 by Sam Bankman-Fried and Tara MacAulay"
+    },
+    {
+      "relation_type": "CREATED",
+      "source_entity": "Tara MacAulay",
+      "target_entity": "Alameda Research",
+      "confidence": 0.95,
+      "evidence": "Alameda Research was a cryptocurrency trading firm co-founded in September 2017 by Sam Bankman-Fried and Tara MacAulay"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "Alameda Research",
+      "confidence": 0.95,
+      "evidence": "Alameda CEO Caroline Ellison testified that she was one of Bankman-Fried's main accomplices"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Sam Trabucco",
+      "target_entity": "Alameda Research",
+      "confidence": 0.95,
+      "evidence": "In August 2022, Alameda co-CEO Sam Trabucco resigned"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Alameda Research",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "FTX, Alameda's sister cryptocurrency exchange, experienced a solvency crisis"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Jane Street Capital",
+      "confidence": 0.95,
+      "evidence": "Sam Bankman-Fried co-founded Alameda Research as a quantitative trading firm, after he left his job at Jane Street Capital"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Alameda Research",
+      "target_entity": "Berkeley, California",
+      "confidence": 0.95,
+      "evidence": "The firm was based in Berkeley, California, where Bankman-Fried moved that same year"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Alameda Research",
+      "target_entity": "Hong Kong",
+      "confidence": 0.95,
+      "evidence": "In early 2019, the firm moved its headquarters from California to Hong Kong"
+    },
+    {
+      "relation_type": "OWNS",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Alameda Research",
+      "confidence": 0.95,
+      "evidence": "As of August 2021, Bankman-Fried owned approximately 90 percent of Alameda Research"
+    },
+    {
+      "relation_type": "CREATED",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "FTX",
+      "confidence": 0.95,
+      "evidence": "Sam Bankman-Fried started his own crypto exchange in April 2019 under the name FTX"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Alameda Research",
+      "target_entity": "2020 United States presidential election",
+      "confidence": 0.95,
+      "evidence": "During the 2020 United States presidential election, Alameda gave $5 million to Future Forward USA, a liberal political action committee (PAC) in support of President Joe Biden"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Alameda Research",
+      "target_entity": "Future Forward USA",
+      "confidence": 0.95,
+      "evidence": "Alameda gave $5 million to Future Forward USA, a liberal political action committee (PAC)"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Alameda Research",
+      "target_entity": "Guarding Against Pandemics",
+      "confidence": 0.95,
+      "evidence": "In 2022, Alameda reportedly donated $5 million to Guarding Against Pandemics, a PAC run by Sam Bankman-Fried's brother, Gabe"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Alameda Research",
+      "target_entity": "Art of Problem Solving",
+      "confidence": 0.95,
+      "evidence": "The company provided financial support to the Worldwide Online Olympiad Training program by the Art of Problem Solving"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Alameda Research",
+      "target_entity": "Chapter 11 bankruptcy filing",
+      "confidence": 0.95,
+      "evidence": "Alameda Research, along with FTX and more than 130 affiliated entities, filed for Chapter 11 bankruptcy protection in November 2022"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Alameda Research",
+      "target_entity": "2020 United States presidential election",
+      "confidence": 0.95,
+      "evidence": "During the 2020 United States presidential election, Alameda gave $5 million to Future Forward USA"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Alameda Research",
+      "target_entity": "Future Forward USA",
+      "confidence": 0.95,
+      "evidence": "Alameda gave $5 million to Future Forward USA, a liberal political action committee (PAC)"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Future Forward USA",
+      "target_entity": "Joe Biden",
+      "confidence": 0.95,
+      "evidence": "Future Forward USA, a liberal political action committee (PAC) in support of President Joe Biden"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Alameda Research",
+      "target_entity": "Guarding Against Pandemics",
+      "confidence": 0.95,
+      "evidence": "Alameda reportedly donated $5 million to Guarding Against Pandemics, a PAC"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Guarding Against Pandemics",
+      "target_entity": "Gabe Bankman-Fried",
+      "confidence": 0.95,
+      "evidence": "Guarding Against Pandemics, a PAC run by Sam Bankman-Fried's brother, Gabe"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Alameda Research",
+      "target_entity": "Art of Problem Solving",
+      "confidence": 0.95,
+      "evidence": "The company provided financial support to the Worldwide Online Olympiad Training program by the Art of Problem Solving"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Art of Problem Solving",
+      "target_entity": "Worldwide Online Olympiad Training program",
+      "confidence": 0.95,
+      "evidence": "Worldwide Online Olympiad Training program by the Art of Problem Solving"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "Alameda Research",
+      "target_entity": "Alameda Research website archive",
+      "confidence": 0.95,
+      "evidence": "Alameda Research website, as archived by the Internet Archive"
+    }
+  ],
+  "cost_usd": 0.035817,
+  "model_used": "anthropic/claude-haiku-4-5-20251001",
+  "error": null
+}

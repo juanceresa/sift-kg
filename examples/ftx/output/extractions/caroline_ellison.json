@@ -1,0 +1,956 @@
+{
+  "document_id": "caroline_ellison",
+  "document_path": "test-docs/caroline_ellison.txt",
+  "chunks_processed": 2,
+  "entities": [
+    {
+      "name": "Caroline Ellison",
+      "entity_type": "PERSON",
+      "attributes": {
+        "birth_date": "November 1994",
+        "nationality": "American",
+        "occupation": "former business executive, convicted fraudster",
+        "birthplace": "Boston",
+        "education": "Stanford University (B.S. Mathematics, 2016)",
+        "positions_held": "CEO of Alameda Research, co-CEO of Alameda Research"
+      },
+      "confidence": 0.99,
+      "context": "Caroline Ellison (born November 1994) is an American former business executive, and convicted fraudster"
+    },
+    {
+      "name": "Sam Bankman-Fried",
+      "entity_type": "PERSON",
+      "attributes": {
+        "occupation": "founder of FTX and Alameda Research",
+        "role": "director of development at Centre for Effective Altruism"
+      },
+      "confidence": 0.99,
+      "context": "She was the CEO of Alameda Research, a trading firm affiliated with FTX and founded by Sam Bankman-Fried"
+    },
+    {
+      "name": "Lewis Kaplan",
+      "entity_type": "PERSON",
+      "attributes": {
+        "title": "U.S. District Judge",
+        "role": "judge in Ellison case"
+      },
+      "confidence": 0.95,
+      "context": "U.S. District Judge Lewis Kaplan called Ellison's cooperation in the case against Bankman-Fried"
+    },
+    {
+      "name": "Glenn Ellison",
+      "entity_type": "PERSON",
+      "attributes": {
+        "occupation": "economist at MIT",
+        "relationship": "father of Caroline Ellison"
+      },
+      "confidence": 0.9,
+      "context": "She is the eldest of three daughters of Glenn and Sara Fisher Ellison, both economists at MIT"
+    },
+    {
+      "name": "Sara Fisher Ellison",
+      "entity_type": "PERSON",
+      "attributes": {
+        "occupation": "economist at MIT",
+        "relationship": "mother of Caroline Ellison"
+      },
+      "confidence": 0.9,
+      "context": "She is the eldest of three daughters of Glenn and Sara Fisher Ellison, both economists at MIT"
+    },
+    {
+      "name": "Anna Ellison",
+      "entity_type": "PERSON",
+      "attributes": {
+        "relationship": "younger sister of Caroline Ellison"
+      },
+      "confidence": 0.85,
+      "context": "Ellison and her younger sister Anna competed with the math team"
+    },
+    {
+      "name": "Sam Trabucco",
+      "entity_type": "PERSON",
+      "attributes": {
+        "recognition": "Forbes 30 Under 30"
+      },
+      "confidence": 0.95,
+      "context": "together with Sam Trabucco, was listed on Forbes 30 Under 30"
+    },
+    {
+      "name": "Tara Mac Aulay",
+      "entity_type": "PERSON",
+      "attributes": {
+        "occupation": "co-founder of Alameda Research",
+        "affiliation": "effective altruism colleague"
+      },
+      "confidence": 0.85,
+      "context": "a cryptocurrency hedge fund co-founded in November 2017 by Bankman-Fried and effective altruism colleague Tara Mac Aulay"
+    },
+    {
+      "name": "FTX",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "cryptocurrency exchange",
+        "status": "bankrupt",
+        "founder": "Sam Bankman-Fried"
+      },
+      "confidence": 0.99,
+      "context": "convicted fraudster who pleaded guilty to fraud in 2023 in relation to the bankruptcy of FTX"
+    },
+    {
+      "name": "Alameda Research",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "trading firm, cryptocurrency hedge fund",
+        "founder": "Sam Bankman-Fried",
+        "status": "bankrupt",
+        "debt_to_FTX": "$10 billion"
+      },
+      "confidence": 0.99,
+      "context": "She was the CEO of Alameda Research, a trading firm affiliated with FTX and founded by Sam Bankman-Fried"
+    },
+    {
+      "name": "Jane Street",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "proprietary trading firm",
+        "location": "New York City"
+      },
+      "confidence": 0.9,
+      "context": "Ellison began her career in quantitative trading with two internships at Jane Street, a proprietary trading firm in New York City"
+    },
+    {
+      "name": "Centre for Effective Altruism",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "organization",
+        "location": "Berkeley, California"
+      },
+      "confidence": 0.9,
+      "context": "to serve as director of development at the Centre for Effective Altruism in Berkeley, California"
+    },
+    {
+      "name": "MIT",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "university",
+        "affiliation": "employers of Glenn and Sara Fisher Ellison"
+      },
+      "confidence": 0.95,
+      "context": "both economists at MIT"
+    },
+    {
+      "name": "Stanford University",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "university",
+        "affiliation": "alma mater of Caroline Ellison"
+      },
+      "confidence": 0.95,
+      "context": "Ellison graduated from Stanford University in 2016 with a bachelor's degree in mathematics"
+    },
+    {
+      "name": "Newton North High School",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "high school",
+        "location": "Newton"
+      },
+      "confidence": 0.9,
+      "context": "As a Newton North High School student, she represented the US in the 2011 International Linguistics Olympiad"
+    },
+    {
+      "name": "Bigelow Middle School",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "middle school"
+      },
+      "confidence": 0.85,
+      "context": "At Bigelow Middle School, Ellison and her younger sister Anna competed with the math team"
+    },
+    {
+      "name": "Forbes 30 Under 30",
+      "entity_type": "DOCUMENT",
+      "attributes": {
+        "type": "Recognition/Award",
+        "year": "2022",
+        "category": "North America – Finance"
+      },
+      "confidence": 0.95,
+      "context": "Named in Forbes 30 Under 30 – North America – Finance"
+    },
+    {
+      "name": "Boston",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "city",
+        "country": "United States"
+      },
+      "confidence": 0.95,
+      "context": "Ellison was born in Boston to a Catholic family"
+    },
+    {
+      "name": "Cambridge",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "city",
+        "country": "United States",
+        "region": "Massachusetts"
+      },
+      "confidence": 0.9,
+      "context": "grew up in nearby suburbs Cambridge and Newton"
+    },
+    {
+      "name": "Newton",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "city",
+        "country": "United States",
+        "region": "Massachusetts"
+      },
+      "confidence": 0.9,
+      "context": "grew up in nearby suburbs Cambridge and Newton"
+    },
+    {
+      "name": "New York City",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "city",
+        "country": "United States"
+      },
+      "confidence": 0.95,
+      "context": "a proprietary trading firm in New York City"
+    },
+    {
+      "name": "San Francisco Bay Area",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "region",
+        "country": "United States"
+      },
+      "confidence": 0.9,
+      "context": "In February 2018, while visiting the San Francisco Bay Area"
+    },
+    {
+      "name": "Berkeley, California",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "city",
+        "country": "United States"
+      },
+      "confidence": 0.9,
+      "context": "Centre for Effective Altruism in Berkeley, California"
+    },
+    {
+      "name": "Greater Boston Math League",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "competition/league"
+      },
+      "confidence": 0.85,
+      "context": "Ellison competed in the Greater Boston Math League through her high school"
+    },
+    {
+      "name": "American Mathematics Competitions",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "competition"
+      },
+      "confidence": 0.85,
+      "context": "In 2008, Ellison received top honors in the American Mathematics Competitions"
+    },
+    {
+      "name": "International Linguistics Olympiad",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "competition",
+        "year": 2011,
+        "participant": "Caroline Ellison",
+        "result": "honorable mention and award for best solution"
+      },
+      "confidence": 0.9,
+      "context": "she represented the US in the 2011 International Linguistics Olympiad and received an honorable mention and an award for \"best solution\""
+    },
+    {
+      "name": "Putnam Competitions",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "mathematics competition",
+        "years": "2013, 2014, 2015",
+        "participant": "Caroline Ellison",
+        "result": "top 500 students"
+      },
+      "confidence": 0.9,
+      "context": "she scored in the top 500 students in the 2013, 2014, and 2015 Putnam Competitions"
+    },
+    {
+      "name": "Sentencing of Caroline Ellison",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal event",
+        "date": "September 24, 2024",
+        "outcome": "two years in prison",
+        "judge": "Lewis Kaplan",
+        "participant": "Caroline Ellison"
+      },
+      "confidence": 0.95,
+      "context": "On September 24, 2024, Ellison, a key government witness in the collapse of cryptocurrency exchange FTX, was sentenced to two years in prison"
+    },
+    {
+      "name": "FTX Bankruptcy",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "financial event",
+        "year": 2022,
+        "organizations_involved": "FTX, Alameda Research"
+      },
+      "confidence": 0.95,
+      "context": "Ellison was terminated from her position after FTX and Alameda filed for bankruptcy"
+    },
+    {
+      "name": "Guilty Plea",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "legal event",
+        "year": 2023,
+        "participant": "Caroline Ellison",
+        "charges": "fraud"
+      },
+      "confidence": 0.95,
+      "context": "convicted fraudster who pleaded guilty to fraud in 2023"
+    },
+    {
+      "name": "Math Prize for Girls",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "mathematics competition",
+        "participant": "Caroline Ellison"
+      },
+      "confidence": 0.85,
+      "context": "Ellison represented Newton several times in the Math Prize for Girls"
+    },
+    {
+      "name": "The Wall Street Journal",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Publication"
+      },
+      "confidence": 0.95,
+      "context": "According to anonymous sources cited by The Wall Street Journal"
+    },
+    {
+      "name": "CoinDesk",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Publication",
+        "action": "Raised concerns about Alameda Research balance sheet"
+      },
+      "confidence": 0.95,
+      "context": "after CoinDesk raised concerns about the balance sheet of Alameda Research"
+    },
+    {
+      "name": "Toys \"R\" Us",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "retail company"
+      },
+      "confidence": 0.85,
+      "context": "At age 8, Ellison gave her father an economic study of stuffed animal prices from Toys \"R\" Us"
+    },
+    {
+      "name": "John J. Ray III",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Terminated Caroline Ellison from FTX"
+      },
+      "confidence": 0.95,
+      "context": "Ellison was terminated from her position by John J. Ray III"
+    },
+    {
+      "name": "Nishad Singh",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "FTX executive",
+        "involvement": "Aware of FTX using customer money for Alameda liabilities"
+      },
+      "confidence": 0.95,
+      "context": "Nishad Singh and Gary Wang, were aware of the circumstances"
+    },
+    {
+      "name": "Gary Wang",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "FTX executive",
+        "involvement": "Pleaded guilty to several charges",
+        "plea_date": "December 18"
+      },
+      "confidence": 0.99,
+      "context": "FTX co-founder Gary Wang also pleaded guilty to several charges"
+    },
+    {
+      "name": "Stephanie Avakian",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Lead attorney for Caroline Ellison",
+        "organization": "WilmerHale"
+      },
+      "confidence": 0.95,
+      "context": "Ellison hired Stephanie Avakian of law firm WilmerHale as her lead attorney"
+    },
+    {
+      "name": "Ronnie Abrams",
+      "entity_type": "PERSON",
+      "attributes": {
+        "role": "Judge"
+      },
+      "confidence": 0.95,
+      "context": "she had admitted to judge Ronnie Abrams"
+    },
+    {
+      "name": "Forbes",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Publication",
+        "recognition_programs": [
+          "30 Under 30",
+          "Hall of Shame"
+        ]
+      },
+      "confidence": 0.99,
+      "context": "was listed on Forbes 30 Under 30"
+    },
+    {
+      "name": "WilmerHale",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Law firm"
+      },
+      "confidence": 0.95,
+      "context": "Stephanie Avakian of law firm WilmerHale"
+    },
+    {
+      "name": "FTX Foundation",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Philanthropic organization",
+        "program": "Future Fund",
+        "status": "Ceased operations"
+      },
+      "confidence": 0.95,
+      "context": "contributed to the FTX Foundation's Future Fund"
+    },
+    {
+      "name": "The New York Times",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Publication"
+      },
+      "confidence": 0.95,
+      "context": "The Wall Street Journal and The New York Times"
+    },
+    {
+      "name": "Business Insider",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Publication"
+      },
+      "confidence": 0.95,
+      "context": "Business Insider said that Ellison's alleged relationship with Bankman-Fried"
+    },
+    {
+      "name": "Good Morning America",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Media outlet"
+      },
+      "confidence": 0.95,
+      "context": "Bankman-Fried told Good Morning America"
+    },
+    {
+      "name": "The Washington Post",
+      "entity_type": "ORGANIZATION",
+      "attributes": {
+        "type": "Publication"
+      },
+      "confidence": 0.95,
+      "context": "The Washington Post reported that Ellison's sentence had been reduced"
+    },
+    {
+      "name": "Southern District of New York",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "Federal court jurisdiction"
+      },
+      "confidence": 0.95,
+      "context": "pleaded guilty in the Southern District of New York"
+    },
+    {
+      "name": "Connecticut",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "State",
+        "country": "United States",
+        "facility": "Federal prison"
+      },
+      "confidence": 0.95,
+      "context": "Ellison began serving her sentence at a prison in Connecticut"
+    },
+    {
+      "name": "North America",
+      "entity_type": "LOCATION",
+      "attributes": {
+        "type": "Region"
+      },
+      "confidence": 0.95,
+      "context": "Forbes 30 Under 30 – North America – Finance"
+    },
+    {
+      "name": "Forbes Hall of Shame",
+      "entity_type": "DOCUMENT",
+      "attributes": {
+        "type": "Recognition/Award",
+        "year": "2023",
+        "category": "North America – Finance"
+      },
+      "confidence": 0.95,
+      "context": "Named in Forbes \"Hall Of Shame\" – North America – Finance"
+    },
+    {
+      "name": "Plea hearing transcript",
+      "entity_type": "DOCUMENT",
+      "attributes": {
+        "type": "Legal document",
+        "unsealed_date": "December 23"
+      },
+      "confidence": 0.95,
+      "context": "A transcript of her plea hearing was unsealed on December 23"
+    },
+    {
+      "name": "CoinDesk balance sheet concerns",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "Financial/Legal event",
+        "date": "November 6, 2022",
+        "subject": "Alameda Research balance sheet and FTX relationship",
+        "outcome": "Ellison claimed additional $10 billion in assets"
+      },
+      "confidence": 0.95,
+      "context": "On 6 November 2022, after CoinDesk raised concerns about the balance sheet of Alameda Research"
+    },
+    {
+      "name": "Employee video meeting",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "Corporate event",
+        "date": "November 9, 2022",
+        "participants": [
+          "Caroline Ellison",
+          "FTX employees"
+        ],
+        "disclosure": "FTX used customer money for Alameda liabilities"
+      },
+      "confidence": 0.95,
+      "context": "Ellison was in a video meeting with employees on 9 November 2022"
+    },
+    {
+      "name": "FTX bankruptcy filing",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "Legal/Financial event",
+        "filing_type": "Chapter 11 bankruptcy",
+        "companies_involved": "FTX, Alameda Research, and more than 100 related companies",
+        "outcome": "Caroline Ellison terminated"
+      },
+      "confidence": 0.99,
+      "context": "FTX, Alameda Research, and more than 100 related companies filed for Chapter 11 bankruptcy"
+    },
+    {
+      "name": "Ellison plea hearing",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "Legal event",
+        "date": "December 18",
+        "year": "2022",
+        "charges": [
+          "Conspiracy to commit wire fraud on customers",
+          "Conspiracy to commit wire fraud on lenders",
+          "Wire fraud on lenders",
+          "Conspiracy to commit commodities fraud",
+          "Conspiracy to commit securities fraud",
+          "Conspiracy to commit money laundering"
+        ],
+        "outcome": "Guilty plea"
+      },
+      "confidence": 0.99,
+      "context": "On December 18, Ellison pleaded guilty in the Southern District of New York"
+    },
+    {
+      "name": "Gary Wang plea",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "Legal event",
+        "date": "December 18",
+        "year": "2022",
+        "participant": "Gary Wang",
+        "outcome": "Pleaded guilty to several charges"
+      },
+      "confidence": 0.95,
+      "context": "On that day, FTX co-founder Gary Wang also pleaded guilty to several charges"
+    },
+    {
+      "name": "Plea hearing transcript unsealing",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "Legal event",
+        "date": "December 23",
+        "year": "2022",
+        "disclosure": "Ellison admitted to conspiracy to steal billions from FTX customers"
+      },
+      "confidence": 0.95,
+      "context": "A transcript of her plea hearing was unsealed on December 23"
+    },
+    {
+      "name": "Bankman-Fried fraud trial",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "Legal event",
+        "date": "October 2023",
+        "defendant": "Sam Bankman-Fried",
+        "witness": "Caroline Ellison",
+        "side": "Prosecution"
+      },
+      "confidence": 0.95,
+      "context": "In October 2023, Ellison testified for the prosecution in the fraud trial of Bankman-Fried"
+    },
+    {
+      "name": "Ellison sentencing",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "Legal event",
+        "date": "September 24, 2024",
+        "sentence": "2 years in prison",
+        "forfeiture": "$11 billion"
+      },
+      "confidence": 0.99,
+      "context": "On September 24, 2024, Ellison was sentenced to serve two years in prison and ordered to forfeit $11 billion"
+    },
+    {
+      "name": "Ellison prison sentence commencement",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "Legal event",
+        "date": "Early November 2024",
+        "location": "Connecticut federal prison"
+      },
+      "confidence": 0.95,
+      "context": "Ellison began serving her sentence at a prison in Connecticut in early November 2024"
+    },
+    {
+      "name": "Ellison sentence reduction",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "Legal event",
+        "date": "December 2024",
+        "reduction": "Several months",
+        "source": "The Washington Post"
+      },
+      "confidence": 0.9,
+      "context": "In December 2024, The Washington Post reported that Ellison's sentence had been reduced by several months"
+    },
+    {
+      "name": "Ellison release",
+      "entity_type": "EVENT",
+      "attributes": {
+        "type": "Legal event",
+        "date": "January 22, 2026",
+        "time_served": "14 months in federal custody"
+      },
+      "confidence": 0.95,
+      "context": "After serving 14 months in federal custody, Ellison was released on January 22, 2026"
+    }
+  ],
+  "relations": [
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "Alameda Research",
+      "confidence": 0.99,
+      "evidence": "She was the CEO of Alameda Research"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Alameda Research",
+      "target_entity": "FTX",
+      "confidence": 0.99,
+      "evidence": "a trading firm affiliated with FTX"
+    },
+    {
+      "relation_type": "CREATED",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Alameda Research",
+      "confidence": 0.99,
+      "evidence": "founded by Sam Bankman-Fried"
+    },
+    {
+      "relation_type": "MEMBER_OF",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "MIT",
+      "confidence": 0.85,
+      "evidence": "She is the eldest of three daughters of Glenn and Sara Fisher Ellison, both economists at MIT"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "Boston",
+      "confidence": 0.99,
+      "evidence": "Ellison was born in Boston"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "Cambridge",
+      "confidence": 0.99,
+      "evidence": "grew up in nearby suburbs Cambridge and Newton"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "Newton",
+      "confidence": 0.99,
+      "evidence": "grew up in nearby suburbs Cambridge and Newton"
+    },
+    {
+      "relation_type": "MEMBER_OF",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "Stanford University",
+      "confidence": 0.99,
+      "evidence": "Ellison graduated from Stanford University in 2016"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "Jane Street",
+      "confidence": 0.99,
+      "evidence": "Ellison began her career in quantitative trading with two internships at Jane Street"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "Sam Bankman-Fried",
+      "confidence": 0.99,
+      "evidence": "Ellison and Bankman-Fried bonded over an interest in effective altruism and remained in contact"
+    },
+    {
+      "relation_type": "MEMBER_OF",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "Centre for Effective Altruism",
+      "confidence": 0.85,
+      "evidence": "Ellison and Bankman-Fried bonded over an interest in effective altruism"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "International Linguistics Olympiad",
+      "confidence": 0.99,
+      "evidence": "she represented the US in the 2011 International Linguistics Olympiad"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "American Mathematics Competitions",
+      "confidence": 0.99,
+      "evidence": "In 2008, Ellison received top honors in the American Mathematics Competitions"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "Putnam Competitions",
+      "confidence": 0.99,
+      "evidence": "she scored in the top 500 students in the 2013, 2014, and 2015 Putnam Competitions"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "Math Prize for Girls",
+      "confidence": 0.99,
+      "evidence": "She represented Newton several times in the Math Prize for Girls"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "Forbes 30 Under 30",
+      "confidence": 0.99,
+      "evidence": "In November 2022, Ellison, together with Sam Trabucco, was listed on Forbes 30 Under 30"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "Sentencing of Caroline Ellison",
+      "confidence": 0.99,
+      "evidence": "On September 24, 2024, Ellison was sentenced to two years in prison"
+    },
+    {
+      "relation_type": "RELATED_TO",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "FTX Bankruptcy",
+      "confidence": 0.99,
+      "evidence": "pleaded guilty to fraud in 2023 in relation to the bankruptcy of FTX"
+    },
+    {
+      "relation_type": "MEMBER_OF",
+      "source_entity": "Glenn Ellison",
+      "target_entity": "MIT",
+      "confidence": 0.99,
+      "evidence": "Glenn and Sara Fisher Ellison, both economists at MIT"
+    },
+    {
+      "relation_type": "MEMBER_OF",
+      "source_entity": "Sara Fisher Ellison",
+      "target_entity": "MIT",
+      "confidence": 0.99,
+      "evidence": "Glenn and Sara Fisher Ellison, both economists at MIT"
+    },
+    {
+      "relation_type": "CREATED",
+      "source_entity": "Tara Mac Aulay",
+      "target_entity": "Alameda Research",
+      "confidence": 0.99,
+      "evidence": "co-founded in November 2017 by Bankman-Fried and effective altruism colleague Tara Mac Aulay"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Jane Street",
+      "confidence": 0.99,
+      "evidence": "Sam Bankman-Fried, who left the firm a year later"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Sam Bankman-Fried",
+      "target_entity": "Centre for Effective Altruism",
+      "confidence": 0.99,
+      "evidence": "he pitched her on joining Alameda Research, a cryptocurrency hedge fund co-founded in November 2017 by Bankman-Fried and effective altruism colleague Tara Mac Aulay"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Sam Trabucco",
+      "target_entity": "Alameda Research",
+      "confidence": 0.99,
+      "evidence": "She became co-CEO along with Sam Trabucco in October 2021"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Jane Street",
+      "target_entity": "New York City",
+      "confidence": 0.99,
+      "evidence": "Jane Street, a proprietary trading firm in New York City"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Centre for Effective Altruism",
+      "target_entity": "Berkeley, California",
+      "confidence": 0.99,
+      "evidence": "Centre for Effective Altruism in Berkeley, California"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "Sam Trabucco",
+      "confidence": 0.95,
+      "evidence": "together with Sam Trabucco, was listed on Forbes 30 Under 30"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "Forbes 30 Under 30",
+      "confidence": 0.95,
+      "evidence": "was listed on Forbes 30 Under 30"
+    },
+    {
+      "relation_type": "MENTIONED_IN",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "Forbes Hall of Shame",
+      "confidence": 0.95,
+      "evidence": "placing Ellison on its Hall of Shame"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "Alameda Research",
+      "confidence": 0.9,
+      "evidence": "Ellison was in a video meeting with employees... she admitted there that FTX had used customer money to help Alameda meet its liabilities"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "FTX",
+      "confidence": 0.9,
+      "evidence": "Ellison was terminated from her position by John J. Ray III after FTX... filed for Chapter 11 bankruptcy"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "Sam Bankman-Fried",
+      "confidence": 0.85,
+      "evidence": "she, Bankman-Fried, and two other FTX executives, Nishad Singh and Gary Wang, were aware of the circumstances"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "Nishad Singh",
+      "confidence": 0.85,
+      "evidence": "she, Bankman-Fried, and two other FTX executives, Nishad Singh and Gary Wang, were aware of the circumstances"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "Gary Wang",
+      "confidence": 0.85,
+      "evidence": "she, Bankman-Fried, and two other FTX executives, Nishad Singh and Gary Wang, were aware of the circumstances"
+    },
+    {
+      "relation_type": "EMPLOYED_BY",
+      "source_entity": "Stephanie Avakian",
+      "target_entity": "WilmerHale",
+      "confidence": 0.95,
+      "evidence": "Ellison hired Stephanie Avakian of law firm WilmerHale as her lead attorney"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "Ellison plea hearing",
+      "confidence": 0.95,
+      "evidence": "On December 18, Ellison pleaded guilty in the Southern District of New York"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Gary Wang",
+      "target_entity": "Gary Wang plea",
+      "confidence": 0.95,
+      "evidence": "On that day, FTX co-founder Gary Wang also pleaded guilty to several charges"
+    },
+    {
+      "relation_type": "PARTICIPATED_IN",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "Bankman-Fried fraud trial",
+      "confidence": 0.95,
+      "evidence": "In October 2023, Ellison testified for the prosecution in the fraud trial of Bankman-Fried"
+    },
+    {
+      "relation_type": "LOCATED_IN",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "Connecticut",
+      "confidence": 0.9,
+      "evidence": "Ellison began serving her sentence at a prison in Connecticut in early November 2024"
+    },
+    {
+      "relation_type": "ASSOCIATED_WITH",
+      "source_entity": "Caroline Ellison",
+      "target_entity": "FTX Foundation",
+      "confidence": 0.85,
+      "evidence": "Ellison, along with FTX senior employees, contributed to the FTX Foundation's Future Fund"
+    }
+  ],
+  "cost_usd": 0.05964900000000001,
+  "model_used": "anthropic/claude-haiku-4-5-20251001",
+  "error": null
+}

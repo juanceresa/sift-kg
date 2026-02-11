@@ -1,0 +1,69 @@
+proposals:
+- canonical_id: organization:binance_holdings_ltd
+  canonical_name: Binance Holdings Ltd.
+  entity_type: ORGANIZATION
+  status: REJECTED
+  members:
+  - id: organization:gulf_binance
+    name: Gulf Binance
+    confidence: 0.75
+  reason: Gulf Binance appears to be a regional subsidiary or operation of Binance
+    Holdings Ltd., sharing the Binance brand name
+- canonical_id: organization:ftx_trading_ltd
+  canonical_name: FTX Trading Ltd.
+  entity_type: ORGANIZATION
+  status: CONFIRMED
+  members:
+  - id: organization:ftx_arena
+    name: FTX Arena
+    confidence: 0.95
+  - id: organization:ftx_foundation
+    name: FTX Foundation
+    confidence: 0.95
+  - id: organization:ftx_future_fund
+    name: FTX Future Fund
+    confidence: 0.95
+  - id: organization:ftx_ventures
+    name: FTX Ventures
+    confidence: 0.95
+  reason: FTX Arena, Foundation, Future Fund, and Ventures are all subsidiary entities
+    or initiatives of FTX Trading Ltd., the main FTX organization
+- canonical_id: organization:centre_for_effective_altruism
+  canonical_name: Centre for Effective Altruism
+  entity_type: ORGANIZATION
+  status: CONFIRMED
+  members:
+  - id: organization:giving_what_we_can
+    name: Giving What We Can
+    confidence: 0.7
+  reason: Giving What We Can is a project/initiative of the Centre for Effective Altruism
+- canonical_id: person:brian_shroder
+  canonical_name: Brian Shroder
+  entity_type: PERSON
+  status: REJECTED
+  members:
+  - id: person:catherine_coley
+    name: Catherine Coley
+    confidence: 0.6
+  reason: Both listed as CEO of Binance.US, likely representing different time periods
+    or one may be an error in the source data
+- canonical_id: person:changpeng_zhao
+  canonical_name: Changpeng Zhao
+  entity_type: PERSON
+  status: REJECTED
+  members:
+  - id: person:richard_teng
+    name: Richard Teng
+    confidence: 0.5
+  reason: Both listed as CEO of Binance; Richard Teng may be successor or replacement
+    CEO
+- canonical_id: person:glenn_ellison
+  canonical_name: Glenn Ellison
+  entity_type: PERSON
+  status: REJECTED
+  members:
+  - id: person:sara_fisher_ellison
+    name: Sara Fisher Ellison
+    confidence: 0.7
+  reason: Both economists at MIT with same surname; likely married couple but distinct
+    individuals - should NOT be merged
