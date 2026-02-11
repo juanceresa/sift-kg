@@ -11,11 +11,7 @@ open output/graph.html     # macOS
 xdg-open output/graph.html # Linux
 ```
 
-Read the generated narrative:
-
-```bash
-cat output/narrative.md
-```
+Or with sift installed: `sift view --output examples/ftx/output`
 
 ## What's Here
 
