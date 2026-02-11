@@ -1,0 +1,86 @@
+name: "General Purpose"
+version: "1.0.0"
+description: |
+  Default domain for general document analysis. Works with any corpus
+  without domain-specific configuration. Entity and relation types cover
+  the most common patterns found in documents.
+
+entity_types:
+  PERSON:
+    description: "Individual people mentioned in documents"
+    extraction_hints:
+      - "Look for full names, titles, roles, and any biographical details"
+      - "Include birth/death dates, occupations, and affiliations when mentioned"
+
+  ORGANIZATION:
+    description: "Companies, institutions, government bodies, NGOs"
+    extraction_hints:
+      - "Include full official names and common abbreviations"
+      - "Note the type of organization (company, agency, university, etc.)"
+
+  LOCATION:
+    description: "Geographic places — cities, countries, addresses, regions"
+    extraction_hints:
+      - "Include both specific addresses and general locations"
+      - "Note hierarchical relationships (city in country)"
+
+  DOCUMENT:
+    description: "Referenced documents, records, filings, publications"
+    extraction_hints:
+      - "Include document identifiers, dates, and issuing authorities"
+
+  EVENT:
+    description: "Significant occurrences with dates — meetings, transactions, decisions"
+    extraction_hints:
+      - "Capture the date, participants, and outcome when available"
+      - "Note the type of event (legal, financial, political, personal)"
+
+relation_types:
+  ASSOCIATED_WITH:
+    description: "General association between entities"
+    source_types: [PERSON, ORGANIZATION, LOCATION]
+    target_types: [PERSON, ORGANIZATION, LOCATION]
+    symmetric: true
+
+  MEMBER_OF:
+    description: "Person belongs to or is employed by an organization"
+    source_types: [PERSON]
+    target_types: [ORGANIZATION]
+
+  EMPLOYED_BY:
+    description: "Person is employed by an organization"
+    source_types: [PERSON]
+    target_types: [ORGANIZATION]
+
+  LOCATED_IN:
+    description: "Entity is located within a geographic area"
+    source_types: [ORGANIZATION, LOCATION, EVENT]
+    target_types: [LOCATION]
+
+  PARTICIPATED_IN:
+    description: "Person or organization participated in an event"
+    source_types: [PERSON, ORGANIZATION]
+    target_types: [EVENT]
+
+  MENTIONED_IN:
+    description: "Entity is mentioned in a document"
+    source_types: [PERSON, ORGANIZATION, LOCATION, EVENT]
+    target_types: [DOCUMENT]
+
+  OWNS:
+    description: "Person or organization owns property or assets"
+    source_types: [PERSON, ORGANIZATION]
+    target_types: [ORGANIZATION, LOCATION]
+
+  CREATED:
+    description: "Person or organization created a document or entity"
+    source_types: [PERSON, ORGANIZATION]
+    target_types: [DOCUMENT, ORGANIZATION]
+
+  RELATED_TO:
+    description: "Family or personal relationship between people"
+    source_types: [PERSON]
+    target_types: [PERSON]
+    symmetric: true
+    extraction_hints:
+      - "Note the specific relationship type (spouse, parent, sibling, etc.)"
