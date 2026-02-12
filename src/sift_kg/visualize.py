@@ -29,10 +29,26 @@ DEFAULT_ENTITY_COLOR = "#B0BEC5"
 
 # Distinct edge color palette — auto-assigned to relation types
 EDGE_PALETTE = [
-    "#4CAF50", "#FF7043", "#42A5F5", "#AB47BC", "#26A69A",
-    "#EC407A", "#FFA726", "#66BB6A", "#7E57C2", "#29B6F6",
-    "#EF5350", "#8D6E63", "#78909C", "#FFCA28", "#5C6BC0",
-    "#D4E157", "#26C6DA", "#FF8A65", "#9CCC65", "#CE93D8",
+    "#4CAF50",
+    "#FF7043",
+    "#42A5F5",
+    "#AB47BC",
+    "#26A69A",
+    "#EC407A",
+    "#FFA726",
+    "#66BB6A",
+    "#7E57C2",
+    "#29B6F6",
+    "#EF5350",
+    "#8D6E63",
+    "#78909C",
+    "#FFCA28",
+    "#5C6BC0",
+    "#D4E157",
+    "#26C6DA",
+    "#FF8A65",
+    "#9CCC65",
+    "#CE93D8",
 ]
 
 
@@ -58,17 +74,18 @@ def generate_view(
     entity_descriptions: dict[str, str] = {}
     if descriptions_path and descriptions_path.exists():
         import json
+
         entity_descriptions = json.loads(descriptions_path.read_text())
         logger.info(f"Loaded {len(entity_descriptions)} entity descriptions for viewer")
     try:
         from pyvis.network import Network
     except ImportError as exc:
         raise ImportError(
-            "pyvis is required for graph visualization.\n"
-            "Install it with: pip install pyvis"
+            "pyvis is required for graph visualization.\nInstall it with: pip install pyvis"
         ) from exc
 
     from sift_kg.graph.postprocessor import strip_metadata
+
     kg = strip_metadata(kg)
 
     net = Network(
@@ -212,9 +229,10 @@ def generate_view(
             edge_confidence=float(confidence) if isinstance(confidence, (int, float)) else 0,
         )
 
-    # Write HTML then inject UI
+    # Write HTML then inject UI + fix Firefox height
     output_path.parent.mkdir(parents=True, exist_ok=True)
     net.write_html(str(output_path))
+    _fix_firefox_height(output_path)
     _inject_ui(output_path, kg, entity_types_present, rel_color_map)
 
     logger.info(
@@ -226,6 +244,18 @@ def generate_view(
         webbrowser.open(f"file://{output_path.resolve()}")
 
     return output_path
+
+
+def _fix_firefox_height(html_path: Path) -> None:
+    """Fix graph container height for Firefox.
+
+    pyvis sets #mynetwork to height:100% but doesn't set explicit heights
+    on html/body/parent elements. Chrome infers the height, Firefox doesn't.
+    """
+    html = html_path.read_text()
+    fix_css = "<style>html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; } .card { height: 100%; }</style>"
+    html = html.replace("</head>", f"{fix_css}\n</head>")
+    html_path.write_text(html)
 
 
 def _inject_ui(
@@ -245,7 +275,7 @@ def _inject_ui(
             f'<input type="checkbox" checked data-etype="{et}" onchange="toggleEntityType(this)">'
             f'<input type="color" value="{color}" data-etype-color="{et}" onchange="changeEntityColor(this)">'
             f'<span class="type-label">{et}</span>'
-            f'</div>'
+            f"</div>"
         )
 
     # Relation type controls
@@ -257,7 +287,7 @@ def _inject_ui(
             f'<input type="checkbox" checked data-rtype="{rt}" onchange="toggleRelationType(this)">'
             f'<input type="color" value="{color}" data-rtype-color="{rt}" onchange="changeRelationColor(this)">'
             f'<span class="type-label">{rt}</span>'
-            f'</div>'
+            f"</div>"
         )
 
     controls_html = f"""
