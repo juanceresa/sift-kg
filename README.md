@@ -69,7 +69,7 @@ sift extract ./docs/ --domain-name osint
 
 The human-in-the-loop merge review is designed for this — the LLM proposes, you verify. Nothing gets merged without your approval, and every extraction links back to the source document and passage.
 
-See [`examples/ftx/`](examples/ftx/) for a complete pipeline run on 9 articles about the FTX collapse (373 entities, 1184 relations). Open `examples/ftx/output/graph.html` in your browser to explore — no API key needed.
+See [`examples/ftx/`](examples/ftx/) for a complete pipeline run on 9 articles about the FTX collapse (373 entities, 1184 relations). [**Explore the graph live**](https://juanceresa.github.io/sift-kg/graph.html) — no install, no API key.
 
 ## Civic Table
 
