@@ -1,8 +1,8 @@
 # sift-kg
 
-**Turn any pile of documents into a knowledge graph.**
+**Turn any collection of documents into a knowledge graph.**
 
-Domain-configurable entity extraction, human-in-the-loop entity resolution, and narrative generation — from the command line.
+No code, no database, no infrastructure — just a CLI and your documents. Define what to extract in YAML (or use the built-in defaults), and get a browsable, exportable knowledge graph. sift-kg handles the rest: entity extraction, duplicate resolution with your approval, and narrative generation that traces connections across your entire collection.
 
 ```bash
 pip install sift-kg
@@ -58,6 +58,18 @@ Every entity and relation links back to the source document and passage. You con
 - **Academic research** — build structured datasets from historical archives
 - **Legal review** — extract and connect entities across document collections
 - **Genealogy** — trace family relationships across vital records
+
+## For OSINT & Investigations
+
+sift-kg ships with a bundled `osint` domain that adds entity types for shell companies, financial instruments, and government agencies, plus relation types like `BENEFICIAL_OWNER_OF` and `SANCTIONS_LISTED`:
+
+```bash
+sift extract ./docs/ --domain-name osint
+```
+
+The human-in-the-loop merge review is designed for this — the LLM proposes, you verify. Nothing gets merged without your approval, and every extraction links back to the source document and passage.
+
+See [`examples/ftx/`](examples/ftx/) for a complete pipeline run on 9 articles about the FTX collapse (373 entities, 1184 relations). Open `examples/ftx/output/graph.html` in your browser to explore — no API key needed.
 
 ## Civic Table
 
