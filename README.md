@@ -347,10 +347,11 @@ sift review
 
 Walks through each `DRAFT` proposal one by one. For each, you see the canonical entity, the proposed merge members, the LLM's confidence and reasoning. You approve, reject, or skip.
 
-High-confidence proposals (>0.85 by default) can be auto-approved, and low-confidence relations can be auto-rejected:
+High-confidence proposals (>0.85 by default) are auto-approved, and low-confidence relations (<=0.5 by default) are auto-rejected:
 ```bash
-sift review --auto-approve 0.90    # auto-confirm proposals above 90% confidence
-sift review --auto-reject 0.3      # auto-reject relations below 30% confidence
+sift review                        # uses defaults: --auto-approve 0.85, --auto-reject 0.5
+sift review --auto-approve 0.90    # raise the auto-approve threshold
+sift review --auto-reject 0.3      # lower the auto-reject threshold
 sift review --auto-approve 1.0     # disable auto-approve, review everything manually
 ```
 
