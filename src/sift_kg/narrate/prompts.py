@@ -3,6 +3,17 @@
 import json
 from typing import Any
 
+# Shared across all prompts — single source of truth for banned phrases.
+_BANNED_PHRASES = """BANNED PHRASES — using any of these is an instant quality failure:
+- "played a [significant/pivotal/key/central/crucial/important] role"
+- "served as" — replace with direct verbs (represented, managed, ran, worked at)
+- "highlighting", "underscoring", "indicating", "suggesting"
+- "as evidenced by", "the documents reveal", "records show", "the source material indicates"
+- "is associated with", "is mentioned in", "in the context of"
+- "is significant as", "is noted for", "is identified as", "is a key figure"
+- "this suggests", "this indicates", "this highlights"
+- Any sentence that could describe anyone — if you can swap the name and it's still true, rewrite it."""
+
 
 def build_narrative_prompt(
     entities: list[dict[str, Any]],
@@ -78,16 +89,17 @@ TOP ENTITIES (ranked by connectivity):{entity_summary}
 KEY RELATIONS:
 {relations_text}
 {source_excerpts_section}
-Write an overview (3-5 paragraphs) like an investigative journalist briefing an editor. Be direct, specific, and assertive.
+Write an overview (3-5 paragraphs) like an investigative journalist briefing an editor.
 
 Rules:
-1. Name names. Describe what people did, who they worked with, where things happened.
-2. Trace the key connections — who links to whom and through what.
+1. Name names. Describe what people DID — recruited, testified, traveled, filed, paid — not what they "are connected to."
+2. Trace the key connections — who links to whom and through what specific actions.
 3. Identify clusters of activity and what they reveal.
 4. Use the source excerpts for specific details, quotes, and evidence.
-5. NEVER use: "is associated with", "highlighting", "underscoring", "indicating", "in the context of", "is significant as", "this suggests."
-6. NEVER reference the documents themselves — no "the documents reveal", "records show", "as evidenced by."
-7. State facts. Be specific. No hedging, no filler.
+5. NEVER reference the documents themselves — no "the documents reveal", "records show", "as evidenced by."
+6. State facts. Be specific. No hedging, no filler, no meta-commentary about the case.
+
+{_BANNED_PHRASES}
 
 Output ONLY the narrative prose. No headers, no bullet points, no metadata."""
 
@@ -114,17 +126,19 @@ def build_entity_description_prompt(
     """
     attrs_text = json.dumps(attributes, indent=2, ensure_ascii=False) if attributes else "None"
 
-    # Format relations as readable sentences, grouping by direction
+    # Format relations with evidence, grouping by direction
     outgoing = []
     incoming = []
     for r in relations[:40]:
         rel = r.get("relation_type", "?")
         src = r.get("source_name", "?")
         tgt = r.get("target_name", "?")
+        evidence = r.get("evidence", "")
+        evidence_note = f' — "{evidence}"' if evidence else ""
         if src == entity_name:
-            outgoing.append(f"- {rel} → {tgt}")
+            outgoing.append(f"- {rel} → {tgt}{evidence_note}")
         else:
-            incoming.append(f"- {src} → {rel}")
+            incoming.append(f"- {src} → {rel}{evidence_note}")
     rel_parts = []
     if outgoing:
         rel_parts.extend(outgoing)
@@ -158,7 +172,12 @@ ATTRIBUTES: {attrs_text}
 CONNECTIONS:
 {relations_text}
 
-Length: Proportional to evidence. Rich source material = multiple paragraphs. Thin evidence = 2-3 sentences. Never pad.
+LENGTH — THIS IS CRITICAL:
+You MUST write proportionally to the evidence provided above. Count the source excerpts and connections.
+- 15+ source excerpts or 20+ connections → write 4-6 detailed paragraphs. USE the quotes. Trace the timeline. Name every person they interacted with.
+- 5-15 source excerpts → write 2-4 paragraphs.
+- Under 5 excerpts → write 2-5 sentences. Don't invent details.
+"Never pad" means don't add filler — it does NOT mean be brief. If you have 30 source quotes and write one paragraph, you failed.
 
 OPENING SENTENCE — THIS IS CRITICAL:
 Your first sentence must be a concrete action or fact. Never a role description.
@@ -168,20 +187,10 @@ Your first sentence must be a concrete action or fact. Never a role description.
 - Good: "Ghislaine Maxwell recruited underage girls for Epstein, trained them in massage techniques, and traveled with them internationally."
 - Bad: "Laura Menninger is a key legal figure in the case." → Wikipedia summary voice.
 - Good: "Laura Menninger represented Ghislaine Maxwell in the Giuffre v. Maxwell defamation suit, filing motions to seal depositions and challenging witness credibility."
-- Bad: "The FBI investigated Epstein." → Too vague.
-- Good: "The FBI opened an investigation into Epstein in 2006 after Palm Beach police referred the case, interviewing over 30 victims."
 
 STYLE: Every sentence must contain a SPECIFIC VERB describing what someone DID, SAID, WENT, FILED, RECRUITED, TESTIFIED, PAID, FLEW, etc. If you catch yourself writing "was involved in" or "was connected to" — replace it with the actual action.
 
-BANNED PATTERNS (instant fail):
-- "[Name] played a [significant/pivotal/key/central/crucial/important] role" — NEVER. Say what they DID.
-- "[Name] is a [key/significant/important/notable] [figure/person/entity]" — NEVER. Say what they DID.
-- "[Name] served as" — replace with active verbs (represented, defended, managed, ran)
-- "as evidenced by", "the documents reveal", "court records show", "the source material indicates"
-- "is associated with", "is mentioned in", "in the context of", "highlighting", "indicating", "underscoring"
-- "is significant as", "is noted for", "is identified as", "this suggests", "this indicates"
-- "also known as" in the opening — weave aliases in naturally or skip them
-- Any sentence where you could swap the person's name and it would still be true. That means it's generic.
+{_BANNED_PHRASES}
 
 RULES:
 - ONLY use facts from the source evidence. No outside knowledge.
@@ -208,9 +217,15 @@ def build_relationship_chain_prompt(
     chain_descriptions = []
     all_entity_names: set[str] = set()
     for i, chain in enumerate(chains, 1):
-        names = [e["name"] for e in chain]
-        all_entity_names.update(n.lower().strip() for n in names)
-        path_str = " \u2192 ".join(names)
+        all_entity_names.update(e["name"].lower().strip() for e in chain)
+        # Build path with edge labels: "A --[REL]--> B --[REL]--> C"
+        parts = []
+        for e in chain:
+            parts.append(e["name"])
+            edge_type = e.get("_edge_to_next")
+            if edge_type:
+                parts.append(f"--[{edge_type}]-->")
+        path_str = " ".join(parts)
         chain_descriptions.append(f"Chain {i}: {path_str}")
 
     chains_text = "\n".join(chain_descriptions)
@@ -235,15 +250,17 @@ def build_relationship_chain_prompt(
 CHAINS:
 {chains_text}
 {contexts_section}
-Write one paragraph per chain. For each, explain HOW these entities connect — what the intermediaries did, what role they played, why this chain matters.
+Write one paragraph per chain. For each, explain HOW these entities connect — what the intermediaries did, what specific actions link them.
 
 Rules:
 - Write like investigative journalism. Be direct and specific.
 - Don't just list the chain — narrate it. What happened along this path?
 - Use source excerpts for concrete details where available.
-- NEVER use: "is associated with", "highlighting", "underscoring", "indicating", "in the context of."
 - NEVER reference documents — no "records show", "documents reveal."
 - If a chain's connection is trivial or unclear from the evidence, write a shorter paragraph acknowledging the link without inventing details.
+- Do NOT end paragraphs with meta-commentary like "this chain matters because" or "this illustrates the complexity of."
+
+{_BANNED_PHRASES}
 
 Output ONLY the narrative paragraphs, one per chain. No headers, no bullet points, no chain labels."""
 
@@ -312,7 +329,9 @@ Write a narrative timeline (flowing prose, not bullet points) that connects thes
 Rules:
 - Write like investigative journalism — direct, specific, no hedging.
 - Include dates and names. Be concrete.
-- NEVER use: "highlighting", "underscoring", "indicating", "in the context of."
 - Connect events into a story, don't just restate the list.
+- Do NOT end with a summary paragraph reflecting on "the broader narrative" or "the full scope." Just end with the last event.
+
+{_BANNED_PHRASES}
 
 Output ONLY the narrative timeline."""

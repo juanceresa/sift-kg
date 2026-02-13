@@ -325,24 +325,47 @@ def _find_relationship_chains(
         if len(selected) >= 6:
             break
 
-    # Convert node IDs to entity dicts
+    # Convert node IDs to entity dicts, including edge types between hops
     entity_map = {e["id"]: e for e in entities}
     result: list[list[dict[str, Any]]] = []
     for path in selected:
         chain: list[dict[str, Any]] = []
-        for nid in path:
+        for idx, nid in enumerate(path):
             if nid in entity_map:
-                chain.append(entity_map[nid])
+                node = dict(entity_map[nid])
             else:
                 node_data = kg.graph.nodes.get(nid, {})
-                chain.append({
+                node = {
                     "id": nid,
                     "name": node_data.get("name", nid),
                     "entity_type": node_data.get("entity_type", "UNKNOWN"),
-                })
+                }
+            # Attach the relation type to the next hop
+            if idx < len(path) - 1:
+                next_nid = path[idx + 1]
+                edge_type = _get_edge_type(kg, nid, next_nid)
+                node["_edge_to_next"] = edge_type
+            chain.append(node)
         result.append(chain)
 
     return result
+
+
+def _get_edge_type(kg: KnowledgeGraph, src: str, tgt: str) -> str:
+    """Get the relation type between two nodes (checking both directions)."""
+    # Check src → tgt
+    if kg.graph.has_edge(src, tgt):
+        for _key, data in kg.graph[src][tgt].items():
+            rel = data.get("relation_type", "")
+            if rel and rel != "MENTIONED_IN":
+                return rel
+    # Check tgt → src
+    if kg.graph.has_edge(tgt, src):
+        for _key, data in kg.graph[tgt][src].items():
+            rel = data.get("relation_type", "")
+            if rel and rel != "MENTIONED_IN":
+                return rel
+    return "CONNECTED_TO"
 
 
 # ---------------------------------------------------------------------------
@@ -363,7 +386,20 @@ def _detect_communities(
     Returns None if detection fails or produces <=1 community.
     """
     try:
-        undirected = kg.graph.to_undirected()
+        # Build subgraph excluding DOCUMENT nodes and MENTIONED_IN edges
+        # to prevent co-mention from distorting community structure
+        non_doc_nodes = [
+            nid for nid, data in kg.graph.nodes(data=True)
+            if data.get("entity_type") != "DOCUMENT"
+        ]
+        subgraph = kg.graph.subgraph(non_doc_nodes).copy()
+        # Remove any remaining MENTIONED_IN edges
+        edges_to_remove = [
+            (u, v, k) for u, v, k, d in subgraph.edges(keys=True, data=True)
+            if d.get("relation_type") == "MENTIONED_IN"
+        ]
+        subgraph.remove_edges_from(edges_to_remove)
+        undirected = subgraph.to_undirected()
         raw_communities = nx.community.louvain_communities(undirected)
     except Exception as e:
         logger.debug(f"Community detection failed: {e}")
@@ -568,6 +604,7 @@ async def _agenerate_entity_descriptions(
                     "source_name": source_data.get("name", r["source"]),
                     "target_name": target_data.get("name", r["target"]),
                     "relation_type": r.get("relation_type", ""),
+                    "evidence": r.get("evidence", ""),
                 })
 
             # Get source text quotes for this entity

@@ -122,7 +122,8 @@ ENTITY TYPES:
 STEP 2 — RELATIONS
 Identify relationships between the entities you extracted.
 
-RELATION TYPES: {rel_types}
+RELATION TYPES (use ONLY these — do not invent new types): {rel_types}
+If a relationship doesn't fit any listed type, use ASSOCIATED_WITH as the fallback.
 
 OUTPUT SCHEMA:
 {{
@@ -195,7 +196,8 @@ def build_relation_prompt(
 
     return f"""{context_section}Extract relationships between entities from this document. Return valid JSON only.
 
-RELATION TYPES: {rel_types}
+RELATION TYPES (use ONLY these — do not invent new types): {rel_types}
+If a relationship doesn't fit any listed type, use ASSOCIATED_WITH as the fallback.
 
 OUTPUT SCHEMA:
 {{

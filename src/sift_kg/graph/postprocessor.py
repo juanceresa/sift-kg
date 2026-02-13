@@ -4,9 +4,11 @@ Implements Chilean KG paper (arXiv:2408.11975) cleanup rules:
 - Remove self-loops
 - Remove transitive redundant edges
 - Prune isolated entities with no substantive connections
+- Normalize undefined relation types to domain-defined types
 """
 
 import logging
+from typing import Any
 
 import networkx as nx
 
@@ -22,6 +24,28 @@ TRANSITIVE_RELATIONS = {"LOCATED_IN"}
 # Edge types that don't count as substantive connections for pruning.
 # MENTIONED_IN just links entities to their source documents.
 METADATA_RELATIONS = {"MENTIONED_IN"}
+
+# Common LLM-invented relation types → canonical mappings.
+# Applied when a domain defines relation types and the LLM ignores constraints.
+_RELATION_SYNONYMS: dict[str, str] = {
+    "DEFENDED_BY": "ASSOCIATED_WITH",
+    "DEFENDS": "ASSOCIATED_WITH",
+    "REPRESENTS": "ASSOCIATED_WITH",
+    "REPRESENTED_BY": "ASSOCIATED_WITH",
+    "DEFENDANT_IN": "PARTICIPATED_IN",
+    "FRIEND_OF": "ASSOCIATED_WITH",
+    "MARRIED_TO": "ASSOCIATED_WITH",
+    "GAVE_TO": "ASSOCIATED_WITH",
+    "SENT_TO": "ASSOCIATED_WITH",
+    "TOLD_TO": "ASSOCIATED_WITH",
+    "INVESTIGATED": "ASSOCIATED_WITH",
+    "SUBPOENAED": "ASSOCIATED_WITH",
+    "TREATED_BY": "ASSOCIATED_WITH",
+    "OWNED": "OWNS",
+    "STAYED_AT": "RESIDED_AT",
+    "REGISTERED_AT": "LOCATED_IN",
+    "TRAVELED_FROM": "TRAVELED_TO",
+}
 
 
 def strip_metadata(kg: KnowledgeGraph) -> KnowledgeGraph:
@@ -163,6 +187,58 @@ def prune_isolated_entities(
     if stats["entities_pruned"]:
         logger.info(
             f"Post-processing: pruned {stats['entities_pruned']} isolated entities"
+        )
+
+    return stats
+
+
+def normalize_relation_types(
+    kg: KnowledgeGraph,
+    domain_types: set[str] | None = None,
+    dry_run: bool = False,
+) -> dict[str, Any]:
+    """Normalize undefined relation types to domain-defined types.
+
+    Uses synonym mapping first, then falls back to ASSOCIATED_WITH for
+    any relation type not in the domain's defined set.
+
+    Args:
+        kg: KnowledgeGraph to clean (modified in place unless dry_run)
+        domain_types: Set of valid relation type names from domain config.
+            If None, only applies synonym mapping without fallback.
+        dry_run: Report stats without modifying graph
+
+    Returns:
+        Stats dict with normalization counts
+    """
+    stats: dict[str, Any] = {"normalized": 0, "mappings": {}}
+    valid = domain_types or set()
+
+    for source, target, key, data in list(kg.graph.edges(data=True, keys=True)):
+        rel_type = data.get("relation_type", "")
+        if not rel_type or rel_type in METADATA_RELATIONS:
+            continue
+        if valid and rel_type in valid:
+            continue
+
+        # Try synonym mapping first
+        mapped = _RELATION_SYNONYMS.get(rel_type)
+        if not mapped and valid:
+            mapped = "ASSOCIATED_WITH"
+        if not mapped:
+            continue
+
+        stats["normalized"] += 1
+        stats["mappings"][rel_type] = mapped
+
+        if not dry_run:
+            kg.graph.edges[source, target, key]["relation_type"] = mapped
+
+    if stats["normalized"]:
+        unique = {f"{k} → {v}" for k, v in stats["mappings"].items()}
+        logger.info(
+            f"Post-processing: normalized {stats['normalized']} relations "
+            f"({len(unique)} types: {', '.join(sorted(unique))})"
         )
 
     return stats

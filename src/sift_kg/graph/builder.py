@@ -11,7 +11,11 @@ from unidecode import unidecode
 
 from sift_kg.extract.models import DocumentExtraction
 from sift_kg.graph.knowledge_graph import KnowledgeGraph
-from sift_kg.graph.postprocessor import prune_isolated_entities, remove_redundant_edges
+from sift_kg.graph.postprocessor import (
+    normalize_relation_types,
+    prune_isolated_entities,
+    remove_redundant_edges,
+)
 from sift_kg.graph.prededup import prededup_entities
 
 logger = logging.getLogger(__name__)
@@ -42,12 +46,15 @@ def _make_relation_id(
 def build_graph(
     extractions: list[DocumentExtraction],
     postprocess: bool = True,
+    domain_relation_types: set[str] | None = None,
 ) -> KnowledgeGraph:
     """Build knowledge graph from extraction results.
 
     Args:
         extractions: List of document extractions
         postprocess: Whether to remove redundant edges
+        domain_relation_types: Valid relation type names from domain config.
+            If provided, undefined types are normalized to defined ones.
 
     Returns:
         Populated KnowledgeGraph
@@ -149,6 +156,9 @@ def build_graph(
         stats.update(cleanup)
         prune = prune_isolated_entities(kg)
         stats.update(prune)
+        if domain_relation_types:
+            norm = normalize_relation_types(kg, domain_relation_types)
+            stats.update(norm)
 
     logger.info(
         f"Graph built: {stats['documents']} docs → "

@@ -75,7 +75,8 @@ def run_build(
     if not extractions:
         raise FileNotFoundError(f"No extractions found in {output_dir / 'extractions'}")
 
-    kg = build_graph(extractions, postprocess=postprocess)
+    domain_rel_types = set(domain.relation_types.keys()) if domain.relation_types else None
+    kg = build_graph(extractions, postprocess=postprocess, domain_relation_types=domain_rel_types)
 
     # Save graph
     graph_path = output_dir / "graph_data.json"

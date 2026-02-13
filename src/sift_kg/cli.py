@@ -154,7 +154,8 @@ def build(
 
     console.print(f"[cyan]Loading:[/cyan] {len(extractions)} extraction files")
 
-    kg = build_graph(extractions, postprocess=not no_postprocess)
+    domain_rel_types = set(domain_config.relation_types.keys()) if domain_config.relation_types else None
+    kg = build_graph(extractions, postprocess=not no_postprocess, domain_relation_types=domain_rel_types)
 
     # Save graph
     graph_path = output_dir / "graph_data.json"
