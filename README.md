@@ -4,6 +4,8 @@
 
 No code, no database, no infrastructure — just a CLI and your documents. Define what to extract in YAML (or use the built-in defaults), and get a browsable, exportable knowledge graph. sift-kg handles the rest: entity extraction, duplicate resolution with your approval, and narrative generation that traces connections across your entire collection.
 
+**[Live demos →](https://juanceresa.github.io/sift-kg/)** — graphs generated entirely by sift-kg
+
 ```bash
 pip install sift-kg
 
@@ -71,7 +73,7 @@ sift extract ./docs/ --domain-name osint
 
 The human-in-the-loop merge review is designed for this — the LLM proposes, you verify. Nothing gets merged without your approval, and every extraction links back to the source document and passage.
 
-See [`examples/ftx/`](examples/ftx/) for a complete pipeline run on 9 articles about the FTX collapse (373 entities, 1184 relations). [**Explore the graph live**](https://juanceresa.github.io/sift-kg/graph.html) — no install, no API key.
+See [`examples/ftx/`](examples/ftx/) for a pipeline run on 9 articles about the FTX collapse (431 entities, 1,201 relations) and [`examples/epstein/`](examples/epstein/) for the Giuffre v. Maxwell depositions (190 entities, 387 relations). [**Explore both graphs live**](https://juanceresa.github.io/sift-kg/) — no install, no API key.
 
 ## Civic Table
 
