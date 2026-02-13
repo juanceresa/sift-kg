@@ -1,9 +1,12 @@
-name: Deploy FTX demo to GitHub Pages
+name: Deploy demos to GitHub Pages
 
 on:
   push:
     branches: [main]
-    paths: [examples/ftx/output/graph.html]
+    paths:
+      - examples/ftx/output/graph.html
+      - examples/epstein/output/graph.html
+      - pages/**
   workflow_dispatch:
 
 permissions:
@@ -23,9 +26,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Assemble site
+        run: |
+          mkdir -p _site/ftx _site/epstein
+          cp pages/index.html _site/
+          cp examples/ftx/output/graph.html examples/ftx/output/entity_descriptions.json examples/ftx/output/communities.json _site/ftx/ 2>/dev/null || true
+          cp examples/epstein/output/graph.html examples/epstein/output/entity_descriptions.json examples/epstein/output/communities.json _site/epstein/ 2>/dev/null || true
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: examples/ftx/output
+          path: _site
       - id: deployment
         uses: actions/deploy-pages@v4

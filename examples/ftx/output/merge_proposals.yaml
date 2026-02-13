@@ -1,69 +1,162 @@
 proposals:
-- canonical_id: organization:binance_holdings_ltd
-  canonical_name: Binance Holdings Ltd.
-  entity_type: ORGANIZATION
+- canonical_id: event:sam_bankman_fried_arrest
+  canonical_name: Sam Bankman-Fried arrest
+  entity_type: EVENT
+  status: CONFIRMED
+  members:
+  - id: event:bankman_fried_arrest
+    name: Bankman-Fried arrest
+    confidence: 1.0
+  reason: Different naming conventions for the same event involving Sam Bankman-Fried.
+- canonical_id: event:bankman_fried_fraud_trial
+  canonical_name: Bankman-Fried fraud trial
+  entity_type: EVENT
+  status: CONFIRMED
+  members:
+  - id: event:sam_bankman_fried_trial
+    name: Sam Bankman-Fried trial
+    confidence: 1.0
+  reason: Different naming conventions for the same trial involving Sam Bankman-Fried.
+- canonical_id: event:bankman_fried_charges
+  canonical_name: Bankman-Fried Charges
+  entity_type: EVENT
   status: REJECTED
   members:
-  - id: organization:gulf_binance
-    name: Gulf Binance
-    confidence: 0.75
-  reason: Gulf Binance appears to be a regional subsidiary or operation of Binance
-    Holdings Ltd., sharing the Binance brand name
-- canonical_id: organization:ftx_trading_ltd
-  canonical_name: FTX Trading Ltd.
-  entity_type: ORGANIZATION
+  - id: event:sam_bankman_fried_conviction
+    name: Sam Bankman-Fried conviction
+    confidence: 0.8
+  reason: Related events concerning charges and conviction of the same individual,
+    Sam Bankman-Fried.
+- canonical_id: event:caroline_ellison_guilty_plea
+  canonical_name: Caroline Ellison guilty plea
+  entity_type: EVENT
   status: CONFIRMED
   members:
-  - id: organization:ftx_arena
-    name: FTX Arena
-    confidence: 0.95
-  - id: organization:ftx_foundation
-    name: FTX Foundation
-    confidence: 0.95
-  - id: organization:ftx_future_fund
-    name: FTX Future Fund
-    confidence: 0.95
-  - id: organization:ftx_ventures
-    name: FTX Ventures
-    confidence: 0.95
-  reason: FTX Arena, Foundation, Future Fund, and Ventures are all subsidiary entities
-    or initiatives of FTX Trading Ltd., the main FTX organization
-- canonical_id: organization:centre_for_effective_altruism
-  canonical_name: Centre for Effective Altruism
-  entity_type: ORGANIZATION
-  status: CONFIRMED
-  members:
-  - id: organization:giving_what_we_can
-    name: Giving What We Can
-    confidence: 0.7
-  reason: Giving What We Can is a project/initiative of the Centre for Effective Altruism
-- canonical_id: person:brian_shroder
-  canonical_name: Brian Shroder
+  - id: event:sentencing_of_caroline_ellison
+    name: Sentencing of Caroline Ellison
+    confidence: 0.9
+  reason: Events related to the same individual, Caroline Ellison, involving her guilty
+    plea and subsequent sentencing.
+- canonical_id: person:sam_bankman_fried
+  canonical_name: Sam Bankman-Fried
   entity_type: PERSON
-  status: REJECTED
+  status: CONFIRMED
   members:
-  - id: person:catherine_coley
-    name: Catherine Coley
-    confidence: 0.6
-  reason: Both listed as CEO of Binance.US, likely representing different time periods
-    or one may be an error in the source data
+  - id: person:bankman_fried
+    name: Bankman-Fried
+    confidence: 1.0
+  - id: person:samuel_benjamin_bankman_fried
+    name: Samuel Benjamin Bankman-Fried
+    confidence: 1.0
+  reason: Different variations of the same name, including full name and common nickname.
+- canonical_id: person:tara_mac_aulay
+  canonical_name: Tara Mac Aulay
+  entity_type: PERSON
+  status: CONFIRMED
+  members:
+  - id: person:tara_macaulay
+    name: Tara MacAulay
+    confidence: 1.0
+  reason: Different spellings of the same name.
 - canonical_id: person:changpeng_zhao
   canonical_name: Changpeng Zhao
   entity_type: PERSON
-  status: REJECTED
+  status: CONFIRMED
   members:
-  - id: person:richard_teng
-    name: Richard Teng
-    confidence: 0.5
-  reason: Both listed as CEO of Binance; Richard Teng may be successor or replacement
-    CEO
-- canonical_id: person:glenn_ellison
-  canonical_name: Glenn Ellison
+  - id: person:zhao
+    name: Zhao
+    confidence: 0.9
+  - id: person:zhao_shengkai
+    name: Zhao Shengkai
+    confidence: 0.9
+  reason: Different references to the same individual, with one being an alias.
+- canonical_id: person:tyler_winklevoss
+  canonical_name: Tyler Winklevoss
   entity_type: PERSON
   status: REJECTED
   members:
-  - id: person:sara_fisher_ellison
-    name: Sara Fisher Ellison
-    confidence: 0.7
-  reason: Both economists at MIT with same surname; likely married couple but distinct
-    individuals - should NOT be merged
+  - id: person:cameron_winklevoss
+    name: Cameron Winklevoss
+    confidence: 0.8
+  - id: person:winklevoss_twins
+    name: Winklevoss twins
+    confidence: 0.8
+  reason: References to the Winklevoss twins, who are distinct but often mentioned
+    together.
+- canonical_id: organization:alameda_research_llc
+  canonical_name: Alameda Research LLC
+  entity_type: ORGANIZATION
+  status: CONFIRMED
+  members:
+  - id: organization:alameda
+    name: Alameda
+    confidence: 0.9
+  - id: organization:alameda_research
+    name: Alameda Research
+    confidence: 0.9
+  reason: All variations refer to the same organization, with 'Alameda Research LLC'
+    being the most complete and formal name.
+- canonical_id: organization:binance_holdings_ltd
+  canonical_name: Binance Holdings Ltd.
+  entity_type: ORGANIZATION
+  status: CONFIRMED
+  members:
+  - id: organization:binance
+    name: Binance
+    confidence: 0.9
+  reason: Both names refer to the same entity, with 'Binance Holdings Ltd.' being
+    the formal name and 'Binance' as a common abbreviation.
+- canonical_id: organization:ftx
+  canonical_name: FTX
+  entity_type: ORGANIZATION
+  status: CONFIRMED
+  members:
+  - id: organization:ftx_trading_ltd
+    name: FTX Trading Ltd.
+    confidence: 0.8
+  reason: Both refer to the same trading platform, with 'FTX' being the common name
+    and 'FTX Trading Ltd.' being the formal name.
+- canonical_id: organization:jane_street
+  canonical_name: Jane Street
+  entity_type: ORGANIZATION
+  status: CONFIRMED
+  members:
+  - id: organization:jane_street_capital
+    name: Jane Street Capital
+    confidence: 0.9
+  reason: Jane Street Capital is a subsidiary or related entity of Jane Street, indicating
+    they refer to the same organization.
+- canonical_id: organization:softbank
+  canonical_name: Softbank
+  entity_type: ORGANIZATION
+  status: CONFIRMED
+  members:
+  - id: organization:softbank_group
+    name: SoftBank Group
+    confidence: 0.9
+  reason: SoftBank Group is the parent company of SoftBank, indicating they refer
+    to the same organization.
+- canonical_id: organization:massachusetts_institute_of_technology
+  canonical_name: Massachusetts Institute of Technology
+  entity_type: ORGANIZATION
+  status: CONFIRMED
+  members:
+  - id: organization:mit
+    name: MIT
+    confidence: 0.9
+  reason: MIT is a common abbreviation for the Massachusetts Institute of Technology,
+    indicating they refer to the same institution.
+- canonical_id: organization:securities_and_exchange_commission
+  canonical_name: Securities and Exchange Commission
+  entity_type: ORGANIZATION
+  status: CONFIRMED
+  members:
+  - id: organization:sec
+    name: SEC
+    confidence: 0.9
+  - id: organization:united_states_securities_and_exchange_commission
+    name: United States Securities and Exchange Commission
+    confidence: 0.9
+  reason: SEC is a common abbreviation for the Securities and Exchange Commission,
+    and the United States Securities and Exchange Commission is a specific instance
+    of this entity.

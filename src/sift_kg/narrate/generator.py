@@ -26,6 +26,33 @@ DEFAULT_CONCURRENCY = 4
 MAX_OVERVIEW_ENTITIES = 50
 MAX_OVERVIEW_RELATIONS = 150
 MAX_DESCRIBED_ENTITIES = 250
+MIN_DESCRIPTION_DEGREE = 3
+
+# Patterns that signal low-quality LLM output — used for post-generation filtering
+_BANNED_PATTERNS = [
+    re.compile(r"played a \w+ role", re.IGNORECASE),
+    re.compile(r"served as", re.IGNORECASE),
+    re.compile(r"\bhighlighting\b", re.IGNORECASE),
+    re.compile(r"\bunderscoring\b", re.IGNORECASE),
+    re.compile(r"\bindicating\b", re.IGNORECASE),
+    re.compile(r"\bsuggesting\b", re.IGNORECASE),
+    re.compile(r"as evidenced by", re.IGNORECASE),
+    re.compile(r"the documents reveal", re.IGNORECASE),
+    re.compile(r"records show", re.IGNORECASE),
+    re.compile(r"the source material indicates", re.IGNORECASE),
+    re.compile(r"is associated with", re.IGNORECASE),
+    re.compile(r"is mentioned in", re.IGNORECASE),
+    re.compile(r"in the context of", re.IGNORECASE),
+    re.compile(r"is significant as", re.IGNORECASE),
+    re.compile(r"is noted for", re.IGNORECASE),
+    re.compile(r"is identified as", re.IGNORECASE),
+    re.compile(r"is a key figure", re.IGNORECASE),
+    re.compile(r"this suggests\b", re.IGNORECASE),
+    re.compile(r"this indicates\b", re.IGNORECASE),
+    re.compile(r"this highlights\b", re.IGNORECASE),
+    re.compile(r"played a crucial role", re.IGNORECASE),
+    re.compile(r"played a pivotal role", re.IGNORECASE),
+]
 
 _YEAR_PATTERN = re.compile(r"\b((?:19|20)\d{2})\b")
 _FULL_DATE_PATTERN = re.compile(
@@ -195,7 +222,10 @@ def generate_narrative(
     # --- Generate per-entity descriptions (top entities by degree) ---
     entity_descriptions: dict[str, str] = {}
     if include_entity_descriptions and entities:
-        described = entities[:MAX_DESCRIBED_ENTITIES]
+        described = [
+            e for e in entities
+            if degree_map.get(e["id"], 0) >= MIN_DESCRIPTION_DEGREE
+        ][:MAX_DESCRIBED_ENTITIES]
         skipped = len(entities) - len(described)
         if skipped > 0:
             logger.info(f"Describing top {len(described)} entities, skipping {skipped} low-connectivity entities")
@@ -205,6 +235,19 @@ def generate_narrative(
                 described, kg, llm, max_cost, concurrency, entity_contexts, system_context
             )
         )
+
+        # Rewrite descriptions that contain banned phrases
+        entity_descriptions = asyncio.run(
+            _arewrite_banned_phrases(entity_descriptions, llm, concurrency)
+        )
+
+    # Rewrite prose sections that contain banned phrases
+    if _find_banned_phrases(overview):
+        overview = _rewrite_banned_phrases(overview, llm)
+    if relationship_narrative and _find_banned_phrases(relationship_narrative):
+        relationship_narrative = _rewrite_banned_phrases(relationship_narrative, llm)
+    if timeline_narrative and _find_banned_phrases(timeline_narrative):
+        timeline_narrative = _rewrite_banned_phrases(timeline_narrative, llm)
 
     # --- Phase 3: Community detection + theme naming (cached) ---
     communities: list[list[dict]] | None = None
@@ -638,6 +681,116 @@ async def _agenerate_entity_descriptions(
         logger.warning("Budget limit reached during entity descriptions")
 
     return {eid: desc for eid, desc in results if desc is not None}
+
+
+# ---------------------------------------------------------------------------
+# Post-generation quality filter
+# ---------------------------------------------------------------------------
+
+
+def _find_banned_phrases(text: str) -> list[str]:
+    """Find all banned phrase matches in text. Returns list of matched strings."""
+    matches = []
+    for pattern in _BANNED_PATTERNS:
+        for m in pattern.finditer(text):
+            matches.append(m.group(0))
+    return matches
+
+
+def _rewrite_banned_phrases(text: str, llm: LLMClient) -> str:
+    """Rewrite text to remove banned phrases via a focused LLM call."""
+    violations = _find_banned_phrases(text)
+    if not violations:
+        return text
+
+    unique_violations = sorted(set(violations))
+    violations_list = "\n".join(f'- "{v}"' for v in unique_violations)
+
+    prompt = f"""Rewrite the following text to remove these filler phrases:
+
+{violations_list}
+
+Replace each one with a specific, concrete alternative. For example:
+- "played a crucial role" → describe the actual action
+- "served as" → use a direct verb (represented, managed, ran)
+- "highlighting" / "underscoring" / "indicating" → delete or replace with factual statement
+- "in the context of" → delete or rewrite the sentence
+- "is identified as" / "is noted for" → state the fact directly
+
+Keep everything else EXACTLY the same. Do not add new information. Do not change facts. Only fix the flagged phrases.
+
+TEXT:
+{text}
+
+Output ONLY the rewritten text."""
+
+    try:
+        return llm.call(prompt).strip()
+    except RuntimeError:
+        return text
+
+
+async def _arewrite_banned_phrases(
+    descriptions: dict[str, str],
+    llm: LLMClient,
+    concurrency: int = DEFAULT_CONCURRENCY,
+) -> dict[str, str]:
+    """Rewrite entity descriptions that contain banned phrases (async batch)."""
+    to_fix = {eid: desc for eid, desc in descriptions.items() if _find_banned_phrases(desc)}
+    if not to_fix:
+        return descriptions
+
+    logger.info(f"Rewriting {len(to_fix)}/{len(descriptions)} descriptions with banned phrases")
+    sem = asyncio.Semaphore(concurrency)
+    completed = 0
+
+    with Progress(
+        SpinnerColumn(),
+        TextColumn("[progress.description]{task.description}"),
+        BarColumn(),
+        TaskProgressColumn(),
+    ) as progress:
+        ptask = progress.add_task("Rewriting banned phrases...", total=len(to_fix))
+
+        async def _fix(eid: str, text: str) -> tuple[str, str]:
+            nonlocal completed
+            violations = _find_banned_phrases(text)
+            unique_violations = sorted(set(violations))
+            violations_list = "\n".join(f'- "{v}"' for v in unique_violations)
+
+            prompt = f"""Rewrite the following text to remove these filler phrases:
+
+{violations_list}
+
+Replace each one with a specific, concrete alternative. For example:
+- "played a crucial role" → describe the actual action
+- "served as" → use a direct verb (represented, managed, ran)
+- "highlighting" / "underscoring" / "indicating" → delete or replace with factual statement
+- "in the context of" → delete or rewrite the sentence
+- "is identified as" / "is noted for" → state the fact directly
+
+Keep everything else EXACTLY the same. Do not add new information. Do not change facts. Only fix the flagged phrases.
+
+TEXT:
+{text}
+
+Output ONLY the rewritten text."""
+
+            async with sem:
+                try:
+                    result = await llm.acall(prompt)
+                    completed += 1
+                    progress.update(ptask, completed=completed)
+                    return eid, result.strip()
+                except RuntimeError:
+                    completed += 1
+                    progress.update(ptask, completed=completed)
+                    return eid, text
+
+        results = await asyncio.gather(*[_fix(eid, desc) for eid, desc in to_fix.items()])
+
+    fixed = dict(results)
+    return {eid: fixed.get(eid, desc) for eid, desc in descriptions.items()}
 
 
 # ---------------------------------------------------------------------------
