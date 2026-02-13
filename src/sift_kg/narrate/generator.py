@@ -111,7 +111,7 @@ def generate_narrative(
 
         entity_descriptions = asyncio.run(
             _agenerate_entity_descriptions(
-                described, kg, llm, max_cost, concurrency, entity_contexts
+                described, kg, llm, max_cost, concurrency, entity_contexts, system_context
             )
         )
 
@@ -144,6 +144,7 @@ def _load_entity_contexts(extractions_dir: Path) -> dict[str, list[str]]:
     """Load source text context quotes from extraction JSONs.
 
     Returns a map of entity name (lowercased) → list of context quotes.
+    Handles multi-context fields joined with ' ||| ' separator.
     """
     contexts: dict[str, list[str]] = {}
     if not extractions_dir.exists():
@@ -155,7 +156,11 @@ def _load_entity_contexts(extractions_dir: Path) -> dict[str, list[str]]:
             ctx = e.get("context", "").strip()
             if ctx:
                 key = e.get("name", "").lower().strip()
-                contexts.setdefault(key, []).append(ctx)
+                # Split multi-context fields (from dedup merging)
+                for fragment in ctx.split(" ||| "):
+                    fragment = fragment.strip()
+                    if fragment:
+                        contexts.setdefault(key, []).append(fragment)
 
     return contexts
 
@@ -167,6 +172,7 @@ async def _agenerate_entity_descriptions(
     max_cost: float | None = None,
     concurrency: int = DEFAULT_CONCURRENCY,
     entity_contexts: dict[str, list[str]] | None = None,
+    system_context: str = "",
 ) -> dict[str, str]:
     """Generate descriptions for each entity with async concurrency."""
     sem = asyncio.Semaphore(concurrency)
@@ -209,6 +215,7 @@ async def _agenerate_entity_descriptions(
                 relations=rel_dicts,
                 source_documents=entity.get("source_documents", []),
                 source_contexts=source_quotes,
+                system_context=system_context,
             )
 
             async with sem:

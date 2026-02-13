@@ -76,6 +76,7 @@ def build_entity_description_prompt(
     relations: list[dict[str, Any]],
     source_documents: list[str],
     source_contexts: list[str] | None = None,
+    system_context: str = "",
 ) -> str:
     """Build prompt for generating a description of a single entity.
 
@@ -86,18 +87,27 @@ def build_entity_description_prompt(
         relations: Relations involving this entity
         source_documents: Documents mentioning this entity
         source_contexts: Quotes from source text where entity appears
+        system_context: Domain context for better descriptions
     """
     attrs_text = json.dumps(attributes, indent=2, ensure_ascii=False) if attributes else "None"
 
-    rel_lines = []
+    # Format relations as readable sentences, grouping by direction
+    outgoing = []
+    incoming = []
     for r in relations[:20]:
-        rel_lines.append(
-            f"- {r.get('relation_type', '?')}: "
-            f"{r.get('source_name', '?')} → {r.get('target_name', '?')}"
-        )
-    relations_text = "\n".join(rel_lines) if rel_lines else "No known relations."
-
-    docs_text = ", ".join(source_documents[:10]) if source_documents else "Unknown"
+        rel = r.get("relation_type", "?")
+        src = r.get("source_name", "?")
+        tgt = r.get("target_name", "?")
+        if src == entity_name:
+            outgoing.append(f"- {rel} → {tgt}")
+        else:
+            incoming.append(f"- {src} → {rel}")
+    rel_parts = []
+    if outgoing:
+        rel_parts.extend(outgoing)
+    if incoming:
+        rel_parts.extend(incoming)
+    relations_text = "\n".join(rel_parts) if rel_parts else "No known relations."
 
     # Deduplicate and cap source contexts
     contexts = []
@@ -108,27 +118,31 @@ def build_entity_description_prompt(
             if normalized not in seen:
                 seen.add(normalized)
                 contexts.append(ctx)
-    contexts = contexts[:15]  # Cap to avoid oversized prompts
+    contexts = contexts[:15]
     contexts_text = "\n".join(f"- \"{ctx}\"" for ctx in contexts) if contexts else "None available."
 
-    return f"""Write a brief description (2-4 sentences) of this entity based on the source documents and knowledge graph data.
+    context_section = ""
+    if system_context:
+        context_section = f"DOMAIN CONTEXT:\n{system_context}\n\n"
 
-ENTITY: {entity_name}
-TYPE: {entity_type}
-ATTRIBUTES: {attrs_text}
+    return f"""{context_section}Write a 2-4 sentence description of {entity_name} ({entity_type}).
 
 SOURCE TEXT EXCERPTS:
 {contexts_text}
 
-RELATIONS:
+ATTRIBUTES: {attrs_text}
+
+CONNECTIONS:
 {relations_text}
 
-MENTIONED IN DOCUMENTS: {docs_text}
+Rules:
+- ONLY describe what the source documents reveal about this entity. Do NOT add general knowledge, background facts, or geographic descriptions.
+- Bad: "Fort Lauderdale is a city known for its boating canals and beaches." Good: "Fort Lauderdale is where law firm Boies Schiller & Flexner LLP operated during the case."
+- Describe what this entity DID, not just who they are connected to.
+- Lead with their role or significance, then key actions or allegations.
+- NEVER mention document filenames, case numbers, or that something was "referenced in" a document.
+- NEVER use filler like "is associated with", "is mentioned in", "is referenced in", "in the context of", "highlighting", "indicating".
+- State facts directly: "Maxwell recruited girls for Epstein" not "Maxwell is associated with Epstein".
+- If the source excerpts are thin, write a shorter description. Do NOT pad with filler.
 
-Synthesize the source excerpts and relations into a specific, factual description.
-Focus on what the documents actually say about this entity — their role, actions, and significance.
-Do not provide generic background information that isn't in the sources.
-Write directly and factually. Do not hedge with phrases like "according to the source documents",
-"mentioned in connection with", or "available documentation indicates". State facts plainly.
-
-Output ONLY the description. No headers or formatting."""
+Output ONLY the description text."""
