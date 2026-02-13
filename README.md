@@ -48,6 +48,7 @@ Every entity and relation links back to the source document and passage. You con
 - **Export anywhere** — GraphML (yEd, Cytoscape), GEXF (Gephi), CSV, or native JSON for advanced analysis
 - **Narrative generation** — structured summaries tracing connections across your documents
 - **Source provenance** — every extraction links to the document and passage it came from
+- **Multilingual** — extracts from documents in any language, outputs a unified English knowledge graph. Proper names stay as-is, non-Latin scripts are romanized automatically
 - **Budget controls** — set `--max-cost` to cap LLM spending
 - **Runs locally** — your documents stay on your machine
 
