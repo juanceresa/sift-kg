@@ -1,11 +1,11 @@
-"""Document reader — extracts text from PDF, plain text, and HTML files."""
+"""Document reader — extracts text from PDF, DOCX, plain text, and HTML files."""
 
 import logging
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
-SUPPORTED_EXTENSIONS = {".pdf", ".txt", ".md", ".html", ".htm"}
+SUPPORTED_EXTENSIONS = {".pdf", ".docx", ".txt", ".md", ".html", ".htm"}
 
 
 def read_document(path: Path) -> str:
@@ -33,6 +33,8 @@ def read_document(path: Path) -> str:
 
     if suffix == ".pdf":
         return _read_pdf(path)
+    elif suffix == ".docx":
+        return _read_docx(path)
     elif suffix in {".html", ".htm"}:
         return _read_html(path)
     else:
@@ -50,6 +52,14 @@ def _read_pdf(path: Path) -> str:
             pages.append(text)
 
     return "\n\n".join(pages)
+
+
+def _read_docx(path: Path) -> str:
+    """Extract text from a DOCX file using python-docx."""
+    from docx import Document
+
+    doc = Document(path)
+    return "\n\n".join(p.text for p in doc.paragraphs if p.text.strip())
 
 
 def _read_text(path: Path) -> str:
