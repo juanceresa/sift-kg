@@ -1,0 +1,5 @@
+# sift-kg project config
+# All commands pick up these settings automatically.
+
+domain: domain.yaml
+model: openai/gpt-4o-mini

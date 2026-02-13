@@ -1,0 +1,153 @@
+name: "Epstein Investigation"
+version: "1.0.0"
+description: |
+  Domain for analyzing Giuffre v. Maxwell court documents. Optimized for
+  tracing connections between individuals, locations, events, and legal
+  proceedings across depositions, motions, and unsealed court filings.
+
+system_context: |
+  You are analyzing unsealed court documents from Giuffre v. Maxwell
+  (Case 1:15-cv-07433-LAP), a federal defamation lawsuit. The documents
+  include depositions, motions, declarations, and exhibits related to
+  Jeffrey Epstein's sex trafficking network.
+
+  Focus on identifying: individuals named (perpetrators, victims, witnesses,
+  associates, legal counsel), specific locations (residences, islands, planes),
+  dates and events (meetings, trips, legal proceedings), and the relationships
+  between them.
+
+  Many pages are deposition transcripts with Q&A format. Extract the substance
+  of testimony, not procedural exchanges between attorneys.
+
+entity_types:
+  PERSON:
+    description: "Any individual named — accused, victims, witnesses, associates, attorneys, public figures"
+    extraction_hints:
+      - "Capture full names, nicknames, titles, and any identifying details (age, profession)"
+      - "Note aliases and informal references (e.g., 'JE' for Jeffrey Epstein)"
+      - "Distinguish between deponents, witnesses, and people described in testimony"
+      - "Include attorneys by name when they take substantive action (not just procedural objections)"
+
+  ORGANIZATION:
+    description: "Companies, foundations, law firms, government agencies, schools, airlines"
+    extraction_hints:
+      - "Include Epstein-linked entities, charitable foundations, financial firms"
+      - "Capture law enforcement agencies, prosecution offices, courts"
+      - "Note corporate entities used for travel, property, or employment"
+
+  LOCATION:
+    description: "Specific places — residences, islands, cities, countries, addresses"
+    extraction_hints:
+      - "Key locations: Manhattan townhouse, Palm Beach estate, Zorro Ranch, Little St. James"
+      - "Capture travel destinations mentioned in testimony"
+      - "Note specific addresses when given"
+      - "Include schools, hotels, and other venues where events occurred"
+
+  EVENT:
+    description: "Specific incidents, trips, meetings, legal proceedings, time periods"
+    extraction_hints:
+      - "Capture dates or time ranges when available"
+      - "Note travel events — who traveled where, with whom, and when"
+      - "Track legal milestones: arrests, plea deals, settlements, filings"
+      - "Extract specific described incidents from deposition testimony"
+
+  DOCUMENT:
+    description: "Court filings, depositions, exhibits, evidence, communications"
+    extraction_hints:
+      - "Note filing dates, document numbers, and types (deposition, motion, exhibit)"
+      - "Track which documents reference which individuals"
+
+  VEHICLE:
+    description: "Aircraft, yachts, vehicles — means of transport relevant to the network"
+    extraction_hints:
+      - "The 'Lolita Express' (Boeing 727), helicopters, private jets"
+      - "Note tail numbers, vessel names, and ownership"
+
+relation_types:
+  ASSOCIATED_WITH:
+    description: "General personal or professional connection between individuals"
+    source_types: [PERSON]
+    target_types: [PERSON, ORGANIZATION]
+    symmetric: true
+    extraction_hints:
+      - "Use for social connections, friendships, professional relationships"
+      - "Use when a more specific relation type does not apply"
+
+  EMPLOYED_BY:
+    description: "Employment or service relationship"
+    source_types: [PERSON]
+    target_types: [PERSON, ORGANIZATION]
+    extraction_hints:
+      - "Includes staff, pilots, masseuses, recruiters, assistants, bodyguards"
+      - "Note the role and time period when available"
+
+  TRAVELED_WITH:
+    description: "Individuals who traveled together to specific destinations"
+    source_types: [PERSON]
+    target_types: [PERSON]
+    symmetric: true
+    extraction_hints:
+      - "Flight logs, testimony about trips, travel companions"
+      - "Note the destination and approximate date"
+    review_required: true
+
+  TRAVELED_TO:
+    description: "Individual traveled to a specific location"
+    source_types: [PERSON]
+    target_types: [LOCATION]
+    extraction_hints:
+      - "Note dates, duration, and purpose of travel when available"
+
+  RESIDED_AT:
+    description: "Person lived at or frequented a location"
+    source_types: [PERSON]
+    target_types: [LOCATION]
+
+  OWNS:
+    description: "Ownership of property, vehicles, organizations"
+    source_types: [PERSON, ORGANIZATION]
+    target_types: [LOCATION, VEHICLE, ORGANIZATION]
+
+  WITNESSED:
+    description: "Person witnessed or has knowledge of an event or incident"
+    source_types: [PERSON]
+    target_types: [EVENT]
+    extraction_hints:
+      - "Testimony about events the person saw or experienced"
+      - "Includes secondhand accounts when the witness is named"
+
+  PARTICIPATED_IN:
+    description: "Person participated in an event"
+    source_types: [PERSON]
+    target_types: [EVENT]
+    extraction_hints:
+      - "Active involvement in described events"
+      - "Attendance at gatherings, trips, meetings"
+    review_required: true
+
+  RECRUITED_BY:
+    description: "Person was recruited or introduced by another person"
+    source_types: [PERSON]
+    target_types: [PERSON]
+    extraction_hints:
+      - "Recruitment chains — who brought whom into the network"
+      - "Note the context and approximate time"
+    review_required: true
+
+  LOCATED_IN:
+    description: "Entity is situated within a geographic area"
+    source_types: [ORGANIZATION, LOCATION, VEHICLE]
+    target_types: [LOCATION]
+
+  MENTIONED_IN:
+    description: "Entity is referenced in a court document or exhibit"
+    source_types: [PERSON, ORGANIZATION, LOCATION, EVENT, VEHICLE]
+    target_types: [DOCUMENT]
+
+  TESTIFIED_ABOUT:
+    description: "Deponent gave testimony regarding a person, event, or entity"
+    source_types: [PERSON]
+    target_types: [PERSON, EVENT, ORGANIZATION, LOCATION]
+    extraction_hints:
+      - "Use for substantive testimony about a topic, not just name mentions"
+      - "Note whether testimony was under oath and if there were objections"
