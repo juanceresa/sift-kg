@@ -131,8 +131,8 @@ class TestEntityDescriptionPrompt:
         assert "WORKS_FOR" in prompt
         assert "Acme" in prompt
 
-    def test_includes_source_documents(self):
-        """Prompt mentions source documents."""
+    def test_excludes_source_document_filenames(self):
+        """Prompt no longer includes raw document filenames (noisy)."""
         prompt = build_entity_description_prompt(
             entity_name="Alice",
             entity_type="PERSON",
@@ -140,7 +140,7 @@ class TestEntityDescriptionPrompt:
             relations=[],
             source_documents=["report_2024.pdf", "interview.txt"],
         )
-        assert "report_2024.pdf" in prompt
+        assert "report_2024.pdf" not in prompt
 
     def test_no_relations_placeholder(self):
         """Prompt handles entity with no relations."""

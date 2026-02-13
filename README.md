@@ -7,7 +7,7 @@ No code, no database, no infrastructure — just a CLI and your documents. Defin
 ```bash
 pip install sift-kg
 
-sift init                           # create .env.example with config
+sift init                           # create sift.yaml + .env.example
 sift extract ./documents/           # extract entities & relations
 sift build                          # build knowledge graph
 sift resolve                        # find duplicate entities
@@ -40,7 +40,7 @@ Every entity and relation links back to the source document and passage. You con
 
 ## Features
 
-- **Zero-config start** — point at a folder, get a knowledge graph
+- **Zero-config start** — point at a folder, get a knowledge graph. Or drop a `sift.yaml` in your project for persistent settings
 - **Any LLM provider** — OpenAI, Anthropic, Ollama (local/private), or any LiteLLM-compatible provider
 - **Domain-configurable** — define custom entity types and relation types in YAML
 - **Human-in-the-loop** — sift proposes entity merges, you approve or reject in an interactive terminal UI
@@ -108,21 +108,29 @@ pip install -e ".[dev]"
 ### 1. Initialize and configure
 
 ```bash
-sift init                     # creates .env.example
+sift init                     # creates sift.yaml + .env.example
 cp .env.example .env          # copy and add your API key
+```
+
+`sift init` generates a `sift.yaml` project config so you don't need flags on every command:
+
+```yaml
+# sift.yaml
+domain: domain.yaml           # or a bundled name like "osint"
+model: openai/gpt-4o-mini
 ```
 
 Set your API key in `.env`:
 ```
 SIFT_OPENAI_API_KEY=sk-...
-SIFT_DEFAULT_MODEL=openai/gpt-4o-mini
 ```
 
 Or use Anthropic, Ollama, or any LiteLLM provider:
 ```
 SIFT_ANTHROPIC_API_KEY=sk-ant-...
-SIFT_DEFAULT_MODEL=anthropic/claude-haiku-4-5-20251001
 ```
+
+Settings priority: CLI flags > env vars > `.env` > `sift.yaml` > defaults. You can override anything from `sift.yaml` with a flag on any command.
 
 ### 2. Extract entities and relations
 
@@ -256,16 +264,18 @@ After running the pipeline, your output directory contains:
 
 ```
 output/
-├── extractions/          # Per-document extraction JSON
+├── extractions/               # Per-document extraction JSON
 │   ├── document1.json
 │   └── document2.json
-├── graph_data.json       # Knowledge graph (native format)
-├── merge_proposals.yaml  # Entity merge proposals (DRAFT/CONFIRMED/REJECTED)
-├── relation_review.yaml  # Flagged relations for review
-├── narrative.md          # Generated narrative summary
-├── graph.graphml         # GraphML export (if exported)
-├── graph.gexf            # GEXF export (if exported)
-└── csv/                  # CSV export (if exported)
+├── graph_data.json            # Knowledge graph (native format)
+├── merge_proposals.yaml       # Entity merge proposals (DRAFT/CONFIRMED/REJECTED)
+├── relation_review.yaml       # Flagged relations for review
+├── narrative.md               # Generated narrative summary
+├── entity_descriptions.json   # Entity descriptions (loaded by viewer)
+├── graph.html                 # Interactive graph visualization
+├── graph.graphml              # GraphML export (if exported)
+├── graph.gexf                 # GEXF export (if exported)
+└── csv/                       # CSV export (if exported)
     ├── entities.csv
     └── relations.csv
 ```
@@ -281,6 +291,7 @@ The workflow has three layers, each catching different kinds of duplicates:
 Before entities become graph nodes, sift deterministically collapses names that are obviously the same. No LLM involved, no cost, no review needed:
 
 - **Unicode normalization** — "Jose Garcia" and "Jose Garcia" become one node
+- **Title stripping** — "Detective Joe Recarey" and "Joe Recarey" merge (strips ~35 common prefixes: Dr., Mr., Judge, Senator, etc.)
 - **Singularization** — "Companies" and "Company" merge
 - **Fuzzy string matching** — [SemHash](https://github.com/MinishLab/semhash) at 0.95 threshold catches near-identical strings like "MacAulay" vs "Mac Aulay"
 
@@ -291,8 +302,11 @@ This happens automatically every time you run `sift build`. These are the trivia
 The LLM sees batches of entities and identifies ones that likely refer to the same real-world thing. It produces a `merge_proposals.yaml` file where every proposal starts as `DRAFT`:
 
 ```bash
-sift resolve
+sift resolve                  # uses domain from sift.yaml
+sift resolve --domain osint   # or specify explicitly
 ```
+
+If you have a domain configured, the LLM uses that context to make better judgments about entity names specific to your field.
 
 This generates proposals like:
 
@@ -333,9 +347,10 @@ sift review
 
 Walks through each `DRAFT` proposal one by one. For each, you see the canonical entity, the proposed merge members, the LLM's confidence and reasoning. You approve, reject, or skip.
 
-High-confidence proposals (>0.85 by default) can be auto-approved:
+High-confidence proposals (>0.85 by default) can be auto-approved, and low-confidence relations can be auto-rejected:
 ```bash
 sift review --auto-approve 0.90    # auto-confirm proposals above 90% confidence
+sift review --auto-reject 0.3      # auto-reject relations below 30% confidence
 sift review --auto-approve 1.0     # disable auto-approve, review everything manually
 ```
 
