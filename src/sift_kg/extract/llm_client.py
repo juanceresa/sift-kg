@@ -18,6 +18,9 @@ logger = logging.getLogger(__name__)
 
 # Suppress LiteLLM's verbose logging
 litellm.suppress_debug_info = True
+litellm.set_verbose = False
+for _name in ("LiteLLM", "litellm", "LiteLLM Proxy", "LiteLLM Router"):
+    logging.getLogger(_name).setLevel(logging.WARNING)
 
 
 class _RateLimiter:
