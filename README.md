@@ -44,6 +44,7 @@ Every entity and relation links back to the source document and passage. You con
 - **Any LLM provider** — OpenAI, Anthropic, Ollama (local/private), or any LiteLLM-compatible provider
 - **Domain-configurable** — define custom entity types and relation types in YAML
 - **Human-in-the-loop** — sift proposes entity merges, you approve or reject in an interactive terminal UI
+- **CLI search** — `sift search "SBF"` finds entities by name or alias, with optional relation and description output
 - **Interactive viewer** — explore your graph in-browser with search, type toggles, and entity descriptions
 - **Export anywhere** — GraphML (yEd, Cytoscape), GEXF (Gephi), CSV, or native JSON for advanced analysis
 - **Narrative generation** — structured summaries tracing connections across your documents
@@ -152,6 +153,15 @@ sift view                     # → opens output/graph.html in your browser
 ```
 
 Opens a force-directed graph in your browser with entity descriptions, color-coded types, search, type toggles, and a detail sidebar. This is the intended way to explore your graph — click on entities, trace connections, read the evidence.
+
+**CLI search** — query entities directly from the terminal:
+
+```bash
+sift search "Sam Bankman"          # search by name
+sift search "SBF"                  # search by alias
+sift search "Caroline" -r          # show relations
+sift search "FTX" -d -t ORGANIZATION  # descriptions + type filter
+```
 
 **Static exports** — for analysis tools where you want custom layout, filtering, or styling:
 
