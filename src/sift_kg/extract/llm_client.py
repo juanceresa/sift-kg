@@ -16,10 +16,13 @@ import litellm
 
 logger = logging.getLogger(__name__)
 
-# Suppress LiteLLM's verbose logging
+# Suppress LiteLLM's verbose logging and OpenAI retry chatter
 litellm.suppress_debug_info = True
 litellm.set_verbose = False
-for _name in ("LiteLLM", "litellm", "LiteLLM Proxy", "LiteLLM Router"):
+for _name in (
+    "LiteLLM", "litellm", "LiteLLM Proxy", "LiteLLM Router",
+    "openai", "openai._base_client", "httpx", "httpcore",
+):
     logging.getLogger(_name).setLevel(logging.WARNING)
 
 
