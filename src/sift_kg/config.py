@@ -3,13 +3,51 @@
 This module provides the SiftConfig class for managing application settings
 from environment variables and .env files. All configuration is type-safe
 and validated using Pydantic models.
+
+Settings priority (highest to lowest):
+1. CLI flags (applied after SiftConfig creation)
+2. Environment variables (SIFT_* prefix)
+3. .env file
+4. sift.yaml project config
+5. Default values
 """
 
+import logging
 import os
 from pathlib import Path
 
+import yaml
 from pydantic import Field, field_validator, model_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings, PydanticBaseSettingsSource, SettingsConfigDict
+
+logger = logging.getLogger(__name__)
+
+# Map sift.yaml keys to SiftConfig field names
+_YAML_TO_FIELD = {
+    "domain": "domain_path",
+    "model": "default_model",
+    "output": "output_dir",
+}
+
+
+class _ProjectYamlSource(PydanticBaseSettingsSource):
+    """Read project config from sift.yaml (lower priority than env vars)."""
+
+    def get_field_value(self, field, field_name):  # type: ignore[override]
+        return None, field_name, False
+
+    def __call__(self) -> dict:
+        project_file = Path("sift.yaml")
+        if not project_file.exists():
+            return {}
+
+        raw = yaml.safe_load(project_file.read_text()) or {}
+
+        result: dict = {}
+        for yaml_key, field_name in _YAML_TO_FIELD.items():
+            if yaml_key in raw:
+                result[field_name] = raw[yaml_key]
+        return result
 
 
 class SiftConfig(BaseSettings):
@@ -36,6 +74,23 @@ class SiftConfig(BaseSettings):
         extra="ignore",
         env_ignore_empty=True,
     )
+
+    @classmethod
+    def settings_customise_sources(
+        cls,
+        settings_cls: type[BaseSettings],
+        init_settings: PydanticBaseSettingsSource,
+        env_settings: PydanticBaseSettingsSource,
+        dotenv_settings: PydanticBaseSettingsSource,
+        file_secret_settings: PydanticBaseSettingsSource,
+    ) -> tuple[PydanticBaseSettingsSource, ...]:
+        return (
+            init_settings,
+            env_settings,
+            dotenv_settings,
+            _ProjectYamlSource(settings_cls),
+            file_secret_settings,
+        )
 
     openai_api_key: str | None = Field(
         default=None,
