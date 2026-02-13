@@ -18,14 +18,47 @@ from unidecode import unidecode
 
 from sift_kg.extract.models import DocumentExtraction
 
+# Suppress SemHash/model2vec download noise
+for _logger_name in ("semhash", "model2vec", "minishlab"):
+    logging.getLogger(_logger_name).setLevel(logging.WARNING)
+
 logger = logging.getLogger(__name__)
 
 _INFLECT_ENGINE = inflect.engine()
 
+# Common title prefixes that don't change entity identity
+_TITLE_PREFIXES = (
+    "detective", "det.", "officer", "sergeant", "sgt.", "lieutenant", "lt.",
+    "captain", "cpt.", "chief", "deputy", "agent", "special agent",
+    "dr.", "dr", "doctor", "prof.", "professor",
+    "mr.", "mr", "mrs.", "mrs", "ms.", "ms", "miss",
+    "judge", "justice", "hon.", "honorable",
+    "senator", "sen.", "representative", "rep.", "governor", "gov.",
+    "president", "vice president",
+    "attorney", "atty.", "counsel", "esquire", "esq.",
+    "reverend", "rev.", "father", "sister", "brother",
+    "sir", "dame", "lord", "lady",
+)
+
+
+def _strip_titles(name: str) -> str:
+    """Strip common title prefixes from a name."""
+    changed = True
+    while changed:
+        changed = False
+        for prefix in _TITLE_PREFIXES:
+            if name.startswith(prefix + " "):
+                name = name[len(prefix) + 1:].strip()
+                changed = True
+                break
+    return name
+
 
 def _normalize_name(name: str) -> str:
-    """Normalize entity name: lowercase, ASCII, strip whitespace."""
-    return unidecode(name).lower().strip()
+    """Normalize entity name: lowercase, ASCII, strip titles and whitespace."""
+    name = unidecode(name).lower().strip()
+    name = _strip_titles(name)
+    return name
 
 
 def _singularize(name: str) -> str:
