@@ -45,9 +45,9 @@ Every entity and relation links back to the source document and passage. You con
 - **Domain-configurable** — define custom entity types and relation types in YAML
 - **Human-in-the-loop** — sift proposes entity merges, you approve or reject in an interactive terminal UI
 - **CLI search** — `sift search "SBF"` finds entities by name or alias, with optional relation and description output
-- **Interactive viewer** — explore your graph in-browser with search, type toggles, and entity descriptions
+- **Interactive viewer** — explore your graph in-browser with search, type/community toggles, degree filtering, and entity descriptions
 - **Export anywhere** — GraphML (yEd, Cytoscape), GEXF (Gephi), CSV, or native JSON for advanced analysis
-- **Narrative generation** — structured summaries tracing connections across your documents
+- **Narrative generation** — investigative-style reports with relationship chains, timelines, and community-grouped entity profiles
 - **Source provenance** — every extraction links to the document and passage it came from
 - **Multilingual** — extracts from documents in any language, outputs a unified English knowledge graph. Proper names stay as-is, non-Latin scripts are romanized automatically
 - **Budget controls** — set `--max-cost` to cap LLM spending
@@ -160,7 +160,7 @@ See [Entity Resolution Workflow](#entity-resolution-workflow) below for the full
 sift view                     # → opens output/graph.html in your browser
 ```
 
-Opens a force-directed graph in your browser with entity descriptions, color-coded types, search, type toggles, and a detail sidebar. This is the intended way to explore your graph — click on entities, trace connections, read the evidence.
+Opens a force-directed graph in your browser with entity descriptions, color-coded types, search, type/community/relation toggles, a degree filter slider, and a detail sidebar. Nodes are seeded by community so clusters start separated. This is the intended way to explore your graph — click on entities, trace connections, read the evidence.
 
 **CLI search** — query entities directly from the terminal:
 
@@ -186,9 +186,10 @@ Use GraphML/GEXF when you want to control node sizing, edge weighting, custom co
 
 ```bash
 sift narrate
+sift narrate --communities-only   # regenerate community labels only (~$0.01)
 ```
 
-Produces `output/narrative.md` — a structured summary with entity profiles tracing connections across your documents.
+Produces `output/narrative.md` — an investigative-style report with an overview, key relationship chains between top entities, a timeline (when dates exist in the data), and entity profiles grouped by thematic community (discovered via Louvain community detection). Entity descriptions are written in active voice with specific actions, not role summaries.
 
 ## Domain Configuration
 
@@ -272,6 +273,7 @@ output/
 ├── relation_review.yaml       # Flagged relations for review
 ├── narrative.md               # Generated narrative summary
 ├── entity_descriptions.json   # Entity descriptions (loaded by viewer)
+├── communities.json           # Community assignments (shared by narrate + viewer)
 ├── graph.html                 # Interactive graph visualization
 ├── graph.graphml              # GraphML export (if exported)
 ├── graph.gexf                 # GEXF export (if exported)
