@@ -60,7 +60,9 @@ OUTPUT SCHEMA:
 RULES:
 - Extract ALL entity types present, not just the most common
 - Extract only explicit information from the text
-- Preserve names exactly as written
+- The text may be in ANY language. Extract entities regardless of source language.
+- Output all entity names and attribute values in English. Use the most internationally recognized form of each name — do not anglicize personal names (Juan stays Juan, not John; 习近平 → Xi Jinping, not "Xi Near-Peace").
+- Keep context quotes in the original language of the source text.
 - confidence: 0.0-1.0 based on text clarity
 - attributes: include any relevant details (dates, roles, descriptions, etc.)
 
@@ -135,7 +137,9 @@ OUTPUT SCHEMA:
 RULES:
 - Extract ALL entity types present, not just the most common
 - Extract only explicit information from the text
-- Preserve names exactly as written
+- The text may be in ANY language. Extract entities regardless of source language.
+- Output all entity names and attribute values in English. Use the most internationally recognized form of each name — do not anglicize personal names (Juan stays Juan, not John; 习近平 → Xi Jinping, not "Xi Near-Peace").
+- Keep context and evidence quotes in the original language of the source text.
 - confidence: 0.0-1.0 based on text clarity
 - attributes: include any relevant details (dates, roles, descriptions, etc.)
 - Use entity NAMES (not IDs) for source_entity and target_entity
@@ -195,6 +199,9 @@ OUTPUT SCHEMA:
 }}
 
 RULES:
+- The text may be in ANY language. Extract relationships regardless of source language.
+- Output all entity names in English, matching the names from the entity extraction step.
+- Keep evidence quotes in the original language of the source text.
 - Use entity NAMES (not IDs) for source_entity and target_entity
 - Only extract explicit relationships stated in the text
 - Do not infer relationships from co-occurrence alone
