@@ -434,7 +434,7 @@ Each run is additive — previous `CONFIRMED`/`REJECTED` decisions in `merge_pro
 |---|---|
 | **Quick exploration** | `sift review --auto-approve 0.85` — approve high-confidence, review the rest |
 | **Genealogy / family records** | Edit YAML manually, `--auto-approve 1.0` — review every single merge |
-| **Legal / investigative** | Edit YAML manually, use `sift view` to inspect the graph between rounds |
+| **Legal / investigative** | `sift resolve --embeddings`, edit YAML manually, use `sift view` to inspect between rounds |
 | **Large corpus (1000+ entities)** | `sift resolve --embeddings` for better batching, then interactive review |
 
 ## Deduplication Internals
