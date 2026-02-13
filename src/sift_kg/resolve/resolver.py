@@ -11,8 +11,11 @@ import asyncio
 import json
 import logging
 
+from unidecode import unidecode
+
 from sift_kg.extract.llm_client import LLMClient
 from sift_kg.graph.knowledge_graph import KnowledgeGraph
+from sift_kg.graph.prededup import _TITLE_PREFIXES
 from sift_kg.resolve.models import MergeFile, MergeMember, MergeProposal
 
 logger = logging.getLogger(__name__)
@@ -27,6 +30,28 @@ MAX_BATCH_SIZE = 100
 # Overlap between consecutive batches so entities near boundaries
 # appear in both, eliminating cross-batch blind spots.
 BATCH_OVERLAP = 20
+
+
+def _person_sort_key(name: str) -> str:
+    """Sort PERSON entities by surname so title/first-name variants cluster.
+
+    "Mr. Edwards", "Bradley Edwards", "Edwards" all sort under "edwards".
+    "Detective Joe Recarey", "Joseph Recarey" sort under "recarey".
+    """
+    normalized = unidecode(name).lower().strip()
+    # Strip title prefixes
+    changed = True
+    while changed:
+        changed = False
+        for prefix in _TITLE_PREFIXES:
+            if normalized.startswith(prefix + " "):
+                normalized = normalized[len(prefix) + 1:].strip()
+                changed = True
+                break
+    # Sort by last word (surname), then full name as tiebreaker
+    parts = normalized.split()
+    surname = parts[-1] if parts else normalized
+    return f"{surname} {normalized}"
 
 
 def find_merge_candidates(
@@ -97,7 +122,13 @@ async def _afind_merge_candidates(
 
         logger.info(f"Resolving {len(entities)} {entity_type} entities")
 
-        # Build batches: semantic clustering or alphabetical windows
+        # Build batches: semantic clustering or surname/alphabetical windows
+        sort_key = (
+            (lambda e: _person_sort_key(e["name"]))
+            if entity_type == "PERSON"
+            else (lambda e: e["name"].lower())
+        )
+
         if use_embeddings:
             try:
                 from sift_kg.resolve.clustering import cluster_entities_by_embedding
@@ -105,16 +136,16 @@ async def _afind_merge_candidates(
                 batches = cluster_entities_by_embedding(entities)
             except ImportError:
                 logger.warning(
-                    "Embedding clustering unavailable, falling back to alphabetical"
+                    "Embedding clustering unavailable, falling back"
                 )
-                entities.sort(key=lambda e: e["name"].lower())
+                entities.sort(key=sort_key)
                 batches = _build_overlapping_batches(entities)
             except Exception as e:
-                logger.warning(f"Clustering failed ({e}), falling back to alphabetical")
-                entities.sort(key=lambda e: e["name"].lower())
+                logger.warning(f"Clustering failed ({e}), falling back")
+                entities.sort(key=sort_key)
                 batches = _build_overlapping_batches(entities)
         else:
-            entities.sort(key=lambda e: e["name"].lower())
+            entities.sort(key=sort_key)
             batches = _build_overlapping_batches(entities)
 
         for batch_idx, batch in enumerate(batches):
@@ -213,6 +244,25 @@ def _deduplicate_proposals(proposals: list[MergeProposal]) -> list[MergeProposal
     return deduped
 
 
+def _strip_person_titles(name: str) -> str:
+    """Strip title prefixes from a person name for resolve payloads.
+
+    Returns the stripped name, or the original if nothing changed.
+    """
+    normalized = unidecode(name).strip()
+    lower = normalized.lower()
+    changed = True
+    while changed:
+        changed = False
+        for prefix in _TITLE_PREFIXES:
+            if lower.startswith(prefix + " "):
+                normalized = normalized[len(prefix) + 1:].strip()
+                lower = normalized.lower()
+                changed = True
+                break
+    return normalized
+
+
 async def _aresolve_type_batch(
     entities: list[dict],
     entity_type: str,
@@ -226,8 +276,17 @@ async def _aresolve_type_batch(
     entity_dicts = []
     for e in entities:
         entry: dict = {"id": e["id"], "name": e["name"]}
-        if e.get("aliases"):
-            entry["aliases"] = e["aliases"]
+        aliases = list(e.get("aliases") or [])
+
+        # For PERSON entities, strip titles and add the bare name as an alias
+        # so the LLM can see "Joe Recarey" next to "Joseph Recarey".
+        if entity_type == "PERSON":
+            stripped = _strip_person_titles(e["name"])
+            if stripped.lower() != e["name"].lower() and stripped not in aliases:
+                aliases.insert(0, stripped)
+
+        if aliases:
+            entry["aliases"] = aliases
         attrs = e.get("attributes", {})
         identity_attrs = {k: v for k, v in attrs.items() if k in identity_keys and v}
         if identity_attrs:
@@ -247,9 +306,11 @@ ENTITIES:
 
 Look for:
 - Name variations (abbreviations, nicknames, full legal names vs common names, misspellings, transliterations)
+- Title/honorific prefixes: "Detective Joe Recarey" and "Joseph Recarey" are the SAME person. "Mr. Edwards" and "Bradley Edwards" are the SAME person. Titles like Mr., Mrs., Ms., Dr., Detective, Officer, Judge, Senator, etc. do NOT make someone a different entity.
+- First name vs nickname: "Joseph" = "Joe", "Robert" = "Bob", "William" = "Bill", etc.
 - Aliases — if an entity's aliases list contains a name matching another entity, they are very likely the same
 - Same entity referenced differently across documents
-- DO NOT merge entities that are genuinely different (e.g., father and son with similar names)
+- DO NOT merge entities that are genuinely different (e.g., father and son with similar names, or people who share a surname but are unrelated)
 
 Return valid JSON only:
 {{
