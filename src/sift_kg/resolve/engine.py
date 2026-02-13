@@ -117,6 +117,25 @@ def _merge_node_data(kg: KnowledgeGraph, canonical_id: str, member_id: str) -> N
             canonical_attrs[key] = value
     canonical["attributes"] = canonical_attrs
 
+    # Track member name + member aliases as aliases on canonical
+    member_name = member.get("name", "")
+    canonical_name = canonical.get("name", "")
+    aliases = canonical_attrs.get("aliases", [])
+    if isinstance(aliases, str):
+        aliases = [aliases] if aliases else []
+    # Add member's display name
+    if member_name and member_name != canonical_name and member_name not in aliases:
+        aliases.append(member_name)
+    # Add member's own aliases
+    member_aliases = member_attrs.get("aliases", [])
+    if isinstance(member_aliases, str):
+        member_aliases = [member_aliases] if member_aliases else []
+    for a in member_aliases:
+        if a and a != canonical_name and a not in aliases:
+            aliases.append(a)
+    if aliases:
+        canonical_attrs["aliases"] = aliases
+
 
 def apply_relation_rejections(
     kg: KnowledgeGraph, review_file: RelationReviewFile
