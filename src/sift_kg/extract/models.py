@@ -49,3 +49,7 @@ class DocumentExtraction(BaseModel):
     cost_usd: float = 0.0
     model_used: str = ""
     error: str | None = None
+    # Incremental extraction metadata (defaults for backward compat with existing JSONs)
+    domain_name: str = ""
+    chunk_size: int = 0
+    extracted_at: str = ""

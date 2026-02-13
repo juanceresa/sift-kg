@@ -56,6 +56,7 @@ def extract(
     chunk_size: int = typer.Option(10000, "--chunk-size", help="Characters per chunk (larger = fewer API calls, lower cost)"),
     concurrency: int = typer.Option(4, "-c", "--concurrency", help="Concurrent LLM calls per document"),
     rpm: int = typer.Option(40, "--rpm", help="Max requests per minute (prevents rate limit waste)"),
+    force: bool = typer.Option(False, "--force", "-f", help="Re-extract all documents, ignoring cached results"),
     output: str | None = typer.Option(None, "-o", help="Output directory"),
     verbose: bool = typer.Option(False, "-v", "--verbose", help="Verbose logging"),
 ) -> None:
@@ -103,7 +104,7 @@ def extract(
     from sift_kg.extract.llm_client import LLMClient
 
     llm = LLMClient(model=effective_model, rpm=rpm)
-    results = extract_all(docs, llm, domain_config, output_dir, max_cost=max_cost, concurrency=concurrency, chunk_size=chunk_size)
+    results = extract_all(docs, llm, domain_config, output_dir, max_cost=max_cost, concurrency=concurrency, chunk_size=chunk_size, force=force)
 
     # Summary
     successful = [r for r in results if not r.error]
@@ -366,6 +367,118 @@ def review(
 # ============================================================================
 # Utility Commands
 # ============================================================================
+
+
+@app.command()
+def search(
+    query: str = typer.Argument(..., help="Search term (matches entity names and aliases)"),
+    relations: bool = typer.Option(False, "-r", "--relations", help="Show connected entities"),
+    description: bool = typer.Option(False, "-d", "--description", help="Show entity description (requires sift narrate)"),
+    entity_type: str | None = typer.Option(None, "-t", "--type", help="Filter by entity type (e.g. PERSON)"),
+    output: str | None = typer.Option(None, "-o", help="Output directory"),
+    verbose: bool = typer.Option(False, "-v", "--verbose", help="Verbose logging"),
+) -> None:
+    """Search entities in the knowledge graph by name or alias."""
+    _setup_logging(verbose)
+    config = SiftConfig()
+    output_dir = Path(output) if output else config.output_dir
+
+    graph_path = output_dir / "graph_data.json"
+    if not graph_path.exists():
+        console.print("[yellow]No graph found.[/yellow] Run [cyan]sift build[/cyan] first.")
+        raise typer.Exit(1)
+
+    import json as json_mod
+
+    from sift_kg.graph.knowledge_graph import KnowledgeGraph
+
+    kg = KnowledgeGraph.load(graph_path)
+
+    # Load descriptions if requested
+    descriptions: dict[str, str] = {}
+    if description:
+        desc_path = output_dir / "entity_descriptions.json"
+        if desc_path.exists():
+            descriptions = json_mod.loads(desc_path.read_text())
+        else:
+            console.print("[dim]No descriptions found. Run [cyan]sift narrate[/cyan] first.[/dim]")
+
+    query_lower = query.lower()
+    matches: list[tuple[str, dict]] = []
+
+    for node_id, data in kg.graph.nodes(data=True):
+        name = data.get("name", "")
+        if entity_type and data.get("entity_type", "").upper() != entity_type.upper():
+            continue
+
+        # Search name
+        if query_lower in name.lower():
+            matches.append((node_id, data))
+            continue
+
+        # Search aliases
+        attrs = data.get("attributes", {})
+        aliases = attrs.get("aliases", []) or attrs.get("also_known_as", [])
+        if isinstance(aliases, str):
+            aliases = [aliases]
+        if any(query_lower in str(a).lower() for a in aliases):
+            matches.append((node_id, data))
+
+    if not matches:
+        console.print(f"[yellow]No entities matching \"{query}\"[/yellow]")
+        raise typer.Exit(0)
+
+    console.print(f"[cyan]{len(matches)} result{'s' if len(matches) != 1 else ''}[/cyan]\n")
+
+    for node_id, data in matches:
+        name = data.get("name", "")
+        etype = data.get("entity_type", "UNKNOWN")
+        degree = kg.graph.degree(node_id)
+        sources = data.get("source_documents", [])
+
+        # Aliases
+        attrs = data.get("attributes", {})
+        aliases = attrs.get("aliases", []) or attrs.get("also_known_as", [])
+        if isinstance(aliases, str):
+            aliases = [aliases] if aliases else []
+
+        console.print(f"  [bold]{etype}:[/bold] {name}")
+        if aliases:
+            console.print(f"    [dim]aka:[/dim] {', '.join(str(a) for a in aliases)}")
+        console.print(f"    [dim]Connections:[/dim] {degree}")
+        if sources:
+            console.print(f"    [dim]Sources:[/dim] {', '.join(sources)}")
+
+        # Description
+        if description and node_id in descriptions:
+            desc_text = descriptions[node_id]
+            if len(desc_text) > 300:
+                desc_text = desc_text[:300] + "..."
+            console.print(f"    [dim]Description:[/dim] {desc_text}")
+
+        # Relations
+        if relations:
+            limit = 1000 if verbose else 10
+            all_rels: list[str] = []
+
+            for _, target, edata in kg.graph.edges(node_id, data=True):
+                rel = edata.get("relation_type", "RELATED_TO")
+                target_name = kg.graph.nodes[target].get("name", target)
+                all_rels.append(f"    [green]→[/green] {rel} → {target_name}")
+
+            for source, _, edata in kg.graph.in_edges(node_id, data=True):
+                if source == node_id:
+                    continue
+                rel = edata.get("relation_type", "RELATED_TO")
+                source_name = kg.graph.nodes[source].get("name", source)
+                all_rels.append(f"    [green]←[/green] {source_name} → {rel}")
+
+            for line in all_rels[:limit]:
+                console.print(line)
+            if len(all_rels) > limit:
+                console.print(f"    [dim]... {len(all_rels) - limit} more (use --verbose to show all)[/dim]")
+
+        console.print()
 
 
 @app.command()

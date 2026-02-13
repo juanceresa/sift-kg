@@ -9,6 +9,7 @@ Uses async concurrency to process multiple chunks in parallel.
 import asyncio
 import json
 import logging
+from datetime import UTC, datetime
 from pathlib import Path
 
 from rich.progress import BarColumn, Progress, SpinnerColumn, TaskProgressColumn, TextColumn
@@ -29,6 +30,25 @@ logger = logging.getLogger(__name__)
 
 # Default concurrent LLM calls. Balances speed vs rate limits.
 DEFAULT_CONCURRENCY = 4
+
+
+def _check_stale(
+    existing: DocumentExtraction,
+    model: str,
+    domain_name: str,
+    chunk_size: int,
+) -> str | None:
+    """Check if an existing extraction is stale. Returns reason string or None."""
+    # No metadata = old extraction before incremental support, re-extract
+    if not existing.domain_name and not existing.chunk_size:
+        return "missing metadata (pre-incremental extraction)"
+    if existing.model_used != model:
+        return f"model changed ({existing.model_used} → {model})"
+    if existing.domain_name != domain_name:
+        return f"domain changed ({existing.domain_name} → {domain_name})"
+    if existing.chunk_size != chunk_size:
+        return f"chunk size changed ({existing.chunk_size} → {chunk_size})"
+    return None
 
 
 def extract_from_text(
@@ -94,19 +114,24 @@ def extract_document(
     output_dir: Path,
     chunk_size: int = 10000,
     concurrency: int = DEFAULT_CONCURRENCY,
+    force: bool = False,
 ) -> DocumentExtraction:
     """Extract entities and relations from a single document file.
 
     Reads the file, calls extract_from_text, and saves results to disk.
-    Idempotent — skips documents that already have extraction JSON.
+    Incremental — skips documents whose extraction config matches.
+    Use force=True to re-extract regardless.
     """
     doc_id = doc_path.stem
     extraction_path = output_dir / "extractions" / f"{doc_id}.json"
 
-    if extraction_path.exists():
-        logger.info(f"Skipping {doc_id} (already extracted)")
-        raw = json.loads(extraction_path.read_text())
-        return DocumentExtraction(**raw)
+    if extraction_path.exists() and not force:
+        existing = DocumentExtraction(**json.loads(extraction_path.read_text()))
+        reason = _check_stale(existing, llm.model, domain.name, chunk_size)
+        if reason is None:
+            logger.info(f"Skipping {doc_id} (already extracted)")
+            return existing
+        logger.info(f"Re-extracting {doc_id}: {reason}")
 
     logger.info(f"Extracting: {doc_path.name}")
 
@@ -132,6 +157,9 @@ def extract_document(
 
     extraction = extract_from_text(text, doc_id, llm, domain, chunk_size, concurrency)
     extraction.document_path = str(doc_path)
+    extraction.domain_name = domain.name
+    extraction.chunk_size = chunk_size
+    extraction.extracted_at = datetime.now(UTC).isoformat()
 
     extraction_path.parent.mkdir(parents=True, exist_ok=True)
     extraction_path.write_text(extraction.model_dump_json(indent=2))
@@ -216,6 +244,7 @@ def extract_all(
     max_cost: float | None = None,
     concurrency: int = DEFAULT_CONCURRENCY,
     chunk_size: int = 10000,
+    force: bool = False,
 ) -> list[DocumentExtraction]:
     """Extract entities and relations from multiple documents.
 
@@ -223,7 +252,7 @@ def extract_all(
     so slots aren't wasted waiting between documents.
     """
     return asyncio.run(
-        _aextract_all(doc_paths, llm, domain, output_dir, max_cost, concurrency, chunk_size)
+        _aextract_all(doc_paths, llm, domain, output_dir, max_cost, concurrency, chunk_size, force)
     )
 
 
@@ -235,6 +264,7 @@ async def _aextract_all(
     max_cost: float | None,
     concurrency: int,
     chunk_size: int,
+    force: bool = False,
 ) -> list[DocumentExtraction]:
     """Async extraction across all documents with shared concurrency."""
     sem = asyncio.Semaphore(concurrency)
@@ -249,10 +279,14 @@ async def _aextract_all(
         doc_id = doc_path.stem
         extraction_path = extraction_dir / f"{doc_id}.json"
 
-        if extraction_path.exists():
-            logger.info(f"Skipping {doc_id} (already extracted)")
-            cached.append(DocumentExtraction(**json.loads(extraction_path.read_text())))
-            continue
+        if extraction_path.exists() and not force:
+            existing = DocumentExtraction(**json.loads(extraction_path.read_text()))
+            reason = _check_stale(existing, llm.model, domain.name, chunk_size)
+            if reason is None:
+                logger.info(f"Skipping {doc_id} (already extracted)")
+                cached.append(existing)
+                continue
+            logger.info(f"Re-extracting {doc_id}: {reason}")
 
         try:
             text = read_document(doc_path)
@@ -337,6 +371,9 @@ async def _aextract_all(
             relations=all_relations,
             cost_usd=cost_for_doc,
             model_used=llm.model,
+            domain_name=domain.name,
+            chunk_size=chunk_size,
+            extracted_at=datetime.now(UTC).isoformat(),
         )
 
         extraction_path = extraction_dir / f"{doc_id}.json"
