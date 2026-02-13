@@ -163,13 +163,21 @@ def review_merges(merge_file: MergeFile, auto_approve_threshold: float = 0.85) -
     return stats
 
 
-def review_relations(review_file: RelationReviewFile) -> dict[str, int]:
+def review_relations(
+    review_file: RelationReviewFile,
+    auto_approve_threshold: float = 0.85,
+    auto_reject_threshold: float = 0.0,
+) -> dict[str, int]:
     """Interactively review DRAFT flagged relations.
 
     Modifies review_file in place, setting status to CONFIRMED or REJECTED.
 
     Args:
         review_file: RelationReviewFile with entries to review
+        auto_approve_threshold: Auto-confirm relations at or above this confidence.
+            Set to 1.0 to disable.
+        auto_reject_threshold: Auto-reject relations below this confidence.
+            Set to 0.0 to disable.
 
     Returns:
         Stats dict with counts of approved, rejected, skipped
@@ -179,8 +187,36 @@ def review_relations(review_file: RelationReviewFile) -> dict[str, int]:
         console.print("[dim]No flagged relations to review.[/dim]")
         return {"approved": 0, "rejected": 0, "skipped": 0}
 
+    # Auto-approve high-confidence relations
+    auto_approved = 0
+    if auto_approve_threshold < 1.0:
+        for entry in drafts:
+            if entry.confidence >= auto_approve_threshold:
+                entry.status = "CONFIRMED"
+                auto_approved += 1
+        if auto_approved:
+            console.print(
+                f"[green]Auto-approved {auto_approved} relations "
+                f"(confidence ≥ {auto_approve_threshold:.0%})[/green]"
+            )
+
+    # Auto-reject low-confidence relations
+    auto_rejected = 0
+    if auto_reject_threshold > 0.0:
+        for entry in review_file.draft:
+            if entry.confidence <= auto_reject_threshold:
+                entry.status = "REJECTED"
+                auto_rejected += 1
+        if auto_rejected:
+            console.print(
+                f"[red]Auto-rejected {auto_rejected} relations "
+                f"(confidence < {auto_reject_threshold:.0%})[/red]"
+            )
+
+    # Re-check drafts after auto-approve/reject
+    drafts = review_file.draft
     total = len(drafts)
-    stats = {"approved": 0, "rejected": 0, "skipped": 0}
+    stats = {"approved": auto_approved, "rejected": auto_rejected, "skipped": 0}
 
     console.print()
     console.print(f"[bold cyan]Relation Review[/bold cyan]  —  {total} flagged relations to review")
