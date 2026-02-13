@@ -148,7 +148,7 @@ def build_entity_description_prompt(
     if system_context:
         context_section = f"DOMAIN CONTEXT:\n{system_context}\n\n"
 
-    return f"""{context_section}Write an investigative profile of {entity_name} ({entity_type}) based on the evidence below. Write like a journalist briefing an editor — direct, specific, no hedging.
+    return f"""{context_section}Write an investigative profile of {entity_name} ({entity_type}) based on the evidence below.
 
 SOURCE TEXT EXCERPTS:
 {contexts_text}
@@ -158,22 +158,36 @@ ATTRIBUTES: {attrs_text}
 CONNECTIONS:
 {relations_text}
 
-Length: Write proportionally to the evidence. Major figures with rich source material get multiple paragraphs. Minor entities with thin evidence get 2-3 sentences. Never pad, never truncate prematurely.
+Length: Proportional to evidence. Rich source material = multiple paragraphs. Thin evidence = 2-3 sentences. Never pad.
 
-Style:
-- Write like investigative journalism, not a legal filing. Be direct and assertive.
-- Bad: "Maxwell is identified as a significant figure in the context of the case." Good: "Maxwell recruited underage girls for Epstein, trained them in massage techniques, and traveled with them internationally."
-- Bad: "The documents do not provide further details about this entity." Just stop writing — don't narrate what's missing.
-- Bad: "This suggests a potential connection." Good: State the connection or don't mention it.
+OPENING SENTENCE — THIS IS CRITICAL:
+Your first sentence must be a concrete action or fact. Never a role description.
+- Bad: "Sarah Kellen played a significant role in Epstein's network." → This says NOTHING.
+- Good: "Sarah Kellen scheduled appointments, answered phones, and brought girls to Epstein's Palm Beach mansion."
+- Bad: "Ghislaine Maxwell played a pivotal role in the sex trafficking operation." → Vague filler.
+- Good: "Ghislaine Maxwell recruited underage girls for Epstein, trained them in massage techniques, and traveled with them internationally."
+- Bad: "Laura Menninger is a key legal figure in the case." → Wikipedia summary voice.
+- Good: "Laura Menninger represented Ghislaine Maxwell in the Giuffre v. Maxwell defamation suit, filing motions to seal depositions and challenging witness credibility."
+- Bad: "The FBI investigated Epstein." → Too vague.
+- Good: "The FBI opened an investigation into Epstein in 2006 after Palm Beach police referred the case, interviewing over 30 victims."
 
-Rules:
-- ONLY use facts from the source evidence. Do NOT add outside knowledge, background, or geographic trivia.
-- Describe what this entity DID — actions, testimony, allegations, decisions. Not what they "are connected to."
-- Lead with WHO they are and WHY they matter. Never open with legal labels like "plaintiff", "defendant", "witness", or "is identified as."
+STYLE: Every sentence must contain a SPECIFIC VERB describing what someone DID, SAID, WENT, FILED, RECRUITED, TESTIFIED, PAID, FLEW, etc. If you catch yourself writing "was involved in" or "was connected to" — replace it with the actual action.
+
+BANNED PATTERNS (instant fail):
+- "[Name] played a [significant/pivotal/key/central/crucial/important] role" — NEVER. Say what they DID.
+- "[Name] is a [key/significant/important/notable] [figure/person/entity]" — NEVER. Say what they DID.
+- "[Name] served as" — replace with active verbs (represented, defended, managed, ran)
+- "as evidenced by", "the documents reveal", "court records show", "the source material indicates"
+- "is associated with", "is mentioned in", "in the context of", "highlighting", "indicating", "underscoring"
+- "is significant as", "is noted for", "is identified as", "this suggests", "this indicates"
+- "also known as" in the opening — weave aliases in naturally or skip them
+- Any sentence where you could swap the person's name and it would still be true. That means it's generic.
+
+RULES:
+- ONLY use facts from the source evidence. No outside knowledge.
+- Lead with their most important ACTION, not a label or role description.
 - Include specifics: dates, locations, quotes, names of people they interacted with.
-- NEVER reference the documents themselves — no "the documents reveal", "court records show", "as evidenced by", "the source material indicates."
-- NEVER use: "is associated with", "is mentioned in", "in the context of", "highlighting", "indicating", "underscoring", "is significant as", "is noted for", "is identified as", "this suggests", "this indicates."
-- State facts. Period.
+- State facts. Active voice. Subject-verb-object.
 
 Output ONLY the profile text."""
 
@@ -235,30 +249,42 @@ Output ONLY the narrative paragraphs, one per chain. No headers, no bullet point
 
 
 def build_theme_naming_prompt(
-    entity_names: list[str],
-    entity_types: list[str],
-    relation_types: list[str],
+    communities: list[dict[str, Any]],
 ) -> str:
-    """Build prompt to generate a thematic label for a cluster of entities."""
-    entities_text = ", ".join(entity_names[:20])
-    types_text = ", ".join(sorted(set(entity_types)))
-    rels_text = (
-        ", ".join(sorted(set(relation_types))[:15])
-        if relation_types
-        else "various"
-    )
+    """Build prompt to generate distinct thematic labels for all communities at once.
 
-    return f"""These entities form a cluster in a knowledge graph:
+    Each community dict has keys: entity_names, entity_types, relation_types.
+    """
+    cluster_descriptions = []
+    for i, comm in enumerate(communities, 1):
+        names = ", ".join(comm["entity_names"][:15])
+        types = ", ".join(sorted(set(comm["entity_types"])))
+        rels = (
+            ", ".join(sorted(set(comm["relation_types"]))[:10])
+            if comm["relation_types"]
+            else "various"
+        )
+        cluster_descriptions.append(
+            f"Cluster {i} ({len(comm['entity_names'])} entities):\n"
+            f"  Members: {names}\n"
+            f"  Types: {types}\n"
+            f"  Relations: {rels}"
+        )
 
-Entities: {entities_text}
-Types: {types_text}
-Connection types: {rels_text}
+    clusters_text = "\n\n".join(cluster_descriptions)
 
-Give this cluster a short, descriptive thematic label (2-6 words) that captures what unites these entities. Think like an investigative journalist naming a section of a report.
+    return f"""Below are {len(communities)} entity clusters from a knowledge graph. Each cluster is a group of closely connected entities.
 
-Examples of good labels: "Epstein's Inner Circle", "Palm Beach Investigation", "Flight Log Network", "Financial Transactions", "Legal Proceedings"
+{clusters_text}
 
-Output ONLY the label. No quotes, no explanation."""
+Give each cluster a short, distinctive label (2-6 words) that differentiates it from the others. Each label must be UNIQUE — no two labels should be interchangeable. Focus on WHAT MAKES EACH CLUSTER DIFFERENT, not what they share.
+
+Good labels name specific people, roles, locations, or activities unique to that cluster:
+- "Epstein's Inner Circle" vs "Palm Beach Investigation" vs "Giuffre's Legal Team"
+Bad labels are generic and interchangeable:
+- "Legal Network" vs "Legal Proceedings" vs "Legal Connections"
+
+Return one label per line, in order (Cluster 1 first). No numbering, no quotes, no explanation — just the labels."""
 
 
 def build_timeline_prompt(

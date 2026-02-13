@@ -643,6 +643,7 @@ def narrate(
     output: str | None = typer.Option(None, "-o", help="Output directory"),
     no_descriptions: bool = typer.Option(False, help="Skip per-entity descriptions"),
     max_cost: float | None = typer.Option(None, help="Maximum cost budget in USD"),
+    communities_only: bool = typer.Option(False, "--communities-only", help="Only regenerate community labels (~$0.01)"),
     verbose: bool = typer.Option(False, "-v", "--verbose", help="Verbose logging"),
 ) -> None:
     """Generate narrative summary from the knowledge graph."""
@@ -662,17 +663,28 @@ def narrate(
         console.print("[yellow]No graph found.[/yellow] Run [cyan]sift build[/cyan] first.")
         raise typer.Exit(1)
 
+    from sift_kg.extract.llm_client import LLMClient
+    from sift_kg.graph.knowledge_graph import KnowledgeGraph
+
+    kg = KnowledgeGraph.load(graph_path)
+
+    if communities_only:
+        from sift_kg.narrate.generator import regenerate_communities
+
+        llm = LLMClient(model=effective_model)
+        comm_path = regenerate_communities(kg=kg, llm=llm, output_dir=output_dir)
+        console.print(f"[green]Communities regenerated:[/green] {comm_path}")
+        console.print(f"  Cost: ${llm.total_cost_usd:.4f}")
+        return
+
     # Load domain for system context
     if domain:
         config.domain_path = Path(domain)
     domain_config = _load_domain(config, domain_name)
     system_context = domain_config.system_context or ""
 
-    from sift_kg.extract.llm_client import LLMClient
-    from sift_kg.graph.knowledge_graph import KnowledgeGraph
     from sift_kg.narrate.generator import generate_narrative
 
-    kg = KnowledgeGraph.load(graph_path)
     console.print(f"[cyan]Graph:[/cyan] {kg.entity_count} entities, {kg.relation_count} relations")
     console.print(f"[cyan]Model:[/cyan] {effective_model}")
     if max_cost:

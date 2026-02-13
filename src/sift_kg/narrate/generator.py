@@ -35,6 +35,56 @@ _FULL_DATE_PATTERN = re.compile(
 )
 
 
+def regenerate_communities(
+    kg: KnowledgeGraph,
+    llm: LLMClient,
+    output_dir: Path,
+    concurrency: int = DEFAULT_CONCURRENCY,
+) -> Path:
+    """Regenerate community labels only (Louvain + LLM theme naming).
+
+    Deletes any existing communities.json and creates a fresh one.
+    Much cheaper than full narrate (~$0.01).
+    """
+    # Gather non-document entities
+    entities = []
+    for nid, data in kg.graph.nodes(data=True):
+        if data.get("entity_type") == "DOCUMENT":
+            continue
+        entities.append({
+            "id": nid,
+            "name": data.get("name", nid),
+            "entity_type": data.get("entity_type", "UNKNOWN"),
+        })
+
+    degree_map = dict(kg.graph.degree())
+    entities.sort(key=lambda e: degree_map.get(e["id"], 0), reverse=True)
+
+    # Use all entities as "described" for community detection
+    described_ids = {e["id"] for e in entities}
+    communities = _detect_communities(kg, entities, dict.fromkeys(described_ids, ""), degree_map)
+
+    comm_path = output_dir / "communities.json"
+    if not communities:
+        logger.warning("Community detection produced no usable communities")
+        comm_path.write_text("{}", encoding="utf-8")
+        return comm_path
+
+    community_labels = _generate_theme_labels(communities, kg, llm)
+
+    comm_data: dict[str, str] = {}
+    for i, community in enumerate(communities):
+        label = community_labels.get(i, f"Community {i + 1}")
+        for e in community:
+            comm_data[e["id"]] = label
+
+    comm_path.write_text(
+        json.dumps(comm_data, indent=2, ensure_ascii=False), encoding="utf-8",
+    )
+    logger.info(f"Communities regenerated ({len(set(comm_data.values()))} communities)")
+    return comm_path
+
+
 def generate_narrative(
     kg: KnowledgeGraph,
     llm: LLMClient,
@@ -156,27 +206,36 @@ def generate_narrative(
             )
         )
 
-    # --- Phase 3: Community detection + theme naming ---
+    # --- Phase 3: Community detection + theme naming (cached) ---
     communities: list[list[dict]] | None = None
     community_labels: dict[int, str] = {}
-    if entity_descriptions:
+    comm_path = output_dir / "communities.json"
+    if comm_path.exists():
+        logger.info("Communities already cached, skipping detection + theme naming")
+        comm_data = json.loads(comm_path.read_text())
+        # Rebuild communities structure for _build_markdown
+        comm_groups: dict[str, list[dict]] = {}
+        entity_map = {e["id"]: e for e in entities}
+        for eid, label in comm_data.items():
+            if eid in entity_map and eid in entity_descriptions:
+                comm_groups.setdefault(label, []).append(entity_map[eid])
+        if comm_groups:
+            communities = list(comm_groups.values())
+            community_labels = dict(enumerate(comm_groups.keys()))
+    elif entity_descriptions:
         communities = _detect_communities(kg, entities, entity_descriptions, degree_map)
         if communities:
-            community_labels = asyncio.run(
-                _agenerate_theme_labels(communities, kg, llm, concurrency)
+            community_labels = _generate_theme_labels(communities, kg, llm)
+            # Save for future runs + visualizer
+            comm_data = {}
+            for i, community in enumerate(communities):
+                label = community_labels.get(i, f"Community {i + 1}")
+                for e in community:
+                    comm_data[e["id"]] = label
+            comm_path.write_text(
+                json.dumps(comm_data, indent=2, ensure_ascii=False), encoding="utf-8",
             )
-
-    # Save community assignments for visualizer
-    if communities and community_labels:
-        comm_data: dict[str, str] = {}
-        for i, community in enumerate(communities):
-            label = community_labels.get(i, f"Community {i + 1}")
-            for e in community:
-                comm_data[e["id"]] = label
-        (output_dir / "communities.json").write_text(
-            json.dumps(comm_data, indent=2, ensure_ascii=False), encoding="utf-8",
-        )
-        logger.info(f"Community assignments saved ({len(set(comm_data.values()))} communities)")
+            logger.info(f"Community assignments saved ({len(set(comm_data.values()))} communities)")
 
     # Save descriptions as JSON sidecar for viewer integration
     if entity_descriptions:
@@ -323,7 +382,7 @@ def _detect_communities(
             for nid in community_nodes
             if nid in entity_map and nid in described_ids
         ]
-        if len(members) >= 3:
+        if len(members) >= 8:
             result.append(members)
 
     if not result:
@@ -338,20 +397,15 @@ def _detect_communities(
     return result
 
 
-async def _agenerate_theme_labels(
+def _generate_theme_labels(
     communities: list[list[dict[str, Any]]],
     kg: KnowledgeGraph,
     llm: LLMClient,
-    concurrency: int = DEFAULT_CONCURRENCY,
 ) -> dict[int, str]:
-    """Generate thematic labels for entity communities via async LLM calls."""
-    sem = asyncio.Semaphore(concurrency)
-
-    async def _label(idx: int, community: list[dict[str, Any]]) -> tuple[int, str]:
-        names = [e["name"] for e in community]
-        types = [e["entity_type"] for e in community]
-
-        # Collect relation types within this community
+    """Generate distinct thematic labels for all communities in a single LLM call."""
+    # Build community summaries for the prompt
+    comm_summaries: list[dict[str, Any]] = []
+    for community in communities:
         community_ids = {e["id"] for e in community}
         rel_types: set[str] = set()
         for eid in community_ids:
@@ -361,17 +415,22 @@ async def _agenerate_theme_labels(
                     if rt and rt != "MENTIONED_IN":
                         rel_types.add(rt)
 
-        prompt = build_theme_naming_prompt(names, types, list(rel_types))
-        async with sem:
-            try:
-                label = await llm.acall(prompt)
-                # Strip quotes/whitespace the LLM might add
-                return idx, label.strip().strip('"').strip("'")
-            except RuntimeError:
-                return idx, f"Group {idx + 1}"
+        comm_summaries.append({
+            "entity_names": [e["name"] for e in community],
+            "entity_types": [e["entity_type"] for e in community],
+            "relation_types": list(rel_types),
+        })
 
-    results = await asyncio.gather(*[_label(i, c) for i, c in enumerate(communities)])
-    return dict(results)
+    prompt = build_theme_naming_prompt(comm_summaries)
+    try:
+        response = llm.call(prompt)
+        labels = [line.strip().strip('"').strip("'") for line in response.strip().splitlines() if line.strip()]
+        result: dict[int, str] = {}
+        for i in range(len(communities)):
+            result[i] = labels[i] if i < len(labels) else f"Group {i + 1}"
+        return result
+    except (RuntimeError, IndexError):
+        return {i: f"Group {i + 1}" for i in range(len(communities))}
 
 
 # ---------------------------------------------------------------------------

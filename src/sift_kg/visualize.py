@@ -8,6 +8,8 @@ and detail sidebar.
 
 import json
 import logging
+import math
+import random
 import webbrowser
 from pathlib import Path
 
@@ -177,6 +179,14 @@ def generate_view(
 
     degrees = dict(kg.graph.degree())
 
+    # Seed initial positions by community so clusters start separated
+    community_centers: dict[str, tuple[float, float]] = {}
+    if unique_communities:
+        radius = 800
+        for i, comm in enumerate(unique_communities):
+            angle = 2 * math.pi * i / len(unique_communities)
+            community_centers[comm] = (radius * math.cos(angle), radius * math.sin(angle))
+
     # Collect entity types
     entity_types_present: set[str] = set()
 
@@ -197,7 +207,7 @@ def generate_view(
             "border": comm_color,
             "highlight": {"background": entity_color, "border": comm_color},
         }
-        border_w = 3.0 if comm_label else 1.5
+        border_w = 2.0 if comm_label else 1.5
 
         tooltip_parts = [
             name,
@@ -226,6 +236,12 @@ def generate_view(
 
         desc = entity_descriptions.get(node_id, "")
 
+        # Seed position by community center + jitter
+        center = community_centers.get(comm_label, (0, 0))
+        jitter = 150
+        init_x = center[0] + random.uniform(-jitter, jitter)
+        init_y = center[1] + random.uniform(-jitter, jitter)
+
         net.add_node(
             node_id,
             label=name,
@@ -234,8 +250,11 @@ def generate_view(
             size=size,
             shape="dot",
             borderWidth=border_w,
+            x=init_x,
+            y=init_y,
             entity_type=entity_type,
             community=comm_label,
+            node_degree=degree,
             full_name=name,
             aliases=aliases_str,
             description=desc,
@@ -370,7 +389,7 @@ def _inject_ui(
             background:rgba(26,26,46,0.95); border:1px solid #333;
             border-radius:10px; padding:14px 16px;
             font-family:Inter,system-ui,sans-serif; font-size:13px;
-            color:#e0e0e0; width:210px;
+            color:#e0e0e0; width:320px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.4);
             max-height: calc(100vh - 24px);
             overflow-y: auto;
@@ -453,6 +472,11 @@ def _inject_ui(
     <div id="sift-controls">
         <div style="font-weight:700;margin-bottom:10px;font-size:15px;color:#fff">sift-kg</div>
         <input id="search-input" type="text" placeholder="Search entities..." oninput="searchEntity(this.value)">
+
+        <div style="margin:8px 0 4px">
+            <label style="font-size:11px;color:#888">Min connections: <span id="deg-val">0</span></label>
+            <input id="deg-slider" type="range" min="0" max="20" value="0" style="width:100%;margin:2px 0;accent-color:#4FC3F7" oninput="filterByDegree(this.value)">
+        </div>
 
         <div class="section-header" style="border-top:none">Entity Types</div>
         {entity_items}
@@ -698,7 +722,8 @@ def _inject_ui(
         var updates = [];
         allNodes.forEach(function(node) {
             var hidden = hiddenEntityTypes.has(node.entity_type) ||
-                         (node.community && hiddenCommunities.has(node.community));
+                         (node.community && hiddenCommunities.has(node.community)) ||
+                         (node.node_degree || 0) < minDegree;
             updates.push({ id: node.id, hidden: hidden });
         });
         nodes.update(updates);
@@ -712,11 +737,19 @@ def _inject_ui(
         edges.update(updates);
     }
 
+    // --- Degree filter ---
+    var minDegree = 0;
+    function filterByDegree(val) {
+        minDegree = parseInt(val, 10);
+        document.getElementById('deg-val').textContent = minDegree;
+        applyFilters();
+    }
+
     // --- Search ---
     function searchEntity(query) {
         if (!query || query.length < 2) {
             var reset = allNodes.map(function(n) {
-                return { id: n.id, opacity: 1.0, font: { size: 14 }, borderWidth: n.community ? 3 : 1.5 };
+                return { id: n.id, opacity: 1.0, font: { size: 14 }, borderWidth: n.community ? 2 : 1.5 };
             });
             nodes.update(reset);
             return;
@@ -737,7 +770,7 @@ def _inject_ui(
             if (matchIds.has(n.id))
                 return { id: n.id, opacity: 1.0, font: { size: 18, color: '#ffffff' }, borderWidth: 3 };
             else if (neighborIds.has(n.id))
-                return { id: n.id, opacity: 0.8, font: { size: 12 }, borderWidth: n.community ? 3 : 1.5 };
+                return { id: n.id, opacity: 0.8, font: { size: 12 }, borderWidth: n.community ? 2 : 1.5 };
             else
                 return { id: n.id, opacity: 0.1, font: { size: 0 }, borderWidth: 1 };
         });
