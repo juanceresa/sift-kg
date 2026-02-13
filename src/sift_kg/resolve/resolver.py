@@ -35,6 +35,7 @@ def find_merge_candidates(
     entity_types: list[str] | None = None,
     concurrency: int = 4,
     use_embeddings: bool = False,
+    system_context: str = "",
 ) -> MergeFile:
     """Find entities that likely refer to the same real-world thing.
 
@@ -44,12 +45,13 @@ def find_merge_candidates(
         entity_types: Types to resolve (default: PERSON, ORG, LOCATION, EVENT)
         concurrency: Max concurrent LLM calls
         use_embeddings: Use semantic clustering instead of alphabetical batching
+        system_context: Domain context to help LLM understand entity names
 
     Returns:
         MergeFile with DRAFT proposals
     """
     return asyncio.run(
-        _afind_merge_candidates(kg, llm, entity_types, concurrency, use_embeddings)
+        _afind_merge_candidates(kg, llm, entity_types, concurrency, use_embeddings, system_context)
     )
 
 
@@ -59,6 +61,7 @@ async def _afind_merge_candidates(
     entity_types: list[str] | None,
     concurrency: int,
     use_embeddings: bool = False,
+    system_context: str = "",
 ) -> MergeFile:
     """Async implementation — resolves all type batches concurrently."""
     types_to_check = entity_types or [
@@ -122,7 +125,7 @@ async def _afind_merge_candidates(
 
             async def _bounded(b: list[dict], et: str) -> list[MergeProposal]:
                 async with sem:
-                    return await _aresolve_type_batch(b, et, llm)
+                    return await _aresolve_type_batch(b, et, llm, system_context)
 
             tasks.append(_bounded(batch, entity_type))
 
@@ -214,6 +217,7 @@ async def _aresolve_type_batch(
     entities: list[dict],
     entity_type: str,
     llm: LLMClient,
+    system_context: str = "",
 ) -> list[MergeProposal]:
     """Ask LLM to identify duplicate entities within a type (async)."""
     # Only send identity-relevant fields — full attribute dicts drown out
@@ -232,7 +236,11 @@ async def _aresolve_type_batch(
 
     entity_list = json.dumps(entity_dicts, indent=2, ensure_ascii=False)
 
-    prompt = f"""Analyze these {entity_type} entities and identify groups that refer to the same real-world entity.
+    context_section = ""
+    if system_context:
+        context_section = f"DOMAIN CONTEXT:\n{system_context}\n\n"
+
+    prompt = f"""{context_section}Analyze these {entity_type} entities and identify groups that refer to the same real-world entity.
 
 ENTITIES:
 {entity_list}
