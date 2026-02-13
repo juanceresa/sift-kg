@@ -166,6 +166,18 @@ def generate_narrative(
                 _agenerate_theme_labels(communities, kg, llm, concurrency)
             )
 
+    # Save community assignments for visualizer
+    if communities and community_labels:
+        comm_data: dict[str, str] = {}
+        for i, community in enumerate(communities):
+            label = community_labels.get(i, f"Community {i + 1}")
+            for e in community:
+                comm_data[e["id"]] = label
+        (output_dir / "communities.json").write_text(
+            json.dumps(comm_data, indent=2, ensure_ascii=False), encoding="utf-8",
+        )
+        logger.info(f"Community assignments saved ({len(set(comm_data.values()))} communities)")
+
     # Save descriptions as JSON sidecar for viewer integration
     if entity_descriptions:
         desc_path = output_dir / "entity_descriptions.json"

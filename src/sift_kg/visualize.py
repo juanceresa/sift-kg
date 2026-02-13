@@ -2,12 +2,16 @@
 
 Generates a standalone HTML file with a force-directed graph layout.
 Entities colored by type, edges colored by relation type, with
-interactive color pickers, type toggles, search, and detail sidebar.
+interactive color pickers, type toggles, community filters, search,
+and detail sidebar.
 """
 
+import json
 import logging
 import webbrowser
 from pathlib import Path
+
+import networkx as nx
 
 from sift_kg.graph.knowledge_graph import KnowledgeGraph
 
@@ -51,6 +55,22 @@ EDGE_PALETTE = [
     "#CE93D8",
 ]
 
+# Community border colors — distinct from entity fill colors
+COMMUNITY_COLORS = [
+    "#FF6B6B",
+    "#4ECDC4",
+    "#45B7D1",
+    "#96CEB4",
+    "#FFEAA7",
+    "#DDA0DD",
+    "#98D8C8",
+    "#F7DC6F",
+    "#BB8FCE",
+    "#85C1E9",
+    "#F0B27A",
+    "#82E0AA",
+]
+
 
 def _color_for_relation(rel_type: str, rel_color_map: dict[str, str]) -> str:
     """Get or assign a color for a relation type."""
@@ -73,10 +93,32 @@ def generate_view(
     # Load entity descriptions if available
     entity_descriptions: dict[str, str] = {}
     if descriptions_path and descriptions_path.exists():
-        import json
-
         entity_descriptions = json.loads(descriptions_path.read_text())
         logger.info(f"Loaded {len(entity_descriptions)} entity descriptions for viewer")
+
+    # Load or compute community assignments
+    community_map: dict[str, str] = {}
+    communities_path = output_path.parent / "communities.json"
+    if communities_path.exists():
+        community_map = json.loads(communities_path.read_text())
+        logger.info(f"Loaded {len(set(community_map.values()))} communities for viewer")
+    if not community_map:
+        try:
+            undirected = kg.graph.to_undirected()
+            raw = nx.community.louvain_communities(undirected)
+            if len(raw) > 1:
+                for i, comm in enumerate(sorted(raw, key=len, reverse=True)):
+                    for nid in comm:
+                        community_map[nid] = f"Community {i + 1}"
+        except Exception:
+            pass
+
+    unique_communities = sorted(set(community_map.values()))
+    community_color_map = {
+        label: COMMUNITY_COLORS[i % len(COMMUNITY_COLORS)]
+        for i, label in enumerate(unique_communities)
+    }
+
     try:
         from pyvis.network import Network
     except ImportError as exc:
@@ -144,14 +186,26 @@ def generate_view(
         entity_types_present.add(entity_type)
         name = data.get("name", node_id)
         confidence = data.get("confidence", 0)
-        color = ENTITY_COLORS.get(entity_type, DEFAULT_ENTITY_COLOR)
+        entity_color = ENTITY_COLORS.get(entity_type, DEFAULT_ENTITY_COLOR)
         degree = degrees.get(node_id, 0)
+
+        # Community border color
+        comm_label = community_map.get(node_id, "")
+        comm_color = community_color_map.get(comm_label, "#333")
+        node_color = {
+            "background": entity_color,
+            "border": comm_color,
+            "highlight": {"background": entity_color, "border": comm_color},
+        }
+        border_w = 3.0 if comm_label else 1.5
 
         tooltip_parts = [
             name,
             f"Type: {entity_type}",
             f"Connections: {degree}",
         ]
+        if comm_label:
+            tooltip_parts.append(f"Community: {comm_label}")
         if isinstance(confidence, (int, float)):
             tooltip_parts.append(f"Confidence: {confidence:.0%}")
         source_docs = data.get("source_documents", [])
@@ -176,10 +230,12 @@ def generate_view(
             node_id,
             label=name,
             title=tooltip,
-            color=color,
+            color=node_color,
             size=size,
             shape="dot",
+            borderWidth=border_w,
             entity_type=entity_type,
+            community=comm_label,
             full_name=name,
             aliases=aliases_str,
             description=desc,
@@ -233,7 +289,7 @@ def generate_view(
     output_path.parent.mkdir(parents=True, exist_ok=True)
     net.write_html(str(output_path))
     _fix_firefox_height(output_path)
-    _inject_ui(output_path, kg, entity_types_present, rel_color_map)
+    _inject_ui(output_path, kg, entity_types_present, rel_color_map, community_color_map)
 
     logger.info(
         f"View generated: {kg.entity_count} entities, "
@@ -263,8 +319,9 @@ def _inject_ui(
     kg: KnowledgeGraph,
     entity_types: set[str],
     rel_color_map: dict[str, str],
+    community_color_map: dict[str, str] | None = None,
 ) -> None:
-    """Inject sidebar with search, entity/relation type toggles + color pickers + detail panel."""
+    """Inject sidebar with search, entity/relation/community toggles + color pickers + detail panel."""
 
     # Entity type controls
     entity_items = ""
@@ -277,6 +334,22 @@ def _inject_ui(
             f'<span class="type-label">{et}</span>'
             f"</div>"
         )
+
+    # Community controls
+    community_section = ""
+    if community_color_map:
+        community_items = ""
+        for label in sorted(community_color_map.keys()):
+            color = community_color_map[label]
+            community_items += (
+                f'<div class="type-row">'
+                f'<input type="checkbox" checked data-community="{label}" onchange="toggleCommunity(this)">'
+                f'<span style="display:inline-block;width:12px;height:12px;border-radius:50%;'
+                f'background:{color};border:1px solid #555;flex-shrink:0"></span>'
+                f'<span class="type-label">{label}</span>'
+                f"</div>"
+            )
+        community_section = f'<div class="section-header">Communities</div>{community_items}'
 
     # Relation type controls
     relation_items = ""
@@ -384,6 +457,8 @@ def _inject_ui(
         <div class="section-header" style="border-top:none">Entity Types</div>
         {entity_items}
 
+        {community_section}
+
         <div class="section-header">Relation Types</div>
         {relation_items}
 
@@ -413,6 +488,7 @@ def _inject_ui(
     var allEdges = edges.get();
     var hiddenEntityTypes = new Set();
     var hiddenRelationTypes = new Set();
+    var hiddenCommunities = new Set();
 
     // --- Detail sidebar ---
     var dp = document.getElementById('detail-panel');
@@ -469,6 +545,12 @@ def _inject_ui(
         h += '<div class="d-field"><div class="d-label">Type</div>';
         h += '<span class="d-badge" style="background:' + esc(tc) + ';color:#1a1a2e">' + esc(node.entity_type || 'UNKNOWN') + '</span></div>';
 
+        // community
+        if (node.community) {
+            h += '<div class="d-field"><div class="d-label">Community</div>';
+            h += '<div class="d-val">' + esc(node.community) + '</div></div>';
+        }
+
         // narrative description
         if (node.description) {
             h += '<div class="d-field"><div class="d-label">Description</div>';
@@ -480,6 +562,7 @@ def _inject_ui(
         for (var i = 1; i < lines.length; i++) {
             var ln = lines[i].trim();
             if (!ln) continue;
+            if (ln.startsWith('Community:')) continue;
             var ci = ln.indexOf(': ');
             if (ci > 0) {
                 h += '<div class="d-field"><div class="d-label">' + esc(ln.substring(0, ci)) + '</div>';
@@ -566,6 +649,14 @@ def _inject_ui(
         applyFilters();
     }
 
+    // --- Community toggle ---
+    function toggleCommunity(cb) {
+        var comm = cb.dataset.community;
+        if (cb.checked) hiddenCommunities.delete(comm);
+        else hiddenCommunities.add(comm);
+        applyFilters();
+    }
+
     // --- Relation type toggle ---
     function toggleRelationType(cb) {
         var type = cb.dataset.rtype;
@@ -581,10 +672,13 @@ def _inject_ui(
         var updates = [];
         allNodes.forEach(function(n) {
             if (n.entity_type === type) {
-                updates.push({ id: n.id, color: color });
+                var c = n.color;
+                var border = (typeof c === 'object' && c.border) ? c.border : '#333';
+                updates.push({ id: n.id, color: { background: color, border: border, highlight: { background: color, border: border } } });
             }
         });
         nodes.update(updates);
+        allNodes = nodes.get();
     }
 
     // --- Relation color picker ---
@@ -603,7 +697,9 @@ def _inject_ui(
     function applyFilters() {
         var updates = [];
         allNodes.forEach(function(node) {
-            updates.push({ id: node.id, hidden: hiddenEntityTypes.has(node.entity_type) });
+            var hidden = hiddenEntityTypes.has(node.entity_type) ||
+                         (node.community && hiddenCommunities.has(node.community));
+            updates.push({ id: node.id, hidden: hidden });
         });
         nodes.update(updates);
     }
@@ -620,7 +716,7 @@ def _inject_ui(
     function searchEntity(query) {
         if (!query || query.length < 2) {
             var reset = allNodes.map(function(n) {
-                return { id: n.id, opacity: 1.0, font: { size: 14 }, borderWidth: 1.5 };
+                return { id: n.id, opacity: 1.0, font: { size: 14 }, borderWidth: n.community ? 3 : 1.5 };
             });
             nodes.update(reset);
             return;
@@ -641,7 +737,7 @@ def _inject_ui(
             if (matchIds.has(n.id))
                 return { id: n.id, opacity: 1.0, font: { size: 18, color: '#ffffff' }, borderWidth: 3 };
             else if (neighborIds.has(n.id))
-                return { id: n.id, opacity: 0.8, font: { size: 12 }, borderWidth: 1.5 };
+                return { id: n.id, opacity: 0.8, font: { size: 12 }, borderWidth: n.community ? 3 : 1.5 };
             else
                 return { id: n.id, opacity: 0.1, font: { size: 0 }, borderWidth: 1 };
         });
