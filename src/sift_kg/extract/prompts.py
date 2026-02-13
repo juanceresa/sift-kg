@@ -78,11 +78,16 @@ def build_combined_prompt(
     text: str,
     document_id: str,
     domain: DomainConfig,
+    doc_context: str = "",
 ) -> str:
     """Build a single prompt that extracts both entities and relations.
 
     Cuts LLM calls per chunk from 2 to 1. The prompt instructs the model
     to identify entities first, then find relations between them.
+
+    Args:
+        doc_context: Optional document-level summary prepended to each chunk
+            so the LLM has context about the overall document.
     """
     type_lines = []
     for name, cfg in domain.entity_types.items():
@@ -98,6 +103,13 @@ def build_combined_prompt(
     context_section = ""
     if domain.system_context:
         context_section = f"\n{domain.system_context}\n"
+
+    doc_context_section = ""
+    if doc_context:
+        doc_context_section = (
+            "\nDOCUMENT CONTEXT (applies to entire document, not just this excerpt):\n"
+            f"{doc_context}\n"
+        )
 
     return f"""{context_section}Extract entities and relationships from the following document text. Return valid JSON only.
 
@@ -148,7 +160,7 @@ RULES:
 - If no relations found, return an empty relations list
 
 Document: {document_id}
-
+{doc_context_section}
 TEXT:
 {text}
 

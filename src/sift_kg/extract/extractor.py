@@ -69,6 +69,26 @@ def extract_from_text(
     )
 
 
+async def _generate_doc_context(llm: LLMClient, first_chunk_text: str) -> str:
+    """Generate a brief document summary from the first chunk.
+
+    One LLM call per document — gives every subsequent chunk context about
+    what the overall document is (who's speaking, what case, what subject).
+    """
+    prompt = (
+        "Summarize this document excerpt in 2-3 sentences. "
+        "Focus on: what type of document this is, who the key participants are, "
+        "and what the main subject matter is. Be specific about names and roles.\n\n"
+        f"TEXT:\n{first_chunk_text}\n\nSUMMARY:"
+    )
+    try:
+        response = await llm.acall(prompt)
+        return response.strip()
+    except Exception as e:
+        logger.warning(f"Doc context generation failed: {e}")
+        return ""
+
+
 async def _aextract_from_text(
     text: str,
     doc_id: str,
@@ -82,9 +102,14 @@ async def _aextract_from_text(
     cost_before = llm.total_cost_usd
     sem = asyncio.Semaphore(concurrency)
 
+    # Generate document-level context from the first chunk
+    doc_context = await _generate_doc_context(llm, chunks[0].text)
+    if doc_context:
+        logger.debug(f"Doc context for {doc_id}: {doc_context[:100]}...")
+
     async def _bounded(chunk: TextChunk) -> ExtractionResult:
         async with sem:
-            return await _aextract_chunk(chunk, doc_id, llm, domain)
+            return await _aextract_chunk(chunk, doc_id, llm, domain, doc_context)
 
     results = await asyncio.gather(*[_bounded(c) for c in chunks])
 
@@ -176,13 +201,14 @@ async def _aextract_chunk(
     doc_id: str,
     llm: LLMClient,
     domain: DomainConfig,
+    doc_context: str = "",
 ) -> ExtractionResult:
     """Extract entities and relations from a single chunk (async).
 
     Uses a combined prompt (1 LLM call) instead of separate entity + relation
     calls (2 LLM calls). Falls back to entity-only on parse failure.
     """
-    prompt = build_combined_prompt(chunk.text, doc_id, domain)
+    prompt = build_combined_prompt(chunk.text, doc_id, domain, doc_context=doc_context)
     try:
         data = await llm.acall_json(prompt)
     except (RuntimeError, ValueError) as e:
@@ -224,15 +250,30 @@ async def _aextract_chunk(
 
 
 def _dedupe_entities(entities: list[ExtractedEntity]) -> list[ExtractedEntity]:
-    """Remove duplicate entities within a document by name+type."""
+    """Remove duplicate entities within a document by name+type.
+
+    Keeps the highest-confidence entry but collects ALL unique context
+    quotes into a pipe-separated string so narration has rich source material.
+    """
     seen: dict[str, ExtractedEntity] = {}
+    contexts: dict[str, set[str]] = {}
     for e in entities:
         key = f"{e.entity_type}:{e.name.lower().strip()}"
+        # Collect all unique contexts
+        if e.context.strip():
+            contexts.setdefault(key, set()).add(e.context.strip())
         if key in seen:
             if e.confidence > seen[key].confidence:
                 seen[key] = e
         else:
             seen[key] = e
+
+    # Merge collected contexts back into each entity
+    for key, entity in seen.items():
+        all_ctx = contexts.get(key, set())
+        if len(all_ctx) > 1:
+            entity.context = " ||| ".join(sorted(all_ctx))
+
     return list(seen.values())
 
 
@@ -288,6 +329,7 @@ async def _aextract_all(
                 continue
             logger.info(f"Re-extracting {doc_id}: {reason}")
 
+        logger.info(f"Reading {doc_path.name}...")
         try:
             text = read_document(doc_path)
         except Exception as e:
@@ -307,10 +349,20 @@ async def _aextract_all(
             continue
 
         chunks = chunk_text(text, chunk_size=chunk_size)
+        logger.info(f"  {len(text):,} chars → {len(chunks)} chunks")
         doc_work.append((doc_path, doc_id, text, chunks))
 
     if not doc_work:
         return cached
+
+    # Generate document-level context for each document (1 LLM call each)
+    doc_contexts: dict[str, str] = {}
+    for _, doc_id, _, chunks in doc_work:
+        logger.info(f"Generating context for {doc_id}...")
+        ctx = await _generate_doc_context(llm, chunks[0].text)
+        doc_contexts[doc_id] = ctx
+        if ctx:
+            logger.info(f"  {ctx[:120]}")
 
     # Flatten all chunks across all docs, tagged with their doc info
     all_tasks: list[tuple[str, TextChunk]] = []
@@ -335,7 +387,9 @@ async def _aextract_all(
             if max_cost and llm.total_cost_usd >= max_cost:
                 return doc_id, ExtractionResult(source_document=doc_id, chunk_index=chunk.chunk_index)
             async with sem:
-                result = await _aextract_chunk(chunk, doc_id, llm, domain)
+                result = await _aextract_chunk(
+                    chunk, doc_id, llm, domain, doc_context=doc_contexts.get(doc_id, "")
+                )
                 completed_chunks += 1
                 progress.update(ptask, completed=completed_chunks, cost=llm.total_cost_usd)
                 return doc_id, result
