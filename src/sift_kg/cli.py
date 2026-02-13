@@ -20,7 +20,10 @@ console = Console()
 
 
 def _load_domain(config: SiftConfig, domain_name: str = "default"):
-    """Load domain config from user path or bundled name."""
+    """Load domain config from user path or bundled name.
+
+    Priority: --domain CLI flag > SIFT_DOMAIN_PATH env > sift.yaml > bundled default
+    """
     from sift_kg.domains.loader import DomainLoader
 
     loader = DomainLoader()
@@ -189,6 +192,8 @@ def build(
 @app.command()
 def resolve(
     model: str = typer.Option(None, help="LLM model for entity resolution"),
+    domain: str | None = typer.Option(None, help="Path to custom domain YAML"),
+    domain_name: str = typer.Option("default", "--domain-name", "-d", help="Bundled domain name (e.g. osint)"),
     concurrency: int = typer.Option(4, "-c", "--concurrency", help="Concurrent LLM calls"),
     rpm: int = typer.Option(40, "--rpm", help="Max requests per minute"),
     use_embeddings: bool = typer.Option(
@@ -209,6 +214,12 @@ def resolve(
         console.print(f"[red]Error:[/red] {e}")
         raise typer.Exit(1) from None
 
+    # Load domain for system context
+    if domain:
+        config.domain_path = Path(domain)
+    domain_config = _load_domain(config, domain_name)
+    system_context = domain_config.system_context or ""
+
     graph_path = output_dir / "graph_data.json"
     if not graph_path.exists():
         console.print("[yellow]No graph found.[/yellow] Run [cyan]sift build[/cyan] first.")
@@ -220,10 +231,11 @@ def resolve(
     from sift_kg.resolve.resolver import find_merge_candidates
 
     kg = KnowledgeGraph.load(graph_path)
+    console.print(f"[cyan]Domain:[/cyan] {domain_config.name}")
     console.print(f"[cyan]Graph:[/cyan] {kg.entity_count} entities, {kg.relation_count} relations")
 
     llm = LLMClient(model=effective_model, rpm=rpm)
-    merge_file = find_merge_candidates(kg, llm, concurrency=concurrency, use_embeddings=use_embeddings)
+    merge_file = find_merge_candidates(kg, llm, concurrency=concurrency, use_embeddings=use_embeddings, system_context=system_context)
 
     if not merge_file.proposals:
         console.print("[green]No duplicates found![/green]")
@@ -314,6 +326,10 @@ def review(
         0.85, "--auto-approve",
         help="Auto-confirm proposals where all members meet this confidence (0-1). Set to 1.0 to disable.",
     ),
+    auto_reject: float = typer.Option(
+        0.5, "--auto-reject",
+        help="Auto-reject relations below this confidence (0-1). Set to 0.0 to disable.",
+    ),
     verbose: bool = typer.Option(False, "-v", "--verbose", help="Verbose logging"),
 ) -> None:
     """Interactively review merge proposals and flagged relations."""
@@ -354,7 +370,11 @@ def review(
     if has_relations:
         relation_file = read_relation_review(review_path)
         if relation_file.draft:
-            review_relations(relation_file)
+            review_relations(
+                relation_file,
+                auto_approve_threshold=auto_approve,
+                auto_reject_threshold=auto_reject,
+            )
             write_relation_review(relation_file, review_path)
             console.print()
         else:
@@ -679,16 +699,16 @@ def narrate(
 
 
 @app.command()
-def init() -> None:
+def init(
+    domain: str | None = typer.Option(None, help="Path to custom domain YAML to set in project config"),
+) -> None:
     """Initialize a new sift-kg project in the current directory."""
     env_example_path = Path(".env.example")
+    sift_yaml_path = Path("sift.yaml")
 
-    if env_example_path.exists():
-        overwrite = typer.confirm("Overwrite existing .env.example?")
-        if not overwrite:
-            raise typer.Exit(0)
-
-    env_template = """# sift-kg Configuration
+    # Create .env.example
+    if not env_example_path.exists() or typer.confirm("Overwrite existing .env.example?", default=False):
+        env_template = """# sift-kg Configuration
 # Copy this file to .env and fill in your API keys
 
 # === LLM API Keys ===
@@ -699,22 +719,32 @@ SIFT_ANTHROPIC_API_KEY=
 # === Model Configuration ===
 # Format: provider/model-name
 SIFT_DEFAULT_MODEL=openai/gpt-4o-mini
-
-# === Output Configuration ===
-SIFT_OUTPUT_DIR=output
-
-# === Domain Configuration (Optional) ===
-# SIFT_DOMAIN_PATH=path/to/custom/domain.yaml
 """
-    env_example_path.write_text(env_template)
-    console.print("[green]Created .env.example[/green]")
+        env_example_path.write_text(env_template)
+        console.print("[green]Created .env.example[/green]")
+
+    # Create sift.yaml project config
+    if not sift_yaml_path.exists() or typer.confirm("Overwrite existing sift.yaml?", default=False):
+        project_config = "# sift-kg project config\n# All commands pick up these settings automatically.\n\n"
+        if domain:
+            project_config += f"domain: {domain}\n"
+        else:
+            project_config += "# domain: path/to/domain.yaml\n"
+        project_config += "# model: openai/gpt-4o-mini\n"
+        project_config += "# output: output\n"
+        sift_yaml_path.write_text(project_config)
+        console.print("[green]Created sift.yaml[/green]")
+
     console.print("\nNext steps:")
     console.print("  1. cp .env.example .env")
     console.print("  2. Add your API key to .env")
-    console.print("  3. sift extract ./docs/")
+    if not domain:
+        console.print("  3. Edit sift.yaml to set your domain (or use --domain flag)")
+        console.print("  4. sift extract ./docs/")
+    else:
+        console.print("  3. sift extract ./docs/")
     console.print()
     console.print("Available domains: [cyan]sift domains[/cyan]")
-    console.print("  Use: [cyan]sift extract ./docs/ --domain-name osint[/cyan]")
     raise typer.Exit(0)
 
 
