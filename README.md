@@ -43,7 +43,7 @@ Every entity and relation links back to the source document and passage. You con
 ## Features
 
 - **Zero-config start** — point at a folder, get a knowledge graph. Or drop a `sift.yaml` in your project for persistent settings
-- **Any LLM provider** — OpenAI, Anthropic, Ollama (local/private), or any LiteLLM-compatible provider
+- **Any LLM provider** — OpenAI, Anthropic, Mistral, Ollama (local/private), or any LiteLLM-compatible provider
 - **Domain-configurable** — define custom entity types and relation types in YAML
 - **Human-in-the-loop** — sift proposes entity merges, you approve or reject in an interactive terminal UI
 - **CLI search** — `sift search "SBF"` finds entities by name or alias, with optional relation and description output
@@ -127,9 +127,10 @@ Set your API key in `.env`:
 SIFT_OPENAI_API_KEY=sk-...
 ```
 
-Or use Anthropic, Ollama, or any LiteLLM provider:
+Or use Anthropic, Mistral, Ollama, or any LiteLLM provider:
 ```
 SIFT_ANTHROPIC_API_KEY=sk-ant-...
+SIFT_MISTRAL_API_KEY=...
 ```
 
 Settings priority: CLI flags > env vars > `.env` > `sift.yaml` > defaults. You can override anything from `sift.yaml` with a flag on any command.
