@@ -107,6 +107,11 @@ class SiftConfig(BaseSettings):
         description="Google Gemini API key. Get from: https://aistudio.google.com/apikey"
     )
 
+    mistral_api_key: str | None = Field(
+        default=None,
+        description="Mistral API key. Get from: https://admin.mistral.ai/organization/api-keys",
+    )
+
     default_model: str = Field(
         default="openai/gpt-4o-mini",
         description="Default LLM model in format provider/model-name (e.g., openai/gpt-4o-mini, anthropic/claude-haiku, ollama/llama3.3)"
@@ -129,6 +134,7 @@ class SiftConfig(BaseSettings):
             "OPENAI_API_KEY": self.openai_api_key,
             "ANTHROPIC_API_KEY": self.anthropic_api_key,
             "GEMINI_API_KEY": self.gemini_api_key,
+            "MISTRAL_API_KEY": self.mistral_api_key,
         }
         for env_var, value in key_map.items():
             if value and env_var not in os.environ:
@@ -181,6 +187,16 @@ class SiftConfig(BaseSettings):
             raise ValueError(
                 "GEMINI_API_KEY not found. Set in environment or .env file.\n"
                 "Get your key from: https://aistudio.google.com/apikey"
+            )
+
+        if (
+            model.startswith("mistral/")
+            and not self.mistral_api_key
+            and not os.environ.get("MISTRAL_API_KEY")
+        ):
+            raise ValueError(
+                "MISTRAL_API_KEY not found. Set in environment or .env file.\n"
+                "Get your key from: https://admin.mistral.ai/organization/api-keys"
             )
 
         # Ollama models run locally - no API key needed
