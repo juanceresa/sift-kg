@@ -23,12 +23,22 @@ def _load_domain(config: SiftConfig, domain_name: str = "default"):
     """Load domain config from user path or bundled name.
 
     Priority: --domain CLI flag > SIFT_DOMAIN_PATH env > sift.yaml > bundled default
+
+    The domain value from sift.yaml can be a file path or a bundled name
+    (e.g. "academic", "osint"). If the path doesn't exist as a file, it's
+    tried as a bundled domain name.
     """
     from sift_kg.domains.loader import DomainLoader
 
     loader = DomainLoader()
     if config.domain_path:
-        return loader.load_from_path(config.domain_path)
+        if config.domain_path.exists():
+            return loader.load_from_path(config.domain_path)
+        # Try as a bundled domain name (e.g. domain: academic in sift.yaml)
+        name = str(config.domain_path)
+        if name in loader.list_bundled():
+            return loader.load_bundled(name)
+        return loader.load_from_path(config.domain_path)  # let it raise
     return loader.load_bundled(domain_name)
 
 

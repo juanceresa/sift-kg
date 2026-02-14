@@ -59,19 +59,38 @@ Every entity and relation links back to the source document and passage. You con
 
 - **Investigative journalism** — analyze FOIA releases, court filings, and document leaks
 - **OSINT research** — map entity networks from public records
-- **Academic research** — build structured datasets from historical archives
+- **Academic research** — map how theories, methods, and findings connect across a body of literature
 - **Legal review** — extract and connect entities across document collections
 - **Genealogy** — trace family relationships across vital records
 
-## For OSINT & Investigations
+## Bundled Domains
 
-sift-kg ships with a bundled `osint` domain that adds entity types for shell companies, financial instruments, and government agencies, plus relation types like `BENEFICIAL_OWNER_OF` and `SANCTIONS_LISTED`:
+sift-kg ships with specialized domains you can use out of the box:
 
 ```bash
-sift extract ./docs/ --domain-name osint
+sift domains                              # list available domains
+sift extract ./docs/ --domain-name osint  # use a bundled domain
 ```
 
-The human-in-the-loop merge review is designed for this — the LLM proposes, you verify. Nothing gets merged without your approval, and every extraction links back to the source document and passage.
+Set a domain in `sift.yaml` so you don't need the flag every time:
+
+```yaml
+domain: academic
+```
+
+Works with bundled names (`academic`, `osint`, `default`) or a path to a custom YAML file.
+
+| Domain | Focus | Key Entity Types | Key Relation Types |
+|--------|-------|------------------|--------------------|
+| `default` | General document analysis | PERSON, ORGANIZATION, LOCATION, EVENT, DOCUMENT | ASSOCIATED_WITH, MEMBER_OF, LOCATED_IN |
+| `osint` | Investigations & FOIA | SHELL_COMPANY, FINANCIAL_ACCOUNT | BENEFICIAL_OWNER_OF, TRANSACTED_WITH, SIGNATORY_OF |
+| `academic` | Literature review & topic mapping | CONCEPT, THEORY, METHOD, FINDING, PHENOMENON | SUPPORTS, CONTRADICTS, EXTENDS, EXPLAINS |
+
+The **academic** domain maps the intellectual landscape of a research area — feed in papers and get a graph of how theories, methods, findings, and concepts connect. Designed for literature reviews, topic mapping, and understanding where ideas agree, contradict, or build on each other.
+
+The **osint** domain adds entity types for shell companies, financial accounts, and offshore jurisdictions, plus relation types for tracing beneficial ownership and financial flows.
+
+Nothing gets merged without your approval — the LLM proposes, you verify. Every extraction links back to the source document and passage.
 
 See [`examples/ftx/`](examples/ftx/) for a pipeline run on 9 articles about the FTX collapse (431 entities, 1,201 relations) and [`examples/epstein/`](examples/epstein/) for the Giuffre v. Maxwell depositions (190 entities, 387 relations). [**Explore both graphs live**](https://juanceresa.github.io/sift-kg/) — no install, no API key.
 
@@ -196,16 +215,7 @@ Produces `output/narrative.md` — an investigative-style report with an overvie
 
 ## Domain Configuration
 
-sift-kg ships with two bundled domains:
-
-```bash
-sift domains                  # list available domains
-```
-
-| Domain | Entity Types | Relation Types | Use Case |
-|--------|-------------|----------------|----------|
-| `default` | PERSON, ORGANIZATION, LOCATION, EVENT, DOCUMENT | 9 general relations | Any document corpus |
-| `osint` | Adds SHELL_COMPANY, FINANCIAL_INSTRUMENT, GOVERNMENT_AGENCY | Adds BENEFICIAL_OWNER_OF, SANCTIONS_LISTED, etc. | Investigations, FOIA |
+sift-kg ships with three bundled domains (see [Bundled Domains](#bundled-domains) above for details).
 
 Use a bundled domain:
 ```bash
