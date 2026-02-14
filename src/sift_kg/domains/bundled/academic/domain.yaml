@@ -1,0 +1,167 @@
+name: "Academic Research"
+version: "1.0.0"
+description: |
+  Domain for mapping the intellectual landscape of a research area.
+  Optimized for literature reviews, topic mapping, and understanding
+  how concepts, theories, methods, and findings connect across a body
+  of academic work. Feed in papers and get a graph of ideas.
+
+system_context: |
+  You are analyzing academic papers and research documents to map the
+  intellectual landscape of a research area. Your goal is to extract the
+  structure of ideas — not bibliometric metadata like citation counts,
+  h-indices, or institutional affiliations.
+
+  Focus on these relationship patterns:
+  - Which theories EXPLAIN which phenomena or findings
+  - Which findings SUPPORT or CONTRADICT which theories
+  - Which methods are USED to produce which findings
+  - Which concepts, theories, or methods EXTEND or BUILD ON earlier ones
+  - Which researchers PROPOSED key theories, methods, or findings
+  - How ideas connect across different fields and subfields
+
+  When naming entities, prefer canonical forms: use the established name
+  of a theory ("Dual Process Theory" not "the dual process account"),
+  the standard term for a method ("grounded theory" not "GT approach"),
+  and concise labels for findings ("bilingual cognitive advantage" not
+  "the finding that bilingual individuals show improved executive function").
+
+entity_types:
+  CONCEPT:
+    description: "Core ideas, constructs, variables, and technical terms central to the research area"
+    extraction_hints:
+      - "Look for defined terms, key variables, and constructs that papers build arguments around"
+      - "Include both broad concepts (e.g. 'cognitive load') and specific operationalizations"
+      - "Capture the definition or description when the text provides one"
+      - "Use CONCEPT for ideas that don't have a named theoretical framework — if it has a proper name and makes predictions, use THEORY instead"
+
+  THEORY:
+    description: "Named theoretical frameworks, models, paradigms, and schools of thought"
+    extraction_hints:
+      - "Look for named theories, frameworks, and models (e.g. 'Actor-Network Theory', 'Dual Process Model')"
+      - "Include paradigms and schools of thought (e.g. 'constructivism', 'positivism')"
+      - "Note the originator or key proponents when mentioned"
+      - "Must have a proper name — 'Cognitive Load Theory' is a THEORY, 'cognitive load' is a CONCEPT"
+
+  METHOD:
+    description: "Research methods, techniques, analytical approaches, and tools"
+    extraction_hints:
+      - "Include study designs (RCT, case study, ethnography), analysis techniques (regression, thematic analysis), and instruments"
+      - "Capture software tools and platforms when they are central to the methodology"
+      - "Note sample sizes, populations, or conditions when they define the methodological approach"
+
+  FINDING:
+    description: "Key results, conclusions, effects, and empirical observations reported in studies"
+    extraction_hints:
+      - "Look for stated results, reported effects, and conclusions drawn from data"
+      - "Capture effect sizes, statistical significance, and directionality when mentioned"
+      - "Include null results and negative findings — these matter for the landscape"
+      - "Name findings as concise canonical labels, not full sentences (e.g. 'bilingual cognitive advantage' not 'bilingual individuals show improved executive function')"
+      - "If a finding has an established name (e.g. 'replication crisis', 'Mozart effect'), use that name"
+
+  PHENOMENON:
+    description: "Observable events, behaviors, patterns, or problems that research investigates"
+    extraction_hints:
+      - "Look for the thing being studied — the real-world behavior, pattern, trend, or problem"
+      - "PHENOMENON is something observable in the world; CONCEPT is an abstract idea used to reason about it; THEORY is a named framework that explains it"
+      - "Examples: 'urban heat island effect', 'antibiotic resistance', 'voter turnout decline'"
+      - "'Climate change' is a PHENOMENON; 'greenhouse effect' is a CONCEPT; 'Anthropogenic Global Warming Theory' is a THEORY"
+
+  RESEARCHER:
+    description: "Individual academics referenced as key contributors to ideas, not just listed authors"
+    extraction_hints:
+      - "Extract researchers who are credited with originating a theory, coining a term, or producing a landmark finding"
+      - "Skip routine author mentions — focus on people whose names are attached to ideas"
+      - "Note their contribution: 'proposed X', 'demonstrated Y', 'coined the term Z'"
+
+  PUBLICATION:
+    description: "Specific papers, books, or reports referenced as important sources"
+    extraction_hints:
+      - "Extract publications that are discussed substantively, not just cited in passing"
+      - "Include landmark papers, seminal books, and meta-analyses that shape the field"
+      - "Capture the title or short identifier, year, and why it matters"
+
+  FIELD:
+    description: "Academic disciplines, subfields, and interdisciplinary areas"
+    extraction_hints:
+      - "Look for named disciplines and subfields (e.g. 'computational linguistics', 'behavioral economics')"
+      - "Capture interdisciplinary bridges when research draws from multiple fields"
+
+relation_types:
+  SUPPORTS:
+    description: "Finding or publication provides evidence for a theory, concept, or other finding"
+    source_types: [FINDING, PUBLICATION]
+    target_types: [THEORY, CONCEPT, FINDING]
+    extraction_hints:
+      - "Look for language like 'consistent with', 'confirms', 'provides evidence for', 'supports'"
+
+  CONTRADICTS:
+    description: "Finding or publication provides evidence against a theory, concept, or other finding"
+    source_types: [FINDING, PUBLICATION]
+    target_types: [THEORY, CONCEPT, FINDING]
+    extraction_hints:
+      - "Look for language like 'inconsistent with', 'challenges', 'refutes', 'contradicts', 'fails to replicate'"
+    review_required: true
+
+  EXTENDS:
+    description: "Theory, concept, or method builds upon or refines another"
+    source_types: [THEORY, CONCEPT, METHOD]
+    target_types: [THEORY, CONCEPT, METHOD]
+    extraction_hints:
+      - "Look for language like 'builds on', 'extends', 'refines', 'adapts', 'generalizes'"
+
+  USES_METHOD:
+    description: "Publication or finding was produced using a specific method"
+    source_types: [PUBLICATION, FINDING]
+    target_types: [METHOD]
+    extraction_hints:
+      - "Look for methodology sections, phrases like 'we used', 'employing', 'analyzed with'"
+      - "Include both the study design and specific analysis techniques"
+
+  INVESTIGATES:
+    description: "Publication, method, or researcher studies a phenomenon or concept"
+    source_types: [PUBLICATION, RESEARCHER, METHOD]
+    target_types: [PHENOMENON, CONCEPT]
+    extraction_hints:
+      - "Look for language like 'examines', 'investigates', 'explores', 'studies', 'focuses on'"
+
+  EXPLAINS:
+    description: "Theory or concept provides an explanation for a phenomenon or finding"
+    source_types: [THEORY, CONCEPT]
+    target_types: [PHENOMENON, FINDING]
+    extraction_hints:
+      - "Look for language like 'accounts for', 'explains', 'predicts', 'models'"
+
+  PROPOSED_BY:
+    description: "Theory, concept, method, or finding originated from a researcher or publication"
+    source_types: [THEORY, CONCEPT, METHOD, FINDING]
+    target_types: [RESEARCHER, PUBLICATION]
+    extraction_hints:
+      - "Look for language like 'proposed by', 'introduced by', 'developed by', 'first described in'"
+      - "Only use for origination — not for someone who merely uses or cites the idea"
+
+  APPLIED_TO:
+    description: "Method, theory, or concept is applied to a phenomenon or field"
+    source_types: [METHOD, THEORY, CONCEPT]
+    target_types: [PHENOMENON, FIELD]
+
+  BELONGS_TO:
+    description: "Concept, theory, method, or phenomenon falls within a field or discipline"
+    source_types: [CONCEPT, THEORY, METHOD, PHENOMENON, RESEARCHER]
+    target_types: [FIELD]
+    extraction_hints:
+      - "Use when the text explicitly places something within a discipline or subfield"
+      - "Don't infer field membership — only extract when stated"
+
+  MENTIONED_IN:
+    description: "Entity is discussed in a publication"
+    source_types: [CONCEPT, THEORY, METHOD, FINDING, PHENOMENON, RESEARCHER, FIELD]
+    target_types: [PUBLICATION]
+
+  ASSOCIATED_WITH:
+    description: "General association between entities — use when a more specific relation does not apply"
+    source_types: [CONCEPT, THEORY, METHOD, FINDING, PHENOMENON, RESEARCHER, PUBLICATION, FIELD]
+    target_types: [CONCEPT, THEORY, METHOD, FINDING, PHENOMENON, RESEARCHER, PUBLICATION, FIELD]
+    symmetric: true
+    extraction_hints:
+      - "Use only when a more specific relation type does not apply"
