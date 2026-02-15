@@ -47,7 +47,7 @@ Every entity and relation links back to the source document and passage. You con
 - **Domain-configurable** — define custom entity types and relation types in YAML
 - **Human-in-the-loop** — sift proposes entity merges, you approve or reject in an interactive terminal UI
 - **CLI search** — `sift search "SBF"` finds entities by name or alias, with optional relation and description output
-- **Interactive viewer** — explore your graph in-browser with focus mode (double-click to isolate neighborhoods), keyboard navigation (arrow keys to step through connections), search, type/community toggles, and degree filtering
+- **Interactive viewer** — explore your graph in-browser with community regions (colored zones showing graph structure), hover preview, focus mode (double-click to isolate neighborhoods), keyboard navigation (arrow keys to step through connections), search, type/community/relation toggles, and degree filtering
 - **Export anywhere** — GraphML (yEd, Cytoscape), GEXF (Gephi), CSV, or native JSON for advanced analysis
 - **Narrative generation** — investigative-style reports with relationship chains, timelines, and community-grouped entity profiles
 - **Source provenance** — every extraction links to the document and passage it came from
@@ -193,7 +193,7 @@ See [Entity Resolution Workflow](#entity-resolution-workflow) below for the full
 sift view                     # → opens output/graph.html in your browser
 ```
 
-Opens a force-directed graph in your browser with color-coded entity types, semantic edge colors, search, type/community/relation toggles, a degree filter, and a detail sidebar. Smart defaults hide low-signal edges (MENTIONED_IN) and low-degree nodes on first load so you start with a readable graph.
+Opens a force-directed graph in your browser. The overview shows **community regions** — colored convex hulls grouping related entities — so you can see graph structure at a glance without label clutter. Hover any node to preview its name and connections. Includes search, type/community/relation toggles, a degree filter, and a detail sidebar.
 
 **Focus mode:** Double-click any entity to isolate its neighborhood. Use arrow keys to step through connections one by one — each pair is shown in isolation with labeled edges. Press Enter/Right to shift focus to a neighbor, Backspace/Left to go back along your path, Escape to exit. This is the intended way to explore dense graphs — zoom in on what matters, trace connections, read the evidence.
 
