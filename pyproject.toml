@@ -46,12 +46,17 @@ embeddings = [
     "sentence-transformers>=2.0.0",
     "scikit-learn>=1.3.0",
 ]
+ocr = [
+    "google-cloud-vision>=3.4.0",
+    "pymupdf>=1.23.0",
+]
 dev = [
     "pytest>=8.0",
     "ruff>=0.9.0",
 ]
 all = [
     "sift-kg[embeddings]",
+    "sift-kg[ocr]",
 ]
 
 [project.scripts]

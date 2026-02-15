@@ -8,13 +8,14 @@ logger = logging.getLogger(__name__)
 SUPPORTED_EXTENSIONS = {".pdf", ".docx", ".txt", ".md", ".html", ".htm"}
 
 
-def read_document(path: Path) -> str:
+def read_document(path: Path, ocr: bool = False) -> str:
     """Read text content from a document file.
 
-    Supports PDF (text-searchable), plain text (.txt, .md), and HTML.
+    Supports PDF (text-searchable or scanned with --ocr), plain text (.txt, .md), and HTML.
 
     Args:
         path: Path to the document file
+        ocr: If True, use Google Cloud Vision OCR for PDF files
 
     Returns:
         Extracted text content
@@ -32,7 +33,7 @@ def read_document(path: Path) -> str:
         )
 
     if suffix == ".pdf":
-        return _read_pdf(path)
+        return _read_pdf(path, ocr=ocr)
     elif suffix == ".docx":
         return _read_docx(path)
     elif suffix in {".html", ".htm"}:
@@ -41,8 +42,17 @@ def read_document(path: Path) -> str:
         return _read_text(path)
 
 
-def _read_pdf(path: Path) -> str:
-    """Extract text from a text-searchable PDF using pdfplumber."""
+def _read_pdf(path: Path, ocr: bool = False) -> str:
+    """Extract text from a PDF.
+
+    Uses Google Cloud Vision OCR when ocr=True, otherwise pdfplumber.
+    Logs a warning if pdfplumber returns thin text (likely a scanned PDF).
+    """
+    if ocr:
+        from sift_kg.ingest.ocr import ocr_pdf
+
+        return ocr_pdf(path)
+
     import pdfplumber
 
     pages = []
@@ -51,7 +61,17 @@ def _read_pdf(path: Path) -> str:
             text = page.extract_text() or ""
             pages.append(text)
 
-    return "\n\n".join(pages)
+    full_text = "\n\n".join(pages)
+
+    # Warn if text is suspiciously thin (likely scanned)
+    num_pages = len(pages)
+    if num_pages > 0 and len(full_text.strip()) / num_pages < 100:
+        logger.warning(
+            f"Thin text extracted from {path.name} — this may be a scanned PDF. "
+            "Try: sift extract --ocr"
+        )
+
+    return full_text
 
 
 def _read_docx(path: Path) -> str:

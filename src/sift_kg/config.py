@@ -27,6 +27,7 @@ _YAML_TO_FIELD = {
     "domain": "domain_path",
     "model": "default_model",
     "output": "output_dir",
+    "ocr": "ocr",
 }
 
 
@@ -125,6 +126,11 @@ class SiftConfig(BaseSettings):
     domain_path: Path | None = Field(
         default=None,
         description="Path to custom domain YAML file (uses default domain if not set)"
+    )
+
+    ocr: bool = Field(
+        default=False,
+        description="Use Google Cloud Vision OCR for scanned PDFs (requires: pip install sift-kg[ocr])"
     )
 
     @model_validator(mode="after")

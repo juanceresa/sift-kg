@@ -1,10 +1,13 @@
-"""Tests for sift_kg.ingest (reader and chunker)."""
+"""Tests for sift_kg.ingest (reader, chunker, and OCR)."""
 
+import logging
 from pathlib import Path
+from unittest.mock import MagicMock, patch
 
 import pytest
 
-from sift_kg.ingest.chunker import TextChunk, chunk_text
+from sift_kg.ingest.chunker import chunk_text
+from sift_kg.ingest.ocr import normalize_ocr_text
 from sift_kg.ingest.reader import discover_documents, read_document
 
 
@@ -171,3 +174,114 @@ class TestChunker:
         assert hasattr(chunk, "chunk_index")
         assert isinstance(chunk.text, str)
         assert isinstance(chunk.chunk_index, int)
+
+
+class TestNormalizeOcrText:
+    """Test OCR text normalization."""
+
+    def test_joins_hyphenated_line_breaks(self):
+        assert normalize_ocr_text("docu-\nment") == "document"
+
+    def test_collapses_multiple_newlines(self):
+        result = normalize_ocr_text("paragraph one\n\n\n\n\nparagraph two")
+        assert result == "paragraph one\n\nparagraph two"
+
+    def test_joins_mid_sentence_line_breaks(self):
+        result = normalize_ocr_text("the quick brown\nfox jumps over")
+        assert result == "the quick brown fox jumps over"
+
+    def test_preserves_sentence_boundaries(self):
+        result = normalize_ocr_text("First sentence.\nSecond sentence.")
+        # Capital S means new sentence — should NOT be joined
+        assert "Second" in result
+        assert "\nSecond" in result
+
+    def test_empty_string(self):
+        assert normalize_ocr_text("") == ""
+
+    def test_combined_artifacts(self):
+        text = "The docu-\nment was impor-\ntant.\n\n\n\nIt contained\nevidence."
+        result = normalize_ocr_text(text)
+        assert "document" in result
+        assert "important" in result
+        assert "\n\n\n" not in result
+        assert "contained evidence" in result
+
+
+class TestOcrIntegration:
+    """Test OCR routing and error handling."""
+
+    def test_read_document_ocr_routes_to_ocr_pdf(self, tmp_dir):
+        """read_document(path, ocr=True) calls ocr_pdf for PDFs."""
+        pdf_path = tmp_dir / "scan.pdf"
+        pdf_path.write_bytes(b"%PDF-1.4 fake")
+
+        with patch("sift_kg.ingest.ocr.ocr_pdf", return_value="OCR text here") as mock_ocr:
+            text = read_document(pdf_path, ocr=True)
+
+        mock_ocr.assert_called_once_with(pdf_path)
+        assert text == "OCR text here"
+
+    def test_read_document_ocr_false_uses_pdfplumber(self, tmp_dir):
+        """read_document(path, ocr=False) uses pdfplumber path."""
+        pdf_path = tmp_dir / "normal.pdf"
+        pdf_path.write_bytes(b"%PDF-1.4 fake")
+
+        with patch("sift_kg.ingest.ocr.ocr_pdf") as mock_ocr:
+            with patch("pdfplumber.open") as mock_pdfplumber:
+                mock_pdf = MagicMock()
+                mock_pdf.__enter__ = MagicMock(return_value=mock_pdf)
+                mock_pdf.__exit__ = MagicMock(return_value=False)
+                mock_pdf.pages = []
+                mock_pdfplumber.return_value = mock_pdf
+
+                read_document(pdf_path, ocr=False)
+
+        mock_ocr.assert_not_called()
+        mock_pdfplumber.assert_called_once()
+
+    def test_ocr_import_error_pymupdf(self):
+        """Clear error message when pymupdf is missing."""
+        import importlib
+
+        from sift_kg.ingest import ocr as ocr_module
+
+        with patch.dict("sys.modules", {"pymupdf": None}):
+            with patch("builtins.__import__", side_effect=_import_blocker("pymupdf")):
+                importlib.reload(ocr_module)
+
+                with pytest.raises(ImportError, match="PyMuPDF is required"):
+                    ocr_module.ocr_pdf(Path("/fake/doc.pdf"))
+
+    def test_thin_text_warning(self, tmp_dir, caplog):
+        """Thin text from pdfplumber triggers a warning."""
+        pdf_path = tmp_dir / "thin.pdf"
+        pdf_path.write_bytes(b"%PDF-1.4 fake")
+
+        mock_page = MagicMock()
+        mock_page.extract_text.return_value = "hi"  # very thin
+
+        with patch("pdfplumber.open") as mock_open:
+            mock_pdf = MagicMock()
+            mock_pdf.__enter__ = MagicMock(return_value=mock_pdf)
+            mock_pdf.__exit__ = MagicMock(return_value=False)
+            mock_pdf.pages = [mock_page, mock_page, mock_page]
+            mock_open.return_value = mock_pdf
+
+            with caplog.at_level(logging.WARNING):
+                read_document(pdf_path, ocr=False)
+
+        assert "scanned PDF" in caplog.text
+        assert "--ocr" in caplog.text
+
+
+def _import_blocker(blocked_module: str):
+    """Create an import side_effect that blocks a specific module."""
+    real_import = __builtins__.__import__ if hasattr(__builtins__, "__import__") else __import__
+
+    def _blocked_import(name, *args, **kwargs):
+        if name == blocked_module:
+            raise ImportError(f"Mocked: {name} not installed")
+        return real_import(name, *args, **kwargs)
+
+    return _blocked_import

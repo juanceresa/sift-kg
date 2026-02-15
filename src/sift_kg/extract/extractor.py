@@ -140,6 +140,7 @@ def extract_document(
     chunk_size: int = 10000,
     concurrency: int = DEFAULT_CONCURRENCY,
     force: bool = False,
+    ocr: bool = False,
 ) -> DocumentExtraction:
     """Extract entities and relations from a single document file.
 
@@ -161,7 +162,7 @@ def extract_document(
     logger.info(f"Extracting: {doc_path.name}")
 
     try:
-        text = read_document(doc_path)
+        text = read_document(doc_path, ocr=ocr)
     except Exception as e:
         logger.error(f"Failed to read {doc_path.name}: {e}")
         return DocumentExtraction(
@@ -286,6 +287,7 @@ def extract_all(
     concurrency: int = DEFAULT_CONCURRENCY,
     chunk_size: int = 10000,
     force: bool = False,
+    ocr: bool = False,
 ) -> list[DocumentExtraction]:
     """Extract entities and relations from multiple documents.
 
@@ -293,7 +295,7 @@ def extract_all(
     so slots aren't wasted waiting between documents.
     """
     return asyncio.run(
-        _aextract_all(doc_paths, llm, domain, output_dir, max_cost, concurrency, chunk_size, force)
+        _aextract_all(doc_paths, llm, domain, output_dir, max_cost, concurrency, chunk_size, force, ocr=ocr)
     )
 
 
@@ -306,6 +308,7 @@ async def _aextract_all(
     concurrency: int,
     chunk_size: int,
     force: bool = False,
+    ocr: bool = False,
 ) -> list[DocumentExtraction]:
     """Async extraction across all documents with shared concurrency."""
     sem = asyncio.Semaphore(concurrency)
@@ -331,7 +334,7 @@ async def _aextract_all(
 
         logger.info(f"Reading {doc_path.name}...")
         try:
-            text = read_document(doc_path)
+            text = read_document(doc_path, ocr=ocr)
         except Exception as e:
             logger.error(f"Failed to read {doc_path.name}: {e}")
             cached.append(DocumentExtraction(

@@ -70,6 +70,7 @@ def extract(
     concurrency: int = typer.Option(4, "-c", "--concurrency", help="Concurrent LLM calls per document"),
     rpm: int = typer.Option(40, "--rpm", help="Max requests per minute (prevents rate limit waste)"),
     force: bool = typer.Option(False, "--force", "-f", help="Re-extract all documents, ignoring cached results"),
+    use_ocr: bool = typer.Option(False, "--ocr", help="Use Google Cloud Vision OCR for scanned PDFs (requires: pip install sift-kg[ocr])"),
     output: str | None = typer.Option(None, "-o", help="Output directory"),
     verbose: bool = typer.Option(False, "-v", "--verbose", help="Verbose logging"),
 ) -> None:
@@ -105,9 +106,14 @@ def extract(
         console.print(f"[yellow]No supported documents found in {directory}[/yellow]")
         raise typer.Exit(0)
 
+    # Resolve effective OCR setting: CLI flag > sift.yaml > default
+    effective_ocr = use_ocr or config.ocr
+
     console.print(f"[cyan]Domain:[/cyan] {domain_config.name}")
     console.print(f"[cyan]Model:[/cyan] {effective_model}")
     console.print(f"[cyan]Documents:[/cyan] {len(docs)}")
+    if effective_ocr:
+        console.print("[cyan]OCR:[/cyan] enabled (Google Cloud Vision)")
     if max_cost:
         console.print(f"[cyan]Budget:[/cyan] ${max_cost:.2f}")
     console.print()
@@ -117,7 +123,7 @@ def extract(
     from sift_kg.extract.llm_client import LLMClient
 
     llm = LLMClient(model=effective_model, rpm=rpm)
-    results = extract_all(docs, llm, domain_config, output_dir, max_cost=max_cost, concurrency=concurrency, chunk_size=chunk_size, force=force)
+    results = extract_all(docs, llm, domain_config, output_dir, max_cost=max_cost, concurrency=concurrency, chunk_size=chunk_size, force=force, ocr=effective_ocr)
 
     # Summary
     successful = [r for r in results if not r.error]
