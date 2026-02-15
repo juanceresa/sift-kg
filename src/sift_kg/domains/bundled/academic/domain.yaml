@@ -16,9 +16,15 @@ system_context: |
   - Which theories EXPLAIN which phenomena or findings
   - Which findings SUPPORT or CONTRADICT which theories
   - Which methods are USED to produce which findings
-  - Which concepts, theories, or methods EXTEND or BUILD ON earlier ones
-  - Which researchers PROPOSED key theories, methods, or findings
+  - Which systems IMPLEMENT which theories or methods
+  - Which systems, theories, or methods EXTEND earlier ones
+  - Which researchers PROPOSED key theories, methods, systems, or findings
   - How ideas connect across different fields and subfields
+
+  Distinguish carefully between abstract ideas and concrete artifacts:
+  - "Transformer" as an architecture is a THEORY; "GPT-2" the trained model is a SYSTEM
+  - "reinforcement learning" is a METHOD; "PPO" the algorithm is a METHOD; "ChatGPT" is a SYSTEM
+  - Named benchmarks and datasets (GLUE, ImageNet, SQuAD) are SYSTEMs, not CONCEPTs
 
   When naming entities, prefer canonical forms: use the established name
   of a theory ("Dual Process Theory" not "the dual process account"),
@@ -81,6 +87,15 @@ entity_types:
       - "Include landmark papers, seminal books, and meta-analyses that shape the field"
       - "Capture the title or short identifier, year, and why it matters"
 
+  SYSTEM:
+    description: "Named systems, models, tools, or artifacts built by researchers — specific implementations, not abstract methods"
+    extraction_hints:
+      - "Use for specific named implementations: BERT, GPT-4, CRISPR-Cas9, ImageNet, SPSS, etc."
+      - "SYSTEM is a concrete artifact someone built; METHOD is the abstract technique it uses"
+      - "'Transformer' is a THEORY/architecture; 'GPT-2' is a SYSTEM that implements it"
+      - "Include version numbers or identifiers when given (e.g. 'LLaMA 2', 'ViT-L/16')"
+      - "Benchmarks and datasets with proper names go here too (e.g. 'GLUE', 'ImageNet', 'SQuAD')"
+
   FIELD:
     description: "Academic disciplines, subfields, and interdisciplinary areas"
     extraction_hints:
@@ -89,61 +104,71 @@ entity_types:
 
 relation_types:
   SUPPORTS:
-    description: "Finding or publication provides evidence for a theory, concept, or other finding"
-    source_types: [FINDING, PUBLICATION]
-    target_types: [THEORY, CONCEPT, FINDING]
+    description: "Provides evidence for, validates, or demonstrates the effectiveness of another entity"
+    source_types: [FINDING, PUBLICATION, SYSTEM, METHOD, CONCEPT]
+    target_types: [THEORY, CONCEPT, FINDING, SYSTEM, METHOD, PHENOMENON]
     extraction_hints:
-      - "Look for language like 'consistent with', 'confirms', 'provides evidence for', 'supports'"
+      - "Look for language like 'consistent with', 'confirms', 'provides evidence for', 'supports', 'validates', 'demonstrates'"
 
   CONTRADICTS:
-    description: "Finding or publication provides evidence against a theory, concept, or other finding"
-    source_types: [FINDING, PUBLICATION]
-    target_types: [THEORY, CONCEPT, FINDING]
+    description: "Provides evidence against, challenges, or underperforms relative to another entity"
+    source_types: [FINDING, PUBLICATION, SYSTEM, METHOD]
+    target_types: [THEORY, CONCEPT, FINDING, SYSTEM, METHOD]
     extraction_hints:
-      - "Look for language like 'inconsistent with', 'challenges', 'refutes', 'contradicts', 'fails to replicate'"
+      - "Look for language like 'inconsistent with', 'challenges', 'refutes', 'contradicts', 'fails to replicate', 'outperformed by'"
     review_required: true
 
   EXTENDS:
-    description: "Theory, concept, or method builds upon or refines another"
-    source_types: [THEORY, CONCEPT, METHOD]
-    target_types: [THEORY, CONCEPT, METHOD]
+    description: "Theory, concept, method, or system builds upon or refines another"
+    source_types: [THEORY, CONCEPT, METHOD, SYSTEM]
+    target_types: [THEORY, CONCEPT, METHOD, SYSTEM]
     extraction_hints:
       - "Look for language like 'builds on', 'extends', 'refines', 'adapts', 'generalizes'"
 
-  USES_METHOD:
-    description: "Publication or finding was produced using a specific method"
-    source_types: [PUBLICATION, FINDING]
-    target_types: [METHOD]
+  IMPLEMENTS:
+    description: "System implements or is based on a theory, method, concept, or another system"
+    source_types: [SYSTEM]
+    target_types: [THEORY, METHOD, CONCEPT, SYSTEM]
     extraction_hints:
-      - "Look for methodology sections, phrases like 'we used', 'employing', 'analyzed with'"
+      - "Look for language like 'based on', 'implements', 'uses', 'built on'"
+      - "'GPT-2 IMPLEMENTS Transformer architecture', 'ViT IMPLEMENTS self-attention for images'"
+
+  USES_METHOD:
+    description: "Entity uses or employs a specific method, technique, or system"
+    source_types: [PUBLICATION, FINDING, SYSTEM, METHOD, THEORY]
+    target_types: [METHOD, SYSTEM, CONCEPT]
+    extraction_hints:
+      - "Look for methodology sections, phrases like 'we used', 'employing', 'analyzed with', 'trained with', 'optimized using'"
       - "Include both the study design and specific analysis techniques"
 
   INVESTIGATES:
-    description: "Publication, method, or researcher studies a phenomenon or concept"
-    source_types: [PUBLICATION, RESEARCHER, METHOD]
-    target_types: [PHENOMENON, CONCEPT]
+    description: "Entity studies, evaluates, or analyzes a phenomenon, concept, or system"
+    source_types: [PUBLICATION, RESEARCHER, METHOD, SYSTEM, CONCEPT]
+    target_types: [PHENOMENON, CONCEPT, SYSTEM]
     extraction_hints:
-      - "Look for language like 'examines', 'investigates', 'explores', 'studies', 'focuses on'"
+      - "Look for language like 'examines', 'investigates', 'explores', 'studies', 'evaluates', 'benchmarks'"
 
   EXPLAINS:
-    description: "Theory or concept provides an explanation for a phenomenon or finding"
-    source_types: [THEORY, CONCEPT]
-    target_types: [PHENOMENON, FINDING]
+    description: "Entity provides an explanation, mechanism, or account for another entity"
+    source_types: [THEORY, CONCEPT, METHOD, SYSTEM]
+    target_types: [PHENOMENON, FINDING, CONCEPT, METHOD, SYSTEM]
     extraction_hints:
-      - "Look for language like 'accounts for', 'explains', 'predicts', 'models'"
+      - "Look for language like 'accounts for', 'explains', 'predicts', 'models', 'addresses'"
 
   PROPOSED_BY:
-    description: "Theory, concept, method, or finding originated from a researcher or publication"
-    source_types: [THEORY, CONCEPT, METHOD, FINDING]
+    description: "Entity originated from a researcher or publication"
+    source_types: [THEORY, CONCEPT, METHOD, FINDING, SYSTEM, PUBLICATION]
     target_types: [RESEARCHER, PUBLICATION]
     extraction_hints:
       - "Look for language like 'proposed by', 'introduced by', 'developed by', 'first described in'"
       - "Only use for origination — not for someone who merely uses or cites the idea"
 
   APPLIED_TO:
-    description: "Method, theory, or concept is applied to a phenomenon or field"
-    source_types: [METHOD, THEORY, CONCEPT]
-    target_types: [PHENOMENON, FIELD]
+    description: "Entity is applied to, tested on, or used with another entity"
+    source_types: [METHOD, THEORY, CONCEPT, SYSTEM]
+    target_types: [PHENOMENON, FIELD, SYSTEM]
+    extraction_hints:
+      - "Look for language like 'applied to', 'tested on', 'fine-tuned on', 'adapted for'"
 
   BELONGS_TO:
     description: "Concept, theory, method, or phenomenon falls within a field or discipline"
@@ -155,13 +180,13 @@ relation_types:
 
   MENTIONED_IN:
     description: "Entity is discussed in a publication"
-    source_types: [CONCEPT, THEORY, METHOD, FINDING, PHENOMENON, RESEARCHER, FIELD]
+    source_types: [CONCEPT, THEORY, METHOD, FINDING, PHENOMENON, RESEARCHER, FIELD, SYSTEM]
     target_types: [PUBLICATION]
 
   ASSOCIATED_WITH:
     description: "General association between entities — use when a more specific relation does not apply"
-    source_types: [CONCEPT, THEORY, METHOD, FINDING, PHENOMENON, RESEARCHER, PUBLICATION, FIELD]
-    target_types: [CONCEPT, THEORY, METHOD, FINDING, PHENOMENON, RESEARCHER, PUBLICATION, FIELD]
+    source_types: [CONCEPT, THEORY, METHOD, FINDING, PHENOMENON, RESEARCHER, PUBLICATION, FIELD, SYSTEM]
+    target_types: [CONCEPT, THEORY, METHOD, FINDING, PHENOMENON, RESEARCHER, PUBLICATION, FIELD, SYSTEM]
     symmetric: true
     extraction_hints:
       - "Use only when a more specific relation type does not apply"

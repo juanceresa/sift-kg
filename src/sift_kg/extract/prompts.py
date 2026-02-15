@@ -100,6 +100,22 @@ def build_combined_prompt(
     entity_types_section = "\n".join(type_lines)
     rel_types = ", ".join(domain.relation_types.keys())
 
+    # Build direction hints for relation types that have source/target constraints
+    direction_lines = []
+    for rel_name, rel_cfg in domain.relation_types.items():
+        if rel_cfg.source_types and rel_cfg.target_types:
+            src = "/".join(rel_cfg.source_types)
+            tgt = "/".join(rel_cfg.target_types)
+            direction_lines.append(f"- {rel_name}: {src} → {tgt}")
+
+    direction_section = ""
+    if direction_lines:
+        direction_section = (
+            "\n\nRELATION DIRECTIONS (source_entity → target_entity):\n"
+            + "\n".join(direction_lines)
+            + "\nIMPORTANT: source_entity must be the type on the LEFT, target_entity the type on the RIGHT."
+        )
+
     context_section = ""
     if domain.system_context:
         context_section = f"\n{domain.system_context}\n"
@@ -123,7 +139,7 @@ STEP 2 — RELATIONS
 Identify relationships between the entities you extracted.
 
 RELATION TYPES (use ONLY these — do not invent new types): {rel_types}
-If a relationship doesn't fit any listed type, use ASSOCIATED_WITH as the fallback.
+If a relationship doesn't fit any listed type, use ASSOCIATED_WITH as the fallback.{direction_section}
 
 OUTPUT SCHEMA:
 {{
