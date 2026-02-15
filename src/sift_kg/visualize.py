@@ -19,31 +19,38 @@ from sift_kg.graph.knowledge_graph import KnowledgeGraph
 
 logger = logging.getLogger(__name__)
 
-# Color palette for entity types — visually distinct, dark-mode friendly
-ENTITY_COLORS = {
-    # Academic entity types
-    "CONCEPT":     "#42A5F5",  # blue — abstract ideas
-    "THEORY":      "#AB47BC",  # purple — frameworks
-    "METHOD":      "#66BB6A",  # green — techniques
-    "SYSTEM":      "#FFA726",  # orange — concrete implementations
-    "FINDING":     "#FFEE58",  # yellow — results
-    "RESEARCHER":  "#26C6DA",  # cyan — people
-    "PHENOMENON":  "#EF5350",  # red — observable things
-    "PUBLICATION": "#78909C",  # gray — papers
-    "FIELD":       "#8D6E63",  # brown — disciplines
-    "DATASET":     "#9CCC65",  # lime — data
-    # OSINT entity types (backward compat)
-    "PERSON":      "#4FC3F7",
-    "ORGANIZATION": "#81C784",
-    "SHELL_COMPANY": "#FFB74D",
-    "FINANCIAL_INSTRUMENT": "#F06292",
-    "FINANCIAL_ACCOUNT": "#F06292",
-    "GOVERNMENT_AGENCY": "#CE93D8",
-    "LOCATION":    "#BA68C8",
-    "DOCUMENT":    "#90A4AE",
-    "EVENT":       "#FFD54F",
+# Node color palette — auto-assigned to entity types, max hue separation
+NODE_PALETTE = [
+    "#42A5F5",  # blue
+    "#66BB6A",  # green
+    "#FFA726",  # orange
+    "#AB47BC",  # purple
+    "#26C6DA",  # cyan
+    "#EF5350",  # red
+    "#FFEE58",  # yellow
+    "#EC407A",  # pink
+    "#9CCC65",  # lime
+    "#FF7043",  # deep orange
+    "#7E57C2",  # deep purple
+    "#29B6F6",  # light blue
+    "#8D6E63",  # brown
+    "#78909C",  # gray
+    "#FFD54F",  # amber
+    "#26A69A",  # teal
+    "#CE93D8",  # light purple
+    "#5C6BC0",  # indigo
+    "#D4E157",  # yellow-green
+    "#FF8A65",  # light deep orange
+]
+
+# Semantic entity colors — common types get stable meaningful colors
+SEMANTIC_ENTITY_COLORS = {
+    "PERSON":      "#42A5F5",  # blue — people
+    "ORGANIZATION": "#66BB6A",  # green — groups
+    "LOCATION":    "#AB47BC",  # purple — places
+    "EVENT":       "#FFA726",  # orange — happenings
+    "DOCUMENT":    "#78909C",  # gray — records
 }
-DEFAULT_ENTITY_COLOR = "#B0BEC5"
 
 # Distinct edge color palette — auto-assigned to relation types
 EDGE_PALETTE = [
@@ -69,21 +76,16 @@ EDGE_PALETTE = [
     "#CE93D8",
 ]
 
-# Community border colors — distinct from entity fill colors
-COMMUNITY_COLORS = [
-    "#FF6B6B",
-    "#4ECDC4",
-    "#45B7D1",
-    "#96CEB4",
-    "#FFEAA7",
-    "#DDA0DD",
-    "#98D8C8",
-    "#F7DC6F",
-    "#BB8FCE",
-    "#85C1E9",
-    "#F0B27A",
-    "#82E0AA",
-]
+def _generate_community_colors(n: int) -> list[str]:
+    """Generate n maximally-separated colors using golden angle hue spacing."""
+    import colorsys
+    colors = []
+    golden_angle = 137.508  # degrees
+    for i in range(n):
+        hue = ((i * golden_angle) % 360) / 360.0
+        r, g, b = colorsys.hls_to_rgb(hue, 0.65, 0.75)
+        colors.append(f"#{int(r*255):02x}{int(g*255):02x}{int(b*255):02x}")
+    return colors
 
 
 # Semantic edge colors — named relation types get meaningful colors
@@ -99,11 +101,22 @@ SEMANTIC_EDGE_COLORS = {
 }
 
 
+def _color_for_entity(entity_type: str, entity_color_map: dict[str, str]) -> str:
+    """Get or assign a color for an entity type."""
+    if entity_type in entity_color_map:
+        return entity_color_map[entity_type]
+    if entity_type in SEMANTIC_ENTITY_COLORS:
+        entity_color_map[entity_type] = SEMANTIC_ENTITY_COLORS[entity_type]
+    else:
+        idx = len(entity_color_map) % len(NODE_PALETTE)
+        entity_color_map[entity_type] = NODE_PALETTE[idx]
+    return entity_color_map[entity_type]
+
+
 def _color_for_relation(rel_type: str, rel_color_map: dict[str, str]) -> str:
     """Get or assign a color for a relation type."""
     if rel_type in rel_color_map:
         return rel_color_map[rel_type]
-    # Use semantic color if available, otherwise auto-assign from palette
     if rel_type in SEMANTIC_EDGE_COLORS:
         rel_color_map[rel_type] = SEMANTIC_EDGE_COLORS[rel_type]
     else:
@@ -145,8 +158,9 @@ def generate_view(
             pass
 
     unique_communities = sorted(set(community_map.values()))
+    comm_colors = _generate_community_colors(len(unique_communities))
     community_color_map = {
-        label: COMMUNITY_COLORS[i % len(COMMUNITY_COLORS)]
+        label: comm_colors[i]
         for i, label in enumerate(unique_communities)
     }
 
@@ -189,10 +203,11 @@ def generate_view(
         "edges": {
             "arrows": { "to": { "enabled": true, "scaleFactor": 0.4 } },
             "smooth": { "type": "curvedCW", "roundness": 0.1 },
+            "color": { "opacity": 0.2 },
             "font": { "size": 0 }
         },
         "nodes": {
-            "font": { "size": 14, "face": "Inter, sans-serif" },
+            "font": { "size": 0, "face": "Inter, sans-serif" },
             "borderWidth": 1.5,
             "borderWidthSelected": 3
         },
@@ -216,8 +231,9 @@ def generate_view(
             angle = 2 * math.pi * i / len(unique_communities)
             community_centers[comm] = (radius * math.cos(angle), radius * math.sin(angle))
 
-    # Collect entity types
+    # Collect entity types — auto-assign colors as they appear
     entity_types_present: set[str] = set()
+    entity_color_map: dict[str, str] = {}
 
     # Add nodes
     for node_id, data in kg.graph.nodes(data=True):
@@ -225,7 +241,7 @@ def generate_view(
         entity_types_present.add(entity_type)
         name = data.get("name", node_id)
         confidence = data.get("confidence", 0)
-        entity_color = ENTITY_COLORS.get(entity_type, DEFAULT_ENTITY_COLOR)
+        entity_color = _color_for_entity(entity_type, entity_color_map)
         degree = degrees.get(node_id, 0)
 
         # Community border color
@@ -337,7 +353,7 @@ def generate_view(
     output_path.parent.mkdir(parents=True, exist_ok=True)
     net.write_html(str(output_path))
     _fix_firefox_height(output_path)
-    _inject_ui(output_path, kg, entity_types_present, rel_color_map, community_color_map)
+    _inject_ui(output_path, kg, entity_types_present, entity_color_map, rel_color_map, community_color_map)
 
     logger.info(
         f"View generated: {kg.entity_count} entities, "
@@ -366,6 +382,7 @@ def _inject_ui(
     html_path: Path,
     kg: KnowledgeGraph,
     entity_types: set[str],
+    entity_color_map: dict[str, str],
     rel_color_map: dict[str, str],
     community_color_map: dict[str, str] | None = None,
 ) -> None:
@@ -374,7 +391,7 @@ def _inject_ui(
     # Entity type controls
     entity_items = ""
     for et in sorted(entity_types):
-        color = ENTITY_COLORS.get(et, DEFAULT_ENTITY_COLOR)
+        color = entity_color_map.get(et, NODE_PALETTE[0])
         entity_items += (
             f'<div class="type-row">'
             f'<input type="checkbox" checked data-etype="{et}" onchange="toggleEntityType(this)">'
@@ -397,7 +414,7 @@ def _inject_ui(
                 f'<span class="type-label">{label}</span>'
                 f"</div>"
             )
-        community_section = f'<div class="section-header">Communities</div>{community_items}'
+        community_section = f'<div class="section-header" style="border-top:none">Communities</div>{community_items}'
 
     # Relation type controls — count edges per relation type
     rel_counts: dict[str, int] = {}
@@ -413,7 +430,6 @@ def _inject_ui(
         relation_items += (
             f'<div class="type-row">'
             f'<input type="checkbox"{checked} data-rtype="{rt}" onchange="toggleRelationType(this)">'
-            f'<input type="color" value="{color}" data-rtype-color="{rt}" onchange="changeRelationColor(this)">'
             f'<span class="type-label">{rt}</span>'
             f'<span style="margin-left:auto;font-size:10px;color:#666;flex-shrink:0">{count}</span>'
             f"</div>"
@@ -531,10 +547,10 @@ def _inject_ui(
             <input id="deg-slider" type="range" min="0" max="20" value="2" style="width:100%;margin:2px 0;accent-color:#4FC3F7" oninput="filterByDegree(this.value)">
         </div>
 
-        <div class="section-header" style="border-top:none">Entity Types</div>
-        {entity_items}
-
         {community_section}
+
+        <div class="section-header">Entity Types</div>
+        {entity_items}
 
         <div class="section-header">Relation Types</div>
         {relation_items}
@@ -560,13 +576,138 @@ def _inject_ui(
     # In the JS below, we use \\n to produce the JS string literal \n for split().
     script = """
     <script>
-    // Freeze after stabilization
-    network.once('stabilizationIterationsDone', function() {
-        network.setOptions({ physics: { enabled: false } });
-    });
-
     var allNodes = nodes.get();
     var allEdges = edges.get();
+
+    // --- Community region data ---
+    var communityHulls = {};   // comm -> [{x,y}, ...] padded convex hull points
+    var communityCentroids = {}; // comm -> {x, y}
+    var communityColors = COMMUNITY_COLORS_JS;
+
+    // Convex hull (Graham scan)
+    function convexHull(points) {
+        if (points.length < 3) return points.slice();
+        points.sort(function(a, b) { return a.x === b.x ? a.y - b.y : a.x - b.x; });
+        var lower = [];
+        for (var i = 0; i < points.length; i++) {
+            while (lower.length >= 2 && cross(lower[lower.length - 2], lower[lower.length - 1], points[i]) <= 0) lower.pop();
+            lower.push(points[i]);
+        }
+        var upper = [];
+        for (var i = points.length - 1; i >= 0; i--) {
+            while (upper.length >= 2 && cross(upper[upper.length - 2], upper[upper.length - 1], points[i]) <= 0) upper.pop();
+            upper.push(points[i]);
+        }
+        upper.pop(); lower.pop();
+        return lower.concat(upper);
+    }
+    function cross(o, a, b) { return (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x); }
+
+    // Pad hull outward from centroid
+    function padHull(hull, cx, cy, padding) {
+        return hull.map(function(p) {
+            var dx = p.x - cx, dy = p.y - cy;
+            var dist = Math.sqrt(dx * dx + dy * dy) || 1;
+            return { x: p.x + (dx / dist) * padding, y: p.y + (dy / dist) * padding };
+        });
+    }
+
+    function computeCommunityRegions() {
+        var positions = network.getPositions();
+        var commPoints = {};
+        allNodes.forEach(function(n) {
+            if (!n.community) return;
+            var p = positions[n.id];
+            if (!p) return;
+            if (!commPoints[n.community]) commPoints[n.community] = [];
+            commPoints[n.community].push({ x: p.x, y: p.y });
+        });
+        communityHulls = {};
+        communityCentroids = {};
+        for (var comm in commPoints) {
+            var pts = commPoints[comm];
+            // Centroid
+            var cx = 0, cy = 0;
+            for (var i = 0; i < pts.length; i++) { cx += pts[i].x; cy += pts[i].y; }
+            cx /= pts.length; cy /= pts.length;
+            communityCentroids[comm] = { x: cx, y: cy };
+            // Hull with padding
+            if (pts.length < 3) {
+                communityHulls[comm] = padHull(pts, cx, cy, 80);
+            } else {
+                var hull = convexHull(pts);
+                communityHulls[comm] = padHull(hull, cx, cy, 80);
+            }
+        }
+    }
+
+    network.once('stabilizationIterationsDone', function() {
+        network.setOptions({ physics: { enabled: false } });
+        computeCommunityRegions();
+    });
+
+    // Draw filled community regions BEHIND nodes
+    network.on('beforeDrawing', function(ctx) {
+        if (focusedNodeId !== null) return;
+        for (var comm in communityHulls) {
+            var hull = communityHulls[comm];
+            if (hull.length < 2) continue;
+            var color = communityColors[comm] || '#ffffff';
+            var r = parseInt(color.slice(1,3), 16);
+            var g = parseInt(color.slice(3,5), 16);
+            var b = parseInt(color.slice(5,7), 16);
+
+            ctx.save();
+            ctx.beginPath();
+            // Draw smooth rounded hull using quadratic curves
+            if (hull.length === 2) {
+                ctx.moveTo(hull[0].x, hull[0].y);
+                ctx.lineTo(hull[1].x, hull[1].y);
+            } else {
+                // Start at midpoint of first edge
+                var mx = (hull[0].x + hull[hull.length - 1].x) / 2;
+                var my = (hull[0].y + hull[hull.length - 1].y) / 2;
+                ctx.moveTo(mx, my);
+                for (var i = 0; i < hull.length; i++) {
+                    var next = (i + 1) % hull.length;
+                    var mx2 = (hull[i].x + hull[next].x) / 2;
+                    var my2 = (hull[i].y + hull[next].y) / 2;
+                    ctx.quadraticCurveTo(hull[i].x, hull[i].y, mx2, my2);
+                }
+            }
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',0.08)';
+            ctx.fill();
+            ctx.strokeStyle = 'rgba(' + r + ',' + g + ',' + b + ',0.25)';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+            ctx.restore();
+        }
+    });
+
+    // Draw community labels ON TOP of nodes — scale-compensated
+    network.on('afterDrawing', function(ctx) {
+        if (focusedNodeId !== null) return;
+        var scale = network.getScale();
+        var fontSize = Math.round(16 / scale);
+        var strokeW = Math.max(2, Math.round(3 / scale));
+        for (var comm in communityCentroids) {
+            var pos = communityCentroids[comm];
+            var color = communityColors[comm] || '#ffffff';
+            ctx.save();
+            ctx.font = '700 ' + fontSize + 'px Inter, system-ui, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.strokeStyle = '#1a1a2e';
+            ctx.lineWidth = strokeW;
+            ctx.lineJoin = 'round';
+            ctx.strokeText(comm, pos.x, pos.y);
+            ctx.fillStyle = color;
+            ctx.fillText(comm, pos.x, pos.y);
+            ctx.restore();
+        }
+    });
+
     var hiddenEntityTypes = new Set();
     var hiddenRelationTypes = new Set();
     var hiddenCommunities = new Set();
@@ -776,19 +917,6 @@ def _inject_ui(
         allNodes = nodes.get();
     }
 
-    // --- Relation color picker ---
-    function changeRelationColor(input) {
-        var type = input.dataset.rtypeColor;
-        var color = input.value;
-        var updates = [];
-        allEdges.forEach(function(e) {
-            if (e.relation_type === type) {
-                updates.push({ id: e.id, color: color });
-            }
-        });
-        edges.update(updates);
-    }
-
     function applyFilters() {
         var updates = [];
         allNodes.forEach(function(node) {
@@ -831,7 +959,7 @@ def _inject_ui(
     function searchEntity(query) {
         if (!query || query.length < 2) {
             var reset = allNodes.map(function(n) {
-                return { id: n.id, opacity: 1.0, font: { size: 14 }, borderWidth: n.community ? 2 : 1.5 };
+                return { id: n.id, opacity: 1.0, font: { size: 0 }, borderWidth: n.community ? 2 : 1.5 };
             });
             nodes.update(reset);
             return;
@@ -874,7 +1002,7 @@ def _inject_ui(
     });
 
     document.addEventListener('keydown', function(ev) {
-        if (ev.key === 'Escape' && focusedNodeId !== null) {
+        if (ev.key === 'Escape') {
             exitFocusMode();
             return;
         }
@@ -914,44 +1042,70 @@ def _inject_ui(
 
     function highlightConn(idx) {
         var rows = document.querySelectorAll('#conn-list .d-conn');
-        // Update sidebar highlight
         rows.forEach(function(r, i) { r.classList.toggle('active', i === idx); });
-        // Scroll into view
         if (rows[idx]) rows[idx].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
         if (idx < 0 || idx >= rows.length) return;
         var c = { nid: rows[idx].getAttribute('data-nid') };
 
-        // Select neighbor node in graph
         network.selectNodes([c.nid]);
 
-        // Hide all nodes/edges except focused + highlighted neighbor
+        // Find neighbor's adjacents, ranked by degree — cap at 10
+        var adjList = [];
+        var adjDeg = {};
+        allEdges.forEach(function(e) {
+            var other = null;
+            if (e.from === c.nid && e.to !== focusedNodeId) other = e.to;
+            if (e.to === c.nid && e.from !== focusedNodeId) other = e.from;
+            if (other && !adjDeg[other]) {
+                adjDeg[other] = 0;
+                adjList.push(other);
+            }
+            if (other) adjDeg[other]++;
+        });
+        adjList.sort(function(a, b) {
+            var da = 0, db = 0;
+            allNodes.forEach(function(n) {
+                if (n.id === a) da = n.node_degree || 0;
+                if (n.id === b) db = n.node_degree || 0;
+            });
+            return db - da;
+        });
+        var MAX_ADJ = 10;
+        var adjIds = new Set(adjList.slice(0, MAX_ADJ));
+
+        // Nodes: primary pair full, adjacents ghosted
         var nodeUpdates = [];
         allNodes.forEach(function(n) {
-            var visible = n.id === focusedNodeId || n.id === c.nid;
-            nodeUpdates.push({ id: n.id, hidden: !visible });
+            var isPrimary = n.id === focusedNodeId || n.id === c.nid;
+            var isAdj = adjIds.has(n.id);
+            nodeUpdates.push({ id: n.id, hidden: !(isPrimary || isAdj), opacity: isAdj ? 0.35 : 1.0 });
         });
         nodes.update(nodeUpdates);
 
+        // Edges: primary thick + labeled, adjacent thin + unlabeled
         var edgeUpdates = [];
         allEdges.forEach(function(e) {
-            var isThisConn = (e.from === focusedNodeId && e.to === c.nid) || (e.to === focusedNodeId && e.from === c.nid);
+            var isPrimary = (e.from === focusedNodeId && e.to === c.nid) || (e.to === focusedNodeId && e.from === c.nid);
+            var isAdj = (e.from === c.nid && adjIds.has(e.to)) || (e.to === c.nid && adjIds.has(e.from));
+            var show = (isPrimary || isAdj) && !hiddenRelationTypes.has(e.relation_type);
             edgeUpdates.push({
                 id: e.id,
-                hidden: !isThisConn || hiddenRelationTypes.has(e.relation_type),
-                label: isThisConn ? formatRelLabel(e.relation_type) : '',
-                width: isThisConn ? 4 : undefined
+                hidden: !show,
+                color: { opacity: isPrimary ? 0.9 : 0.4 },
+                label: isPrimary ? formatRelLabel(e.relation_type) : '',
+                width: isPrimary ? 4 : 1
             });
         });
         edges.update(edgeUpdates);
 
-        // Center the pair in the visible area between sidebars
+        // Camera: center on PRIMARY PAIR only, adjacents are peripheral
         var positions = network.getPositions([focusedNodeId, c.nid]);
         var p1 = positions[focusedNodeId];
         var p2 = positions[c.nid];
         var midX = (p1.x + p2.x) / 2;
         var midY = (p1.y + p2.y) / 2;
 
-        var pad = 200;
+        var pad = 250;
         var rangeX = Math.abs(p1.x - p2.x) + pad * 2;
         var rangeY = Math.abs(p1.y - p2.y) + pad * 2;
 
@@ -965,27 +1119,6 @@ def _inject_ui(
 
         var scale = Math.min(visW / rangeX, visH / rangeY, 1.5);
 
-        // Scale font sizes so they appear constant on screen (~20px nodes, ~16px edges)
-        var nodeFontSize = Math.round(20 / scale);
-        var edgeFontSize = Math.round(16 / scale);
-
-        // Re-apply with distance-aware font sizes
-        var fontUpdatesN = [];
-        allNodes.forEach(function(n) {
-            var visible = n.id === focusedNodeId || n.id === c.nid;
-            if (visible) fontUpdatesN.push({ id: n.id, font: { size: nodeFontSize, color: '#ffffff', strokeWidth: Math.max(3, Math.round(3 / scale)), strokeColor: '#1a1a2e' } });
-        });
-        nodes.update(fontUpdatesN);
-
-        var fontUpdatesE = [];
-        allEdges.forEach(function(e) {
-            var isThisConn = (e.from === focusedNodeId && e.to === c.nid) || (e.to === focusedNodeId && e.from === c.nid);
-            if (isThisConn && !hiddenRelationTypes.has(e.relation_type)) {
-                fontUpdatesE.push({ id: e.id, font: { size: edgeFontSize, color: '#ffffff', strokeWidth: Math.max(3, Math.round(3 / scale)), strokeColor: '#1a1a2e' } });
-            }
-        });
-        edges.update(fontUpdatesE);
-
         var visCenterPx = leftW + visW / 2;
         var shiftPx = visCenterPx - totalW / 2;
 
@@ -994,11 +1127,94 @@ def _inject_ui(
             scale: scale,
             animation: { duration: 300, easingFunction: 'easeInOutQuad' }
         });
+
+        // Fonts: primary pair large + white, adjacents small + dim
+        (function() {
+            var nodeFontSize = Math.round(20 / scale);
+            var adjFontSize = Math.round(9 / scale);
+            var edgeFontSize = Math.round(16 / scale);
+            var strokeW = Math.max(3, Math.round(3 / scale));
+
+            var fontUpdatesN = [];
+            allNodes.forEach(function(n) {
+                if (n.id === focusedNodeId || n.id === c.nid) {
+                    fontUpdatesN.push({ id: n.id, font: { size: nodeFontSize, color: '#ffffff', strokeWidth: strokeW, strokeColor: '#1a1a2e' } });
+                } else if (adjIds.has(n.id)) {
+                    fontUpdatesN.push({ id: n.id, font: { size: adjFontSize, color: '#555555', strokeWidth: strokeW, strokeColor: '#1a1a2e' } });
+                }
+            });
+            nodes.update(fontUpdatesN);
+
+            var fontUpdatesE = [];
+            allEdges.forEach(function(e) {
+                var isPrimary = (e.from === focusedNodeId && e.to === c.nid) || (e.to === focusedNodeId && e.from === c.nid);
+                if (isPrimary && !hiddenRelationTypes.has(e.relation_type)) {
+                    fontUpdatesE.push({ id: e.id, font: { size: edgeFontSize, color: '#ffffff', strokeWidth: strokeW, strokeColor: '#1a1a2e' } });
+                }
+            });
+            edges.update(fontUpdatesE);
+        })();
     }
+
+    // --- Overview hover preview: show name + highlight connections ---
+    var overviewHoveredId = null;
+    network.on('hoverNode', function(params) {
+        if (focusedNodeId !== null) return;  // focus mode handles its own display
+        var nid = params.node;
+        overviewHoveredId = nid;
+        var scale = network.getScale();
+        var labelSize = Math.round(12 / scale);
+        var neighborSize = Math.round(9 / scale);
+        var strokeW = Math.max(2, Math.round(2 / scale));
+
+        // Find connected neighbors
+        var neighborIds = new Set();
+        var connEdgeIds = new Set();
+        allEdges.forEach(function(e) {
+            if (e.from === nid) { neighborIds.add(e.to); connEdgeIds.add(e.id); }
+            if (e.to === nid) { neighborIds.add(e.from); connEdgeIds.add(e.id); }
+        });
+
+        // Show hovered node label + dim neighbor labels
+        var nodeUpdates = [];
+        nodeUpdates.push({ id: nid, font: { size: labelSize, color: '#ffffff', strokeWidth: strokeW, strokeColor: '#1a1a2e' } });
+        neighborIds.forEach(function(id) {
+            nodeUpdates.push({ id: id, font: { size: neighborSize, color: '#999999', strokeWidth: strokeW, strokeColor: '#1a1a2e' } });
+        });
+        nodes.update(nodeUpdates);
+
+        // Brighten connected edges
+        var edgeUpdates = [];
+        connEdgeIds.forEach(function(eid) {
+            edgeUpdates.push({ id: eid, color: { opacity: 0.7 } });
+        });
+        edges.update(edgeUpdates);
+    });
+
+    network.on('blurNode', function(params) {
+        if (focusedNodeId !== null) return;
+        if (overviewHoveredId === null) return;
+        overviewHoveredId = null;
+
+        // Reset all node fonts to 0 (overview default)
+        var nodeResets = [];
+        allNodes.forEach(function(n) {
+            nodeResets.push({ id: n.id, font: { size: 0 } });
+        });
+        nodes.update(nodeResets);
+
+        // Reset all edge opacities
+        var edgeResets = [];
+        allEdges.forEach(function(e) {
+            edgeResets.push({ id: e.id, color: { opacity: 0.2 } });
+        });
+        edges.update(edgeResets);
+    });
 
     // Hover-to-reveal edge labels in focus mode (for dense neighborhoods)
     network.on('hoverEdge', function(params) {
         if (focusedNodeId === null) return;
+        if (focusConnIndex >= 0) return;  // pair view has its own labels
         var e = edges.get(params.edge);
         if (e) {
             edges.update({ id: e.id, font: { size: 12, color: '#fff', strokeWidth: 3, strokeColor: '#1a1a2e' }, label: formatRelLabel(e.relation_type) });
@@ -1006,7 +1222,7 @@ def _inject_ui(
     });
     network.on('blurEdge', function(params) {
         if (focusedNodeId === null) return;
-        if (focusConnIndex >= 0) return;  // in pair view, don't undo labels
+        if (focusConnIndex >= 0) return;
         var e = edges.get(params.edge);
         if (!e) return;
         edges.update({ id: e.id, font: { size: 0 }, label: '' });
@@ -1014,6 +1230,7 @@ def _inject_ui(
 
     function enterFocusMode(nodeId) {
         if (focusedNodeId === nodeId && focusConnIndex < 0) return;  // already in neighborhood view
+        overviewHoveredId = null;  // clear any hover preview state
         focusedNodeId = nodeId;
         var node = nodes.get(nodeId);
         if (!node) return;
@@ -1023,27 +1240,36 @@ def _inject_ui(
         document.getElementById('focus-label').textContent = 'Focused on: ' + (node.full_name || node.label || nodeId);
         banner.classList.add('visible');
 
-        // Find 1-hop neighbors
-        var neighborIds = new Set();
-        neighborIds.add(nodeId);
+        // Find all 1-hop neighbors, ranked by degree
+        var allNeighbors = [];
+        var neighborDeg = {};
         var connectedEdgeIds = new Set();
         allEdges.forEach(function(e) {
-            if (e.from === nodeId) { neighborIds.add(e.to); connectedEdgeIds.add(e.id); }
-            if (e.to === nodeId) { neighborIds.add(e.from); connectedEdgeIds.add(e.id); }
+            if (e.from === nodeId) { connectedEdgeIds.add(e.id); if (!neighborDeg[e.to]) { neighborDeg[e.to] = 0; allNeighbors.push(e.to); } neighborDeg[e.to]++; }
+            if (e.to === nodeId) { connectedEdgeIds.add(e.id); if (!neighborDeg[e.from]) { neighborDeg[e.from] = 0; allNeighbors.push(e.from); } neighborDeg[e.from]++; }
         });
 
-        // Hide non-neighbor nodes, show neighbors (respecting min degree filter)
-        // Also reset font from pair-view back to default
+        // Sort by global degree, cap visible neighbors for dense hubs
+        allNeighbors.sort(function(a, b) {
+            var da = 0, db = 0;
+            allNodes.forEach(function(n) { if (n.id === a) da = n.node_degree || 0; if (n.id === b) db = n.node_degree || 0; });
+            return db - da;
+        });
+        var MAX_NEIGHBORS = 25;
+        var visibleNeighbors = new Set(allNeighbors.slice(0, MAX_NEIGHBORS));
+        visibleNeighbors.add(nodeId);
+
+        // Show top neighbors, hide rest
         var nodeUpdates = [];
         allNodes.forEach(function(n) {
-            var isNeighbor = neighborIds.has(n.id);
+            var isVisible = visibleNeighbors.has(n.id);
             var isFocused = n.id === nodeId;
             var belowDegree = (n.node_degree || 0) < minDegree;
-            nodeUpdates.push({ id: n.id, hidden: !isNeighbor || (!isFocused && belowDegree), font: { size: 14, color: '#e0e0e0' } });
+            nodeUpdates.push({ id: n.id, hidden: !isVisible || (!isFocused && belowDegree), opacity: 1.0, font: { size: 14, color: '#e0e0e0' } });
         });
         nodes.update(nodeUpdates);
 
-        // Count parallel edges per node pair to offset their curves
+        // Count parallel edges per node pair to offset curves
         var pairCount = {};
         var pairIndex = {};
         allEdges.forEach(function(e) {
@@ -1054,13 +1280,18 @@ def _inject_ui(
             pairCount[key]++;
         });
 
-        // Show static labels only when neighborhood is small enough to read
-        var showStaticLabels = neighborIds.size <= 20;
+        // Show static edge labels only for small neighborhoods
+        var showStaticLabels = visibleNeighbors.size <= 20;
 
-        // Show connected edges, offset parallel edges so labels don't overlap
+        // Show edges only to visible neighbors
         var edgeUpdates = [];
         allEdges.forEach(function(e) {
             if (connectedEdgeIds.has(e.id)) {
+                var other = e.from === nodeId ? e.to : e.from;
+                if (!visibleNeighbors.has(other)) {
+                    edgeUpdates.push({ id: e.id, hidden: true });
+                    return;
+                }
                 var key = [e.from, e.to].sort().join('||');
                 var total = pairCount[key] || 1;
                 var idx = pairIndex[e.id] || 0;
@@ -1068,6 +1299,7 @@ def _inject_ui(
                 edgeUpdates.push({
                     id: e.id,
                     hidden: hiddenRelationTypes.has(e.relation_type),
+                    color: { opacity: 0.6 },
                     font: { size: showStaticLabels ? 11 : 0, color: '#ccc', strokeWidth: 3, strokeColor: '#1a1a2e' },
                     label: showStaticLabels ? formatRelLabel(e.relation_type) : '',
                     smooth: { type: 'curvedCW', roundness: roundness }
@@ -1080,35 +1312,62 @@ def _inject_ui(
 
         focusConnIndex = -1;
 
-        // Fit camera to visible neighborhood
-        var visibleIds = [];
-        neighborIds.forEach(function(nid) { visibleIds.push(nid); });
-        network.fit({ nodes: visibleIds, animation: { duration: 400, easingFunction: 'easeInOutQuad' } });
+        // Sidebar-aware camera fit
+        var fitIds = [];
+        visibleNeighbors.forEach(function(nid) { fitIds.push(nid); });
+        var positions = network.getPositions(fitIds);
+        var minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+        fitIds.forEach(function(nid) {
+            var p = positions[nid];
+            if (!p) return;
+            if (p.x < minX) minX = p.x;
+            if (p.x > maxX) maxX = p.x;
+            if (p.y < minY) minY = p.y;
+            if (p.y > maxY) maxY = p.y;
+        });
+        var midX = (minX + maxX) / 2;
+        var midY = (minY + maxY) / 2;
 
-        // After fit, show labels only on top neighbors by degree to avoid overlap
+        var pad = 150;
+        var rangeX = (maxX - minX) + pad * 2;
+        var rangeY = (maxY - minY) + pad * 2;
+
+        var canvasEl = network.canvas.frame.canvas;
+        var totalW = canvasEl.clientWidth;
+        var totalH = canvasEl.clientHeight;
+        var leftW = 352;
+        var rightW = dp.classList.contains('open') ? 320 : 0;
+        var visW = totalW - leftW - rightW;
+        var visH = totalH - 80;
+
+        var scale = Math.min(visW / rangeX, visH / rangeY, 1.2);
+
+        var visCenterPx = leftW + visW / 2;
+        var shiftPx = visCenterPx - totalW / 2;
+
+        network.moveTo({
+            position: { x: midX - shiftPx / scale, y: midY },
+            scale: scale,
+            animation: { duration: 400, easingFunction: 'easeInOutQuad' }
+        });
+
+        // After camera settles, apply scale-aware labels on top neighbors
         setTimeout(function() {
-            var scale = network.getScale();
-            var fontSize = Math.round(14 / scale);
-            var strokeW = Math.max(2, Math.round(2 / scale));
+            var s = network.getScale();
+            var fontSize = Math.round(14 / s);
+            var strokeW = Math.max(2, Math.round(2 / s));
 
-            // Rank neighbors by degree, label top 15 + the focused node
-            var ranked = [];
-            allNodes.forEach(function(n) {
-                if (neighborIds.has(n.id) && n.id !== nodeId) {
-                    ranked.push({ id: n.id, deg: n.node_degree || 0 });
-                }
-            });
-            ranked.sort(function(a, b) { return b.deg - a.deg; });
+            // Label top 15 by degree + focused node
             var maxLabeled = 15;
             var labeledSet = new Set();
             labeledSet.add(nodeId);
-            for (var i = 0; i < Math.min(maxLabeled, ranked.length); i++) {
-                labeledSet.add(ranked[i].id);
+            for (var i = 0; i < Math.min(maxLabeled, allNeighbors.length); i++) {
+                if (visibleNeighbors.has(allNeighbors[i])) labeledSet.add(allNeighbors[i]);
             }
 
             var updates = [];
             allNodes.forEach(function(n) {
-                if (neighborIds.has(n.id)) {
+                if (visibleNeighbors.has(n.id)) {
                     var show = labeledSet.has(n.id);
                     updates.push({ id: n.id, font: { size: show ? fontSize : 0, color: '#e0e0e0', strokeWidth: strokeW, strokeColor: '#1a1a2e' } });
                 }
@@ -1120,7 +1379,10 @@ def _inject_ui(
     }
 
     function exitFocusMode() {
-        if (focusedNodeId === null) return;
+        if (focusedNodeId === null) {
+            closeDetail();
+            return;
+        }
         focusedNodeId = null;
         focusConnIndex = -1;
         focusHistory = [];
@@ -1128,24 +1390,37 @@ def _inject_ui(
         // Hide banner
         document.getElementById('focus-banner').classList.remove('visible');
 
-        // Restore all nodes per current filters
+        // Restore all nodes per current filters + reset fonts to overview (no labels)
         applyFilters();
+        var fontResets = [];
+        allNodes.forEach(function(n) {
+            fontResets.push({ id: n.id, font: { size: 0, color: '#e0e0e0' }, opacity: 1.0 });
+        });
+        nodes.update(fontResets);
 
-        // Restore edges — remove labels, re-apply edge filters
+        // Restore edges — re-apply edge filters, reset labels and curves
         var edgeUpdates = [];
         allEdges.forEach(function(e) {
             edgeUpdates.push({
                 id: e.id,
                 hidden: hiddenRelationTypes.has(e.relation_type),
+                color: { opacity: 0.2 },
                 font: { size: 0 },
-                label: ''
+                label: '',
+                smooth: { type: 'curvedCW', roundness: 0.1 }
             });
         });
         edges.update(edgeUpdates);
+
+        // Fit camera back to full graph
+        network.fit({ animation: { duration: 400, easingFunction: 'easeInOutQuad' } });
     }
     </script>
     """
 
     html = html_path.read_text()
-    html = html.replace("</body>", f"{controls_html}{script}</body>")
+    # Inject community color map into JS
+    comm_colors_json = json.dumps(community_color_map or {})
+    script_with_colors = script.replace("COMMUNITY_COLORS_JS", comm_colors_json)
+    html = html.replace("</body>", f"{controls_html}{script_with_colors}</body>")
     html_path.write_text(html)
