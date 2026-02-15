@@ -1,11 +1,14 @@
 """Tests for sift_kg.resolve (models, io, engine)."""
 
-import pytest
-import yaml
 
 from sift_kg.graph.knowledge_graph import KnowledgeGraph
 from sift_kg.resolve.engine import apply_merges, apply_relation_rejections
-from sift_kg.resolve.io import read_proposals, read_relation_review, write_proposals, write_relation_review
+from sift_kg.resolve.io import (
+    read_proposals,
+    read_relation_review,
+    write_proposals,
+    write_relation_review,
+)
 from sift_kg.resolve.models import (
     MergeFile,
     MergeMember,

@@ -1,6 +1,5 @@
 """Tests for sift_kg.extract.models and sift_kg.extract.prompts."""
 
-import pytest
 
 from sift_kg.extract.models import (
     DocumentExtraction,

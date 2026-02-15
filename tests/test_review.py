@@ -2,8 +2,6 @@
 
 from unittest.mock import patch
 
-import pytest
-
 from sift_kg.domains.loader import DomainLoader
 from sift_kg.resolve.models import (
     MergeFile,

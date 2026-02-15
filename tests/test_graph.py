@@ -1,10 +1,13 @@
 """Tests for sift_kg.graph (KnowledgeGraph, builder, postprocessor)."""
 
-import json
 
-import pytest
 
-from sift_kg.graph.builder import _make_entity_id, _make_relation_id, build_graph, flag_relations_for_review
+from sift_kg.graph.builder import (
+    _make_entity_id,
+    _make_relation_id,
+    build_graph,
+    flag_relations_for_review,
+)
 from sift_kg.graph.knowledge_graph import KnowledgeGraph
 from sift_kg.graph.postprocessor import remove_redundant_edges
 

@@ -121,4 +121,6 @@ class TestClusteringResolverIntegration:
             _afind_merge_candidates(sample_graph, mock_llm, None, 1, use_embeddings=False)
         )
         assert result is not None
-        assert hasattr(result, "proposals")
+        # _afind_merge_candidates returns (MergeFile, variant_relations)
+        merge_file, variant_relations = result
+        assert hasattr(merge_file, "proposals")

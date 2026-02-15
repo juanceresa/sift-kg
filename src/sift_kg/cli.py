@@ -248,7 +248,7 @@ def resolve(
 
     from sift_kg.extract.llm_client import LLMClient
     from sift_kg.graph.knowledge_graph import KnowledgeGraph
-    from sift_kg.resolve.io import write_proposals, write_relation_review, read_relation_review
+    from sift_kg.resolve.io import read_relation_review, write_proposals, write_relation_review
     from sift_kg.resolve.models import RelationReviewFile
     from sift_kg.resolve.resolver import find_merge_candidates
 

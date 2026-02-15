@@ -1,6 +1,5 @@
 """Tests for sift_kg.narrate.prompts."""
 
-import pytest
 
 from sift_kg.narrate.prompts import build_entity_description_prompt, build_narrative_prompt
 

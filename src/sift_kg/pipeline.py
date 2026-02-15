@@ -131,7 +131,7 @@ def run_resolve(
         write_proposals(merge_file, output_dir / "merge_proposals.yaml")
 
     if variant_relations:
-        from sift_kg.resolve.io import write_relation_review, read_relation_review
+        from sift_kg.resolve.io import read_relation_review, write_relation_review
         from sift_kg.resolve.models import RelationReviewFile
 
         review_path = output_dir / "relation_review.yaml"

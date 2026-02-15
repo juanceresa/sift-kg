@@ -17,7 +17,9 @@ from sift_kg.extract.llm_client import LLMClient
 from sift_kg.graph.knowledge_graph import KnowledgeGraph
 from sift_kg.graph.prededup import _TITLE_PREFIXES
 from sift_kg.resolve.models import (
-    MergeFile, MergeMember, MergeProposal,
+    MergeFile,
+    MergeMember,
+    MergeProposal,
     RelationReviewEntry,
 )
 
@@ -208,7 +210,7 @@ def _find_cross_type_duplicates(kg: KnowledgeGraph) -> list[MergeProposal]:
         name_groups[name].append((nid, entity_type, degree))
 
     proposals = []
-    for name, group in name_groups.items():
+    for _name, group in name_groups.items():
         # Only care about names that appear under multiple types
         types = {t for _, t, _ in group}
         if len(types) < 2:
@@ -220,7 +222,7 @@ def _find_cross_type_duplicates(kg: KnowledgeGraph) -> list[MergeProposal]:
         canonical_name = kg.graph.nodes[canonical_id].get("name", canonical_id)
 
         members = []
-        for mid, mtype, _ in group[1:]:
+        for mid, _mtype, _ in group[1:]:
             members.append(MergeMember(
                 id=mid,
                 name=kg.graph.nodes[mid].get("name", mid),
