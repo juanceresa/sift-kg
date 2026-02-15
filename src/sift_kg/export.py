@@ -14,7 +14,7 @@ import networkx as nx
 
 from sift_kg.graph.knowledge_graph import KnowledgeGraph
 from sift_kg.graph.postprocessor import strip_metadata
-from sift_kg.visualize import DEFAULT_ENTITY_COLOR, EDGE_PALETTE, ENTITY_COLORS
+from sift_kg.visualize import EDGE_PALETTE, _color_for_entity
 
 logger = logging.getLogger(__name__)
 
@@ -97,6 +97,7 @@ def _build_flat_graph(
     flat = nx.DiGraph()
     descriptions = descriptions or {}
     degrees = dict(kg.graph.degree())
+    entity_color_map: dict[str, str] = {}
 
     for node_id, data in kg.graph.nodes(data=True):
         flat_attrs = {k: _flatten_value(v) for k, v in data.items()}
@@ -104,7 +105,7 @@ def _build_flat_graph(
         flat_attrs["label"] = data.get("name", node_id)
         # Color by entity type — same palette as pyvis viewer
         entity_type = data.get("entity_type", "UNKNOWN")
-        color = ENTITY_COLORS.get(entity_type, DEFAULT_ENTITY_COLOR)
+        color = _color_for_entity(entity_type, entity_color_map)
         r, g, b = _hex_to_rgb(color)
         flat_attrs["color"] = color
         flat_attrs["r"] = r
