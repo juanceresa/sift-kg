@@ -16,12 +16,15 @@ from unidecode import unidecode
 from sift_kg.extract.llm_client import LLMClient
 from sift_kg.graph.knowledge_graph import KnowledgeGraph
 from sift_kg.graph.prededup import _TITLE_PREFIXES
-from sift_kg.resolve.models import MergeFile, MergeMember, MergeProposal
+from sift_kg.resolve.models import (
+    MergeFile, MergeMember, MergeProposal,
+    RelationReviewEntry,
+)
 
 logger = logging.getLogger(__name__)
 
-# Only resolve entity types that commonly have duplicates
-RESOLVABLE_TYPES = {"PERSON", "ORGANIZATION", "LOCATION", "EVENT"}
+# Entity types to skip during resolution (source documents, not real entities)
+SKIP_TYPES = {"DOCUMENT"}
 
 # Don't send more than this many entities to the LLM at once.
 # Slim payloads (name/aliases only) make 100 feasible within token limits.
@@ -61,19 +64,19 @@ def find_merge_candidates(
     concurrency: int = 4,
     use_embeddings: bool = False,
     system_context: str = "",
-) -> MergeFile:
+) -> tuple[MergeFile, list[RelationReviewEntry]]:
     """Find entities that likely refer to the same real-world thing.
 
     Args:
         kg: Knowledge graph with entities
         llm: LLM client for similarity judgments
-        entity_types: Types to resolve (default: PERSON, ORG, LOCATION, EVENT)
+        entity_types: Types to resolve (default: all types except DOCUMENT)
         concurrency: Max concurrent LLM calls
         use_embeddings: Use semantic clustering instead of alphabetical batching
         system_context: Domain context to help LLM understand entity names
 
     Returns:
-        MergeFile with DRAFT proposals
+        Tuple of (MergeFile with DRAFT proposals, list of variant relation proposals)
     """
     return asyncio.run(
         _afind_merge_candidates(kg, llm, entity_types, concurrency, use_embeddings, system_context)
@@ -87,15 +90,17 @@ async def _afind_merge_candidates(
     concurrency: int,
     use_embeddings: bool = False,
     system_context: str = "",
-) -> MergeFile:
+) -> tuple[MergeFile, list[RelationReviewEntry]]:
     """Async implementation — resolves all type batches concurrently."""
-    types_to_check = entity_types or [
-        t for t in RESOLVABLE_TYPES
-        if any(
-            data.get("entity_type") == t
+    if entity_types:
+        types_to_check = entity_types
+    else:
+        # Resolve all entity types present in the graph, except DOCUMENT
+        types_to_check = sorted({
+            data.get("entity_type")
             for _, data in kg.graph.nodes(data=True)
-        )
-    ]
+            if data.get("entity_type") and data.get("entity_type") not in SKIP_TYPES
+        })
 
     # Build all (batch, entity_type) pairs
     tasks = []
@@ -154,23 +159,88 @@ async def _afind_merge_candidates(
             if len(batches) > 1:
                 logger.info(f"  Batch {batch_idx + 1}/{len(batches)}: {len(batch)} entities")
 
-            async def _bounded(b: list[dict], et: str) -> list[MergeProposal]:
+            async def _bounded(b: list[dict], et: str) -> tuple[list[MergeProposal], list[RelationReviewEntry]]:
                 async with sem:
                     return await _aresolve_type_batch(b, et, llm, system_context)
 
             tasks.append(_bounded(batch, entity_type))
 
     if not tasks:
-        return MergeFile(proposals=[])
+        return MergeFile(proposals=[]), []
 
     batch_results = await asyncio.gather(*tasks)
-    all_proposals = [p for batch in batch_results for p in batch]
+    all_proposals = [p for proposals, _ in batch_results for p in proposals]
+    all_variants = [v for _, variants in batch_results for v in variants]
 
     # Overlapping windows can produce duplicate proposals — deduplicate.
     all_proposals = _deduplicate_proposals(all_proposals)
 
-    logger.info(f"Found {len(all_proposals)} merge proposals across {len(types_to_check)} types")
-    return MergeFile(proposals=all_proposals)
+    # Cross-type dedup: find entities with same name but different types.
+    # No LLM needed — if the name is identical, it's almost certainly the
+    # same entity with an inconsistent type assignment.
+    cross_type_proposals = _find_cross_type_duplicates(kg)
+    all_proposals.extend(cross_type_proposals)
+
+    logger.info(f"Found {len(all_proposals)} merge proposals and {len(all_variants)} variant relations across {len(types_to_check)} types")
+    return MergeFile(proposals=all_proposals), all_variants
+
+
+def _find_cross_type_duplicates(kg: KnowledgeGraph) -> list[MergeProposal]:
+    """Find entities with the same name but different types.
+
+    When the LLM extracts "reading comprehension" as both CONCEPT and
+    PHENOMENON, these are the same entity with an inconsistent type.
+    The canonical is the one with more connections (more context for
+    the type assignment). All relations get combined on merge.
+    """
+    from collections import defaultdict
+
+    # Group by normalized name
+    name_groups: dict[str, list[tuple[str, str, int]]] = defaultdict(list)
+    for nid, data in kg.graph.nodes(data=True):
+        entity_type = data.get("entity_type", "")
+        if entity_type in SKIP_TYPES:
+            continue
+        name = data.get("name", "").strip().lower()
+        if not name:
+            continue
+        degree = kg.graph.degree(nid)
+        name_groups[name].append((nid, entity_type, degree))
+
+    proposals = []
+    for name, group in name_groups.items():
+        # Only care about names that appear under multiple types
+        types = {t for _, t, _ in group}
+        if len(types) < 2:
+            continue
+
+        # Canonical = highest degree
+        group.sort(key=lambda x: x[2], reverse=True)
+        canonical_id, canonical_type, _ = group[0]
+        canonical_name = kg.graph.nodes[canonical_id].get("name", canonical_id)
+
+        members = []
+        for mid, mtype, _ in group[1:]:
+            members.append(MergeMember(
+                id=mid,
+                name=kg.graph.nodes[mid].get("name", mid),
+                confidence=0.95,
+            ))
+
+        member_types = ", ".join(t for _, t, _ in group[1:])
+        proposals.append(MergeProposal(
+            canonical_id=canonical_id,
+            canonical_name=canonical_name,
+            entity_type=canonical_type,
+            status="DRAFT",
+            members=members,
+            reason=f"Same name across types ({canonical_type} vs {member_types}). Relations will be combined.",
+        ))
+
+    if proposals:
+        logger.info(f"Cross-type dedup: found {len(proposals)} entities with same name across different types")
+
+    return proposals
 
 
 def _build_overlapping_batches(entities: list[dict]) -> list[list[dict]]:
@@ -299,18 +369,35 @@ async def _aresolve_type_batch(
     if system_context:
         context_section = f"DOMAIN CONTEXT:\n{system_context}\n\n"
 
-    prompt = f"""{context_section}Analyze these {entity_type} entities and identify groups that refer to the same real-world entity.
+    # Build type-appropriate dedup hints
+    person_types = {"PERSON", "RESEARCHER"}
+    if entity_type in person_types:
+        type_hints = """Look for:
+- Name variations (abbreviations, nicknames, full legal names vs common names, misspellings, transliterations)
+- Title/honorific prefixes that don't change identity (Dr., Mr., Detective, Judge, etc.)
+- First name vs nickname variants
+- Aliases — if an entity's aliases list contains a name matching another entity, they are very likely the same
+- Same person referenced differently across documents
+- DO NOT merge genuinely different people (e.g., father and son, or unrelated people sharing a surname)"""
+    else:
+        type_hints = """Look for:
+- Acronyms vs spelled-out forms of the same thing
+- Spacing, punctuation, and capitalization variants of the same name
+- A name with and without a redundant qualifier (e.g. "X method" vs just "X")
+- Same entity referenced with slightly different wording across documents
+- Aliases — if an entity's aliases list contains a name matching another entity, they are very likely the same
+- DO NOT merge entities that are genuinely distinct variants, versions, or subtypes of each other"""
+
+    prompt = f"""{context_section}Analyze these {entity_type} entities and identify:
+1. **Duplicates** — entities that refer to the exact same thing (merge them)
+2. **Variants** — entities that are a subtype, version, or specific implementation of a parent entity (link them with EXTENDS)
 
 ENTITIES:
 {entity_list}
 
-Look for:
-- Name variations (abbreviations, nicknames, full legal names vs common names, misspellings, transliterations)
-- Title/honorific prefixes: "Detective Joe Recarey" and "Joseph Recarey" are the SAME person. "Mr. Edwards" and "Bradley Edwards" are the SAME person. Titles like Mr., Mrs., Ms., Dr., Detective, Officer, Judge, Senator, etc. do NOT make someone a different entity.
-- First name vs nickname: "Joseph" = "Joe", "Robert" = "Bob", "William" = "Bill", etc.
-- Aliases — if an entity's aliases list contains a name matching another entity, they are very likely the same
-- Same entity referenced differently across documents
-- DO NOT merge entities that are genuinely different (e.g., father and son with similar names, or people who share a surname but are unrelated)
+{type_hints}
+
+IMPORTANT: If entity B is a variant/subtype/version of entity A (not the same thing, but derived from it), put it in "variants" NOT "groups". Only true duplicates go in "groups".
 
 Return valid JSON only:
 {{
@@ -322,17 +409,25 @@ Return valid JSON only:
       "confidence": 0.0-1.0,
       "reason": "brief explanation"
     }}
+  ],
+  "variants": [
+    {{
+      "parent_id": "id of the parent/base entity",
+      "child_id": "id of the variant/subtype",
+      "confidence": 0.0-1.0,
+      "reason": "brief explanation"
+    }}
   ]
 }}
 
-If no duplicates found, return {{"groups": []}}.
+If nothing found, return {{"groups": [], "variants": []}}.
 OUTPUT JSON:"""
 
     try:
         data = await llm.acall_json(prompt)
     except (RuntimeError, ValueError) as e:
         logger.warning(f"Entity resolution failed for {entity_type}: {e}")
-        return []
+        return [], []
 
     # Parse response into MergeProposals
     proposals = []
@@ -370,4 +465,26 @@ OUTPUT JSON:"""
             reason=group.get("reason", ""),
         ))
 
-    return proposals
+    # Parse variant relations (EXTENDS)
+    variant_relations = []
+    for variant in data.get("variants", []):
+        parent_id = variant.get("parent_id", "")
+        child_id = variant.get("child_id", "")
+        if not parent_id or not child_id:
+            continue
+        if parent_id not in entity_lookup or child_id not in entity_lookup:
+            continue
+
+        variant_relations.append(RelationReviewEntry(
+            source_id=child_id,
+            source_name=entity_lookup[child_id],
+            target_id=parent_id,
+            target_name=entity_lookup[parent_id],
+            relation_type="EXTENDS",
+            confidence=float(variant.get("confidence", 0.7)),
+            evidence=variant.get("reason", ""),
+            status="DRAFT",
+            flag_reason="Variant relationship discovered during entity resolution",
+        ))
+
+    return proposals, variant_relations

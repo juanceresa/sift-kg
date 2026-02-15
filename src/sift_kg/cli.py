@@ -171,7 +171,11 @@ def build(
     console.print(f"[cyan]Loading:[/cyan] {len(extractions)} extraction files")
 
     domain_rel_types = set(domain_config.relation_types.keys()) if domain_config.relation_types else None
-    kg = build_graph(extractions, postprocess=not no_postprocess, domain_relation_types=domain_rel_types)
+    domain_rel_configs = {
+        name: (cfg.source_types, cfg.target_types, cfg.symmetric)
+        for name, cfg in domain_config.relation_types.items()
+    } if domain_config.relation_types else None
+    kg = build_graph(extractions, postprocess=not no_postprocess, domain_relation_types=domain_rel_types, domain_relation_configs=domain_rel_configs)
 
     # Save graph
     graph_path = output_dir / "graph_data.json"
@@ -244,7 +248,8 @@ def resolve(
 
     from sift_kg.extract.llm_client import LLMClient
     from sift_kg.graph.knowledge_graph import KnowledgeGraph
-    from sift_kg.resolve.io import write_proposals
+    from sift_kg.resolve.io import write_proposals, write_relation_review, read_relation_review
+    from sift_kg.resolve.models import RelationReviewFile
     from sift_kg.resolve.resolver import find_merge_candidates
 
     kg = KnowledgeGraph.load(graph_path)
@@ -252,22 +257,38 @@ def resolve(
     console.print(f"[cyan]Graph:[/cyan] {kg.entity_count} entities, {kg.relation_count} relations")
 
     llm = LLMClient(model=effective_model, rpm=rpm)
-    merge_file = find_merge_candidates(kg, llm, concurrency=concurrency, use_embeddings=use_embeddings, system_context=system_context)
+    merge_file, variant_relations = find_merge_candidates(kg, llm, concurrency=concurrency, use_embeddings=use_embeddings, system_context=system_context)
 
-    if not merge_file.proposals:
-        console.print("[green]No duplicates found![/green]")
+    if not merge_file.proposals and not variant_relations:
+        console.print("[green]No duplicates or variant relationships found![/green]")
         return
 
-    proposals_path = output_dir / "merge_proposals.yaml"
-    write_proposals(merge_file, proposals_path)
+    if merge_file.proposals:
+        proposals_path = output_dir / "merge_proposals.yaml"
+        write_proposals(merge_file, proposals_path)
+
+    # Append variant relations to relation_review.yaml
+    if variant_relations:
+        review_path = output_dir / "relation_review.yaml"
+        if review_path.exists():
+            review_file = read_relation_review(review_path)
+        else:
+            review_file = RelationReviewFile()
+        # Avoid duplicating existing entries
+        existing = {(r.source_id, r.target_id, r.relation_type) for r in review_file.relations}
+        new_variants = [v for v in variant_relations if (v.source_id, v.target_id, v.relation_type) not in existing]
+        review_file.relations.extend(new_variants)
+        write_relation_review(review_file, review_path)
 
     console.print()
-    console.print(f"[green]Found {len(merge_file.proposals)} merge proposals[/green]")
+    if merge_file.proposals:
+        console.print(f"[green]Found {len(merge_file.proposals)} merge proposals[/green]")
+    if variant_relations:
+        console.print(f"[green]Found {len(variant_relations)} variant relationships (EXTENDS)[/green]")
     console.print(f"  Cost: ${llm.total_cost_usd:.4f}")
-    console.print(f"  Output: {proposals_path}")
+    console.print(f"  Output: {output_dir}")
     console.print()
-    console.print("Next: [cyan]sift review[/cyan] to approve/reject merges interactively")
-    console.print("  Or edit [cyan]{proposals_path}[/cyan] manually (DRAFT → CONFIRMED/REJECTED)")
+    console.print("Next: [cyan]sift review[/cyan] to approve/reject merges and relations")
     console.print("  Then: [cyan]sift apply-merges[/cyan]")
 
 

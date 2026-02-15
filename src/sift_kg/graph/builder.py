@@ -12,6 +12,7 @@ from unidecode import unidecode
 from sift_kg.extract.models import DocumentExtraction
 from sift_kg.graph.knowledge_graph import KnowledgeGraph
 from sift_kg.graph.postprocessor import (
+    fix_relation_directions,
     normalize_relation_types,
     prune_isolated_entities,
     remove_redundant_edges,
@@ -47,6 +48,7 @@ def build_graph(
     extractions: list[DocumentExtraction],
     postprocess: bool = True,
     domain_relation_types: set[str] | None = None,
+    domain_relation_configs: dict[str, tuple[list[str], list[str], bool]] | None = None,
 ) -> KnowledgeGraph:
     """Build knowledge graph from extraction results.
 
@@ -159,6 +161,9 @@ def build_graph(
         if domain_relation_types:
             norm = normalize_relation_types(kg, domain_relation_types)
             stats.update(norm)
+        if domain_relation_configs:
+            direction_stats = fix_relation_directions(kg, domain_relation_configs)
+            stats.update(direction_stats)
 
     logger.info(
         f"Graph built: {stats['documents']} docs → "

@@ -242,3 +242,75 @@ def normalize_relation_types(
         )
 
     return stats
+
+
+def fix_relation_directions(
+    kg: KnowledgeGraph,
+    relation_configs: dict[str, tuple[list[str], list[str], bool]],
+    dry_run: bool = False,
+) -> dict[str, int]:
+    """Flip edges whose source/target entity types don't match the domain schema.
+
+    When the LLM extracts "RESEARCHER PROPOSED_BY SYSTEM" instead of
+    "SYSTEM PROPOSED_BY RESEARCHER", this detects the mismatch and flips
+    the edge so the direction matches the domain's source_types/target_types.
+
+    Args:
+        kg: KnowledgeGraph to fix (modified in place unless dry_run)
+        relation_configs: Map of relation_type → (source_types, target_types, symmetric).
+            Only relations present in this map are checked.
+        dry_run: Report stats without modifying graph
+
+    Returns:
+        Stats dict with flip/invalid counts
+    """
+    stats: dict[str, int] = {"relations_flipped": 0, "relations_invalid": 0}
+    to_flip: list[tuple[str, str, str, dict]] = []
+
+    for source, target, key, data in list(kg.graph.edges(data=True, keys=True)):
+        rel_type = data.get("relation_type", "")
+        if rel_type not in relation_configs or rel_type in METADATA_RELATIONS:
+            continue
+
+        source_types, target_types, symmetric = relation_configs[rel_type]
+        if not source_types or not target_types:
+            continue  # No type constraints defined
+        if symmetric:
+            continue  # Direction doesn't matter
+
+        src_etype = kg.graph.nodes[source].get("entity_type", "")
+        tgt_etype = kg.graph.nodes[target].get("entity_type", "")
+
+        src_types_set = set(source_types)
+        tgt_types_set = set(target_types)
+
+        correct = src_etype in src_types_set and tgt_etype in tgt_types_set
+        if correct:
+            continue
+
+        # Check if flipping would fix it
+        flipped = tgt_etype in src_types_set and src_etype in tgt_types_set
+        if flipped:
+            to_flip.append((source, target, key, data))
+        else:
+            stats["relations_invalid"] += 1
+
+    if not dry_run:
+        for source, target, key, data in to_flip:
+            kg.graph.remove_edge(source, target, key=key)
+            kg.graph.add_edge(target, source, key=key, **data)
+
+    stats["relations_flipped"] = len(to_flip)
+
+    if stats["relations_flipped"]:
+        logger.info(
+            f"Post-processing: flipped {stats['relations_flipped']} relations "
+            f"to match domain schema directions"
+        )
+    if stats["relations_invalid"]:
+        logger.debug(
+            f"Post-processing: {stats['relations_invalid']} relations have "
+            f"entity types outside schema constraints (kept as-is)"
+        )
+
+    return stats

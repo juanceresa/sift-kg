@@ -76,7 +76,11 @@ def run_build(
         raise FileNotFoundError(f"No extractions found in {output_dir / 'extractions'}")
 
     domain_rel_types = set(domain.relation_types.keys()) if domain.relation_types else None
-    kg = build_graph(extractions, postprocess=postprocess, domain_relation_types=domain_rel_types)
+    domain_rel_configs = {
+        name: (cfg.source_types, cfg.target_types, cfg.symmetric)
+        for name, cfg in domain.relation_types.items()
+    } if domain.relation_types else None
+    kg = build_graph(extractions, postprocess=postprocess, domain_relation_types=domain_rel_types, domain_relation_configs=domain_rel_configs)
 
     # Save graph
     graph_path = output_dir / "graph_data.json"
@@ -121,10 +125,22 @@ def run_resolve(
 
     kg = KnowledgeGraph.load(graph_path)
     llm = LLMClient(model=model)
-    merge_file = find_merge_candidates(kg, llm)
+    merge_file, variant_relations = find_merge_candidates(kg, llm)
 
     if merge_file.proposals:
         write_proposals(merge_file, output_dir / "merge_proposals.yaml")
+
+    if variant_relations:
+        from sift_kg.resolve.io import write_relation_review, read_relation_review
+        from sift_kg.resolve.models import RelationReviewFile
+
+        review_path = output_dir / "relation_review.yaml"
+        if review_path.exists():
+            review_file = read_relation_review(review_path)
+        else:
+            review_file = RelationReviewFile()
+        review_file.relations.extend(variant_relations)
+        write_relation_review(review_file, review_path)
 
     return merge_file
 
