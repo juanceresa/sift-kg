@@ -21,15 +21,27 @@ logger = logging.getLogger(__name__)
 
 # Color palette for entity types — visually distinct, dark-mode friendly
 ENTITY_COLORS = {
-    "PERSON": "#4FC3F7",
+    # Academic entity types
+    "CONCEPT":     "#42A5F5",  # blue — abstract ideas
+    "THEORY":      "#AB47BC",  # purple — frameworks
+    "METHOD":      "#66BB6A",  # green — techniques
+    "SYSTEM":      "#FFA726",  # orange — concrete implementations
+    "FINDING":     "#FFEE58",  # yellow — results
+    "RESEARCHER":  "#26C6DA",  # cyan — people
+    "PHENOMENON":  "#EF5350",  # red — observable things
+    "PUBLICATION": "#78909C",  # gray — papers
+    "FIELD":       "#8D6E63",  # brown — disciplines
+    "DATASET":     "#9CCC65",  # lime — data
+    # OSINT entity types (backward compat)
+    "PERSON":      "#4FC3F7",
     "ORGANIZATION": "#81C784",
     "SHELL_COMPANY": "#FFB74D",
     "FINANCIAL_INSTRUMENT": "#F06292",
     "FINANCIAL_ACCOUNT": "#F06292",
     "GOVERNMENT_AGENCY": "#CE93D8",
-    "LOCATION": "#BA68C8",
-    "DOCUMENT": "#90A4AE",
-    "EVENT": "#FFD54F",
+    "LOCATION":    "#BA68C8",
+    "DOCUMENT":    "#90A4AE",
+    "EVENT":       "#FFD54F",
 }
 DEFAULT_ENTITY_COLOR = "#B0BEC5"
 
@@ -74,12 +86,29 @@ COMMUNITY_COLORS = [
 ]
 
 
+# Semantic edge colors — named relation types get meaningful colors
+SEMANTIC_EDGE_COLORS = {
+    "EXTENDS":         "#AB47BC",  # purple — lineage/inheritance
+    "PROPOSED_BY":     "#26C6DA",  # cyan — attribution
+    "SUPPORTS":        "#66BB6A",  # green — evidence for
+    "CONTRADICTS":     "#EF5350",  # red — evidence against
+    "USES_METHOD":     "#42A5F5",  # blue — methodology
+    "IMPLEMENTS":      "#FFA726",  # orange — concrete realization
+    "ASSOCIATED_WITH": "#78909C",  # gray — generic fallback
+    "MENTIONED_IN":    "#546E7A",  # dark gray — provenance (low emphasis)
+}
+
+
 def _color_for_relation(rel_type: str, rel_color_map: dict[str, str]) -> str:
     """Get or assign a color for a relation type."""
     if rel_type in rel_color_map:
         return rel_color_map[rel_type]
-    idx = len(rel_color_map) % len(EDGE_PALETTE)
-    rel_color_map[rel_type] = EDGE_PALETTE[idx]
+    # Use semantic color if available, otherwise auto-assign from palette
+    if rel_type in SEMANTIC_EDGE_COLORS:
+        rel_color_map[rel_type] = SEMANTIC_EDGE_COLORS[rel_type]
+    else:
+        idx = len(rel_color_map) % len(EDGE_PALETTE)
+        rel_color_map[rel_type] = EDGE_PALETTE[idx]
     return rel_color_map[rel_type]
 
 
@@ -146,12 +175,12 @@ def generate_view(
     net.set_options("""{
         "physics": {
             "forceAtlas2Based": {
-                "gravitationalConstant": -150,
-                "centralGravity": 0.005,
-                "springLength": 250,
-                "springConstant": 0.04,
+                "gravitationalConstant": -350,
+                "centralGravity": 0.002,
+                "springLength": 400,
+                "springConstant": 0.03,
                 "damping": 0.4,
-                "avoidOverlap": 0.8
+                "avoidOverlap": 0.9
             },
             "solver": "forceAtlas2Based",
             "stabilization": { "enabled": true, "iterations": 300 },
@@ -169,7 +198,7 @@ def generate_view(
         },
         "interaction": {
             "hover": true,
-            "tooltipDelay": 50,
+            "tooltipDelay": 999999,
             "zoomView": true,
             "dragView": true,
             "hideEdgesOnDrag": true,
@@ -182,7 +211,7 @@ def generate_view(
     # Seed initial positions by community so clusters start separated
     community_centers: dict[str, tuple[float, float]] = {}
     if unique_communities:
-        radius = 800
+        radius = 1200
         for i, comm in enumerate(unique_communities):
             angle = 2 * math.pi * i / len(unique_communities)
             community_centers[comm] = (radius * math.cos(angle), radius * math.sin(angle))
@@ -238,7 +267,7 @@ def generate_view(
 
         # Seed position by community center + jitter
         center = community_centers.get(comm_label, (0, 0))
-        jitter = 150
+        jitter = 250
         init_x = center[0] + random.uniform(-jitter, jitter)
         init_y = center[1] + random.uniform(-jitter, jitter)
 
@@ -370,15 +399,23 @@ def _inject_ui(
             )
         community_section = f'<div class="section-header">Communities</div>{community_items}'
 
-    # Relation type controls
+    # Relation type controls — count edges per relation type
+    rel_counts: dict[str, int] = {}
+    for _, _, _, edata in kg.graph.edges(data=True, keys=True):
+        rt = edata.get("relation_type", "UNKNOWN")
+        rel_counts[rt] = rel_counts.get(rt, 0) + 1
+
     relation_items = ""
-    for rt in sorted(rel_color_map.keys()):
+    for rt in sorted(rel_color_map.keys(), key=lambda r: rel_counts.get(r, 0), reverse=True):
         color = rel_color_map[rt]
+        checked = "" if rt == "MENTIONED_IN" else " checked"
+        count = rel_counts.get(rt, 0)
         relation_items += (
             f'<div class="type-row">'
-            f'<input type="checkbox" checked data-rtype="{rt}" onchange="toggleRelationType(this)">'
+            f'<input type="checkbox"{checked} data-rtype="{rt}" onchange="toggleRelationType(this)">'
             f'<input type="color" value="{color}" data-rtype-color="{rt}" onchange="changeRelationColor(this)">'
             f'<span class="type-label">{rt}</span>'
+            f'<span style="margin-left:auto;font-size:10px;color:#666;flex-shrink:0">{count}</span>'
             f"</div>"
         )
 
@@ -462,20 +499,36 @@ def _inject_ui(
             font-size:12px; cursor:pointer;
         }}
         .d-conn:hover {{ color:#4FC3F7; }}
+        .d-conn.active {{ background:rgba(79,195,247,0.15); color:#4FC3F7; border-left:2px solid #4FC3F7; padding-left:6px; }}
         .d-evidence {{
             font-size:12px; color:#ccc; line-height:1.6;
             background:rgba(255,255,255,0.03); border-radius:6px;
             padding:10px 12px; border-left:3px solid #4FC3F7;
             white-space:pre-wrap;
         }}
+        /* Focus mode banner */
+        #focus-banner {{
+            position:fixed; top:12px; left:50%; transform:translateX(-50%);
+            z-index:1000; background:rgba(66,165,245,0.95);
+            color:#fff; padding:8px 18px; border-radius:8px;
+            font-family:Inter,system-ui,sans-serif; font-size:13px;
+            font-weight:600; display:none; align-items:center; gap:10px;
+            box-shadow:0 2px 12px rgba(0,0,0,0.3);
+        }}
+        #focus-banner.visible {{ display:flex; }}
+        #focus-exit {{
+            background:none; border:none; color:#fff; cursor:pointer;
+            font-size:18px; padding:0 2px; line-height:1; opacity:0.8;
+        }}
+        #focus-exit:hover {{ opacity:1; }}
     </style>
     <div id="sift-controls">
         <div style="font-weight:700;margin-bottom:10px;font-size:15px;color:#fff">sift-kg</div>
         <input id="search-input" type="text" placeholder="Search entities..." oninput="searchEntity(this.value)">
 
         <div style="margin:8px 0 4px">
-            <label style="font-size:11px;color:#888">Min connections: <span id="deg-val">0</span></label>
-            <input id="deg-slider" type="range" min="0" max="20" value="0" style="width:100%;margin:2px 0;accent-color:#4FC3F7" oninput="filterByDegree(this.value)">
+            <label style="font-size:11px;color:#888">Min connections: <span id="deg-val">2</span></label>
+            <input id="deg-slider" type="range" min="0" max="20" value="2" style="width:100%;margin:2px 0;accent-color:#4FC3F7" oninput="filterByDegree(this.value)">
         </div>
 
         <div class="section-header" style="border-top:none">Entity Types</div>
@@ -489,6 +542,10 @@ def _inject_ui(
         <div style="margin-top:12px;font-size:11px;color:#555;border-top:1px solid #333;padding-top:8px">
             {kg.entity_count} entities &middot; {kg.relation_count} relations
         </div>
+    </div>
+    <div id="focus-banner">
+        <span id="focus-label">Focused on: —</span>
+        <button id="focus-exit" onclick="exitFocusMode()">&times;</button>
     </div>
     <div id="detail-panel">
         <div id="detail-header">
@@ -513,6 +570,9 @@ def _inject_ui(
     var hiddenEntityTypes = new Set();
     var hiddenRelationTypes = new Set();
     var hiddenCommunities = new Set();
+    var focusedNodeId = null;
+    var focusConnIndex = -1;
+    var focusHistory = [];
 
     // --- Detail sidebar ---
     var dp = document.getElementById('detail-panel');
@@ -540,6 +600,17 @@ def _inject_ui(
     });
 
     network.on('click', function(params) {
+        if (focusedNodeId !== null && params.nodes && params.nodes.length > 0) {
+            // In focus mode: click neighbor to shift focus
+            focusHistory.push(focusedNodeId);
+            enterFocusMode(params.nodes[0]);
+            return;
+        }
+        if (focusedNodeId !== null && (!params.nodes || params.nodes.length === 0) && (!params.edges || params.edges.length === 0)) {
+            // Click empty canvas → exit focus
+            exitFocusMode();
+            return;
+        }
         if (params.nodes && params.nodes.length > 0) {
             showNodeDetail(params.nodes[0]);
         } else if (params.edges && params.edges.length > 0) {
@@ -738,12 +809,23 @@ def _inject_ui(
     }
 
     // --- Degree filter ---
-    var minDegree = 0;
+    var minDegree = 2;
     function filterByDegree(val) {
         minDegree = parseInt(val, 10);
         document.getElementById('deg-val').textContent = minDegree;
         applyFilters();
     }
+
+    // --- Startup: apply smart defaults ---
+    (function() {
+        // MENTIONED_IN starts unchecked — add to hidden set
+        var mentionedCb = document.querySelector('[data-rtype="MENTIONED_IN"]');
+        if (mentionedCb && !mentionedCb.checked) {
+            hiddenRelationTypes.add('MENTIONED_IN');
+        }
+        applyEdgeFilters();
+        applyFilters();
+    })();
 
     // --- Search ---
     function searchEntity(query) {
@@ -778,6 +860,288 @@ def _inject_ui(
         if (matchIds.size > 0) {
             network.focus(matchIds.values().next().value, { scale: 1.5, animation: { duration: 500 } });
         }
+    }
+
+    // --- Focus mode (ego-graph explorer) ---
+    function formatRelLabel(rt) {
+        return rt.toLowerCase().replace(/_/g, ' ');
+    }
+
+    network.on('doubleClick', function(params) {
+        if (params.nodes && params.nodes.length > 0) {
+            enterFocusMode(params.nodes[0]);
+        }
+    });
+
+    document.addEventListener('keydown', function(ev) {
+        if (ev.key === 'Escape' && focusedNodeId !== null) {
+            exitFocusMode();
+            return;
+        }
+        if (focusedNodeId === null) return;
+        var rows = document.querySelectorAll('#conn-list .d-conn');
+        if (!rows.length) return;
+
+        if (ev.key === 'ArrowDown' || ev.key === 'ArrowUp') {
+            ev.preventDefault();
+            if (ev.key === 'ArrowDown') focusConnIndex = Math.min(focusConnIndex + 1, rows.length - 1);
+            else focusConnIndex = focusConnIndex - 1;
+            if (focusConnIndex < 0) {
+                // Back to full neighborhood view
+                focusConnIndex = -1;
+                rows.forEach(function(r) { r.classList.remove('active'); });
+                var restoreId = focusedNodeId;
+                focusedNodeId = null;  // clear so enterFocusMode guard allows re-entry
+                enterFocusMode(restoreId);
+                return;
+            }
+            highlightConn(focusConnIndex);
+        } else if (ev.key === 'ArrowRight' || ev.key === 'Enter') {
+            ev.preventDefault();
+            if (focusConnIndex >= 0 && focusConnIndex < rows.length) {
+                focusHistory.push(focusedNodeId);
+                enterFocusMode(rows[focusConnIndex].getAttribute('data-nid'));
+            }
+        } else if (ev.key === 'Backspace' || ev.key === 'Delete' || ev.key === 'ArrowLeft') {
+            ev.preventDefault();
+            if (focusHistory.length > 0) {
+                var prevId = focusHistory.pop();
+                focusedNodeId = null;
+                enterFocusMode(prevId);
+            }
+        }
+    });
+
+    function highlightConn(idx) {
+        var rows = document.querySelectorAll('#conn-list .d-conn');
+        // Update sidebar highlight
+        rows.forEach(function(r, i) { r.classList.toggle('active', i === idx); });
+        // Scroll into view
+        if (rows[idx]) rows[idx].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        if (idx < 0 || idx >= rows.length) return;
+        var c = { nid: rows[idx].getAttribute('data-nid') };
+
+        // Select neighbor node in graph
+        network.selectNodes([c.nid]);
+
+        // Hide all nodes/edges except focused + highlighted neighbor
+        var nodeUpdates = [];
+        allNodes.forEach(function(n) {
+            var visible = n.id === focusedNodeId || n.id === c.nid;
+            nodeUpdates.push({ id: n.id, hidden: !visible });
+        });
+        nodes.update(nodeUpdates);
+
+        var edgeUpdates = [];
+        allEdges.forEach(function(e) {
+            var isThisConn = (e.from === focusedNodeId && e.to === c.nid) || (e.to === focusedNodeId && e.from === c.nid);
+            edgeUpdates.push({
+                id: e.id,
+                hidden: !isThisConn || hiddenRelationTypes.has(e.relation_type),
+                label: isThisConn ? formatRelLabel(e.relation_type) : '',
+                width: isThisConn ? 4 : undefined
+            });
+        });
+        edges.update(edgeUpdates);
+
+        // Center the pair in the visible area between sidebars
+        var positions = network.getPositions([focusedNodeId, c.nid]);
+        var p1 = positions[focusedNodeId];
+        var p2 = positions[c.nid];
+        var midX = (p1.x + p2.x) / 2;
+        var midY = (p1.y + p2.y) / 2;
+
+        var pad = 200;
+        var rangeX = Math.abs(p1.x - p2.x) + pad * 2;
+        var rangeY = Math.abs(p1.y - p2.y) + pad * 2;
+
+        var canvasEl = network.canvas.frame.canvas;
+        var totalW = canvasEl.clientWidth;
+        var totalH = canvasEl.clientHeight;
+        var leftW = 352;
+        var rightW = dp.classList.contains('open') ? 320 : 0;
+        var visW = totalW - leftW - rightW;
+        var visH = totalH - 80;
+
+        var scale = Math.min(visW / rangeX, visH / rangeY, 1.5);
+
+        // Scale font sizes so they appear constant on screen (~20px nodes, ~16px edges)
+        var nodeFontSize = Math.round(20 / scale);
+        var edgeFontSize = Math.round(16 / scale);
+
+        // Re-apply with distance-aware font sizes
+        var fontUpdatesN = [];
+        allNodes.forEach(function(n) {
+            var visible = n.id === focusedNodeId || n.id === c.nid;
+            if (visible) fontUpdatesN.push({ id: n.id, font: { size: nodeFontSize, color: '#ffffff', strokeWidth: Math.max(3, Math.round(3 / scale)), strokeColor: '#1a1a2e' } });
+        });
+        nodes.update(fontUpdatesN);
+
+        var fontUpdatesE = [];
+        allEdges.forEach(function(e) {
+            var isThisConn = (e.from === focusedNodeId && e.to === c.nid) || (e.to === focusedNodeId && e.from === c.nid);
+            if (isThisConn && !hiddenRelationTypes.has(e.relation_type)) {
+                fontUpdatesE.push({ id: e.id, font: { size: edgeFontSize, color: '#ffffff', strokeWidth: Math.max(3, Math.round(3 / scale)), strokeColor: '#1a1a2e' } });
+            }
+        });
+        edges.update(fontUpdatesE);
+
+        var visCenterPx = leftW + visW / 2;
+        var shiftPx = visCenterPx - totalW / 2;
+
+        network.moveTo({
+            position: { x: midX - shiftPx / scale, y: midY },
+            scale: scale,
+            animation: { duration: 300, easingFunction: 'easeInOutQuad' }
+        });
+    }
+
+    // Hover-to-reveal edge labels in focus mode (for dense neighborhoods)
+    network.on('hoverEdge', function(params) {
+        if (focusedNodeId === null) return;
+        var e = edges.get(params.edge);
+        if (e) {
+            edges.update({ id: e.id, font: { size: 12, color: '#fff', strokeWidth: 3, strokeColor: '#1a1a2e' }, label: formatRelLabel(e.relation_type) });
+        }
+    });
+    network.on('blurEdge', function(params) {
+        if (focusedNodeId === null) return;
+        if (focusConnIndex >= 0) return;  // in pair view, don't undo labels
+        var e = edges.get(params.edge);
+        if (!e) return;
+        edges.update({ id: e.id, font: { size: 0 }, label: '' });
+    });
+
+    function enterFocusMode(nodeId) {
+        if (focusedNodeId === nodeId && focusConnIndex < 0) return;  // already in neighborhood view
+        focusedNodeId = nodeId;
+        var node = nodes.get(nodeId);
+        if (!node) return;
+
+        // Show banner
+        var banner = document.getElementById('focus-banner');
+        document.getElementById('focus-label').textContent = 'Focused on: ' + (node.full_name || node.label || nodeId);
+        banner.classList.add('visible');
+
+        // Find 1-hop neighbors
+        var neighborIds = new Set();
+        neighborIds.add(nodeId);
+        var connectedEdgeIds = new Set();
+        allEdges.forEach(function(e) {
+            if (e.from === nodeId) { neighborIds.add(e.to); connectedEdgeIds.add(e.id); }
+            if (e.to === nodeId) { neighborIds.add(e.from); connectedEdgeIds.add(e.id); }
+        });
+
+        // Hide non-neighbor nodes, show neighbors (respecting min degree filter)
+        // Also reset font from pair-view back to default
+        var nodeUpdates = [];
+        allNodes.forEach(function(n) {
+            var isNeighbor = neighborIds.has(n.id);
+            var isFocused = n.id === nodeId;
+            var belowDegree = (n.node_degree || 0) < minDegree;
+            nodeUpdates.push({ id: n.id, hidden: !isNeighbor || (!isFocused && belowDegree), font: { size: 14, color: '#e0e0e0' } });
+        });
+        nodes.update(nodeUpdates);
+
+        // Count parallel edges per node pair to offset their curves
+        var pairCount = {};
+        var pairIndex = {};
+        allEdges.forEach(function(e) {
+            if (!connectedEdgeIds.has(e.id)) return;
+            var key = [e.from, e.to].sort().join('||');
+            if (!pairCount[key]) pairCount[key] = 0;
+            pairIndex[e.id] = pairCount[key];
+            pairCount[key]++;
+        });
+
+        // Show static labels only when neighborhood is small enough to read
+        var showStaticLabels = neighborIds.size <= 20;
+
+        // Show connected edges, offset parallel edges so labels don't overlap
+        var edgeUpdates = [];
+        allEdges.forEach(function(e) {
+            if (connectedEdgeIds.has(e.id)) {
+                var key = [e.from, e.to].sort().join('||');
+                var total = pairCount[key] || 1;
+                var idx = pairIndex[e.id] || 0;
+                var roundness = total > 1 ? 0.15 + idx * 0.2 : 0.1;
+                edgeUpdates.push({
+                    id: e.id,
+                    hidden: hiddenRelationTypes.has(e.relation_type),
+                    font: { size: showStaticLabels ? 11 : 0, color: '#ccc', strokeWidth: 3, strokeColor: '#1a1a2e' },
+                    label: showStaticLabels ? formatRelLabel(e.relation_type) : '',
+                    smooth: { type: 'curvedCW', roundness: roundness }
+                });
+            } else {
+                edgeUpdates.push({ id: e.id, hidden: true });
+            }
+        });
+        edges.update(edgeUpdates);
+
+        focusConnIndex = -1;
+
+        // Fit camera to visible neighborhood
+        var visibleIds = [];
+        neighborIds.forEach(function(nid) { visibleIds.push(nid); });
+        network.fit({ nodes: visibleIds, animation: { duration: 400, easingFunction: 'easeInOutQuad' } });
+
+        // After fit, show labels only on top neighbors by degree to avoid overlap
+        setTimeout(function() {
+            var scale = network.getScale();
+            var fontSize = Math.round(14 / scale);
+            var strokeW = Math.max(2, Math.round(2 / scale));
+
+            // Rank neighbors by degree, label top 15 + the focused node
+            var ranked = [];
+            allNodes.forEach(function(n) {
+                if (neighborIds.has(n.id) && n.id !== nodeId) {
+                    ranked.push({ id: n.id, deg: n.node_degree || 0 });
+                }
+            });
+            ranked.sort(function(a, b) { return b.deg - a.deg; });
+            var maxLabeled = 15;
+            var labeledSet = new Set();
+            labeledSet.add(nodeId);
+            for (var i = 0; i < Math.min(maxLabeled, ranked.length); i++) {
+                labeledSet.add(ranked[i].id);
+            }
+
+            var updates = [];
+            allNodes.forEach(function(n) {
+                if (neighborIds.has(n.id)) {
+                    var show = labeledSet.has(n.id);
+                    updates.push({ id: n.id, font: { size: show ? fontSize : 0, color: '#e0e0e0', strokeWidth: strokeW, strokeColor: '#1a1a2e' } });
+                }
+            });
+            nodes.update(updates);
+        }, 450);
+
+        showNodeDetail(nodeId);
+    }
+
+    function exitFocusMode() {
+        if (focusedNodeId === null) return;
+        focusedNodeId = null;
+        focusConnIndex = -1;
+        focusHistory = [];
+
+        // Hide banner
+        document.getElementById('focus-banner').classList.remove('visible');
+
+        // Restore all nodes per current filters
+        applyFilters();
+
+        // Restore edges — remove labels, re-apply edge filters
+        var edgeUpdates = [];
+        allEdges.forEach(function(e) {
+            edgeUpdates.push({
+                id: e.id,
+                hidden: hiddenRelationTypes.has(e.relation_type),
+                font: { size: 0 },
+                label: ''
+            });
+        });
+        edges.update(edgeUpdates);
     }
     </script>
     """
