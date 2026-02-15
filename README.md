@@ -47,7 +47,7 @@ Every entity and relation links back to the source document and passage. You con
 - **Domain-configurable** — define custom entity types and relation types in YAML
 - **Human-in-the-loop** — sift proposes entity merges, you approve or reject in an interactive terminal UI
 - **CLI search** — `sift search "SBF"` finds entities by name or alias, with optional relation and description output
-- **Interactive viewer** — explore your graph in-browser with search, type/community toggles, degree filtering, and entity descriptions
+- **Interactive viewer** — explore your graph in-browser with focus mode (double-click to isolate neighborhoods), keyboard navigation (arrow keys to step through connections), search, type/community toggles, and degree filtering
 - **Export anywhere** — GraphML (yEd, Cytoscape), GEXF (Gephi), CSV, or native JSON for advanced analysis
 - **Narrative generation** — investigative-style reports with relationship chains, timelines, and community-grouped entity profiles
 - **Source provenance** — every extraction links to the document and passage it came from
@@ -85,9 +85,9 @@ Works with bundled names (`academic`, `osint`, `default`) or a path to a custom 
 |--------|-------|------------------|--------------------|
 | `default` | General document analysis | PERSON, ORGANIZATION, LOCATION, EVENT, DOCUMENT | ASSOCIATED_WITH, MEMBER_OF, LOCATED_IN |
 | `osint` | Investigations & FOIA | SHELL_COMPANY, FINANCIAL_ACCOUNT | BENEFICIAL_OWNER_OF, TRANSACTED_WITH, SIGNATORY_OF |
-| `academic` | Literature review & topic mapping | CONCEPT, THEORY, METHOD, FINDING, PHENOMENON | SUPPORTS, CONTRADICTS, EXTENDS, EXPLAINS |
+| `academic` | Literature review & topic mapping | CONCEPT, THEORY, METHOD, SYSTEM, FINDING, PHENOMENON, RESEARCHER, PUBLICATION, FIELD, DATASET | SUPPORTS, CONTRADICTS, EXTENDS, IMPLEMENTS, EXPLAINS, PROPOSED_BY, USES_METHOD, APPLIED_TO, INVESTIGATES |
 
-The **academic** domain maps the intellectual landscape of a research area — feed in papers and get a graph of how theories, methods, findings, and concepts connect. Designed for literature reviews, topic mapping, and understanding where ideas agree, contradict, or build on each other.
+The **academic** domain maps the intellectual landscape of a research area — feed in papers and get a graph of how theories, methods, systems, findings, and concepts connect. Distinguishes abstract ideas (THEORY, METHOD) from concrete artifacts (SYSTEM — e.g. GPT-2, BERT, GLUE). Designed for literature reviews, topic mapping, and understanding where ideas agree, contradict, or build on each other.
 
 The **osint** domain adds entity types for shell companies, financial accounts, and offshore jurisdictions, plus relation types for tracing beneficial ownership and financial flows.
 
@@ -179,7 +179,7 @@ The `--ocr` flag enables Google Cloud Vision OCR for scanned PDFs (requires `pip
 sift build
 ```
 
-Constructs a NetworkX graph from all extractions. Automatically deduplicates near-identical entity names (plurals, Unicode variants, case differences) before they become graph nodes. Flags low-confidence relations for review. Saves to `output/graph_data.json`.
+Constructs a NetworkX graph from all extractions. Automatically deduplicates near-identical entity names (plurals, Unicode variants, case differences) before they become graph nodes. Fixes reversed edge directions when the LLM swaps source/target types vs. the domain schema. Flags low-confidence relations for review. Saves to `output/graph_data.json`.
 
 ### 4. Resolve duplicate entities
 
@@ -193,7 +193,9 @@ See [Entity Resolution Workflow](#entity-resolution-workflow) below for the full
 sift view                     # → opens output/graph.html in your browser
 ```
 
-Opens a force-directed graph in your browser with entity descriptions, color-coded types, search, type/community/relation toggles, a degree filter slider, and a detail sidebar. Nodes are seeded by community so clusters start separated. This is the intended way to explore your graph — click on entities, trace connections, read the evidence.
+Opens a force-directed graph in your browser with color-coded entity types, semantic edge colors, search, type/community/relation toggles, a degree filter, and a detail sidebar. Smart defaults hide low-signal edges (MENTIONED_IN) and low-degree nodes on first load so you start with a readable graph.
+
+**Focus mode:** Double-click any entity to isolate its neighborhood. Use arrow keys to step through connections one by one — each pair is shown in isolation with labeled edges. Press Enter/Right to shift focus to a neighbor, Backspace/Left to go back along your path, Escape to exit. This is the intended way to explore dense graphs — zoom in on what matters, trace connections, read the evidence.
 
 **CLI search** — query entities directly from the terminal:
 
@@ -325,7 +327,7 @@ This happens automatically every time you run `sift build`. These are the trivia
 
 ### Layer 2: LLM Proposes Merges (during `sift resolve`)
 
-The LLM sees batches of entities and identifies ones that likely refer to the same real-world thing. It produces a `merge_proposals.yaml` file where every proposal starts as `DRAFT`:
+The LLM sees batches of entities (all types except DOCUMENT) and identifies ones that likely refer to the same real-world thing. It also detects cross-type duplicates (same name, different entity type) and proposes variant relationships (EXTENDS) when it finds parent/child patterns. Results go to `merge_proposals.yaml` (entity merges) and `relation_review.yaml` (variant relations), all starting as `DRAFT`:
 
 ```bash
 sift resolve                  # uses domain from sift.yaml
