@@ -2,7 +2,7 @@
 
 **Turn any collection of documents into a knowledge graph.**
 
-No code, no database, no infrastructure — just a CLI and your documents. Define what to extract in YAML (or use the built-in defaults), and get a browsable, exportable knowledge graph. sift-kg handles the rest: entity extraction, duplicate resolution with your approval, and narrative generation that traces connections across your entire collection.
+Drop in PDFs, papers, articles, or records — get a browsable knowledge graph that shows how everything connects. No code, no database, no infrastructure. sift-kg extracts entities and relationships via LLM, deduplicates with your approval, and generates an interactive viewer you can explore in your browser. Concept maps for anything, in minutes.
 
 **[Live demos →](https://juanceresa.github.io/sift-kg/)** — graphs generated entirely by sift-kg
 
@@ -49,18 +49,18 @@ Every entity and relation links back to the source document and passage. You con
 - **CLI search** — `sift search "SBF"` finds entities by name or alias, with optional relation and description output
 - **Interactive viewer** — explore your graph in-browser with community regions (colored zones showing graph structure), hover preview, focus mode (double-click to isolate neighborhoods), keyboard navigation (arrow keys to step through connections), search, type/community/relation toggles, and degree filtering
 - **Export anywhere** — GraphML (yEd, Cytoscape), GEXF (Gephi), CSV, or native JSON for advanced analysis
-- **Narrative generation** — investigative-style reports with relationship chains, timelines, and community-grouped entity profiles
+- **Narrative generation** — prose reports with relationship chains, timelines, and community-grouped entity profiles
 - **Source provenance** — every extraction links to the document and passage it came from
 - **Multilingual** — extracts from documents in any language, outputs a unified English knowledge graph. Proper names stay as-is, non-Latin scripts are romanized automatically
-- **OCR for scanned PDFs** — optional Google Cloud Vision integration for court records, FOIA dumps, and historical archives (`--ocr` flag)
+- **OCR for scanned PDFs** — optional Google Cloud Vision integration for scanned documents, archival records, and historical materials (`--ocr` flag)
 - **Budget controls** — set `--max-cost` to cap LLM spending
 - **Runs locally** — your documents stay on your machine
 
 ## Use Cases
 
-- **Investigative journalism** — analyze FOIA releases, court filings, and document leaks
-- **OSINT research** — map entity networks from public records
-- **Academic research** — map how theories, methods, and findings connect across a body of literature
+- **Research & education** — map how theories, methods, and findings connect across a body of literature. Generate concept maps for courses, literature reviews, or self-study
+- **Business intelligence** — drop in competitor whitepapers, market reports, or internal docs and see the landscape
+- **Investigative work** — analyze FOIA releases, court filings, public records, and document leaks
 - **Legal review** — extract and connect entities across document collections
 - **Genealogy** — trace family relationships across vital records
 
@@ -93,7 +93,7 @@ The **osint** domain adds entity types for shell companies, financial accounts, 
 
 Nothing gets merged without your approval — the LLM proposes, you verify. Every extraction links back to the source document and passage.
 
-See [`examples/ftx/`](examples/ftx/) for a pipeline run on 9 articles about the FTX collapse (431 entities, 1,201 relations) and [`examples/epstein/`](examples/epstein/) for the Giuffre v. Maxwell depositions (190 entities, 387 relations). [**Explore both graphs live**](https://juanceresa.github.io/sift-kg/) — no install, no API key.
+See [`examples/transformers/`](examples/transformers/) for 12 foundational AI papers mapped as a concept graph (425 entities, ~$0.72), [`examples/ftx/`](examples/ftx/) for the FTX collapse (431 entities from 9 articles), and [`examples/epstein/`](examples/epstein/) for the Giuffre v. Maxwell depositions (190 entities from a scanned PDF). [**Explore all three live**](https://juanceresa.github.io/sift-kg/) — no install, no API key.
 
 ## Civic Table
 
@@ -187,7 +187,7 @@ See [Entity Resolution Workflow](#entity-resolution-workflow) below for the full
 
 ### 5. Explore and export
 
-**Interactive viewer** — for exploration and investigation:
+**Interactive viewer** — explore your concept map in the browser:
 
 ```bash
 sift view                     # → opens output/graph.html in your browser
@@ -224,7 +224,7 @@ sift narrate
 sift narrate --communities-only   # regenerate community labels only (~$0.01)
 ```
 
-Produces `output/narrative.md` — an investigative-style report with an overview, key relationship chains between top entities, a timeline (when dates exist in the data), and entity profiles grouped by thematic community (discovered via Louvain community detection). Entity descriptions are written in active voice with specific actions, not role summaries.
+Produces `output/narrative.md` — a prose report with an overview, key relationship chains between top entities, a timeline (when dates exist in the data), and entity profiles grouped by thematic community (discovered via Louvain community detection). Entity descriptions are written in active voice with specific actions, not role summaries.
 
 ## Domain Configuration
 
