@@ -4,7 +4,7 @@
 
 No code, no database, no infrastructure — just a CLI and your documents. Drop in PDFs, papers, articles, or records — get a browsable knowledge graph that shows how everything connects, in minutes. sift-kg extracts entities and relationships via LLM, deduplicates with your approval, and generates an interactive viewer you can explore in your browser. Concept maps for anything, at your fingertips.
 
-**[Live demos →](https://juanceresa.github.io/sift-kg/)** — graphs generated entirely by sift-kg
+**[Live demos →](https://juanceresa.github.io/sift-kg/)** graphs generated entirely by sift-kg
 
 ```bash
 pip install sift-kg
