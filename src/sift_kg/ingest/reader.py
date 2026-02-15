@@ -42,17 +42,21 @@ def read_document(path: Path, ocr: bool = False) -> str:
         return _read_text(path)
 
 
+# Average chars per page below which a page is considered near-empty.
+# Scanned PDFs typically return 0-5 chars/page from pdfplumber.
+# A short but real document (e.g. a one-page letter) returns 200+.
+_NEAR_EMPTY_THRESHOLD = 15
+
+
 def _read_pdf(path: Path, ocr: bool = False) -> str:
     """Extract text from a PDF.
 
-    Uses Google Cloud Vision OCR when ocr=True, otherwise pdfplumber.
-    Logs a warning if pdfplumber returns thin text (likely a scanned PDF).
+    When ocr=True, tries pdfplumber first. If pages are near-empty (likely
+    scanned), falls back to Google Cloud Vision OCR automatically. Text-rich
+    PDFs skip OCR entirely — no wasted API calls.
+
+    When ocr=False, uses pdfplumber only and warns if text looks thin.
     """
-    if ocr:
-        from sift_kg.ingest.ocr import ocr_pdf
-
-        return ocr_pdf(path)
-
     import pdfplumber
 
     pages = []
@@ -62,12 +66,22 @@ def _read_pdf(path: Path, ocr: bool = False) -> str:
             pages.append(text)
 
     full_text = "\n\n".join(pages)
-
-    # Warn if text is suspiciously thin (likely scanned)
     num_pages = len(pages)
-    if num_pages > 0 and len(full_text.strip()) / num_pages < 100:
+
+    # Check if pdfplumber got near-empty results (likely scanned).
+    # num_pages == 0 means pdfplumber couldn't parse the PDF at all — also a scan signal.
+    avg_chars = len(full_text.strip()) / num_pages if num_pages > 0 else 0
+    is_near_empty = num_pages == 0 or avg_chars < _NEAR_EMPTY_THRESHOLD
+
+    if is_near_empty and ocr:
+        from sift_kg.ingest.ocr import ocr_pdf
+
+        logger.info(f"Near-empty text from pdfplumber for {path.name} — falling back to OCR")
+        return ocr_pdf(path)
+
+    if is_near_empty and not ocr:
         logger.warning(
-            f"Thin text extracted from {path.name} — this may be a scanned PDF. "
+            f"Near-empty text extracted from {path.name} — this may be a scanned PDF. "
             "Try: sift extract --ocr"
         )
 

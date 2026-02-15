@@ -23,9 +23,9 @@ sift export graphml                 # export to Gephi, yEd, Cytoscape, etc.
 ## How It Works
 
 ```
-Documents (PDF, text, HTML)
+Documents (PDF, DOCX, text, HTML)
        ↓
-  Text Extraction (pdfplumber, local)
+  Text Extraction (pdfplumber, local) — or OCR for scanned PDFs (Google Cloud Vision)
        ↓
   Entity & Relation Extraction (LLM)
        ↓
@@ -52,6 +52,7 @@ Every entity and relation links back to the source document and passage. You con
 - **Narrative generation** — investigative-style reports with relationship chains, timelines, and community-grouped entity profiles
 - **Source provenance** — every extraction links to the document and passage it came from
 - **Multilingual** — extracts from documents in any language, outputs a unified English knowledge graph. Proper names stay as-is, non-Latin scripts are romanized automatically
+- **OCR for scanned PDFs** — optional Google Cloud Vision integration for court records, FOIA dumps, and historical archives (`--ocr` flag)
 - **Budget controls** — set `--max-cost` to cap LLM spending
 - **Runs locally** — your documents stay on your machine
 
@@ -96,9 +97,9 @@ See [`examples/ftx/`](examples/ftx/) for a pipeline run on 9 articles about the 
 
 ## Civic Table
 
-Looking for a hosted platform with OCR, forensic legal analysis, and analyst verification?
+Looking for a hosted platform with forensic legal analysis and analyst verification?
 
-[**Civic Table**](https://github.com/juanceresa/forensic_analysis_platform) is a forensic intelligence platform built on the sift-kg pipeline. It adds OCR for scanned/degraded documents (Google Cloud Vision), a 4-tier verification system where analysts and JDs validate AI-extracted facts before they're treated as evidence, LaTeX dossier generation for legal submissions, and a web interface for sharing results with clients and families. Built for property restitution, investigative journalism, and any context where documentary provenance matters.
+[**Civic Table**](https://github.com/juanceresa/forensic_analysis_platform) is a forensic intelligence platform built on the sift-kg pipeline. It adds a 4-tier verification system where analysts and JDs validate AI-extracted facts before they're treated as evidence, LaTeX dossier generation for legal submissions, and a web interface for sharing results with clients and families. Built for property restitution, investigative journalism, and any context where documentary provenance matters.
 
 sift-kg is the open-source CLI. Civic Table is the full platform — and where the output gets vetted by analysts and JDs before it carries evidentiary weight.
 
@@ -108,6 +109,12 @@ Requires Python 3.11+.
 
 ```bash
 pip install sift-kg
+```
+
+For scanned PDF support via Google Cloud Vision OCR (optional):
+
+```bash
+pip install sift-kg[ocr]
 ```
 
 For semantic clustering during entity resolution (optional, ~2GB for PyTorch):
@@ -139,6 +146,7 @@ cp .env.example .env          # copy and add your API key
 # sift.yaml
 domain: domain.yaml           # or a bundled name like "osint"
 model: openai/gpt-4o-mini
+ocr: true                     # for scanned PDFs (requires sift-kg[ocr])
 ```
 
 Set your API key in `.env`:
@@ -158,9 +166,12 @@ Settings priority: CLI flags > env vars > `.env` > `sift.yaml` > defaults. You c
 
 ```bash
 sift extract ./my-documents/
+sift extract ./my-documents/ --ocr    # for scanned PDFs
 ```
 
-Reads PDFs, text files, and HTML. Extracts entities and relations using your configured LLM. Results saved as JSON in `output/extractions/`.
+Reads PDFs, DOCX, text files, and HTML. Extracts entities and relations using your configured LLM. Results saved as JSON in `output/extractions/`.
+
+The `--ocr` flag enables Google Cloud Vision OCR for scanned PDFs (requires `pip install sift-kg[ocr]` and [Google Cloud credentials](https://cloud.google.com/docs/authentication/application-default-credentials)). It autodetects which PDFs need it — text-rich PDFs use pdfplumber as usual, only near-empty pages fall back to OCR. Safe for mixed folders. Without `--ocr`, sift will warn if a PDF appears to be scanned. You can also set `ocr: true` in `sift.yaml` for projects that always need it.
 
 ### 3. Build the knowledge graph
 

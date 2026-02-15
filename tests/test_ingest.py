@@ -211,34 +211,67 @@ class TestNormalizeOcrText:
 class TestOcrIntegration:
     """Test OCR routing and error handling."""
 
-    def test_read_document_ocr_routes_to_ocr_pdf(self, tmp_dir):
-        """read_document(path, ocr=True) calls ocr_pdf for PDFs."""
+    def test_ocr_autodetect_falls_back_on_near_empty(self, tmp_dir):
+        """ocr=True with near-empty pdfplumber result falls back to OCR."""
         pdf_path = tmp_dir / "scan.pdf"
         pdf_path.write_bytes(b"%PDF-1.4 fake")
 
-        with patch("sift_kg.ingest.ocr.ocr_pdf", return_value="OCR text here") as mock_ocr:
-            text = read_document(pdf_path, ocr=True)
+        mock_page = MagicMock()
+        mock_page.extract_text.return_value = ""  # scanned — empty
+
+        with patch("pdfplumber.open") as mock_open:
+            mock_pdf = MagicMock()
+            mock_pdf.__enter__ = MagicMock(return_value=mock_pdf)
+            mock_pdf.__exit__ = MagicMock(return_value=False)
+            mock_pdf.pages = [mock_page, mock_page]
+            mock_open.return_value = mock_pdf
+
+            with patch("sift_kg.ingest.ocr.ocr_pdf", return_value="OCR text") as mock_ocr:
+                text = read_document(pdf_path, ocr=True)
 
         mock_ocr.assert_called_once_with(pdf_path)
-        assert text == "OCR text here"
+        assert text == "OCR text"
 
-    def test_read_document_ocr_false_uses_pdfplumber(self, tmp_dir):
-        """read_document(path, ocr=False) uses pdfplumber path."""
+    def test_ocr_skips_text_rich_pdf(self, tmp_dir):
+        """ocr=True with text-rich PDF skips OCR, uses pdfplumber result."""
         pdf_path = tmp_dir / "normal.pdf"
         pdf_path.write_bytes(b"%PDF-1.4 fake")
 
-        with patch("sift_kg.ingest.ocr.ocr_pdf") as mock_ocr:
-            with patch("pdfplumber.open") as mock_pdfplumber:
-                mock_pdf = MagicMock()
-                mock_pdf.__enter__ = MagicMock(return_value=mock_pdf)
-                mock_pdf.__exit__ = MagicMock(return_value=False)
-                mock_pdf.pages = []
-                mock_pdfplumber.return_value = mock_pdf
+        mock_page = MagicMock()
+        mock_page.extract_text.return_value = "A" * 500  # plenty of text
 
+        with patch("pdfplumber.open") as mock_open:
+            mock_pdf = MagicMock()
+            mock_pdf.__enter__ = MagicMock(return_value=mock_pdf)
+            mock_pdf.__exit__ = MagicMock(return_value=False)
+            mock_pdf.pages = [mock_page]
+            mock_open.return_value = mock_pdf
+
+            with patch("sift_kg.ingest.ocr.ocr_pdf") as mock_ocr:
+                text = read_document(pdf_path, ocr=True)
+
+        mock_ocr.assert_not_called()
+        assert "A" * 500 in text
+
+    def test_ocr_false_never_calls_ocr(self, tmp_dir):
+        """ocr=False never calls OCR even on near-empty PDF."""
+        pdf_path = tmp_dir / "scan.pdf"
+        pdf_path.write_bytes(b"%PDF-1.4 fake")
+
+        mock_page = MagicMock()
+        mock_page.extract_text.return_value = ""
+
+        with patch("pdfplumber.open") as mock_open:
+            mock_pdf = MagicMock()
+            mock_pdf.__enter__ = MagicMock(return_value=mock_pdf)
+            mock_pdf.__exit__ = MagicMock(return_value=False)
+            mock_pdf.pages = [mock_page]
+            mock_open.return_value = mock_pdf
+
+            with patch("sift_kg.ingest.ocr.ocr_pdf") as mock_ocr:
                 read_document(pdf_path, ocr=False)
 
         mock_ocr.assert_not_called()
-        mock_pdfplumber.assert_called_once()
 
     def test_ocr_import_error_pymupdf(self):
         """Clear error message when pymupdf is missing."""
@@ -253,13 +286,13 @@ class TestOcrIntegration:
                 with pytest.raises(ImportError, match="PyMuPDF is required"):
                     ocr_module.ocr_pdf(Path("/fake/doc.pdf"))
 
-    def test_thin_text_warning(self, tmp_dir, caplog):
-        """Thin text from pdfplumber triggers a warning."""
+    def test_near_empty_warning_without_ocr(self, tmp_dir, caplog):
+        """Near-empty text from pdfplumber triggers a warning when ocr=False."""
         pdf_path = tmp_dir / "thin.pdf"
         pdf_path.write_bytes(b"%PDF-1.4 fake")
 
         mock_page = MagicMock()
-        mock_page.extract_text.return_value = "hi"  # very thin
+        mock_page.extract_text.return_value = ""  # near-empty
 
         with patch("pdfplumber.open") as mock_open:
             mock_pdf = MagicMock()
