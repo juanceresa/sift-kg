@@ -3,6 +3,7 @@
 import logging
 from pathlib import Path
 
+import click
 import typer
 from rich.console import Console
 from rich.table import Table
@@ -70,7 +71,10 @@ def extract(
     concurrency: int = typer.Option(4, "-c", "--concurrency", help="Concurrent LLM calls per document"),
     rpm: int = typer.Option(40, "--rpm", help="Max requests per minute (prevents rate limit waste)"),
     force: bool = typer.Option(False, "--force", "-f", help="Re-extract all documents, ignoring cached results"),
-    use_ocr: bool = typer.Option(False, "--ocr", help="Use Google Cloud Vision OCR for scanned PDFs (requires: pip install sift-kg[ocr])"),
+    use_ocr: bool = typer.Option(False, "--ocr", help="Enable OCR for scanned documents"),
+    extractor: str | None = typer.Option(None, "--extractor", help="Extraction backend", click_type=click.Choice(["kreuzberg", "pdfplumber"])),
+    ocr_backend: str | None = typer.Option(None, "--ocr-backend", help="OCR backend", click_type=click.Choice(["tesseract", "easyocr", "paddleocr", "gcv"])),
+    ocr_language: str | None = typer.Option(None, "--ocr-language", help="OCR language code (ISO 639-3, e.g. eng, fra, deu)"),
     output: str | None = typer.Option(None, "-o", help="Output directory"),
     verbose: bool = typer.Option(False, "-v", "--verbose", help="Verbose logging"),
 ) -> None:
@@ -93,6 +97,12 @@ def extract(
     # Output dir
     output_dir = Path(output) if output else config.output_dir
 
+    # Resolve effective extraction settings: CLI > config > defaults
+    effective_ocr = use_ocr or config.ocr
+    effective_backend = extractor or config.extraction_backend
+    effective_ocr_backend = ocr_backend or config.ocr_backend
+    effective_ocr_language = ocr_language or config.ocr_language
+
     # Discover documents
     from sift_kg.ingest.reader import discover_documents
 
@@ -101,19 +111,18 @@ def extract(
         console.print(f"[red]Error:[/red] Not a directory: {directory}")
         raise typer.Exit(1)
 
-    docs = discover_documents(doc_dir)
+    docs = discover_documents(doc_dir, backend=effective_backend)
     if not docs:
         console.print(f"[yellow]No supported documents found in {directory}[/yellow]")
         raise typer.Exit(0)
 
-    # Resolve effective OCR setting: CLI flag > sift.yaml > default
-    effective_ocr = use_ocr or config.ocr
-
     console.print(f"[cyan]Domain:[/cyan] {domain_config.name}")
     console.print(f"[cyan]Model:[/cyan] {effective_model}")
+    console.print(f"[cyan]Extractor:[/cyan] {effective_backend}")
     console.print(f"[cyan]Documents:[/cyan] {len(docs)}")
     if effective_ocr:
-        console.print("[cyan]OCR:[/cyan] enabled (Google Cloud Vision)")
+        ocr_label = "Google Cloud Vision" if effective_ocr_backend == "gcv" else effective_ocr_backend
+        console.print(f"[cyan]OCR:[/cyan] enabled ({ocr_label})")
     if max_cost:
         console.print(f"[cyan]Budget:[/cyan] ${max_cost:.2f}")
     console.print()
@@ -123,7 +132,12 @@ def extract(
     from sift_kg.extract.llm_client import LLMClient
 
     llm = LLMClient(model=effective_model, rpm=rpm)
-    results = extract_all(docs, llm, domain_config, output_dir, max_cost=max_cost, concurrency=concurrency, chunk_size=chunk_size, force=force, ocr=effective_ocr)
+    results = extract_all(
+        docs, llm, domain_config, output_dir,
+        max_cost=max_cost, concurrency=concurrency, chunk_size=chunk_size,
+        force=force, ocr=effective_ocr, backend=effective_backend,
+        ocr_backend=effective_ocr_backend, ocr_language=effective_ocr_language,
+    )
 
     # Summary
     successful = [r for r in results if not r.error]
@@ -782,6 +796,10 @@ SIFT_DEFAULT_MODEL=openai/gpt-4o-mini
             project_config += "# domain: path/to/domain.yaml\n"
         project_config += "# model: openai/gpt-4o-mini\n"
         project_config += "# output: output\n"
+        project_config += "\n# extraction:\n"
+        project_config += "#   backend: kreuzberg      # kreuzberg (default, 75+ formats) | pdfplumber\n"
+        project_config += "#   ocr_backend: tesseract   # tesseract | easyocr | paddleocr | gcv\n"
+        project_config += "#   ocr_language: eng\n"
         sift_yaml_path.write_text(project_config)
         console.print("[green]Created sift.yaml[/green]")
 

@@ -60,3 +60,66 @@ class TestSiftConfig:
         out = tmp_dir / "custom_output"
         config = SiftConfig(output_dir=out, _env_file=None)
         assert config.output_dir.resolve() == out.resolve()
+
+
+class TestExtractionConfig:
+    """Test extraction backend configuration fields."""
+
+    def test_default_extraction_backend(self):
+        """Default extraction backend is kreuzberg."""
+        with patch.dict(os.environ, {}, clear=True):
+            config = SiftConfig(_env_file=None)
+        assert config.extraction_backend == "kreuzberg"
+
+    def test_custom_extraction_backend_from_env(self):
+        """Extraction backend can be set via env var."""
+        with patch.dict(os.environ, {"SIFT_EXTRACTION_BACKEND": "pdfplumber"}):
+            config = SiftConfig(_env_file=None)
+        assert config.extraction_backend == "pdfplumber"
+
+    def test_default_ocr_backend(self):
+        """Default OCR backend is tesseract."""
+        with patch.dict(os.environ, {}, clear=True):
+            config = SiftConfig(_env_file=None)
+        assert config.ocr_backend == "tesseract"
+
+    def test_custom_ocr_backend_from_env(self):
+        """OCR backend can be set via env var."""
+        with patch.dict(os.environ, {"SIFT_OCR_BACKEND": "easyocr"}):
+            config = SiftConfig(_env_file=None)
+        assert config.ocr_backend == "easyocr"
+
+    def test_default_ocr_language(self):
+        """Default OCR language is eng."""
+        with patch.dict(os.environ, {}, clear=True):
+            config = SiftConfig(_env_file=None)
+        assert config.ocr_language == "eng"
+
+    def test_invalid_extraction_backend_raises(self):
+        """Invalid extraction backend raises ValueError."""
+        with pytest.raises(Exception, match="Invalid extraction backend"):
+            SiftConfig(extraction_backend="nonexistent", _env_file=None)
+
+    def test_invalid_ocr_backend_raises(self):
+        """Invalid OCR backend raises ValueError."""
+        with pytest.raises(Exception, match="Invalid OCR backend"):
+            SiftConfig(ocr_backend="nonexistent", _env_file=None)
+
+    def test_sift_yaml_extraction_block(self, tmp_dir):
+        """sift.yaml extraction block is read correctly."""
+        yaml_path = tmp_dir / "sift.yaml"
+        yaml_path.write_text(
+            "extraction:\n  backend: pdfplumber\n  ocr_backend: paddleocr\n  ocr_language: fra\n"
+        )
+        from sift_kg.config import _ProjectYamlSource
+
+        original_cwd = os.getcwd()
+        try:
+            os.chdir(tmp_dir)
+            source = _ProjectYamlSource(SiftConfig)
+            data = source()
+            assert data.get("extraction_backend") == "pdfplumber"
+            assert data.get("ocr_backend") == "paddleocr"
+            assert data.get("ocr_language") == "fra"
+        finally:
+            os.chdir(original_cwd)

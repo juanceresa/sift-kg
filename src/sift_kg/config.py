@@ -30,6 +30,13 @@ _YAML_TO_FIELD = {
     "ocr": "ocr",
 }
 
+# Nested extraction block keys
+_EXTRACTION_YAML_TO_FIELD = {
+    "backend": "extraction_backend",
+    "ocr_backend": "ocr_backend",
+    "ocr_language": "ocr_language",
+}
+
 
 class _ProjectYamlSource(PydanticBaseSettingsSource):
     """Read project config from sift.yaml (lower priority than env vars)."""
@@ -48,6 +55,17 @@ class _ProjectYamlSource(PydanticBaseSettingsSource):
         for yaml_key, field_name in _YAML_TO_FIELD.items():
             if yaml_key in raw:
                 result[field_name] = raw[yaml_key]
+
+        # Handle nested extraction: block
+        extraction = raw.get("extraction", {})
+        if isinstance(extraction, dict):
+            for yaml_key, field_name in _EXTRACTION_YAML_TO_FIELD.items():
+                if yaml_key in extraction:
+                    result[field_name] = extraction[yaml_key]
+            # extraction.ocr overrides top-level ocr
+            if "ocr" in extraction:
+                result["ocr"] = extraction["ocr"]
+
         return result
 
 
@@ -130,8 +148,43 @@ class SiftConfig(BaseSettings):
 
     ocr: bool = Field(
         default=False,
-        description="Use Google Cloud Vision OCR for scanned PDFs (requires: pip install sift-kg[ocr])"
+        description="Enable OCR for scanned documents (local via Kreuzberg by default, or GCV with --ocr-backend gcv)"
     )
+
+    extraction_backend: str = Field(
+        default="kreuzberg",
+        description="Text extraction backend: kreuzberg (default, 75+ formats) or pdfplumber (legacy)",
+    )
+
+    ocr_backend: str = Field(
+        default="tesseract",
+        description="OCR backend when --ocr is enabled: tesseract, easyocr, paddleocr, or gcv (Google Cloud Vision)",
+    )
+
+    ocr_language: str = Field(
+        default="eng",
+        description="OCR language code (ISO 639-3, e.g. eng, fra, deu)",
+    )
+
+    @field_validator("extraction_backend")
+    @classmethod
+    def validate_extraction_backend(cls, v: str) -> str:
+        valid = ("kreuzberg", "pdfplumber")
+        if v not in valid:
+            raise ValueError(
+                f"Invalid extraction backend: {v!r}. Choose from: {', '.join(valid)}"
+            )
+        return v
+
+    @field_validator("ocr_backend")
+    @classmethod
+    def validate_ocr_backend(cls, v: str) -> str:
+        valid = ("tesseract", "easyocr", "paddleocr", "gcv")
+        if v not in valid:
+            raise ValueError(
+                f"Invalid OCR backend: {v!r}. Choose from: {', '.join(valid)}"
+            )
+        return v
 
     @model_validator(mode="after")
     def _export_api_keys(self) -> "SiftConfig":

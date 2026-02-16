@@ -435,6 +435,10 @@ def _inject_ui(
             f"</div>"
         )
 
+    # Adaptive degree filter: small graphs default to 0 so all nodes are visible
+    substantive = kg.relation_count - rel_counts.get("MENTIONED_IN", 0)
+    default_degree = 0 if substantive < 100 else 2
+
     controls_html = f"""
     <style>
         #sift-controls {{
@@ -543,8 +547,8 @@ def _inject_ui(
         <input id="search-input" type="text" placeholder="Search entities..." oninput="searchEntity(this.value)">
 
         <div style="margin:8px 0 4px">
-            <label style="font-size:11px;color:#888">Min connections: <span id="deg-val">2</span></label>
-            <input id="deg-slider" type="range" min="0" max="20" value="2" style="width:100%;margin:2px 0;accent-color:#4FC3F7" oninput="filterByDegree(this.value)">
+            <label style="font-size:11px;color:#888">Min connections: <span id="deg-val">{default_degree}</span></label>
+            <input id="deg-slider" type="range" min="0" max="20" value="{default_degree}" style="width:100%;margin:2px 0;accent-color:#4FC3F7" oninput="filterByDegree(this.value)">
         </div>
 
         {community_section}
@@ -937,7 +941,7 @@ def _inject_ui(
     }
 
     // --- Degree filter ---
-    var minDegree = 2;
+    var minDegree = __DEFAULT_DEGREE__;
     function filterByDegree(val) {
         minDegree = parseInt(val, 10);
         document.getElementById('deg-val').textContent = minDegree;
@@ -1421,6 +1425,8 @@ def _inject_ui(
     html = html_path.read_text()
     # Inject community color map into JS
     comm_colors_json = json.dumps(community_color_map or {})
-    script_with_colors = script.replace("COMMUNITY_COLORS_JS", comm_colors_json)
+    script_with_colors = script.replace("COMMUNITY_COLORS_JS", comm_colors_json).replace(
+        "__DEFAULT_DEGREE__", str(default_degree)
+    )
     html = html.replace("</body>", f"{controls_html}{script_with_colors}</body>")
     html_path.write_text(html)

@@ -23,9 +23,9 @@ sift export graphml                 # export to Gephi, yEd, Cytoscape, etc.
 ## How It Works
 
 ```
-Documents (PDF, DOCX, text, HTML)
+Documents (PDF, DOCX, text, HTML, and 75+ formats)
        ↓
-  Text Extraction (pdfplumber, local) — or OCR for scanned PDFs (Google Cloud Vision)
+  Text Extraction (Kreuzberg, local) — with optional OCR (Tesseract, EasyOCR, PaddleOCR, or Google Cloud Vision)
        ↓
   Entity & Relation Extraction (LLM)
        ↓
@@ -52,7 +52,8 @@ Every entity and relation links back to the source document and passage. You con
 - **Narrative generation** — prose reports with relationship chains, timelines, and community-grouped entity profiles
 - **Source provenance** — every extraction links to the document and passage it came from
 - **Multilingual** — extracts from documents in any language, outputs a unified English knowledge graph. Proper names stay as-is, non-Latin scripts are romanized automatically
-- **OCR for scanned PDFs** — optional Google Cloud Vision integration for scanned documents, archival records, and historical materials (`--ocr` flag)
+- **75+ document formats** — PDF, DOCX, XLSX, PPTX, HTML, EPUB, images, and more via [Kreuzberg](https://kreuzberg-dev.github.io/kreuzberg/) extraction engine
+- **OCR for scanned PDFs** — local OCR via Tesseract (default), EasyOCR, or PaddleOCR (`--ocr` flag), with optional Google Cloud Vision fallback (`--ocr-backend gcv`)
 - **Budget controls** — set `--max-cost` to cap LLM spending
 - **Runs locally** — your documents stay on your machine
 
@@ -111,10 +112,21 @@ Requires Python 3.11+.
 pip install sift-kg
 ```
 
-For scanned PDF support via Google Cloud Vision OCR (optional):
+For OCR support (scanned PDFs, images):
+
+```bash
+# Local OCR — install Tesseract on your system
+brew install tesseract          # macOS
+sudo apt install tesseract-ocr  # Ubuntu/Debian
+
+# Then use: sift extract ./docs/ --ocr
+```
+
+For Google Cloud Vision OCR as an alternative backend (optional):
 
 ```bash
 pip install sift-kg[ocr]
+# Then use: sift extract ./docs/ --ocr --ocr-backend gcv
 ```
 
 For semantic clustering during entity resolution (optional, ~2GB for PyTorch):
@@ -146,7 +158,11 @@ cp .env.example .env          # copy and add your API key
 # sift.yaml
 domain: domain.yaml           # or a bundled name like "osint"
 model: openai/gpt-4o-mini
-ocr: true                     # for scanned PDFs (requires sift-kg[ocr])
+ocr: true                     # enable OCR for scanned PDFs
+# extraction:
+#   backend: kreuzberg         # kreuzberg (default, 75+ formats) | pdfplumber
+#   ocr_backend: tesseract     # tesseract | easyocr | paddleocr | gcv
+#   ocr_language: eng
 ```
 
 Set your API key in `.env`:
@@ -166,12 +182,25 @@ Settings priority: CLI flags > env vars > `.env` > `sift.yaml` > defaults. You c
 
 ```bash
 sift extract ./my-documents/
-sift extract ./my-documents/ --ocr    # for scanned PDFs
+sift extract ./my-documents/ --ocr                  # local OCR via Tesseract
+sift extract ./my-documents/ --ocr --ocr-backend gcv  # Google Cloud Vision OCR
+sift extract ./my-documents/ --extractor pdfplumber   # legacy pdfplumber backend
 ```
 
-Reads PDFs, DOCX, text files, and HTML. Extracts entities and relations using your configured LLM. Results saved as JSON in `output/extractions/`.
+Reads 75+ document formats — PDFs, DOCX, XLSX, PPTX, HTML, EPUB, images, and more. Extracts entities and relations using your configured LLM. Results saved as JSON in `output/extractions/`.
 
-The `--ocr` flag enables Google Cloud Vision OCR for scanned PDFs (requires `pip install sift-kg[ocr]` and [Google Cloud credentials](https://cloud.google.com/docs/authentication/application-default-credentials)). It autodetects which PDFs need it — text-rich PDFs use pdfplumber as usual, only near-empty pages fall back to OCR. Safe for mixed folders. Without `--ocr`, sift will warn if a PDF appears to be scanned. You can also set `ocr: true` in `sift.yaml` for projects that always need it.
+The `--ocr` flag enables local OCR via Tesseract for scanned PDFs — no API keys or cloud services needed. You can switch OCR engines with `--ocr-backend`:
+
+```bash
+sift extract ./docs/ --ocr                          # Tesseract (default, local)
+sift extract ./docs/ --ocr --ocr-backend easyocr    # EasyOCR (local)
+sift extract ./docs/ --ocr --ocr-backend paddleocr  # PaddleOCR (local)
+sift extract ./docs/ --ocr --ocr-backend gcv        # Google Cloud Vision (requires credentials)
+```
+
+It autodetects which PDFs need OCR — text-rich PDFs use standard extraction, only near-empty pages fall back to OCR. Safe for mixed folders. Without `--ocr`, sift will warn if a PDF appears to be scanned.
+
+You can also switch the extraction backend entirely with `--extractor pdfplumber` for the legacy pdfplumber backend (PDF/DOCX/TXT/HTML only).
 
 ### 3. Build the knowledge graph
 
