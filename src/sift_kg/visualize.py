@@ -319,6 +319,14 @@ def generate_view(
         edge_color = _color_for_relation(relation_type, rel_color_map)
         confidence = data.get("confidence", 0)
         evidence = data.get("evidence", "")
+        support_count_raw = data.get("support_count", 1)
+        try:
+            support_count = max(1, int(support_count_raw))
+        except (TypeError, ValueError):
+            support_count = 1
+        support_docs = data.get("support_documents", [])
+        if not isinstance(support_docs, list):
+            support_docs = []
 
         # Look up source/target names
         source_name = kg.graph.nodes[source].get("name", source)
@@ -329,12 +337,16 @@ def generate_view(
         ]
         if isinstance(confidence, (int, float)):
             tooltip_parts.append(f"Confidence: {confidence:.0%}")
+        tooltip_parts.append(f"Support mentions: {support_count}")
+        if support_docs:
+            tooltip_parts.append(f"Support docs: {len(support_docs)}")
         if evidence:
             ev_display = evidence[:150] + "..." if len(evidence) > 150 else evidence
             tooltip_parts.append(f"Evidence: {ev_display}")
         tooltip = "\n".join(p for p in tooltip_parts if p)
 
-        width = 1.0 if not isinstance(confidence, (int, float)) else max(0.5, confidence * 2.5)
+        # Width driven by support_count — linear so differences are obvious
+        width = min(12.0, max(1.0, support_count * 2.5))
 
         net.add_edge(
             source,
@@ -347,6 +359,8 @@ def generate_view(
             target_name=target_name,
             full_evidence=evidence or "",
             edge_confidence=float(confidence) if isinstance(confidence, (int, float)) else 0,
+            support_count=support_count,
+            support_doc_count=len(support_docs),
         )
 
     # Write HTML then inject UI + fix Firefox height
@@ -574,6 +588,10 @@ def _inject_ui(
         </div>
         <div id="detail-body"></div>
     </div>
+    <div id="edge-tooltip" style="display:none;position:fixed;pointer-events:none;
+        background:#23233a;border:1px solid #555;border-radius:6px;padding:6px 10px;
+        font-size:12px;color:#e0e0e0;z-index:9999;max-width:260px;
+        box-shadow:0 2px 8px rgba(0,0,0,0.4);white-space:nowrap"></div>
     """
 
     # NOTE: Use a regular string (not raw) so \\n produces literal \n in the JS output.
@@ -769,13 +787,26 @@ def _inject_ui(
         dt.textContent = node.full_name || node.label || nodeId;
         dp.classList.add('open');
 
-        // gather connections
-        var conns = [];
+        // gather connections — group by neighbor, merge relation types
+        var connMap = {};
         allEdges.forEach(function(e) {
-            if (e.from === nodeId) conns.push({ rel: e.relation_type, name: e.target_name || e.to, dir: '\\u2192', nid: e.to });
-            if (e.to === nodeId) conns.push({ rel: e.relation_type, name: e.source_name || e.from, dir: '\\u2190', nid: e.from });
+            var dir, nid, name;
+            if (e.from === nodeId) { dir = '\\u2192'; nid = e.to; name = e.target_name || e.to; }
+            else if (e.to === nodeId) { dir = '\\u2190'; nid = e.from; name = e.source_name || e.from; }
+            else return;
+            var key = dir + '|' + nid;
+            if (!connMap[key]) connMap[key] = { rels: [], name: name, dir: dir, nid: nid, maxSupport: 0 };
+            if (connMap[key].rels.indexOf(e.relation_type) < 0) connMap[key].rels.push(e.relation_type);
+            connMap[key].maxSupport = Math.max(connMap[key].maxSupport, e.support_count || 1);
         });
-        conns.sort(function(a, b) { return a.rel.localeCompare(b.rel); });
+        var conns = [];
+        for (var k in connMap) {
+            var g = connMap[k];
+            g.rels.sort();
+            g.rel = g.rels.join(', ');
+            conns.push(g);
+        }
+        conns.sort(function(a, b) { return a.rel.localeCompare(b.rel) || a.name.localeCompare(b.name); });
         window._conns = conns;
 
         var h = '';
@@ -810,11 +841,14 @@ def _inject_ui(
             }
         }
 
-        // unique relation types for filter
+        // unique relation types for filter (flatten from grouped rels)
         var relTypes = [];
-        var seen = {};
+        var seenRel = {};
         for (var r = 0; r < conns.length; r++) {
-            if (!seen[conns[r].rel]) { relTypes.push(conns[r].rel); seen[conns[r].rel] = true; }
+            for (var ri = 0; ri < conns[r].rels.length; ri++) {
+                var rt = conns[r].rels[ri];
+                if (!seenRel[rt]) { relTypes.push(rt); seenRel[rt] = true; }
+            }
         }
         relTypes.sort();
 
@@ -825,7 +859,7 @@ def _inject_ui(
             h += '<select id="conn-filter" onchange="filterConns(this.value)" style="width:100%;padding:4px 6px;margin:4px 0 6px;border-radius:4px;border:1px solid #444;background:#16213e;color:#e0e0e0;font-size:11px;outline:none">';
             h += '<option value="">All types</option>';
             for (var t = 0; t < relTypes.length; t++) {
-                var cnt = conns.filter(function(c){ return c.rel === relTypes[t]; }).length;
+                var cnt = conns.filter(function(c){ return c.rels.indexOf(relTypes[t]) >= 0; }).length;
                 h += '<option value="' + esc(relTypes[t]) + '">' + esc(relTypes[t]) + ' (' + cnt + ')</option>';
             }
             h += '</select>';
@@ -844,10 +878,11 @@ def _inject_ui(
         var shown = 0;
         for (var j = 0; j < conns.length; j++) {
             var c = conns[j];
-            if (relFilter && c.rel !== relFilter) continue;
+            if (relFilter && c.rels.indexOf(relFilter) < 0) continue;
             shown++;
             h += '<div class="d-conn" data-nid="' + esc(c.nid) + '">';
-            h += '<span style="color:#888;font-size:10px;text-transform:uppercase">' + esc(c.dir + ' ' + c.rel) + '</span><br>';
+            var relLabel = c.rels.map(function(r){ return formatRelLabel(r); }).join(', ');
+            h += '<span style="color:#888;font-size:10px">' + esc(c.dir) + ' ' + esc(relLabel).toUpperCase() + '</span><br>';
             h += '<span>' + esc(c.name) + '</span></div>';
         }
         list.innerHTML = h;
@@ -874,6 +909,12 @@ def _inject_ui(
             h += '<div class="d-field"><div class="d-label">Confidence</div>';
             h += '<div class="d-val">' + Math.round(edge.edge_confidence * 100) + '%</div></div>';
         }
+        var sc = edge.support_count || 1;
+        var sdc = edge.support_doc_count || 0;
+        h += '<div class="d-field"><div class="d-label">Support</div>';
+        h += '<div class="d-val">' + sc + (sc === 1 ? ' mention' : ' mentions');
+        if (sdc > 1) h += ' across ' + sdc + ' docs';
+        h += '</div></div>';
         if (edge.full_evidence) {
             h += '<div class="d-field"><div class="d-label">Evidence</div>';
             h += '<div class="d-evidence">' + esc(edge.full_evidence) + '</div></div>';
@@ -1092,12 +1133,14 @@ def _inject_ui(
             var isPrimary = (e.from === focusedNodeId && e.to === c.nid) || (e.to === focusedNodeId && e.from === c.nid);
             var isAdj = (e.from === c.nid && adjIds.has(e.to)) || (e.to === c.nid && adjIds.has(e.from));
             var show = (isPrimary || isAdj) && !hiddenRelationTypes.has(e.relation_type);
+            var origWidth = Math.min(12, Math.max(1, (e.support_count || 1) * 2.5));
+            var origColor = (typeof e.color === 'string') ? e.color : (e.color && e.color.color) || '#888';
             edgeUpdates.push({
                 id: e.id,
                 hidden: !show,
-                color: { opacity: isPrimary ? 0.9 : 0.4 },
+                color: { color: origColor, opacity: isPrimary ? 1.0 : 0.25 },
                 label: isPrimary ? formatRelLabel(e.relation_type) : '',
-                width: isPrimary ? 4 : 1
+                width: isPrimary ? Math.max(3, origWidth) : 1
             });
         });
         edges.update(edgeUpdates);
@@ -1215,21 +1258,40 @@ def _inject_ui(
         edges.update(edgeResets);
     });
 
-    // Hover-to-reveal edge labels in focus mode (for dense neighborhoods)
+    // Hover-to-reveal edge labels + support tooltip in focus mode
+    var edgeTooltip = document.getElementById('edge-tooltip');
     network.on('hoverEdge', function(params) {
         if (focusedNodeId === null) return;
-        if (focusConnIndex >= 0) return;  // pair view has its own labels
         var e = edges.get(params.edge);
-        if (e) {
+        if (!e) return;
+        // Show edge label only in neighborhood view (pair view already has labels)
+        if (focusConnIndex < 0) {
             edges.update({ id: e.id, font: { size: 12, color: '#fff', strokeWidth: 3, strokeColor: '#1a1a2e' }, label: formatRelLabel(e.relation_type) });
         }
+        // Show support tooltip in all focus sub-modes
+        var parts = [formatRelLabel(e.relation_type)];
+        if (e.edge_confidence) parts.push(Math.round(e.edge_confidence * 100) + '%');
+        var sc = e.support_count || 1;
+        parts.push(sc + (sc === 1 ? ' mention' : ' mentions'));
+        if (e.support_doc_count > 1) parts.push(e.support_doc_count + ' docs');
+        edgeTooltip.innerHTML = parts.join(' &middot; ');
+        edgeTooltip.style.display = 'block';
     });
     network.on('blurEdge', function(params) {
         if (focusedNodeId === null) return;
-        if (focusConnIndex >= 0) return;
         var e = edges.get(params.edge);
         if (!e) return;
-        edges.update({ id: e.id, font: { size: 0 }, label: '' });
+        if (focusConnIndex < 0) {
+            edges.update({ id: e.id, font: { size: 0 }, label: '' });
+        }
+        edgeTooltip.style.display = 'none';
+    });
+    // Track mouse to position tooltip
+    document.getElementById('mynetwork').addEventListener('mousemove', function(ev) {
+        if (edgeTooltip.style.display === 'block') {
+            edgeTooltip.style.left = (ev.clientX + 14) + 'px';
+            edgeTooltip.style.top = (ev.clientY - 28) + 'px';
+        }
     });
 
     function enterFocusMode(nodeId) {

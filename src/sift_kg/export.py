@@ -79,10 +79,33 @@ def _flatten_value(value: Any) -> str | int | float | bool:
     if isinstance(value, (str, int, float, bool)):
         return value
     if isinstance(value, list):
+        if any(isinstance(v, (dict, list, tuple, set)) for v in value):
+            return json.dumps(value, default=str)
         return "; ".join(str(v) for v in value)
     if isinstance(value, dict):
         return json.dumps(value, default=str)
     return str(value)
+
+
+def _coerce_support_docs(value: Any) -> list[str]:
+    """Normalize support_documents from list/str into a clean list."""
+    if isinstance(value, list):
+        return [str(v) for v in value if v]
+    if isinstance(value, str):
+        if ";" in value:
+            return [part.strip() for part in value.split(";") if part.strip()]
+        if value.strip():
+            return [value.strip()]
+    return []
+
+
+def _coerce_support_count(value: Any) -> int:
+    """Normalize support_count to a positive int fallback."""
+    try:
+        parsed = int(value)
+    except (TypeError, ValueError):
+        parsed = 1
+    return max(1, parsed)
 
 
 def _build_flat_graph(
@@ -127,15 +150,21 @@ def _build_flat_graph(
     edge_map: dict[tuple[str, str], dict[str, Any]] = {}
     for source, target, _key, data in kg.graph.edges(data=True, keys=True):
         pair = (source, target)
+        support_count = _coerce_support_count(data.get("support_count", 1))
+        support_docs = set(_coerce_support_docs(data.get("support_documents", [])))
         if pair not in edge_map:
             edge_map[pair] = {k: _flatten_value(v) for k, v in data.items()}
             # Track multi-valued fields as sets for proper merging
             edge_map[pair]["_relation_types"] = {data.get("relation_type", "")}
             edge_map[pair]["_evidences"] = {data.get("evidence", "")} - {""}
+            edge_map[pair]["_support_count"] = support_count
+            edge_map[pair]["_support_docs"] = support_docs
         else:
             # Merge relation types (set-based, no substring issues)
             edge_map[pair]["_relation_types"].add(data.get("relation_type", ""))
             edge_map[pair]["_evidences"].add(data.get("evidence", ""))
+            edge_map[pair]["_support_count"] += support_count
+            edge_map[pair]["_support_docs"].update(support_docs)
             # Keep highest confidence
             new_conf = data.get("confidence", 0)
             if isinstance(new_conf, (int, float)) and new_conf > edge_map[pair].get("confidence", 0):
@@ -149,6 +178,11 @@ def _build_flat_graph(
         evidences = attrs.pop("_evidences", set())
         if evidences:
             attrs["evidence"] = " | ".join(sorted(evidences))
+        support_docs = attrs.pop("_support_docs", set())
+        support_count = attrs.pop("_support_count", 1)
+        attrs["support_count"] = int(support_count)
+        attrs["support_documents"] = "; ".join(sorted(support_docs))
+        attrs["support_doc_count"] = len(support_docs)
         # Color by relation type — same palette as pyvis viewer
         primary_type = next((t for t in sorted(types) if t), rel_type)
         if primary_type not in rel_color_map:
@@ -226,16 +260,31 @@ def _export_csv(
     relations_path = output_dir / "relations.csv"
     relation_rows = []
     for source, target, _key, data in kg.graph.edges(data=True, keys=True):
+        support_docs = _coerce_support_docs(data.get("support_documents", []))
+        support_count = _coerce_support_count(data.get("support_count", 1))
         relation_rows.append({
             "source": source,
             "target": target,
             "relation_type": data.get("relation_type", ""),
             "confidence": data.get("confidence", ""),
+            "support_count": support_count,
+            "support_documents": "; ".join(support_docs),
+            "support_doc_count": len(set(support_docs)),
             "evidence": data.get("evidence", ""),
             "source_document": data.get("source_document", ""),
         })
 
-    relation_fields = ["source", "target", "relation_type", "confidence", "evidence", "source_document"]
+    relation_fields = [
+        "source",
+        "target",
+        "relation_type",
+        "confidence",
+        "support_count",
+        "support_documents",
+        "support_doc_count",
+        "evidence",
+        "source_document",
+    ]
     with open(relations_path, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=relation_fields)
         writer.writeheader()
@@ -277,6 +326,9 @@ def _export_sqlite(
             target_id TEXT,
             relation_type TEXT,
             confidence REAL,
+            support_count INTEGER,
+            support_documents TEXT,
+            support_doc_count INTEGER,
             evidence TEXT,
             source_document TEXT,
             FOREIGN KEY(source_id) REFERENCES nodes(node_id),
@@ -302,13 +354,18 @@ def _export_sqlite(
         )
 
     for source, target, _key, data in kg.graph.edges(data=True, keys=True):
+        support_docs = _coerce_support_docs(data.get("support_documents", []))
+        support_count = _coerce_support_count(data.get("support_count", 1))
         cur.execute(
-            "INSERT INTO edges VALUES (?, ?, ?, ?, ?, ?)",
+            "INSERT INTO edges VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
             (
                 source,
                 target,
                 data.get("relation_type", ""),
                 data.get("confidence"),
+                support_count,
+                "; ".join(support_docs),
+                len(set(support_docs)),
                 data.get("evidence", ""),
                 data.get("source_document", ""),
             ),

@@ -1,6 +1,8 @@
 """Tests for sift_kg.graph (KnowledgeGraph, builder, postprocessor)."""
 
+import json
 
+import pytest
 
 from sift_kg.graph.builder import (
     _make_entity_id,
@@ -83,6 +85,84 @@ class TestKnowledgeGraph:
         assert result is True
         assert kg.relation_count == 1
 
+    def test_add_relation_tracks_support_and_aggregated_confidence(self):
+        """Repeated canonical relations merge into one edge with support fields."""
+        kg = KnowledgeGraph()
+        kg.add_entity("person:alice", "PERSON", "Alice")
+        kg.add_entity("org:acme", "ORGANIZATION", "Acme")
+
+        kg.add_relation(
+            "r_doc1", "person:alice", "org:acme", "WORKS_FOR",
+            confidence=0.7, source_document="doc1", evidence="Alice works at Acme.",
+        )
+        kg.add_relation(
+            "r_doc2", "person:alice", "org:acme", "WORKS_FOR",
+            confidence=0.6, source_document="doc2", evidence="Acme employs Alice.",
+        )
+
+        assert kg.relation_count == 1
+        edge = next(iter(kg.graph.get_edge_data("person:alice", "org:acme").values()))
+        assert edge["support_count"] == 2
+        assert set(edge["support_documents"]) == {"doc1", "doc2"}
+        assert len(edge["mentions"]) == 2
+        assert edge["confidence"] == pytest.approx(0.88, rel=1e-6)
+
+    def test_duplicate_source_document_not_double_counts_support_documents(self):
+        """Repeated mentions in the same document increment support, not support docs."""
+        kg = KnowledgeGraph()
+        kg.add_entity("person:alice", "PERSON", "Alice")
+        kg.add_entity("org:acme", "ORGANIZATION", "Acme")
+
+        kg.add_relation(
+            "r1", "person:alice", "org:acme", "WORKS_FOR",
+            confidence=0.7, source_document="doc1",
+        )
+        kg.add_relation(
+            "r2", "person:alice", "org:acme", "WORKS_FOR",
+            confidence=0.65, source_document="doc1",
+        )
+
+        edge = next(iter(kg.graph.get_edge_data("person:alice", "org:acme").values()))
+        assert edge["support_count"] == 2
+        assert edge["support_documents"] == ["doc1"]
+        assert edge["support_doc_count"] == 1
+
+    def test_add_relation_canonicalize_false_keeps_parallel_edges(self):
+        """Legacy behavior remains available when canonicalization is disabled."""
+        kg = KnowledgeGraph()
+        kg.add_entity("person:alice", "PERSON", "Alice")
+        kg.add_entity("org:acme", "ORGANIZATION", "Acme")
+
+        kg.add_relation(
+            "r1", "person:alice", "org:acme", "WORKS_FOR",
+            confidence=0.7, source_document="doc1", canonicalize=False,
+        )
+        kg.add_relation(
+            "r2", "person:alice", "org:acme", "WORKS_FOR",
+            confidence=0.6, source_document="doc2", canonicalize=False,
+        )
+
+        assert kg.relation_count == 2
+        assert len(kg.graph.get_edge_data("person:alice", "org:acme")) == 2
+
+    def test_add_relation_support_respects_aggregation_mode(self):
+        """Aggregated confidence supports mean/max/product-complement modes."""
+        kg_mean = KnowledgeGraph(confidence_aggregation="mean")
+        kg_mean.add_entity("a", "PERSON", "A")
+        kg_mean.add_entity("b", "ORG", "B")
+        kg_mean.add_relation("r1", "a", "b", "WORKS_FOR", confidence=0.2)
+        kg_mean.add_relation("r2", "a", "b", "WORKS_FOR", confidence=0.6)
+        edge_mean = next(iter(kg_mean.graph.get_edge_data("a", "b").values()))
+        assert edge_mean["confidence"] == pytest.approx(0.4, rel=1e-6)
+
+        kg_max = KnowledgeGraph(confidence_aggregation="max")
+        kg_max.add_entity("a", "PERSON", "A")
+        kg_max.add_entity("b", "ORG", "B")
+        kg_max.add_relation("r1", "a", "b", "WORKS_FOR", confidence=0.2)
+        kg_max.add_relation("r2", "a", "b", "WORKS_FOR", confidence=0.6)
+        edge_max = next(iter(kg_max.graph.get_edge_data("a", "b").values()))
+        assert edge_max["confidence"] == pytest.approx(0.6, rel=1e-6)
+
     def test_add_relation_missing_source(self):
         """Adding relation with missing source returns False."""
         kg = KnowledgeGraph()
@@ -150,6 +230,36 @@ class TestKnowledgeGraph:
         data = kg.export()
         assert data["metadata"]["entity_count"] == 1
         assert "created_at" in data["metadata"]
+
+    def test_load_legacy_edge_backfills_support_fields(self, tmp_dir):
+        """Old JSON edges without mentions/support fields load as one mention."""
+        payload = {
+            "metadata": {"created_at": "2025-01-01T00:00:00"},
+            "nodes": [
+                {"id": "person:alice", "entity_type": "PERSON", "name": "Alice"},
+                {"id": "org:acme", "entity_type": "ORGANIZATION", "name": "Acme"},
+            ],
+            "links": [
+                {
+                    "source": "person:alice",
+                    "target": "org:acme",
+                    "relation_id": "legacy_r1",
+                    "relation_type": "WORKS_FOR",
+                    "confidence": 0.8,
+                    "evidence": "Alice works for Acme.",
+                    "source_document": "doc1",
+                }
+            ],
+        }
+        graph_path = tmp_dir / "legacy_graph.json"
+        graph_path.write_text(json.dumps(payload))
+
+        loaded = KnowledgeGraph.load(graph_path)
+        edge = next(iter(loaded.graph.get_edge_data("person:alice", "org:acme").values()))
+        assert edge["support_count"] == 1
+        assert edge["support_documents"] == ["doc1"]
+        assert len(edge["mentions"]) == 1
+        assert edge["confidence"] == pytest.approx(0.8, rel=1e-6)
 
 
 class TestEntityIdGeneration:
@@ -243,6 +353,21 @@ class TestBuildGraph:
         kg = build_graph([])
         assert kg.entity_count == 0
         assert kg.relation_count == 0
+
+    def test_repeated_relation_across_documents_tracks_support(self, sample_extraction):
+        """Repeated claims across docs collapse into one canonical supported edge."""
+        extraction2 = sample_extraction.model_copy(deep=True)
+        extraction2.document_id = "test_doc_2"
+        extraction2.document_path = "/tmp/test_doc_2.txt"
+
+        kg = build_graph([sample_extraction, extraction2], postprocess=False)
+        source_id = _make_entity_id("Alice Smith", "PERSON")
+        target_id = _make_entity_id("Acme Corp", "ORGANIZATION")
+        edge = next(iter(kg.graph.get_edge_data(source_id, target_id).values()))
+        assert edge["relation_type"] == "WORKS_FOR"
+        assert edge["support_count"] == 2
+        assert set(edge["support_documents"]) == {"test_doc", "test_doc_2"}
+        assert edge["confidence"] == pytest.approx(0.96, rel=1e-6)
 
 
 class TestFlagRelationsForReview:
