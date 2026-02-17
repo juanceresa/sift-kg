@@ -598,7 +598,7 @@ def export(
     elif fmt == "csv":
         dest = output_dir / "csv"
     else:
-        ext = {"json": "json", "graphml": "graphml", "gexf": "gexf"}[fmt.lower()]
+        ext = {"json": "json", "graphml": "graphml", "gexf": "gexf", "sqlite": "sqlite"}[fmt.lower()]
         dest = output_dir / f"graph.{ext}"
 
     result = export_graph(kg, dest, fmt, descriptions=descriptions)

@@ -1,12 +1,13 @@
 """Export knowledge graphs to various formats.
 
-Supports GraphML, GEXF (Gephi), and CSV. All formats flatten
+Supports GraphML, GEXF (Gephi), CSV, and SQLite. All formats flatten
 complex attributes (lists, dicts) to strings for compatibility.
 """
 
 import csv
 import json
 import logging
+import sqlite3
 from pathlib import Path
 from typing import Any
 
@@ -24,7 +25,7 @@ def _hex_to_rgb(hex_color: str) -> tuple[int, int, int]:
     h = hex_color.lstrip("#")
     return int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16)
 
-SUPPORTED_FORMATS = ("json", "graphml", "gexf", "csv")
+SUPPORTED_FORMATS = ("json", "graphml", "gexf", "csv", "sqlite")
 
 
 def export_graph(
@@ -62,6 +63,8 @@ def export_graph(
         return _export_gexf(clean, output_path, descriptions)
     elif fmt == "csv":
         return _export_csv(clean, output_path, descriptions)
+    elif fmt == "sqlite":
+        return _export_sqlite(clean, output_path, descriptions)
     raise ValueError(f"Unsupported format: {fmt}")
 
 
@@ -242,3 +245,79 @@ def _export_csv(
         f"CSV exported: {len(entity_rows)} entities, {len(relation_rows)} relations -> {output_dir}"
     )
     return output_dir
+
+
+def _export_sqlite(
+    kg: KnowledgeGraph, output_path: Path, descriptions: dict[str, str] | None = None,
+) -> Path:
+    """Export as SQLite database (nodes + edges tables)."""
+    descriptions = descriptions or {}
+
+    # Remove existing file so we get a clean export
+    if output_path.exists():
+        output_path.unlink()
+
+    conn = sqlite3.connect(str(output_path))
+    cur = conn.cursor()
+
+    cur.execute("""
+        CREATE TABLE nodes (
+            node_id TEXT PRIMARY KEY,
+            name TEXT,
+            entity_type TEXT,
+            confidence REAL,
+            source_documents TEXT,
+            attributes TEXT,
+            description TEXT
+        )
+    """)
+    cur.execute("""
+        CREATE TABLE edges (
+            source_id TEXT,
+            target_id TEXT,
+            relation_type TEXT,
+            confidence REAL,
+            evidence TEXT,
+            source_document TEXT,
+            FOREIGN KEY(source_id) REFERENCES nodes(node_id),
+            FOREIGN KEY(target_id) REFERENCES nodes(node_id)
+        )
+    """)
+    cur.execute("CREATE INDEX idx_edges_source ON edges(source_id)")
+    cur.execute("CREATE INDEX idx_edges_target ON edges(target_id)")
+    cur.execute("CREATE INDEX idx_edges_relation ON edges(relation_type)")
+
+    for node_id, data in kg.graph.nodes(data=True):
+        cur.execute(
+            "INSERT INTO nodes VALUES (?, ?, ?, ?, ?, ?, ?)",
+            (
+                node_id,
+                data.get("name", ""),
+                data.get("entity_type", ""),
+                data.get("confidence"),
+                "; ".join(data.get("source_documents", [])),
+                json.dumps(data.get("attributes", {}), default=str),
+                descriptions.get(node_id, ""),
+            ),
+        )
+
+    for source, target, _key, data in kg.graph.edges(data=True, keys=True):
+        cur.execute(
+            "INSERT INTO edges VALUES (?, ?, ?, ?, ?, ?)",
+            (
+                source,
+                target,
+                data.get("relation_type", ""),
+                data.get("confidence"),
+                data.get("evidence", ""),
+                data.get("source_document", ""),
+            ),
+        )
+
+    conn.commit()
+    node_count = cur.execute("SELECT COUNT(*) FROM nodes").fetchone()[0]
+    edge_count = cur.execute("SELECT COUNT(*) FROM edges").fetchone()[0]
+    conn.close()
+
+    logger.info(f"SQLite exported: {node_count} nodes, {edge_count} edges -> {output_path}")
+    return output_path
