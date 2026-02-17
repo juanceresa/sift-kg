@@ -1,0 +1,37 @@
+<div id="sift-controls">
+    <div style="font-weight:700;margin-bottom:10px;font-size:15px;color:#fff">sift-kg</div>
+    <input id="search-input" type="text" placeholder="Search entities..." oninput="searchEntity(this.value)">
+
+    <div style="margin:8px 0 4px">
+        <label style="font-size:11px;color:#888">Min connections: <span id="deg-val">$default_degree</span></label>
+        <input id="deg-slider" type="range" min="0" max="20" value="$default_degree" style="width:100%;margin:2px 0;accent-color:#4FC3F7" oninput="filterByDegree(this.value)">
+    </div>
+
+    $community_section
+
+    <div class="section-header">Entity Types</div>
+    $entity_items
+
+    <div class="section-header">Relation Types</div>
+    $relation_items
+
+    <div style="margin-top:12px;font-size:11px;color:#555;border-top:1px solid #333;padding-top:8px">
+        $entity_count entities &middot; $relation_count relations
+    </div>
+</div>
+<div id="focus-banner">
+    <span id="focus-label">Focused on: &mdash;</span>
+    <button id="focus-exit" onclick="exitFocusMode()">&times;</button>
+</div>
+<div id="detail-panel">
+    <div id="detail-header">
+        <button id="detail-back" onclick="detailGoBack()" style="display:none;background:none;border:none;color:#888;cursor:pointer;font-size:16px;padding:0 4px;line-height:1">&larr;</button>
+        <h3 id="detail-title">Detail</h3>
+        <button id="detail-close" onclick="closeDetail()">&times;</button>
+    </div>
+    <div id="detail-body"></div>
+</div>
+<div id="edge-tooltip" style="display:none;position:fixed;pointer-events:none;
+    background:#23233a;border:1px solid #555;border-radius:6px;padding:6px 10px;
+    font-size:12px;color:#e0e0e0;z-index:9999;max-width:260px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.4);white-space:nowrap"></div>
