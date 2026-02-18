@@ -31,6 +31,9 @@ def build_entity_prompt(
         hints = ""
         if cfg.extraction_hints:
             hints = " (" + "; ".join(cfg.extraction_hints) + ")"
+        if cfg.canonical_names:
+            names_list = ", ".join(cfg.canonical_names)
+            hints += f" ALLOWED VALUES (use ONLY these exact names): [{names_list}]"
         type_lines.append(f"- {name}: {desc}{hints}")
 
     entity_types_section = "\n".join(type_lines)
@@ -95,6 +98,9 @@ def build_combined_prompt(
         hints = ""
         if cfg.extraction_hints:
             hints = " (" + "; ".join(cfg.extraction_hints) + ")"
+        if cfg.canonical_names:
+            names_list = ", ".join(cfg.canonical_names)
+            hints += f" ALLOWED VALUES (use ONLY these exact names): [{names_list}]"
         type_lines.append(f"- {name}: {desc}{hints}")
 
     entity_types_section = "\n".join(type_lines)

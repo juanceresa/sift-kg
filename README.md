@@ -17,7 +17,7 @@ sift review                         # approve/reject merges interactively
 sift apply-merges                   # apply your decisions
 sift narrate                        # generate narrative summary
 sift view                           # interactive graph in your browser
-sift export graphml                 # export to Gephi, yEd, Cytoscape, etc.
+sift export graphml                 # export to Gephi, yEd, Cytoscape, SQLite, etc.
 ```
 
 ## How It Works
@@ -35,7 +35,7 @@ Documents (PDF, DOCX, text, HTML, and 75+ formats)
        ↓
   Narrative Generation (LLM)
        ↓
-  Interactive Viewer (browser) / Export (GraphML, GEXF, CSV)
+  Interactive Viewer (browser) / Export (GraphML, GEXF, CSV, SQLite)
 ```
 
 Every entity and relation links back to the source document and passage. You control what gets merged. The graph is yours.
@@ -47,8 +47,8 @@ Every entity and relation links back to the source document and passage. You con
 - **Domain-configurable** — define custom entity types and relation types in YAML
 - **Human-in-the-loop** — sift proposes entity merges, you approve or reject in an interactive terminal UI
 - **CLI search** — `sift search "SBF"` finds entities by name or alias, with optional relation and description output
-- **Interactive viewer** — explore your graph in-browser with community regions (colored zones showing graph structure), hover preview, focus mode (double-click to isolate neighborhoods), keyboard navigation (arrow keys to step through connections), search, type/community/relation toggles, and degree filtering
-- **Export anywhere** — GraphML (yEd, Cytoscape), GEXF (Gephi), CSV, or native JSON for advanced analysis
+- **Interactive viewer** — explore your graph in-browser with community regions (colored zones showing graph structure), hover preview, focus mode (double-click to isolate neighborhoods), keyboard navigation (arrow keys to step through connections), trail breadcrumb (persistent path that tracks your exploration — trace back through every node you visited), search, type/community/relation toggles, and degree filtering
+- **Export anywhere** — GraphML (yEd, Cytoscape), GEXF (Gephi), SQLite, CSV, or native JSON for advanced analysis
 - **Narrative generation** — prose reports with relationship chains, timelines, and community-grouped entity profiles
 - **Source provenance** — every extraction links to the document and passage it came from
 - **Multilingual** — extracts from documents in any language, outputs a unified English knowledge graph. Proper names stay as-is, non-Latin scripts are romanized automatically
@@ -224,7 +224,7 @@ sift view                     # → opens output/graph.html in your browser
 
 Opens a force-directed graph in your browser. The overview shows **community regions** — colored convex hulls grouping related entities — so you can see graph structure at a glance without label clutter. Hover any node to preview its name and connections. Includes search, type/community/relation toggles, a degree filter, and a detail sidebar.
 
-**Focus mode:** Double-click any entity to isolate its neighborhood. Use arrow keys to step through connections one by one — each pair is shown in isolation with labeled edges. Press Enter/Right to shift focus to a neighbor, Backspace/Left to go back along your path, Escape to exit. This is the intended way to explore dense graphs — zoom in on what matters, trace connections, read the evidence.
+**Focus mode:** Double-click any entity to isolate its neighborhood. Use arrow keys to step through connections one by one — each pair is shown in isolation with labeled edges. Press Enter/Right to shift focus to a neighbor, Backspace/Left to go back along your path, Escape to exit. Your exploration is tracked as a **trail breadcrumb** in the sidebar — a persistent path showing every node you've visited and the relations between them. Trail edges stay highlighted on the canvas so you can see your path through the graph. This is the intended way to explore dense graphs — zoom in on what matters, trace connections, read the evidence.
 
 **CLI search** — query entities directly from the terminal:
 
@@ -240,11 +240,12 @@ sift search "FTX" -d -t ORGANIZATION  # descriptions + type filter
 ```bash
 sift export graphml           # → output/graph.graphml (Gephi, yEd, Cytoscape)
 sift export gexf              # → output/graph.gexf (Gephi native)
+sift export sqlite            # → output/graph.sqlite (SQL queries, DuckDB, Datasette)
 sift export csv               # → output/csv/entities.csv + relations.csv
 sift export json              # → output/graph.json
 ```
 
-Use GraphML/GEXF when you want to control node sizing, edge weighting, custom color schemes, or apply graph algorithms (centrality, community detection) in dedicated tools.
+Use GraphML/GEXF when you want to control node sizing, edge weighting, custom color schemes, or apply graph algorithms (centrality, community detection) in dedicated tools. SQLite is useful for ad-hoc SQL queries, [Datasette](https://datasette.io/) publishing, or loading into DuckDB.
 
 ### 6. Generate narrative
 
@@ -274,6 +275,14 @@ entity_types:
       - Look for full names with titles
   COMPANY:
     description: Business entities
+  DEPARTMENT:
+    description: Named departments within a company
+    canonical_names:              # closed vocabulary — only these values allowed
+      - Engineering
+      - Sales
+      - Legal
+      - Marketing
+    canonical_fallback_type: ORGANIZATION  # non-canonical names get retyped
 relation_types:
   EMPLOYED_BY:
     description: Employment relationship
@@ -284,6 +293,8 @@ relation_types:
     symmetric: false
     review_required: true
 ```
+
+Entity types with `canonical_names` enforce a closed vocabulary. The allowed names are injected into the LLM extraction prompt so it outputs exact matches. As a safety net, any extracted name not in the list gets retyped to `canonical_fallback_type` during graph building (or kept as-is if no fallback is set). Useful for controlled taxonomies — departments, jurisdictions, predefined classifications.
 
 ```bash
 sift extract ./docs/ --domain path/to/domain.yaml
@@ -332,6 +343,7 @@ output/
 ├── graph.html                 # Interactive graph visualization
 ├── graph.graphml              # GraphML export (if exported)
 ├── graph.gexf                 # GEXF export (if exported)
+├── graph.sqlite               # SQLite export (if exported)
 └── csv/                       # CSV export (if exported)
     ├── entities.csv
     └── relations.csv
