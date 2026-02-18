@@ -466,7 +466,7 @@ def _inject_ui(
 
     # Support docs filter: max across all non-DOCUMENT nodes
     max_source_docs = 0
-    for node_id, data in kg.graph.nodes(data=True):
+    for _node_id, data in kg.graph.nodes(data=True):
         if data.get("entity_type") == "DOCUMENT":
             continue
         sd = data.get("source_documents", [])
