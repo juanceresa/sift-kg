@@ -150,6 +150,241 @@ function esc(s) {
     return d.innerHTML;
 }
 
+// --- Trail breadcrumb helpers ---
+function findRelationBetween(fromId, toId) {
+    var rels = [];
+    allEdges.forEach(function(e) {
+        if ((e.from === fromId && e.to === toId) || (e.to === fromId && e.from === toId)) {
+            if (rels.indexOf(e.relation_type) < 0) rels.push(e.relation_type);
+        }
+    });
+    return rels.length > 0 ? rels.join(', ') : '';
+}
+
+function getTrailPath() {
+    var path = [];
+    for (var i = 0; i < focusHistory.length; i++) {
+        var entry = focusHistory[i];
+        path.push({ nodeId: entry.nodeId, edgeRel: entry.relationType || '' });
+    }
+    path.push({ nodeId: focusedNodeId, edgeRel: null });
+    return path;
+}
+
+function getTrailNodeIds() {
+    var ids = new Set();
+    for (var i = 0; i < focusHistory.length; i++) {
+        ids.add(focusHistory[i].nodeId);
+    }
+    if (focusedNodeId) ids.add(focusedNodeId);
+    return ids;
+}
+
+function getTrailEdgeIds() {
+    var edgeIds = new Set();
+    var trail = getTrailPath();
+    for (var i = 0; i < trail.length - 1; i++) {
+        var fromId = trail[i].nodeId;
+        var toId = trail[i + 1].nodeId;
+        allEdges.forEach(function(e) {
+            if ((e.from === fromId && e.to === toId) || (e.to === fromId && e.from === toId)) {
+                edgeIds.add(e.id);
+            }
+        });
+    }
+    return edgeIds;
+}
+
+function buildNodeDetailHtml(nodeId) {
+    var node = nodes.get(nodeId);
+    if (!node) return '';
+
+    var connMap = {};
+    allEdges.forEach(function(e) {
+        var dir, nid, name;
+        if (e.from === nodeId) { dir = '\u2192'; nid = e.to; name = e.target_name || e.to; }
+        else if (e.to === nodeId) { dir = '\u2190'; nid = e.from; name = e.source_name || e.from; }
+        else return;
+        var key = dir + '|' + nid;
+        if (!connMap[key]) connMap[key] = { rels: [], edges: [], name: name, dir: dir, nid: nid, maxSupport: 0 };
+        if (connMap[key].rels.indexOf(e.relation_type) < 0) connMap[key].rels.push(e.relation_type);
+        connMap[key].maxSupport = Math.max(connMap[key].maxSupport, e.support_count || 1);
+        connMap[key].edges.push({
+            relation_type: e.relation_type,
+            confidence: e.edge_confidence || 0,
+            support_count: e.support_count || 1,
+            support_doc_count: e.support_doc_count || 0,
+            evidence: e.full_evidence || ''
+        });
+    });
+    var conns = [];
+    for (var k in connMap) {
+        var g = connMap[k];
+        g.rels.sort();
+        g.rel = g.rels.join(', ');
+        conns.push(g);
+    }
+    conns.sort(function(a, b) { return a.rel.localeCompare(b.rel) || a.name.localeCompare(b.name); });
+
+    var h = '';
+    var tc = node.color || '#B0BEC5';
+    if (typeof tc === 'object') tc = tc.background || '#B0BEC5';
+    h += '<div class="d-field"><div class="d-label">Type</div>';
+    h += '<span class="d-badge" style="background:' + esc(tc) + ';color:#1a1a2e">' + esc(node.entity_type || 'UNKNOWN') + '</span></div>';
+
+    if (node.community) {
+        h += '<div class="d-field"><div class="d-label">Community</div>';
+        h += '<div class="d-val">' + esc(node.community) + '</div></div>';
+    }
+
+    if (node.description) {
+        h += '<div class="d-field"><div class="d-label">Description</div>';
+        h += '<div class="d-evidence">' + esc(node.description) + '</div></div>';
+    }
+
+    var lines = (node.title || '').split('\n');
+    for (var i = 1; i < lines.length; i++) {
+        var ln = lines[i].trim();
+        if (!ln) continue;
+        if (ln.startsWith('Community:')) continue;
+        var ci = ln.indexOf(': ');
+        if (ci > 0) {
+            h += '<div class="d-field"><div class="d-label">' + esc(ln.substring(0, ci)) + '</div>';
+            h += '<div class="d-val">' + esc(ln.substring(ci + 2)) + '</div></div>';
+        }
+    }
+
+    var relTypes = [];
+    var seenRel = {};
+    for (var r = 0; r < conns.length; r++) {
+        for (var ri = 0; ri < conns[r].rels.length; ri++) {
+            var rt = conns[r].rels[ri];
+            if (!seenRel[rt]) { relTypes.push(rt); seenRel[rt] = true; }
+        }
+    }
+    relTypes.sort();
+
+    h += '<div class="d-field" style="margin-top:14px">';
+    h += '<div class="d-label">Connections (' + conns.length + ')</div>';
+    if (relTypes.length > 1) {
+        h += '<select class="trail-conn-filter" onchange="filterTrailConns(this, \'' + esc(nodeId) + '\')" style="width:100%;padding:4px 6px;margin:4px 0 6px;border-radius:4px;border:1px solid #444;background:#16213e;color:#e0e0e0;font-size:11px;outline:none">';
+        h += '<option value="">All types</option>';
+        for (var t = 0; t < relTypes.length; t++) {
+            var cnt = conns.filter(function(c){ return c.rels.indexOf(relTypes[t]) >= 0; }).length;
+            h += '<option value="' + esc(relTypes[t]) + '">' + esc(relTypes[t]) + ' (' + cnt + ')</option>';
+        }
+        h += '</select>';
+    }
+    h += '<div class="trail-conn-list" data-node-id="' + esc(nodeId) + '">';
+    h += buildConnListHtml(conns, '');
+    h += '</div></div>';
+
+    if (!window._trailConns) window._trailConns = {};
+    window._trailConns[nodeId] = conns;
+
+    return h;
+}
+
+function buildConnListHtml(conns, relFilter) {
+    var h = '';
+    for (var j = 0; j < conns.length; j++) {
+        var c = conns[j];
+        if (relFilter && c.rels.indexOf(relFilter) < 0) continue;
+        var relLabel = c.rels.map(function(r){ return formatRelLabel(r); }).join(', ');
+        h += '<div class="d-conn" data-nid="' + esc(c.nid) + '">';
+        h += '<div class="d-conn-header">';
+        h += '<div class="d-conn-summary">';
+        h += '<span style="color:#888;font-size:10px">' + esc(c.dir) + ' ' + esc(relLabel).toUpperCase() + '</span><br>';
+        h += '<span>' + esc(c.name) + '</span>';
+        h += '</div>';
+        h += '<button class="d-conn-nav" data-nid="' + esc(c.nid) + '" title="Go to ' + esc(c.name) + '">\u2192</button>';
+        h += '</div>';
+        h += '<div class="d-conn-detail">';
+        var edges = c.edges || [];
+        for (var ei = 0; ei < edges.length; ei++) {
+            var ed = edges[ei];
+            h += '<div class="d-edge-card">';
+            h += '<div class="d-label">' + esc(formatRelLabel(ed.relation_type)).toUpperCase() + '</div>';
+            var parts = [];
+            if (ed.confidence) parts.push(Math.round(ed.confidence * 100) + '% confidence');
+            parts.push(ed.support_count + (ed.support_count === 1 ? ' mention' : ' mentions'));
+            if (ed.support_doc_count > 1) parts.push(ed.support_doc_count + ' docs');
+            h += '<div class="d-val" style="color:#999">' + esc(parts.join(' \u00b7 ')) + '</div>';
+            if (ed.evidence) {
+                h += '<div class="d-edge-evidence">' + esc(ed.evidence) + '</div>';
+            }
+            h += '</div>';
+        }
+        h += '</div>';
+        h += '</div>';
+    }
+    return h;
+}
+
+function filterTrailConns(select, nodeId) {
+    var list = document.querySelector('.trail-conn-list[data-node-id="' + nodeId + '"]');
+    if (!list) return;
+    var conns = (window._trailConns || {})[nodeId] || [];
+    list.innerHTML = buildConnListHtml(conns, select.value);
+}
+
+function renderTrail() {
+    var trail = getTrailPath();
+    if (trail.length <= 1) {
+        showNodeDetail(focusedNodeId);
+        return;
+    }
+
+    window._trailConns = {};
+    dt.textContent = 'Trail';
+    detailBackBtn.style.display = 'none';
+    dp.classList.add('open');
+
+    var h = '<div class="trail-header">Trail (' + trail.length + ' nodes)</div>';
+
+    for (var i = 0; i < trail.length; i++) {
+        var step = trail[i];
+        var node = nodes.get(step.nodeId);
+        if (!node) continue;
+        var isCurrent = (i === trail.length - 1);
+        var isExpanded = isCurrent;
+
+        var tc = node.color || '#B0BEC5';
+        if (typeof tc === 'object') tc = tc.background || '#B0BEC5';
+
+        h += '<div class="trail-card' + (isCurrent ? ' current' : '') + (isExpanded ? ' expanded' : '') + '" data-trail-idx="' + i + '" data-trail-nid="' + esc(step.nodeId) + '">';
+        h += '<div class="trail-card-header" onclick="toggleTrailCard(' + i + ')">';
+        h += '<span class="d-badge" style="background:' + esc(tc) + ';color:#1a1a2e">' + esc(node.entity_type || '?') + '</span>';
+        h += '<span>' + esc(node.full_name || node.label || step.nodeId) + '</span>';
+        h += '<span class="trail-expand-icon">\u25B8</span>';
+        h += '</div>';
+        h += '<div class="trail-card-body">';
+        h += buildNodeDetailHtml(step.nodeId);
+        h += '</div>';
+        h += '</div>';
+
+        if (step.edgeRel) {
+            h += '<div class="trail-rel-label">\u2193 ' + esc(formatRelLabel(step.edgeRel)).toUpperCase() + '</div>';
+        }
+    }
+
+    db.innerHTML = h;
+
+    var currentNodeId = trail[trail.length - 1].nodeId;
+    window._conns = (window._trailConns || {})[currentNodeId] || [];
+}
+
+function toggleTrailCard(idx) {
+    var cards = document.querySelectorAll('.trail-card');
+    cards.forEach(function(card, i) {
+        if (i === idx) {
+            card.classList.toggle('expanded');
+        } else {
+            card.classList.remove('expanded');
+        }
+    });
+}
+
 function closeDetail() {
     dp.classList.remove('open');
     detailLastNodeId = null;
@@ -161,6 +396,12 @@ function detailGoBack() {
 }
 
 function focusNode(nid) {
+    if (focusedNodeId !== null) {
+        var rel = findRelationBetween(focusedNodeId, nid);
+        focusHistory.push({ nodeId: focusedNodeId, connIndex: focusConnIndex, relationType: rel, targetId: nid });
+        enterFocusMode(nid);
+        return;
+    }
     network.focus(nid, { scale: 1.5, animation: { duration: 400 } });
     network.selectNodes([nid]);
     showNodeDetail(nid);
@@ -193,8 +434,10 @@ db.addEventListener('click', function(ev) {
 network.on('click', function(params) {
     if (focusedNodeId !== null && params.nodes && params.nodes.length > 0) {
         // In focus mode: click neighbor to shift focus
-        focusHistory.push({ nodeId: focusedNodeId, connIndex: focusConnIndex });
-        enterFocusMode(params.nodes[0]);
+        var clickedNid = params.nodes[0];
+        var clickRel = findRelationBetween(focusedNodeId, clickedNid);
+        focusHistory.push({ nodeId: focusedNodeId, connIndex: focusConnIndex, relationType: clickRel, targetId: clickedNid });
+        enterFocusMode(clickedNid);
         return;
     }
     if (focusedNodeId !== null && (!params.nodes || params.nodes.length === 0) && (!params.edges || params.edges.length === 0)) {
@@ -512,7 +755,8 @@ document.addEventListener('keydown', function(ev) {
         return;
     }
     if (focusedNodeId === null) return;
-    var rows = document.querySelectorAll('#conn-list .d-conn');
+    var connList = document.querySelector('.trail-card.current .trail-conn-list') || document.getElementById('conn-list');
+    var rows = connList ? connList.querySelectorAll('.d-conn') : [];
     if (!rows.length) return;
 
     if (ev.key === 'ArrowDown' || ev.key === 'ArrowUp') {
@@ -532,8 +776,16 @@ document.addEventListener('keydown', function(ev) {
     } else if (ev.key === 'ArrowRight' || ev.key === 'Enter') {
         ev.preventDefault();
         if (focusConnIndex >= 0 && focusConnIndex < rows.length) {
-            focusHistory.push({ nodeId: focusedNodeId, connIndex: focusConnIndex });
-            enterFocusMode(rows[focusConnIndex].getAttribute('data-nid'));
+            var targetNid = rows[focusConnIndex].getAttribute('data-nid');
+            var currentConns = focusHistory.length > 0
+                ? ((window._trailConns || {})[focusedNodeId] || [])
+                : (window._conns || []);
+            var relType = '';
+            if (currentConns[focusConnIndex]) {
+                relType = currentConns[focusConnIndex].rels.join(', ');
+            }
+            focusHistory.push({ nodeId: focusedNodeId, connIndex: focusConnIndex, relationType: relType, targetId: targetNid });
+            enterFocusMode(targetNid);
         }
     } else if (ev.key === ' ') {
         ev.preventDefault();
@@ -559,7 +811,8 @@ document.addEventListener('keydown', function(ev) {
 });
 
 function highlightConn(idx) {
-    var rows = document.querySelectorAll('#conn-list .d-conn');
+    var connList = document.querySelector('.trail-card.current .trail-conn-list') || document.getElementById('conn-list');
+    var rows = connList ? connList.querySelectorAll('.d-conn') : [];
     rows.forEach(function(r, i) {
         r.classList.toggle('active', i === idx);
         if (i !== idx) r.classList.remove('expanded');
@@ -594,12 +847,24 @@ function highlightConn(idx) {
     var MAX_ADJ = 10;
     var adjIds = new Set(adjList.slice(0, MAX_ADJ));
 
-    // Nodes: primary pair full, adjacents ghosted
+    // Collect focused node's 1-hop neighbors so they stay faintly visible
+    var focusNeighborIds = new Set();
+    allEdges.forEach(function(e) {
+        if (e.from === focusedNodeId && e.to !== c.nid) focusNeighborIds.add(e.to);
+        if (e.to === focusedNodeId && e.from !== c.nid) focusNeighborIds.add(e.from);
+    });
+
+    // Nodes: primary pair full, trail visible, adjacents ghosted, focus neighbors faint
+    var trailNids = getTrailNodeIds();
     var nodeUpdates = [];
     allNodes.forEach(function(n) {
         var isPrimary = n.id === focusedNodeId || n.id === c.nid;
         var isAdj = adjIds.has(n.id);
-        nodeUpdates.push({ id: n.id, hidden: !(isPrimary || isAdj), opacity: isAdj ? 0.35 : 1.0 });
+        var isTrail = trailNids.has(n.id);
+        var isFocusNeighbor = focusNeighborIds.has(n.id);
+        var visible = isPrimary || isAdj || isTrail || isFocusNeighbor;
+        var opacity = isPrimary || isTrail ? 1.0 : isAdj ? 0.35 : isFocusNeighbor ? 0.15 : 1.0;
+        nodeUpdates.push({ id: n.id, hidden: !visible, opacity: opacity });
     });
     nodes.update(nodeUpdates);
 
@@ -614,20 +879,24 @@ function highlightConn(idx) {
         }
     });
 
-    // Edges: primary thick + labeled + curved apart, adjacent thin + unlabeled
+    // Edges: primary thick + labeled, trail visible + labeled, adjacent thin, focus-neighbor faint
+    var trailEids = getTrailEdgeIds();
     var edgeUpdates = [];
     allEdges.forEach(function(e) {
         var isPrimary = (e.from === focusedNodeId && e.to === c.nid) || (e.to === focusedNodeId && e.from === c.nid);
         var isAdj = (e.from === c.nid && adjIds.has(e.to)) || (e.to === c.nid && adjIds.has(e.from));
-        var show = (isPrimary || isAdj) && !hiddenRelationTypes.has(e.relation_type);
+        var isTrail = trailEids.has(e.id);
+        var isFocusEdge = (e.from === focusedNodeId && focusNeighborIds.has(e.to)) || (e.to === focusedNodeId && focusNeighborIds.has(e.from));
+        var show = (isPrimary || isAdj || isTrail || isFocusEdge) && !hiddenRelationTypes.has(e.relation_type);
         var origWidth = Math.min(10, 1.5 + (e.support_count || 1) * 2);
         var origColor = (typeof e.color === 'string') ? e.color : (e.color && e.color.color) || '#888';
+        var edgeOpacity = isPrimary || isTrail ? 1.0 : isAdj ? 0.25 : isFocusEdge ? 0.1 : 0.25;
         var update = {
             id: e.id,
             hidden: !show,
-            color: { color: origColor, opacity: isPrimary ? 1.0 : 0.25 },
-            label: isPrimary ? formatRelLabel(e.relation_type) : '',
-            width: isPrimary ? Math.max(3, origWidth) : 1
+            color: { color: origColor, opacity: edgeOpacity },
+            label: (isPrimary || isTrail) ? formatRelLabel(e.relation_type) : '',
+            width: isPrimary ? Math.max(3, origWidth) : (isTrail ? origWidth : 1)
         };
         if (isPrimary && primaryCount > 1) {
             var roundness = 0.15 + (primaryIndex[e.id] || 0) * 0.2;
@@ -637,16 +906,25 @@ function highlightConn(idx) {
     });
     edges.update(edgeUpdates);
 
-    // Camera: center on PRIMARY PAIR only, adjacents are peripheral
-    var positions = network.getPositions([focusedNodeId, c.nid]);
-    var p1 = positions[focusedNodeId];
-    var p2 = positions[c.nid];
-    var midX = (p1.x + p2.x) / 2;
-    var midY = (p1.y + p2.y) / 2;
+    // Camera: fit trail + primary pair, adjacents are peripheral
+    var fitNodeIds = [focusedNodeId, c.nid];
+    trailNids.forEach(function(nid) { if (fitNodeIds.indexOf(nid) < 0) fitNodeIds.push(nid); });
+    var positions = network.getPositions(fitNodeIds);
+    var minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+    fitNodeIds.forEach(function(nid) {
+        var p = positions[nid];
+        if (!p) return;
+        if (p.x < minX) minX = p.x;
+        if (p.x > maxX) maxX = p.x;
+        if (p.y < minY) minY = p.y;
+        if (p.y > maxY) maxY = p.y;
+    });
+    var midX = (minX + maxX) / 2;
+    var midY = (minY + maxY) / 2;
 
     var pad = 250;
-    var rangeX = Math.abs(p1.x - p2.x) + pad * 2;
-    var rangeY = Math.abs(p1.y - p2.y) + pad * 2;
+    var rangeX = (maxX - minX) + pad * 2;
+    var rangeY = (maxY - minY) + pad * 2;
 
     var canvasEl = network.canvas.frame.canvas;
     var totalW = canvasEl.clientWidth;
@@ -667,10 +945,11 @@ function highlightConn(idx) {
         animation: { duration: 300, easingFunction: 'easeInOutQuad' }
     });
 
-    // Fonts: primary pair large + white, adjacents small + dim
+    // Fonts: primary pair large + white, trail nodes medium + gray, adjacents small + dim
     (function() {
         var nodeFontSize = Math.round(20 / scale);
         var adjFontSize = Math.round(9 / scale);
+        var ghostFontSize = Math.round(6 / scale);
         var edgeFontSize = Math.round(16 / scale);
         var strokeW = Math.max(3, Math.round(3 / scale));
 
@@ -678,17 +957,25 @@ function highlightConn(idx) {
         allNodes.forEach(function(n) {
             if (n.id === focusedNodeId || n.id === c.nid) {
                 fontUpdatesN.push({ id: n.id, font: { size: nodeFontSize, color: '#ffffff', strokeWidth: strokeW, strokeColor: '#1a1a2e' } });
+            } else if (trailNids.has(n.id)) {
+                fontUpdatesN.push({ id: n.id, font: { size: adjFontSize, color: '#aaaaaa', strokeWidth: strokeW, strokeColor: '#1a1a2e' } });
             } else if (adjIds.has(n.id)) {
                 fontUpdatesN.push({ id: n.id, font: { size: adjFontSize, color: '#555555', strokeWidth: strokeW, strokeColor: '#1a1a2e' } });
+            } else if (focusNeighborIds.has(n.id)) {
+                fontUpdatesN.push({ id: n.id, font: { size: ghostFontSize, color: '#333333', strokeWidth: strokeW, strokeColor: '#1a1a2e' } });
             }
         });
         nodes.update(fontUpdatesN);
 
         var fontUpdatesE = [];
+        var smallEdgeFont = Math.round(4 / scale);
         allEdges.forEach(function(e) {
             var isPrimary = (e.from === focusedNodeId && e.to === c.nid) || (e.to === focusedNodeId && e.from === c.nid);
-            if (isPrimary && !hiddenRelationTypes.has(e.relation_type)) {
+            var isTrail = trailEids.has(e.id);
+            if ((isPrimary || isTrail) && !hiddenRelationTypes.has(e.relation_type)) {
                 fontUpdatesE.push({ id: e.id, font: { size: edgeFontSize, color: '#ffffff', strokeWidth: strokeW, strokeColor: '#1a1a2e' } });
+            } else {
+                fontUpdatesE.push({ id: e.id, font: { size: smallEdgeFont, color: '#333333', strokeWidth: 0, strokeColor: '#1a1a2e' } });
             }
         });
         edges.update(fontUpdatesE);
@@ -816,14 +1103,17 @@ function enterFocusMode(nodeId, skipCamera) {
     var MAX_NEIGHBORS = 25;
     var visibleNeighbors = new Set(allNeighbors.slice(0, MAX_NEIGHBORS));
     visibleNeighbors.add(nodeId);
+    var trailNodeIds = getTrailNodeIds();
+    trailNodeIds.forEach(function(nid) { visibleNeighbors.add(nid); });
 
     // Show top neighbors, hide rest
     var nodeUpdates = [];
     allNodes.forEach(function(n) {
         var isVisible = visibleNeighbors.has(n.id);
         var isFocused = n.id === nodeId;
+        var isTrail = trailNodeIds.has(n.id);
         var belowDegree = (n.node_degree || 0) < minDegree;
-        nodeUpdates.push({ id: n.id, hidden: !isVisible || (!isFocused && belowDegree), opacity: 1.0, font: { size: 14, color: '#e0e0e0' } });
+        nodeUpdates.push({ id: n.id, hidden: !isVisible || (!isFocused && !isTrail && belowDegree), opacity: 1.0, font: { size: 14, color: '#e0e0e0' } });
     });
     nodes.update(nodeUpdates);
 
@@ -841,10 +1131,21 @@ function enterFocusMode(nodeId, skipCamera) {
     // Show static edge labels only for small neighborhoods
     var showStaticLabels = visibleNeighbors.size <= 20;
 
-    // Show edges only to visible neighbors
+    // Show edges only to visible neighbors + trail edges
+    var trailEdgeIds = getTrailEdgeIds();
     var edgeUpdates = [];
     allEdges.forEach(function(e) {
-        if (connectedEdgeIds.has(e.id)) {
+        var isTrailEdge = trailEdgeIds.has(e.id);
+        if (isTrailEdge) {
+            edgeUpdates.push({
+                id: e.id,
+                hidden: false,
+                color: { opacity: 0.6 },
+                font: { size: 11, color: '#ccc', strokeWidth: 3, strokeColor: '#1a1a2e' },
+                label: formatRelLabel(e.relation_type),
+                smooth: { type: 'curvedCW', roundness: 0.1 }
+            });
+        } else if (connectedEdgeIds.has(e.id)) {
             var other = e.from === nodeId ? e.to : e.from;
             if (!visibleNeighbors.has(other)) {
                 edgeUpdates.push({ id: e.id, hidden: true });
@@ -868,7 +1169,7 @@ function enterFocusMode(nodeId, skipCamera) {
     });
     edges.update(edgeUpdates);
 
-    focusConnIndex = -1;
+    if (!skipCamera) focusConnIndex = -1;
 
     if (!skipCamera) {
         // Sidebar-aware camera fit
@@ -920,6 +1221,8 @@ function enterFocusMode(nodeId, skipCamera) {
             var maxLabeled = 15;
             var labeledSet = new Set();
             labeledSet.add(nodeId);
+            var trailIds = getTrailNodeIds();
+            trailIds.forEach(function(nid) { labeledSet.add(nid); });
             for (var i = 0; i < Math.min(maxLabeled, allNeighbors.length); i++) {
                 if (visibleNeighbors.has(allNeighbors[i])) labeledSet.add(allNeighbors[i]);
             }
@@ -932,10 +1235,25 @@ function enterFocusMode(nodeId, skipCamera) {
                 }
             });
             nodes.update(updates);
+
+            // Upscale trail edge labels to match current zoom
+            var trailEids = getTrailEdgeIds();
+            if (trailEids.size > 0) {
+                var trailEdgeFontSize = Math.round(12 / s);
+                var edgeUpdatesTrail = [];
+                trailEids.forEach(function(eid) {
+                    edgeUpdatesTrail.push({ id: eid, font: { size: trailEdgeFontSize, color: '#cccccc', strokeWidth: strokeW, strokeColor: '#1a1a2e' } });
+                });
+                edges.update(edgeUpdatesTrail);
+            }
         }, 450);
     }
 
-    showNodeDetail(nodeId);
+    if (focusHistory.length > 0) {
+        renderTrail();
+    } else {
+        showNodeDetail(nodeId);
+    }
 }
 
 function exitFocusMode() {
