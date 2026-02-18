@@ -691,7 +691,8 @@ function applyFilters() {
     allNodes.forEach(function(node) {
         var hidden = hiddenEntityTypes.has(node.entity_type) ||
                      (node.community && hiddenCommunities.has(node.community)) ||
-                     (node.node_degree || 0) < minDegree;
+                     (node.node_degree || 0) < minDegree ||
+                     (node.num_source_docs || 0) < minSupportDocs;
         updates.push({ id: node.id, hidden: hidden });
     });
     nodes.update(updates);
@@ -710,6 +711,14 @@ var minDegree = SIFT_CONFIG.defaultDegree;
 function filterByDegree(val) {
     minDegree = parseInt(val, 10);
     document.getElementById('deg-val').textContent = minDegree;
+    applyFilters();
+}
+
+// --- Support docs filter ---
+var minSupportDocs = SIFT_CONFIG.defaultMinDocs || 0;
+function filterBySupportDocs(val) {
+    minSupportDocs = parseInt(val, 10);
+    document.getElementById('docs-val').textContent = minSupportDocs;
     applyFilters();
 }
 

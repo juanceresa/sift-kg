@@ -2,9 +2,15 @@
     <div style="font-weight:700;margin-bottom:10px;font-size:15px;color:#fff">sift-kg</div>
     <input id="search-input" type="text" placeholder="Search entities..." oninput="searchEntity(this.value)">
 
-    <div style="margin:8px 0 4px">
-        <label style="font-size:11px;color:#888">Min connections: <span id="deg-val">$default_degree</span></label>
-        <input id="deg-slider" type="range" min="0" max="20" value="$default_degree" style="width:100%;margin:2px 0;accent-color:#4FC3F7" oninput="filterByDegree(this.value)">
+    <div style="margin:8px 0 4px;display:flex;gap:8px">
+        <div style="flex:1;min-width:0">
+            <label style="font-size:10px;color:#888">Connections &ge; <span id="deg-val">$default_degree</span></label>
+            <input id="deg-slider" type="range" min="1" max="20" value="$default_degree" style="width:100%;margin:2px 0;accent-color:#4FC3F7" oninput="filterByDegree(this.value)">
+        </div>
+        <div style="flex:1;min-width:0">
+            <label style="font-size:10px;color:#888">Docs &ge; <span id="docs-val">$default_min_docs</span></label>
+            <input id="docs-slider" type="range" min="1" max="$max_source_docs" value="$default_min_docs" style="width:100%;margin:2px 0;accent-color:#4FC3F7" oninput="filterBySupportDocs(this.value)">
+        </div>
     </div>
 
     $community_section

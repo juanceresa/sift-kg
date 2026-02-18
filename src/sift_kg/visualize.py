@@ -287,6 +287,8 @@ def generate_view(
         init_x = center[0] + random.uniform(-jitter, jitter)
         init_y = center[1] + random.uniform(-jitter, jitter)
 
+        num_source_docs = len(source_docs) if source_docs else 0
+
         net.add_node(
             node_id,
             label=name,
@@ -300,6 +302,7 @@ def generate_view(
             entity_type=entity_type,
             community=comm_label,
             node_degree=degree,
+            num_source_docs=num_source_docs,
             full_name=name,
             aliases=aliases_str,
             description=desc,
@@ -459,7 +462,16 @@ def _inject_ui(
 
     # Adaptive degree filter: small graphs default to 0 so all nodes are visible
     substantive = kg.relation_count - rel_counts.get("MENTIONED_IN", 0)
-    default_degree = 0 if substantive < 100 else 2
+    default_degree = 1 if substantive < 100 else 2
+
+    # Support docs filter: max across all non-DOCUMENT nodes
+    max_source_docs = 0
+    for node_id, data in kg.graph.nodes(data=True):
+        if data.get("entity_type") == "DOCUMENT":
+            continue
+        sd = data.get("source_documents", [])
+        max_source_docs = max(max_source_docs, len(sd) if isinstance(sd, list) else 0)
+    default_min_docs = 1
 
     # Substitute HTML template
     controls_html = controls_template.substitute(
@@ -467,6 +479,8 @@ def _inject_ui(
         relation_items=relation_items,
         community_section=community_section,
         default_degree=default_degree,
+        default_min_docs=default_min_docs,
+        max_source_docs=max_source_docs,
         entity_count=kg.entity_count,
         relation_count=kg.relation_count,
     )
@@ -475,6 +489,8 @@ def _inject_ui(
     config_json = json.dumps({
         "communityColors": community_color_map or {},
         "defaultDegree": default_degree,
+        "defaultMinDocs": default_min_docs,
+        "maxSourceDocs": max_source_docs,
     })
 
     # Assemble: CSS + controls + config script + app script

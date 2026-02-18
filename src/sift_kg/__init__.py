@@ -5,7 +5,9 @@ using any LLM provider. Supports domain-agnostic entity and relation
 extraction, interactive entity resolution, and narrative generation.
 """
 
-__version__ = "0.3.1"
+from importlib.metadata import version as _get_version
+
+__version__ = _get_version("sift-kg")
 
 from sift_kg.domains.loader import load_domain
 from sift_kg.domains.models import DomainConfig

@@ -305,22 +305,34 @@ sift extract ./docs/ --domain path/to/domain.yaml
 Use sift-kg from Python — Jupyter notebooks, scripts, web apps:
 
 ```python
-from sift_kg import load_domain, run_extract, run_build, run_narrate, export_graph
+from sift_kg import load_domain, run_extract, run_build, run_narrate, run_resolve, run_export
 from sift_kg import KnowledgeGraph
 from pathlib import Path
 
-# Load domain and run extraction
 domain = load_domain()  # or load_domain(bundled_name="osint")
-results = run_extract(Path("./docs"), "openai/gpt-4o-mini", domain, Path("./output"))
+
+# Extract — supports OCR, backend selection, concurrency
+results = run_extract(
+    Path("./docs"), "openai/gpt-4o-mini", domain, Path("./output"),
+    ocr=True, ocr_backend="tesseract",       # enable OCR for scanned PDFs
+    extractor="kreuzberg",                     # or "pdfplumber"
+    concurrency=4, chunk_size=10000,
+)
 
 # Build graph
 kg = run_build(Path("./output"), domain)
 print(f"{kg.entity_count} entities, {kg.relation_count} relations")
 
-# Export
-export_graph(kg, Path("./output/graph.graphml"), "graphml")
+# Resolve duplicates — with optional semantic clustering
+merges = run_resolve(Path("./output"), "openai/gpt-4o-mini", domain=domain, use_embeddings=True)
 
-# Or run the full pipeline
+# Export — json, graphml, gexf, csv, sqlite
+run_export(Path("./output"), "sqlite")
+
+# Narrate — or just regenerate community labels cheaply
+run_narrate(Path("./output"), "openai/gpt-4o-mini", communities_only=True)
+
+# Or run the full pipeline (extract → build → narrate)
 from sift_kg import run_pipeline
 run_pipeline(Path("./docs"), "openai/gpt-4o-mini", domain, Path("./output"))
 ```

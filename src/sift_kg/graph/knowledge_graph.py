@@ -4,9 +4,15 @@ import json
 import logging
 from collections import Counter
 from datetime import datetime
+from importlib.metadata import version as _get_version
 from math import prod
 from pathlib import Path
 from typing import Any
+
+try:
+    __version__ = _get_version("sift-kg")
+except Exception:
+    __version__ = "unknown"
 
 import networkx as nx
 
@@ -317,7 +323,7 @@ class KnowledgeGraph:
             "relation_count": self.graph.number_of_edges(),
             "document_count": type_counts.get("DOCUMENT", 0),
             "entity_type_summary": dict(type_counts),
-            "sift_kg_version": "0.2.0",
+            "sift_kg_version": __version__,
         }
 
         return {"metadata": metadata, "nodes": nodes, "links": links}

@@ -23,15 +23,31 @@ def run_extract(
     domain: DomainConfig,
     output_dir: Path,
     max_cost: float | None = None,
+    concurrency: int = 4,
+    chunk_size: int = 10000,
+    force: bool = False,
+    extractor: str = "kreuzberg",
+    ocr: bool = False,
+    ocr_backend: str = "tesseract",
+    ocr_language: str = "eng",
+    rpm: int = 40,
 ) -> list[DocumentExtraction]:
     """Extract entities and relations from all documents in a directory.
 
     Args:
-        doc_dir: Directory containing documents (PDF, text, HTML)
+        doc_dir: Directory containing documents (PDF, text, HTML, 75+ formats)
         model: LLM model string (e.g. "openai/gpt-4o-mini")
         domain: Domain configuration
         output_dir: Where to save extraction JSON files
         max_cost: Budget cap in USD
+        concurrency: Concurrent LLM calls per document
+        chunk_size: Characters per text chunk (larger = fewer API calls)
+        force: Re-extract all documents, ignoring cached results
+        extractor: Extraction backend — "kreuzberg" (default) or "pdfplumber"
+        ocr: Enable OCR for scanned documents
+        ocr_backend: OCR engine — "tesseract", "easyocr", "paddleocr", or "gcv"
+        ocr_language: OCR language code (ISO 639-3, e.g. "eng")
+        rpm: Max requests per minute
 
     Returns:
         List of DocumentExtraction results
@@ -39,13 +55,18 @@ def run_extract(
     from sift_kg.extract.extractor import extract_all
     from sift_kg.ingest.reader import discover_documents
 
-    docs = discover_documents(doc_dir)
+    docs = discover_documents(doc_dir, backend=extractor)
     if not docs:
         logger.warning(f"No supported documents found in {doc_dir}")
         return []
 
-    llm = LLMClient(model=model)
-    return extract_all(docs, llm, domain, output_dir, max_cost=max_cost)
+    llm = LLMClient(model=model, rpm=rpm)
+    return extract_all(
+        docs, llm, domain, output_dir,
+        max_cost=max_cost, concurrency=concurrency, chunk_size=chunk_size,
+        force=force, ocr=ocr, backend=extractor,
+        ocr_backend=ocr_backend, ocr_language=ocr_language,
+    )
 
 
 def run_build(
@@ -117,12 +138,20 @@ def run_build(
 def run_resolve(
     output_dir: Path,
     model: str,
+    domain: DomainConfig | None = None,
+    use_embeddings: bool = False,
+    concurrency: int = 4,
+    rpm: int = 40,
 ) -> MergeFile:
     """Find duplicate entities using LLM-based resolution.
 
     Args:
         output_dir: Directory with graph_data.json
         model: LLM model string
+        domain: Domain configuration (provides system context for smarter resolution)
+        use_embeddings: Use semantic clustering for batching (requires sift-kg[embeddings])
+        concurrency: Concurrent LLM calls
+        rpm: Max requests per minute
 
     Returns:
         MergeFile with DRAFT proposals
@@ -135,8 +164,12 @@ def run_resolve(
         raise FileNotFoundError(f"No graph found at {graph_path}")
 
     kg = KnowledgeGraph.load(graph_path)
-    llm = LLMClient(model=model)
-    merge_file, variant_relations = find_merge_candidates(kg, llm)
+    llm = LLMClient(model=model, rpm=rpm)
+    system_context = domain.system_context if domain else ""
+    merge_file, variant_relations = find_merge_candidates(
+        kg, llm, concurrency=concurrency,
+        use_embeddings=use_embeddings, system_context=system_context,
+    )
 
     if merge_file.proposals:
         write_proposals(merge_file, output_dir / "merge_proposals.yaml")
@@ -199,6 +232,7 @@ def run_narrate(
     system_context: str = "",
     include_entity_descriptions: bool = True,
     max_cost: float | None = None,
+    communities_only: bool = False,
 ) -> Path:
     """Generate narrative summary from the knowledge graph.
 
@@ -208,18 +242,23 @@ def run_narrate(
         system_context: Optional domain context for LLM
         include_entity_descriptions: Generate per-entity descriptions
         max_cost: Budget cap in USD
+        communities_only: Only regenerate community labels (~$0.01)
 
     Returns:
-        Path to generated narrative.md
+        Path to generated narrative.md or communities.json
     """
-    from sift_kg.narrate.generator import generate_narrative
-
     graph_path = output_dir / "graph_data.json"
     if not graph_path.exists():
         raise FileNotFoundError(f"No graph found at {graph_path}")
 
     kg = KnowledgeGraph.load(graph_path)
     llm = LLMClient(model=model)
+
+    if communities_only:
+        from sift_kg.narrate.generator import regenerate_communities
+        return regenerate_communities(kg=kg, llm=llm, output_dir=output_dir)
+
+    from sift_kg.narrate.generator import generate_narrative
 
     return generate_narrative(
         kg=kg,
@@ -240,7 +279,7 @@ def run_export(
 
     Args:
         output_dir: Directory with graph_data.json
-        fmt: Export format — "json", "graphml", "gexf", or "csv"
+        fmt: Export format — "json", "graphml", "gexf", "csv", or "sqlite"
         export_path: Where to write output (default: output_dir/graph.{fmt})
 
     Returns:
@@ -258,7 +297,7 @@ def run_export(
         if fmt == "csv":
             export_path = output_dir / "csv"
         else:
-            ext = {"json": "json", "graphml": "graphml", "gexf": "gexf"}[fmt]
+            ext = {"json": "json", "graphml": "graphml", "gexf": "gexf", "sqlite": "sqlite"}[fmt]
             export_path = output_dir / f"graph.{ext}"
 
     return export_graph(kg, export_path, fmt)
