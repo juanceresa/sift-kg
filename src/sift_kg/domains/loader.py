@@ -124,6 +124,8 @@ class DomainLoader:
                 entity_types[name] = EntityTypeConfig(
                     description=cfg.get("description", ""),
                     extraction_hints=cfg.get("extraction_hints", []),
+                    canonical_names=cfg.get("canonical_names", []),
+                    canonical_fallback_type=cfg.get("canonical_fallback_type"),
                 )
 
         relation_types = {}

@@ -152,22 +152,27 @@ function esc(s) {
 
 // --- Trail breadcrumb helpers ---
 function findRelationBetween(fromId, toId) {
-    var rels = [];
+    var outgoing = [], incoming = [];
     allEdges.forEach(function(e) {
-        if ((e.from === fromId && e.to === toId) || (e.to === fromId && e.from === toId)) {
-            if (rels.indexOf(e.relation_type) < 0) rels.push(e.relation_type);
+        if (e.from === fromId && e.to === toId) {
+            if (outgoing.indexOf(e.relation_type) < 0) outgoing.push(e.relation_type);
+        } else if (e.to === fromId && e.from === toId) {
+            if (incoming.indexOf(e.relation_type) < 0) incoming.push(e.relation_type);
         }
     });
-    return rels.length > 0 ? rels.join(', ') : '';
+    // Prefer outgoing; if only incoming, mark as incoming
+    if (outgoing.length > 0) return { rel: outgoing.join(', '), dir: '\u2192' };
+    if (incoming.length > 0) return { rel: incoming.join(', '), dir: '\u2190' };
+    return { rel: '', dir: '' };
 }
 
 function getTrailPath() {
     var path = [];
     for (var i = 0; i < focusHistory.length; i++) {
         var entry = focusHistory[i];
-        path.push({ nodeId: entry.nodeId, edgeRel: entry.relationType || '' });
+        path.push({ nodeId: entry.nodeId, edgeRel: entry.relationType || '', edgeDir: entry.relationDir || '' });
     }
-    path.push({ nodeId: focusedNodeId, edgeRel: null });
+    path.push({ nodeId: focusedNodeId, edgeRel: null, edgeDir: null });
     return path;
 }
 
@@ -193,6 +198,22 @@ function getTrailEdgeIds() {
         });
     }
     return edgeIds;
+}
+
+// Map trail edge IDs to the traversal "from" node for correct label perspective
+function getTrailEdgePerspectives() {
+    var map = {};
+    var trail = getTrailPath();
+    for (var i = 0; i < trail.length - 1; i++) {
+        var fromId = trail[i].nodeId;
+        var toId = trail[i + 1].nodeId;
+        allEdges.forEach(function(e) {
+            if ((e.from === fromId && e.to === toId) || (e.to === fromId && e.from === toId)) {
+                map[e.id] = fromId;
+            }
+        });
+    }
+    return map;
 }
 
 function buildNodeDetailHtml(nodeId) {
@@ -224,7 +245,13 @@ function buildNodeDetailHtml(nodeId) {
         g.rel = g.rels.join(', ');
         conns.push(g);
     }
-    conns.sort(function(a, b) { return a.rel.localeCompare(b.rel) || a.name.localeCompare(b.name); });
+    // Sort: outgoing first, then incoming; within each group, by rel then name
+    conns.sort(function(a, b) {
+        var aOut = a.dir === '\u2192' ? 0 : 1;
+        var bOut = b.dir === '\u2192' ? 0 : 1;
+        if (aOut !== bOut) return aOut - bOut;
+        return a.rel.localeCompare(b.rel) || a.name.localeCompare(b.name);
+    });
 
     var h = '';
     var tc = node.color || '#B0BEC5';
@@ -285,38 +312,55 @@ function buildNodeDetailHtml(nodeId) {
     return h;
 }
 
-function buildConnListHtml(conns, relFilter) {
+function buildConnRowHtml(c) {
+    var isIncoming = c.dir === '\u2190';
+    var relLabel = c.rels.map(function(r){ return isIncoming ? inverseRelLabel(r) : formatRelLabel(r); }).join(', ');
     var h = '';
+    h += '<div class="d-conn" data-nid="' + esc(c.nid) + '">';
+    h += '<div class="d-conn-header">';
+    h += '<div class="d-conn-summary">';
+    h += '<span style="color:#888;font-size:10px">' + esc(relLabel).toUpperCase() + '</span><br>';
+    h += '<span>' + esc(c.name) + '</span>';
+    h += '</div>';
+    h += '<button class="d-conn-nav" data-nid="' + esc(c.nid) + '" title="Go to ' + esc(c.name) + '">\u2192</button>';
+    h += '</div>';
+    h += '<div class="d-conn-detail">';
+    var edges = c.edges || [];
+    for (var ei = 0; ei < edges.length; ei++) {
+        var ed = edges[ei];
+        h += '<div class="d-edge-card">';
+        h += '<div class="d-label">' + esc(formatRelLabel(ed.relation_type)).toUpperCase() + '</div>';
+        var parts = [];
+        if (ed.confidence) parts.push(Math.round(ed.confidence * 100) + '% confidence');
+        parts.push(ed.support_count + (ed.support_count === 1 ? ' mention' : ' mentions'));
+        if (ed.support_doc_count > 1) parts.push(ed.support_doc_count + ' docs');
+        h += '<div class="d-val" style="color:#999">' + esc(parts.join(' \u00b7 ')) + '</div>';
+        if (ed.evidence) {
+            h += '<div class="d-edge-evidence">' + esc(ed.evidence) + '</div>';
+        }
+        h += '</div>';
+    }
+    h += '</div>';
+    h += '</div>';
+    return h;
+}
+
+function buildConnListHtml(conns, relFilter) {
+    var outgoing = [];
+    var incoming = [];
     for (var j = 0; j < conns.length; j++) {
         var c = conns[j];
         if (relFilter && c.rels.indexOf(relFilter) < 0) continue;
-        var relLabel = c.rels.map(function(r){ return formatRelLabel(r); }).join(', ');
-        h += '<div class="d-conn" data-nid="' + esc(c.nid) + '">';
-        h += '<div class="d-conn-header">';
-        h += '<div class="d-conn-summary">';
-        h += '<span style="color:#888;font-size:10px">' + esc(c.dir) + ' ' + esc(relLabel).toUpperCase() + '</span><br>';
-        h += '<span>' + esc(c.name) + '</span>';
-        h += '</div>';
-        h += '<button class="d-conn-nav" data-nid="' + esc(c.nid) + '" title="Go to ' + esc(c.name) + '">\u2192</button>';
-        h += '</div>';
-        h += '<div class="d-conn-detail">';
-        var edges = c.edges || [];
-        for (var ei = 0; ei < edges.length; ei++) {
-            var ed = edges[ei];
-            h += '<div class="d-edge-card">';
-            h += '<div class="d-label">' + esc(formatRelLabel(ed.relation_type)).toUpperCase() + '</div>';
-            var parts = [];
-            if (ed.confidence) parts.push(Math.round(ed.confidence * 100) + '% confidence');
-            parts.push(ed.support_count + (ed.support_count === 1 ? ' mention' : ' mentions'));
-            if (ed.support_doc_count > 1) parts.push(ed.support_doc_count + ' docs');
-            h += '<div class="d-val" style="color:#999">' + esc(parts.join(' \u00b7 ')) + '</div>';
-            if (ed.evidence) {
-                h += '<div class="d-edge-evidence">' + esc(ed.evidence) + '</div>';
-            }
-            h += '</div>';
-        }
-        h += '</div>';
-        h += '</div>';
+        if (c.dir === '\u2190') { incoming.push(c); } else { outgoing.push(c); }
+    }
+    var h = '';
+    if (outgoing.length > 0) {
+        h += '<div class="d-conn-group-header">Outgoing</div>';
+        for (var o = 0; o < outgoing.length; o++) h += buildConnRowHtml(outgoing[o]);
+    }
+    if (incoming.length > 0) {
+        h += '<div class="d-conn-group-header">Incoming</div>';
+        for (var i = 0; i < incoming.length; i++) h += buildConnRowHtml(incoming[i]);
     }
     return h;
 }
@@ -364,7 +408,11 @@ function renderTrail() {
         h += '</div>';
 
         if (step.edgeRel) {
-            h += '<div class="trail-rel-label">\u2193 ' + esc(formatRelLabel(step.edgeRel)).toUpperCase() + '</div>';
+            var isIncomingTrail = step.edgeDir === '\u2190';
+            var trailRelLabel = step.edgeRel.split(', ').map(function(r) {
+                return isIncomingTrail ? inverseRelLabel(r.trim()) : formatRelLabel(r.trim());
+            }).join(', ');
+            h += '<div class="trail-rel-label">\u2193 ' + esc(trailRelLabel).toUpperCase() + '</div>';
         }
     }
 
@@ -397,8 +445,8 @@ function detailGoBack() {
 
 function focusNode(nid) {
     if (focusedNodeId !== null) {
-        var rel = findRelationBetween(focusedNodeId, nid);
-        focusHistory.push({ nodeId: focusedNodeId, connIndex: focusConnIndex, relationType: rel, targetId: nid });
+        var info = findRelationBetween(focusedNodeId, nid);
+        focusHistory.push({ nodeId: focusedNodeId, connIndex: focusConnIndex, relationType: info.rel, relationDir: info.dir, targetId: nid });
         enterFocusMode(nid);
         return;
     }
@@ -435,8 +483,8 @@ network.on('click', function(params) {
     if (focusedNodeId !== null && params.nodes && params.nodes.length > 0) {
         // In focus mode: click neighbor to shift focus
         var clickedNid = params.nodes[0];
-        var clickRel = findRelationBetween(focusedNodeId, clickedNid);
-        focusHistory.push({ nodeId: focusedNodeId, connIndex: focusConnIndex, relationType: clickRel, targetId: clickedNid });
+        var clickInfo = findRelationBetween(focusedNodeId, clickedNid);
+        focusHistory.push({ nodeId: focusedNodeId, connIndex: focusConnIndex, relationType: clickInfo.rel, relationDir: clickInfo.dir, targetId: clickedNid });
         enterFocusMode(clickedNid);
         return;
     }
@@ -486,7 +534,13 @@ function showNodeDetail(nodeId) {
         g.rel = g.rels.join(', ');
         conns.push(g);
     }
-    conns.sort(function(a, b) { return a.rel.localeCompare(b.rel) || a.name.localeCompare(b.name); });
+    // Sort: outgoing first, then incoming; within each group, by rel then name
+    conns.sort(function(a, b) {
+        var aOut = a.dir === '\u2192' ? 0 : 1;
+        var bOut = b.dir === '\u2192' ? 0 : 1;
+        if (aOut !== bOut) return aOut - bOut;
+        return a.rel.localeCompare(b.rel) || a.name.localeCompare(b.name);
+    });
     window._conns = conns;
 
     var h = '';
@@ -554,40 +608,7 @@ function filterConns(relFilter) {
     var list = document.getElementById('conn-list');
     if (!list) return;
     var conns = window._conns || [];
-    var h = '';
-    for (var j = 0; j < conns.length; j++) {
-        var c = conns[j];
-        if (relFilter && c.rels.indexOf(relFilter) < 0) continue;
-        var relLabel = c.rels.map(function(r){ return formatRelLabel(r); }).join(', ');
-        h += '<div class="d-conn" data-nid="' + esc(c.nid) + '">';
-        h += '<div class="d-conn-header">';
-        h += '<div class="d-conn-summary">';
-        h += '<span style="color:#888;font-size:10px">' + esc(c.dir) + ' ' + esc(relLabel).toUpperCase() + '</span><br>';
-        h += '<span>' + esc(c.name) + '</span>';
-        h += '</div>';
-        h += '<button class="d-conn-nav" data-nid="' + esc(c.nid) + '" title="Go to ' + esc(c.name) + '">\u2192</button>';
-        h += '</div>';
-        // Expandable edge detail cards
-        h += '<div class="d-conn-detail">';
-        var edges = c.edges || [];
-        for (var ei = 0; ei < edges.length; ei++) {
-            var ed = edges[ei];
-            h += '<div class="d-edge-card">';
-            h += '<div class="d-label">' + esc(formatRelLabel(ed.relation_type)).toUpperCase() + '</div>';
-            var parts = [];
-            if (ed.confidence) parts.push(Math.round(ed.confidence * 100) + '% confidence');
-            parts.push(ed.support_count + (ed.support_count === 1 ? ' mention' : ' mentions'));
-            if (ed.support_doc_count > 1) parts.push(ed.support_doc_count + ' docs');
-            h += '<div class="d-val" style="color:#999">' + esc(parts.join(' \u00b7 ')) + '</div>';
-            if (ed.evidence) {
-                h += '<div class="d-edge-evidence">' + esc(ed.evidence) + '</div>';
-            }
-            h += '</div>';
-        }
-        h += '</div>';
-        h += '</div>';
-    }
-    list.innerHTML = h;
+    list.innerHTML = buildConnListHtml(conns, relFilter);
 }
 
 function showEdgeDetail(edgeId) {
@@ -743,6 +764,36 @@ function formatRelLabel(rt) {
     return rt.toLowerCase().replace(/_/g, ' ');
 }
 
+// Direction-aware edge label relative to a perspective node
+function edgeLabelFrom(e, perspectiveNodeId) {
+    if (e.to === perspectiveNodeId && e.from !== perspectiveNodeId) {
+        return inverseRelLabel(e.relation_type);
+    }
+    return formatRelLabel(e.relation_type);
+}
+
+// Convert relation type to passive/inverse form for incoming edges
+// e.g. "CONTRADICTS" → "CONTRADICTED BY", "GOVERNS" → "GOVERNED BY"
+function inverseRelLabel(rt) {
+    var inv = {
+        'CONTRADICTS': 'CONTRADICTED BY',
+        'GOVERNS': 'GOVERNED BY',
+        'INVOLVES': 'INVOLVED IN',
+        'RESPONSIBLE_FOR': 'UNDER RESPONSIBILITY OF',
+        'ENABLED_BY': 'ENABLES',
+        'ASSOCIATED_WITH': 'ASSOCIATED WITH'
+    };
+    var upper = rt.toUpperCase().replace(/\s+/g, '_');
+    if (inv[upper]) return formatRelLabel(inv[upper]);
+    // Fallback: try common English verb patterns
+    var lower = rt.toLowerCase().replace(/_/g, ' ');
+    if (lower.endsWith('s') && !lower.endsWith('ss')) {
+        // "contradicts" → "contradicted by" (rough heuristic)
+        return lower.replace(/s$/, 'd by');
+    }
+    return lower + ' (inverse)';
+}
+
 network.on('doubleClick', function(params) {
     if (params.nodes && params.nodes.length > 0) {
         enterFocusMode(params.nodes[0]);
@@ -781,10 +832,12 @@ document.addEventListener('keydown', function(ev) {
                 ? ((window._trailConns || {})[focusedNodeId] || [])
                 : (window._conns || []);
             var relType = '';
+            var relDir = '';
             if (currentConns[focusConnIndex]) {
                 relType = currentConns[focusConnIndex].rels.join(', ');
+                relDir = currentConns[focusConnIndex].dir || '';
             }
-            focusHistory.push({ nodeId: focusedNodeId, connIndex: focusConnIndex, relationType: relType, targetId: targetNid });
+            focusHistory.push({ nodeId: focusedNodeId, connIndex: focusConnIndex, relationType: relType, relationDir: relDir, targetId: targetNid });
             enterFocusMode(targetNid);
         }
     } else if (ev.key === ' ') {
@@ -881,6 +934,7 @@ function highlightConn(idx) {
 
     // Edges: primary thick + labeled, trail visible + labeled, adjacent thin, focus-neighbor faint
     var trailEids = getTrailEdgeIds();
+    var trailPersp = getTrailEdgePerspectives();
     var edgeUpdates = [];
     allEdges.forEach(function(e) {
         var isPrimary = (e.from === focusedNodeId && e.to === c.nid) || (e.to === focusedNodeId && e.from === c.nid);
@@ -891,11 +945,12 @@ function highlightConn(idx) {
         var origWidth = Math.min(10, 1.5 + (e.support_count || 1) * 2);
         var origColor = (typeof e.color === 'string') ? e.color : (e.color && e.color.color) || '#888';
         var edgeOpacity = isPrimary || isTrail ? 1.0 : isAdj ? 0.25 : isFocusEdge ? 0.1 : 0.25;
+        var edgePerspective = isTrail ? (trailPersp[e.id] || focusedNodeId) : focusedNodeId;
         var update = {
             id: e.id,
             hidden: !show,
             color: { color: origColor, opacity: edgeOpacity },
-            label: (isPrimary || isTrail) ? formatRelLabel(e.relation_type) : '',
+            label: (isPrimary || isTrail) ? edgeLabelFrom(e, edgePerspective) : '',
             width: isPrimary ? Math.max(3, origWidth) : (isTrail ? origWidth : 1)
         };
         if (isPrimary && primaryCount > 1) {
@@ -1045,10 +1100,10 @@ network.on('hoverEdge', function(params) {
     if (!e) return;
     // Show edge label only in neighborhood view (pair view already has labels)
     if (focusConnIndex < 0) {
-        edges.update({ id: e.id, font: { size: 12, color: '#fff', strokeWidth: 3, strokeColor: '#1a1a2e' }, label: formatRelLabel(e.relation_type) });
+        edges.update({ id: e.id, font: { size: 12, color: '#fff', strokeWidth: 3, strokeColor: '#1a1a2e' }, label: edgeLabelFrom(e, focusedNodeId) });
     }
     // Show support tooltip in all focus sub-modes
-    var parts = [formatRelLabel(e.relation_type)];
+    var parts = [edgeLabelFrom(e, focusedNodeId)];
     if (e.edge_confidence) parts.push(Math.round(e.edge_confidence * 100) + '%');
     var sc = e.support_count || 1;
     parts.push(sc + (sc === 1 ? ' mention' : ' mentions'));
@@ -1133,6 +1188,7 @@ function enterFocusMode(nodeId, skipCamera) {
 
     // Show edges only to visible neighbors + trail edges
     var trailEdgeIds = getTrailEdgeIds();
+    var trailEdgePersp = getTrailEdgePerspectives();
     var edgeUpdates = [];
     allEdges.forEach(function(e) {
         var isTrailEdge = trailEdgeIds.has(e.id);
@@ -1142,7 +1198,7 @@ function enterFocusMode(nodeId, skipCamera) {
                 hidden: false,
                 color: { opacity: 0.6 },
                 font: { size: 11, color: '#ccc', strokeWidth: 3, strokeColor: '#1a1a2e' },
-                label: formatRelLabel(e.relation_type),
+                label: edgeLabelFrom(e, trailEdgePersp[e.id] || nodeId),
                 smooth: { type: 'curvedCW', roundness: 0.1 }
             });
         } else if (connectedEdgeIds.has(e.id)) {
@@ -1160,7 +1216,7 @@ function enterFocusMode(nodeId, skipCamera) {
                 hidden: hiddenRelationTypes.has(e.relation_type),
                 color: { opacity: 0.6 },
                 font: { size: showStaticLabels ? 11 : 0, color: '#ccc', strokeWidth: 3, strokeColor: '#1a1a2e' },
-                label: showStaticLabels ? formatRelLabel(e.relation_type) : '',
+                label: showStaticLabels ? edgeLabelFrom(e, nodeId) : '',
                 smooth: { type: 'curvedCW', roundness: roundness }
             });
         } else {

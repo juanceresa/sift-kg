@@ -201,7 +201,7 @@ def generate_view(
             "enabled": true
         },
         "edges": {
-            "arrows": { "to": { "enabled": true, "scaleFactor": 0.3 } },
+            "arrows": { "to": { "enabled": true, "scaleFactor": 1.2 } },
             "smooth": { "type": "curvedCW", "roundness": 0.1 },
             "color": { "opacity": 0.2 },
             "font": { "size": 0 }

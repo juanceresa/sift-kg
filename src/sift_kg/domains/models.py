@@ -13,6 +13,8 @@ class EntityTypeConfig(BaseModel):
 
     description: str = ""
     extraction_hints: list[str] = Field(default_factory=list)
+    canonical_names: list[str] = Field(default_factory=list)
+    canonical_fallback_type: str | None = None
 
 
 class RelationTypeConfig(BaseModel):

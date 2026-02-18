@@ -189,7 +189,18 @@ def build(
         name: (cfg.source_types, cfg.target_types, cfg.symmetric)
         for name, cfg in domain_config.relation_types.items()
     } if domain_config.relation_types else None
-    kg = build_graph(extractions, postprocess=not no_postprocess, domain_relation_types=domain_rel_types, domain_relation_configs=domain_rel_configs)
+    domain_canonical = {
+        name: (cfg.canonical_names, cfg.canonical_fallback_type)
+        for name, cfg in domain_config.entity_types.items()
+        if cfg.canonical_names
+    } or None
+    kg = build_graph(
+        extractions,
+        postprocess=not no_postprocess,
+        domain_relation_types=domain_rel_types,
+        domain_relation_configs=domain_rel_configs,
+        domain_canonical_entities=domain_canonical,
+    )
 
     # Save graph
     graph_path = output_dir / "graph_data.json"

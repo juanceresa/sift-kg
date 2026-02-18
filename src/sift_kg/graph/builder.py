@@ -12,6 +12,7 @@ from unidecode import unidecode
 from sift_kg.extract.models import DocumentExtraction
 from sift_kg.graph.knowledge_graph import KnowledgeGraph
 from sift_kg.graph.postprocessor import (
+    activate_passive_relations,
     fix_relation_directions,
     normalize_relation_types,
     prune_isolated_entities,
@@ -49,6 +50,7 @@ def build_graph(
     postprocess: bool = True,
     domain_relation_types: set[str] | None = None,
     domain_relation_configs: dict[str, tuple[list[str], list[str], bool]] | None = None,
+    domain_canonical_entities: dict[str, tuple[list[str], str | None]] | None = None,
 ) -> KnowledgeGraph:
     """Build knowledge graph from extraction results.
 
@@ -57,6 +59,10 @@ def build_graph(
         postprocess: Whether to remove redundant edges
         domain_relation_types: Valid relation type names from domain config.
             If provided, undefined types are normalized to defined ones.
+        domain_canonical_entities: Map of entity_type → (canonical_names, fallback_type).
+            Types with canonical_names enforce closed vocabularies: non-canonical
+            entities are retyped to fallback_type, and canonical entities are
+            pre-created so relations always resolve.
 
     Returns:
         Populated KnowledgeGraph
@@ -67,13 +73,39 @@ def build_graph(
         "entities_added": 0,
         "relations_added": 0,
         "relations_skipped": 0,
+        "canonical_created": 0,
+        "canonical_retyped": 0,
     }
+
+    # Build canonical name lookup: lowercase name → (entity_type, display_name)
+    canonical_lookup: dict[str, tuple[str, str]] = {}
+    canonical_fallbacks: dict[str, str | None] = {}
+    if domain_canonical_entities:
+        for entity_type, (names, fallback) in domain_canonical_entities.items():
+            canonical_fallbacks[entity_type] = fallback
+            for name in names:
+                canonical_lookup[name.lower().strip()] = (entity_type, name)
 
     # Entity name → ID lookup (for resolving relation endpoints)
     name_to_id: dict[str, str] = {}
 
     # Pre-dedup: merge near-identical entity names deterministically
     canonical_map = prededup_entities(extractions)
+
+    # Pre-create canonical entities so relations always resolve
+    for entity_type, (names, _fallback) in (domain_canonical_entities or {}).items():
+        for name in names:
+            eid = _make_entity_id(name, entity_type)
+            kg.add_entity(
+                entity_id=eid,
+                entity_type=entity_type,
+                name=name,
+                confidence=1.0,
+                source_documents=[],
+                attributes={"canonical": True},
+            )
+            name_to_id[name.lower().strip()] = eid
+            stats["canonical_created"] += 1
 
     for extraction in extractions:
         if extraction.error:
@@ -98,10 +130,23 @@ def build_graph(
             entity_name = canonical_map.get(
                 (entity.entity_type, entity.name), entity.name
             )
-            eid = _make_entity_id(entity_name, entity.entity_type)
+            entity_type = entity.entity_type
+
+            # Enforce canonical names: retype non-canonical entities
+            if entity_type in canonical_fallbacks:
+                name_key = entity_name.lower().strip()
+                if name_key in canonical_lookup:
+                    # Name is canonical — use the canonical type and display name
+                    entity_type, entity_name = canonical_lookup[name_key]
+                elif canonical_fallbacks[entity_type] is not None:
+                    # Name is non-canonical — retype to fallback
+                    entity_type = canonical_fallbacks[entity_type]
+                    stats["canonical_retyped"] += 1
+
+            eid = _make_entity_id(entity_name, entity_type)
             kg.add_entity(
                 entity_id=eid,
-                entity_type=entity.entity_type,
+                entity_type=entity_type,
                 name=entity_name,
                 confidence=entity.confidence,
                 source_documents=[doc_id],
@@ -154,6 +199,12 @@ def build_graph(
 
     # Post-process
     if postprocess and kg.entity_count > 0:
+        passive = activate_passive_relations(kg)
+        stats.update(passive)
+        # Add activated forms to domain types so normalizer doesn't collapse them
+        if domain_relation_types and passive.get("passive_mappings"):
+            for _old, new in passive["passive_mappings"].items():
+                domain_relation_types.add(new)
         cleanup = remove_redundant_edges(kg)
         stats.update(cleanup)
         prune = prune_isolated_entities(kg)
@@ -165,6 +216,14 @@ def build_graph(
             direction_stats = fix_relation_directions(kg, domain_relation_configs)
             stats.update(direction_stats)
 
+    if stats["canonical_created"]:
+        logger.info(
+            f"Canonical entities: {stats['canonical_created']} pre-created"
+        )
+    if stats["canonical_retyped"]:
+        logger.info(
+            f"Canonical enforcement: {stats['canonical_retyped']} non-canonical entities retyped"
+        )
     logger.info(
         f"Graph built: {stats['documents']} docs → "
         f"{kg.entity_count} entities, {kg.relation_count} relations "

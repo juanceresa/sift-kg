@@ -1,6 +1,7 @@
 """Graph post-processing for redundancy removal and noise pruning.
 
 Implements Chilean KG paper (arXiv:2408.11975) cleanup rules:
+- Activate passive relations (ENABLED_BY → ENABLES with edge flip)
 - Remove self-loops
 - Remove transitive redundant edges
 - Prune isolated entities with no substantive connections
@@ -28,10 +29,8 @@ METADATA_RELATIONS = {"MENTIONED_IN"}
 # Common LLM-invented relation types → canonical mappings.
 # Applied when a domain defines relation types and the LLM ignores constraints.
 _RELATION_SYNONYMS: dict[str, str] = {
-    "DEFENDED_BY": "ASSOCIATED_WITH",
     "DEFENDS": "ASSOCIATED_WITH",
     "REPRESENTS": "ASSOCIATED_WITH",
-    "REPRESENTED_BY": "ASSOCIATED_WITH",
     "DEFENDANT_IN": "PARTICIPATED_IN",
     "FRIEND_OF": "ASSOCIATED_WITH",
     "MARRIED_TO": "ASSOCIATED_WITH",
@@ -40,7 +39,6 @@ _RELATION_SYNONYMS: dict[str, str] = {
     "TOLD_TO": "ASSOCIATED_WITH",
     "INVESTIGATED": "ASSOCIATED_WITH",
     "SUBPOENAED": "ASSOCIATED_WITH",
-    "TREATED_BY": "ASSOCIATED_WITH",
     "OWNED": "OWNS",
     "STAYED_AT": "RESIDED_AT",
     "REGISTERED_AT": "LOCATED_IN",
@@ -187,6 +185,107 @@ def prune_isolated_entities(
     if stats["entities_pruned"]:
         logger.info(
             f"Post-processing: pruned {stats['entities_pruned']} isolated entities"
+        )
+
+    return stats
+
+
+def activate_passive_relations(
+    kg: KnowledgeGraph, dry_run: bool = False
+) -> dict[str, Any]:
+    """Convert passive relation types to active form and flip edge direction.
+
+    Passive relations like ENABLED_BY create counterintuitive arrow directions:
+    mission_creep → ENABLED_BY → super_database means "mission creep is enabled
+    by super-database", but the arrow points away from the enabler.
+
+    This normalizes to active form: super_database → ENABLES → mission_creep,
+    making arrows point from actor to target.
+
+    Handles two patterns:
+    - Explicit mapping for known passive types (e.g. GOVERNED_BY → GOVERNS)
+    - Heuristic: *ED_BY suffix → strip to active form and flip
+
+    Args:
+        kg: KnowledgeGraph to clean (modified in place unless dry_run)
+        dry_run: Report stats without modifying graph
+
+    Returns:
+        Stats dict with conversion counts
+    """
+    # Known passive → active mappings
+    passive_to_active: dict[str, str] = {
+        "ENABLED_BY": "ENABLES",
+        "ENABLEDBY": "ENABLES",
+        "GOVERNED_BY": "GOVERNS",
+        "CAUSED_BY": "CAUSES",
+        "FUNDED_BY": "FUNDS",
+        "OWNED_BY": "OWNS",
+        "EMPLOYED_BY": "EMPLOYS",
+        "MANAGED_BY": "MANAGES",
+        "CONTROLLED_BY": "CONTROLS",
+        "REGULATED_BY": "REGULATES",
+        "INFLUENCED_BY": "INFLUENCES",
+        "CREATED_BY": "CREATES",
+        "SUPPORTED_BY": "SUPPORTS",
+        "OPPOSED_BY": "OPPOSES",
+        "AUTHORIZED_BY": "AUTHORIZES",
+        "CONSTRAINED_BY": "CONSTRAINS",
+        "MONITORED_BY": "MONITORS",
+        "ENFORCED_BY": "ENFORCES",
+        "INVESTIGATED_BY": "INVESTIGATES",
+        "OPERATED_BY": "OPERATES",
+        "MAINTAINED_BY": "MAINTAINS",
+    }
+
+    import re
+
+    stats: dict[str, Any] = {"passive_activated": 0, "passive_mappings": {}}
+    to_flip: list[tuple[str, str, str, dict, str]] = []
+
+    for source, target, key, data in list(kg.graph.edges(data=True, keys=True)):
+        rel_type = data.get("relation_type", "")
+        if not rel_type or rel_type in METADATA_RELATIONS:
+            continue
+
+        active = passive_to_active.get(rel_type)
+
+        # Heuristic fallback: *ED_BY pattern
+        if not active and re.match(r"^[A-Z]+ED_BY$", rel_type):
+            # INVESTIGATED_BY → INVESTIGATES, MONITORED_BY → MONITORS
+            stem = rel_type[:-3]  # strip "_BY"
+            if stem.endswith("ED"):
+                # Remove -ED, add -ES: ENABLED → ENABLES, GOVERNED → GOVERNS
+                base = stem[:-2]
+                if base.endswith("I"):
+                    # STUDI_ED → STUDIES (not common in relation types)
+                    active = base[:-1] + "IES"
+                else:
+                    active = base + "ES"
+                    # Clean double-S: PROCESSSES → PROCESSES
+                    if active.endswith("SES") and not active.endswith("SSES"):
+                        pass  # keep as-is, e.g. CAUSES
+
+        if not active:
+            continue
+
+        to_flip.append((source, target, key, data, active))
+        stats["passive_mappings"][rel_type] = active
+
+    if not dry_run:
+        for source, target, key, data, active in to_flip:
+            kg.graph.remove_edge(source, target, key=key)
+            new_data = dict(data)
+            new_data["relation_type"] = active
+            kg.graph.add_edge(target, source, key=key, **new_data)
+
+    stats["passive_activated"] = len(to_flip)
+
+    if stats["passive_activated"]:
+        unique = {f"{k} → {v}" for k, v in stats["passive_mappings"].items()}
+        logger.info(
+            f"Post-processing: activated {stats['passive_activated']} passive relations "
+            f"({len(unique)} types: {', '.join(sorted(unique))})"
         )
 
     return stats

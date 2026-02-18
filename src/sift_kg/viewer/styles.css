@@ -162,3 +162,8 @@
     width:1px; height:10px; background:#444;
     margin-left:4px;
 }
+.d-conn-group-header {
+    font-size:9px; text-transform:uppercase; letter-spacing:0.5px;
+    color:#666; padding:8px 0 4px; border-bottom:1px solid #2a2a3e;
+    margin-bottom:4px;
+}
