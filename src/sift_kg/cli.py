@@ -628,6 +628,12 @@ def view(
     output: str | None = typer.Option(None, "-o", help="Output directory"),
     to: str | None = typer.Option(None, "--to", help="Output HTML path"),
     no_open: bool = typer.Option(False, "--no-open", help="Don't open in browser"),
+    top: int | None = typer.Option(None, "--top", help="Show only top N entities by degree"),
+    min_confidence: float | None = typer.Option(None, "--min-confidence", help="Hide nodes/edges below this confidence (0.0-1.0)"),
+    source_doc: str | None = typer.Option(None, "--source-doc", help="Show only entities from this document"),
+    neighborhood: str | None = typer.Option(None, "--neighborhood", help="Center on entity and show N-hop neighborhood"),
+    depth: int = typer.Option(1, "--depth", help="Neighborhood hops [default: 1]"),
+    community: str | None = typer.Option(None, "--community", help="Focus on a specific community (e.g. 'Community 1')"),
     verbose: bool = typer.Option(False, "-v", "--verbose", help="Verbose logging"),
 ) -> None:
     """Open an interactive graph visualization in your browser."""
@@ -641,7 +647,8 @@ def view(
         raise typer.Exit(1)
 
     from sift_kg.graph.knowledge_graph import KnowledgeGraph
-    from sift_kg.visualize import generate_view
+    from sift_kg.graph.postprocessor import strip_metadata
+    from sift_kg.visualize import filter_graph, generate_view
 
     kg = KnowledgeGraph.load(graph_path)
     dest = Path(to) if to else output_dir / "graph.html"
@@ -654,11 +661,41 @@ def view(
     result = generate_view(
         kg, dest, open_browser=not no_open,
         descriptions_path=desc_path if desc_path.exists() else None,
+        top_n=top,
+        min_confidence=min_confidence,
+        source_doc=source_doc,
+        neighborhood=neighborhood,
+        depth=depth,
+        community=community,
     )
 
+    filters = []
+    if top:
+        filters.append(f"top {top}")
+    if min_confidence:
+        filters.append(f"confidence >= {min_confidence}")
+    if source_doc:
+        filters.append(f"doc: {source_doc}")
+    if neighborhood:
+        filters.append(f"neighborhood: {neighborhood} (depth {depth})")
+    if community:
+        filters.append(f"community: {community}")
+    if filters:
+        console.print(f"[cyan]Filters:[/cyan] {', '.join(filters)}")
+
+    # Show accurate stats (strip metadata + apply filters to match what was rendered)
+    clean_kg = strip_metadata(kg)
+    any_filter = top or min_confidence or source_doc or neighborhood
+    if any_filter:
+        clean_kg = filter_graph(
+            clean_kg, top_n=top, min_confidence=min_confidence,
+            source_doc=source_doc, neighborhood=neighborhood, depth=depth,
+        )
+    entity_ct, relation_ct = clean_kg.entity_count, clean_kg.relation_count
+
     console.print("[green]View generated![/green]")
-    console.print(f"  Entities: {kg.entity_count}")
-    console.print(f"  Relations: {kg.relation_count}")
+    console.print(f"  Entities: {entity_ct}")
+    console.print(f"  Relations: {relation_ct}")
     console.print(f"  Output: {result}")
     if no_open:
         console.print(f"  Open in browser: [cyan]file://{result.resolve()}[/cyan]")

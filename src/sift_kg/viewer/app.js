@@ -689,10 +689,16 @@ function changeEntityColor(input) {
 function applyFilters() {
     var updates = [];
     allNodes.forEach(function(node) {
+        var docHidden = false;
+        if (activeSourceDoc) {
+            var nodeDocs = (node.source_docs_str || '').split(',');
+            docHidden = nodeDocs.indexOf(activeSourceDoc) < 0;
+        }
         var hidden = hiddenEntityTypes.has(node.entity_type) ||
                      (node.community && hiddenCommunities.has(node.community)) ||
                      (node.node_degree || 0) < minDegree ||
-                     (node.num_source_docs || 0) < minSupportDocs;
+                     (node.num_source_docs || 0) < minSupportDocs ||
+                     docHidden;
         updates.push({ id: node.id, hidden: hidden });
     });
     nodes.update(updates);
@@ -701,7 +707,14 @@ function applyFilters() {
 function applyEdgeFilters() {
     var updates = [];
     allEdges.forEach(function(edge) {
-        updates.push({ id: edge.id, hidden: hiddenRelationTypes.has(edge.relation_type) });
+        var docHidden = false;
+        if (activeSourceDoc) {
+            var edgeDocs = (edge.support_docs_str || '').split(',');
+            docHidden = edgeDocs.indexOf(activeSourceDoc) < 0;
+        }
+        var hidden = hiddenRelationTypes.has(edge.relation_type) ||
+                     docHidden;
+        updates.push({ id: edge.id, hidden: hidden });
     });
     edges.update(updates);
 }
@@ -722,12 +735,42 @@ function filterBySupportDocs(val) {
     applyFilters();
 }
 
+
+
+// --- Source document filter ---
+var activeSourceDoc = '';
+function filterBySourceDoc(val) {
+    activeSourceDoc = val;
+    applyFilters();
+    applyEdgeFilters();
+}
+
 // --- Startup: apply smart defaults ---
 (function() {
     // MENTIONED_IN starts unchecked — add to hidden set
     var mentionedCb = document.querySelector('[data-rtype="MENTIONED_IN"]');
     if (mentionedCb && !mentionedCb.checked) {
         hiddenRelationTypes.add('MENTIONED_IN');
+    }
+    // --community flag: pre-hide all other communities
+    if (SIFT_CONFIG.focusCommunity) {
+        var target = SIFT_CONFIG.focusCommunity;
+        document.querySelectorAll('[data-community]').forEach(function(cb) {
+            if (cb.dataset.community !== target) {
+                cb.checked = false;
+                hiddenCommunities.add(cb.dataset.community);
+            }
+        });
+    }
+    // --source-doc flag: pre-select and disable dropdown
+    if (SIFT_CONFIG.preFilteredSourceDoc) {
+        var docSelect = document.getElementById('doc-filter');
+        if (docSelect) {
+            docSelect.value = SIFT_CONFIG.preFilteredSourceDoc;
+            docSelect.disabled = true;
+            docSelect.style.opacity = '0.5';
+            activeSourceDoc = SIFT_CONFIG.preFilteredSourceDoc;
+        }
     }
     applyEdgeFilters();
     applyFilters();

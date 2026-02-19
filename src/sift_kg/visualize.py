@@ -10,6 +10,7 @@ import json
 import logging
 import math
 import random
+import re
 import webbrowser
 from pathlib import Path
 
@@ -18,6 +19,12 @@ import networkx as nx
 from sift_kg.graph.knowledge_graph import KnowledgeGraph
 
 logger = logging.getLogger(__name__)
+
+
+def _community_sort_key(label: str) -> tuple[str, int]:
+    """Sort 'Community 12' numerically, not lexicographically."""
+    m = re.search(r"(\d+)$", label)
+    return (re.sub(r"\d+$", "", label), int(m.group(1)) if m else 0)
 
 # Node color palette — auto-assigned to entity types, max hue separation
 NODE_PALETTE = [
@@ -125,6 +132,110 @@ def _color_for_relation(rel_type: str, rel_color_map: dict[str, str]) -> str:
     return rel_color_map[rel_type]
 
 
+
+def filter_graph(
+    kg: KnowledgeGraph,
+    top_n: int | None = None,
+    min_confidence: float | None = None,
+    source_doc: str | None = None,
+    neighborhood: str | None = None,
+    depth: int = 1,
+) -> KnowledgeGraph:
+    """Pre-filter a knowledge graph for visualization.
+
+    Filters are applied in order: neighborhood -> source_doc -> min_confidence -> top_n.
+    Returns a new KnowledgeGraph; the original is not modified.
+    """
+    g = kg.graph.copy()
+
+    # 1. Neighborhood: extract ego graph
+    if neighborhood:
+        if neighborhood not in g:
+            # Try matching by display name (case-insensitive)
+            query = neighborhood.lower()
+            matches = [
+                nid for nid, data in g.nodes(data=True)
+                if data.get("name", "").lower() == query
+            ]
+            if len(matches) == 1:
+                neighborhood = matches[0]
+            elif len(matches) > 1:
+                match_list = ", ".join(matches)
+                raise ValueError(
+                    f"Multiple entities match {neighborhood!r}: {match_list}. "
+                    f"Use the full entity ID instead."
+                )
+            else:
+                raise ValueError(
+                    f"Entity {neighborhood!r} not found in graph. "
+                    f"Use entity ID (e.g. 'person:alice') or display name."
+                )
+        undirected = g.to_undirected()
+        ego_nodes: set[str] = {neighborhood}
+        frontier = {neighborhood}
+        for _ in range(depth):
+            next_frontier: set[str] = set()
+            for node in frontier:
+                for neighbor in undirected.neighbors(node):
+                    if neighbor not in ego_nodes:
+                        ego_nodes.add(neighbor)
+                        next_frontier.add(neighbor)
+            frontier = next_frontier
+        remove = [n for n in g.nodes() if n not in ego_nodes]
+        g.remove_nodes_from(remove)
+
+    # 2. Source doc: keep only entities from that document
+    if source_doc:
+        keep: set[str] = set()
+        for node_id, data in g.nodes(data=True):
+            docs = data.get("source_documents", [])
+            if isinstance(docs, list) and source_doc in docs:
+                keep.add(node_id)
+        g.remove_nodes_from([n for n in g.nodes() if n not in keep])
+        # Also remove edges not from this document
+        edges_to_remove = []
+        for src, tgt, key, edata in g.edges(data=True, keys=True):
+            edge_doc = edata.get("source_document", "")
+            support_docs = edata.get("support_documents", [])
+            if edge_doc != source_doc and source_doc not in (support_docs or []):
+                edges_to_remove.append((src, tgt, key))
+        for src, tgt, key in edges_to_remove:
+            g.remove_edge(src, tgt, key=key)
+
+    # 3. Min confidence: remove low-confidence nodes and edges
+    if min_confidence is not None:
+        g.remove_nodes_from([
+            n for n, data in g.nodes(data=True)
+            if (data.get("confidence") or 0) < min_confidence
+        ])
+        edges_to_remove = []
+        for src, tgt, key, edata in g.edges(data=True, keys=True):
+            if (edata.get("confidence") or 0) < min_confidence:
+                edges_to_remove.append((src, tgt, key))
+        for src, tgt, key in edges_to_remove:
+            g.remove_edge(src, tgt, key=key)
+
+    # 4. Top N by degree: keep top N hubs + their direct neighbors
+    if top_n is not None:
+        ranked = sorted(g.degree(), key=lambda x: (-x[1], x[0]))
+        hubs = {node for node, _ in ranked[:top_n]}
+        keep_top = set(hubs)
+        undirected = g.to_undirected()
+        for hub in hubs:
+            keep_top.update(undirected.neighbors(hub))
+        g.remove_nodes_from([n for n in g.nodes() if n not in keep_top])
+
+    # Build new KG from filtered graph
+    filtered = KnowledgeGraph(
+        canonicalize_relations=kg.canonicalize_relations,
+        confidence_aggregation=kg.confidence_aggregation,
+    )
+    filtered.created_at = kg.created_at
+    filtered.updated_at = kg.updated_at
+    filtered.graph = g
+    return filtered
+
+
 def generate_view(
     kg: KnowledgeGraph,
     output_path: Path,
@@ -132,15 +243,24 @@ def generate_view(
     height: str = "100%",
     width: str = "100%",
     descriptions_path: Path | None = None,
+    top_n: int | None = None,
+    min_confidence: float | None = None,
+    source_doc: str | None = None,
+    neighborhood: str | None = None,
+    depth: int = 1,
+    community: str | None = None,
 ) -> Path:
     """Generate an interactive HTML visualization of the knowledge graph."""
+    from sift_kg.graph.postprocessor import strip_metadata
+
     # Load entity descriptions if available
     entity_descriptions: dict[str, str] = {}
     if descriptions_path and descriptions_path.exists():
         entity_descriptions = json.loads(descriptions_path.read_text())
         logger.info(f"Loaded {len(entity_descriptions)} entity descriptions for viewer")
 
-    # Load or compute community assignments
+    # Load or compute community assignments on FULL graph (before stripping)
+    # MENTIONED_IN edges provide connectivity that produces better communities
     community_map: dict[str, str] = {}
     communities_path = output_path.parent / "communities.json"
     if communities_path.exists():
@@ -148,8 +268,10 @@ def generate_view(
         logger.info(f"Loaded {len(set(community_map.values()))} communities for viewer")
     if not community_map:
         try:
+            # Use full graph (with DOCUMENT nodes + MENTIONED_IN edges) —
+            # shared-document connectivity produces better entity clustering
             undirected = kg.graph.to_undirected()
-            raw = nx.community.louvain_communities(undirected)
+            raw = nx.community.louvain_communities(undirected, seed=42)
             if len(raw) > 1:
                 for i, comm in enumerate(sorted(raw, key=len, reverse=True)):
                     for nid in comm:
@@ -157,7 +279,28 @@ def generate_view(
         except Exception:
             pass
 
-    unique_communities = sorted(set(community_map.values()))
+    # Strip metadata edges/nodes so filters operate on clean graph
+    kg = strip_metadata(kg)
+
+    # Apply pre-filters
+    kg = filter_graph(
+        kg,
+        top_n=top_n,
+        min_confidence=min_confidence,
+        source_doc=source_doc,
+        neighborhood=neighborhood,
+        depth=depth,
+    )
+    if kg.entity_count == 0:
+        logger.warning("All entities filtered out \u2014 nothing to visualize")
+
+    unique_communities = sorted(set(community_map.values()), key=_community_sort_key)
+
+    # Normalize --community flag to match actual label (case-insensitive)
+    if community:
+        label_lookup = {c.lower(): c for c in unique_communities}
+        community = label_lookup.get(community.lower(), community)
+
     comm_colors = _generate_community_colors(len(unique_communities))
     community_color_map = {
         label: comm_colors[i]
@@ -170,10 +313,6 @@ def generate_view(
         raise ImportError(
             "pyvis is required for graph visualization.\nInstall it with: pip install pyvis"
         ) from exc
-
-    from sift_kg.graph.postprocessor import strip_metadata
-
-    kg = strip_metadata(kg)
 
     net = Network(
         height=height,
@@ -303,6 +442,7 @@ def generate_view(
             community=comm_label,
             node_degree=degree,
             num_source_docs=num_source_docs,
+            source_docs_str=",".join(source_docs) if source_docs else "",
             full_name=name,
             aliases=aliases_str,
             description=desc,
@@ -364,13 +504,14 @@ def generate_view(
             edge_confidence=float(confidence) if isinstance(confidence, (int, float)) else 0,
             support_count=support_count,
             support_doc_count=len(support_docs),
+            support_docs_str=",".join(support_docs) if support_docs else "",
         )
 
     # Write HTML then inject UI + fix Firefox height
     output_path.parent.mkdir(parents=True, exist_ok=True)
     net.write_html(str(output_path))
     _fix_firefox_height(output_path)
-    _inject_ui(output_path, kg, entity_types_present, entity_color_map, rel_color_map, community_color_map)
+    _inject_ui(output_path, kg, entity_types_present, entity_color_map, rel_color_map, community_color_map, community=community, source_doc=source_doc)
 
     logger.info(
         f"View generated: {kg.entity_count} entities, "
@@ -402,6 +543,8 @@ def _inject_ui(
     entity_color_map: dict[str, str],
     rel_color_map: dict[str, str],
     community_color_map: dict[str, str] | None = None,
+    community: str | None = None,
+    source_doc: str | None = None,
 ) -> None:
     """Inject sidebar with search, entity/relation/community toggles + color pickers + detail panel."""
     from string import Template
@@ -429,7 +572,7 @@ def _inject_ui(
     community_section = ""
     if community_color_map:
         community_items = ""
-        for label in sorted(community_color_map.keys()):
+        for label in sorted(community_color_map.keys(), key=_community_sort_key):
             color = community_color_map[label]
             community_items += (
                 f'<div class="type-row">'
@@ -473,6 +616,20 @@ def _inject_ui(
         max_source_docs = max(max_source_docs, len(sd) if isinstance(sd, list) else 0)
     default_min_docs = 1
 
+    # Collect source documents with entity counts for dropdown
+    doc_entity_counts: dict[str, int] = {}
+    for _, data in kg.graph.nodes(data=True):
+        if data.get("entity_type") == "DOCUMENT":
+            continue
+        for doc in data.get("source_documents", []):
+            if doc:
+                doc_entity_counts[doc] = doc_entity_counts.get(doc, 0) + 1
+
+    source_doc_options = '<option value="">All documents</option>'
+    for doc in sorted(doc_entity_counts):
+        count = doc_entity_counts[doc]
+        source_doc_options += f'<option value="{doc}">{doc} ({count})</option>'
+
     # Substitute HTML template
     controls_html = controls_template.substitute(
         entity_items=entity_items,
@@ -483,6 +640,7 @@ def _inject_ui(
         max_source_docs=max_source_docs,
         entity_count=kg.entity_count,
         relation_count=kg.relation_count,
+        source_doc_options=source_doc_options,
     )
 
     # Build config JSON for JS runtime values
@@ -491,6 +649,8 @@ def _inject_ui(
         "defaultDegree": default_degree,
         "defaultMinDocs": default_min_docs,
         "maxSourceDocs": max_source_docs,
+        "focusCommunity": community or "",
+        "preFilteredSourceDoc": source_doc or "",
     })
 
     # Assemble: CSS + controls + config script + app script

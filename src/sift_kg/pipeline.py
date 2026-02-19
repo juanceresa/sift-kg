@@ -303,6 +303,55 @@ def run_export(
     return export_graph(kg, export_path, fmt)
 
 
+def run_view(
+    output_dir: Path,
+    to: Path | None = None,
+    open_browser: bool = True,
+    top_n: int | None = None,
+    min_confidence: float | None = None,
+    source_doc: str | None = None,
+    neighborhood: str | None = None,
+    depth: int = 1,
+    community: str | None = None,
+) -> Path:
+    """Generate interactive graph visualization with optional pre-filters.
+
+    Args:
+        output_dir: Directory with graph_data.json
+        to: Output HTML path (default: output_dir/graph.html)
+        open_browser: Whether to open in browser
+        top_n: Show only top N entities by degree
+        min_confidence: Hide nodes/edges below this confidence
+        source_doc: Show only entities from this document
+        neighborhood: Center on entity ID (e.g. 'person:alice')
+        depth: Neighborhood hops (used with neighborhood)
+        community: Focus on a specific community label
+
+    Returns:
+        Path to generated HTML file
+    """
+    from sift_kg.visualize import generate_view
+
+    graph_path = output_dir / "graph_data.json"
+    if not graph_path.exists():
+        raise FileNotFoundError(f"No graph found at {graph_path}")
+
+    kg = KnowledgeGraph.load(graph_path)
+    dest = to or output_dir / "graph.html"
+
+    desc_path = output_dir / "entity_descriptions.json"
+    return generate_view(
+        kg, dest, open_browser=open_browser,
+        descriptions_path=desc_path if desc_path.exists() else None,
+        top_n=top_n,
+        min_confidence=min_confidence,
+        source_doc=source_doc,
+        neighborhood=neighborhood,
+        depth=depth,
+        community=community,
+    )
+
+
 def run_pipeline(
     doc_dir: Path,
     model: str,

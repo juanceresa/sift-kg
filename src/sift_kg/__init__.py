@@ -22,6 +22,7 @@ from sift_kg.pipeline import (
     run_narrate,
     run_pipeline,
     run_resolve,
+    run_view,
 )
 
 __all__ = [
@@ -38,4 +39,5 @@ __all__ = [
     "run_narrate",
     "run_pipeline",
     "run_resolve",
+    "run_view",
 ]
