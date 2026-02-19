@@ -47,7 +47,7 @@ Every entity and relation links back to the source document and passage. You con
 - **Domain-configurable** — define custom entity types and relation types in YAML
 - **Human-in-the-loop** — sift proposes entity merges, you approve or reject in an interactive terminal UI
 - **CLI search** — `sift search "SBF"` finds entities by name or alias, with optional relation and description output
-- **Interactive viewer** — explore your graph in-browser with community regions (colored zones showing graph structure), hover preview, focus mode (double-click to isolate neighborhoods), keyboard navigation (arrow keys to step through connections), trail breadcrumb (persistent path that tracks your exploration — trace back through every node you visited), search, type/community/relation toggles, and degree filtering
+- **Interactive viewer** — explore your graph in-browser with community regions (colored zones showing graph structure), hover preview, focus mode (double-click to isolate neighborhoods), keyboard navigation (arrow keys to step through connections), trail breadcrumb (persistent path that tracks your exploration — trace back through every node you visited), search, type/community/relation toggles, source document filter, and degree filtering. Pre-filter with CLI flags: `--neighborhood`, `--top`, `--community`, `--source-doc`, `--min-confidence`
 - **Export anywhere** — GraphML (yEd, Cytoscape), GEXF (Gephi), SQLite, CSV, or native JSON for advanced analysis
 - **Narrative generation** — prose reports with relationship chains, timelines, and community-grouped entity profiles
 - **Source provenance** — every extraction links to the document and passage it came from
@@ -219,10 +219,18 @@ See [Entity Resolution Workflow](#entity-resolution-workflow) below for the full
 **Interactive viewer** — explore your concept map in the browser:
 
 ```bash
-sift view                     # → opens output/graph.html in your browser
+sift view                                              # full graph
+sift view --neighborhood "Palantir Technologies"       # 1-hop ego graph around an entity
+sift view --neighborhood "Palantir" --depth 3          # 3-hop neighborhood
+sift view --top 10                                     # top 10 hubs + their neighbors
+sift view --community "Community 1"                    # focus on a specific community
+sift view --source-doc palantir_nsa_surveillance       # entities from one document
+sift view --min-confidence 0.8                         # hide low-confidence nodes/edges
 ```
 
-Opens a force-directed graph in your browser. The overview shows **community regions** — colored convex hulls grouping related entities — so you can see graph structure at a glance without label clutter. Hover any node to preview its name and connections. Includes search, type/community/relation toggles, a degree filter, and a detail sidebar.
+Opens a force-directed graph in your browser. The overview shows **community regions** — colored convex hulls grouping related entities — so you can see graph structure at a glance without label clutter. Hover any node to preview its name and connections. Includes search, type/community/relation toggles, source document filter, degree filter, and a detail sidebar.
+
+Pre-filter flags (`--top`, `--neighborhood`, `--source-doc`, `--min-confidence`) reduce the graph before rendering. `--community` pre-selects a community in the sidebar. `--neighborhood` accepts entity IDs (`person:alice`) or display names (case-insensitive).
 
 **Focus mode:** Double-click any entity to isolate its neighborhood. Use arrow keys to step through connections one by one — each pair is shown in isolation with labeled edges. Press Enter/Right to shift focus to a neighbor, Backspace/Left to go back along your path, Escape to exit. Your exploration is tracked as a **trail breadcrumb** in the sidebar — a persistent path showing every node you've visited and the relations between them. Trail edges stay highlighted on the canvas so you can see your path through the graph. This is the intended way to explore dense graphs — zoom in on what matters, trace connections, read the evidence.
 
@@ -305,7 +313,7 @@ sift extract ./docs/ --domain path/to/domain.yaml
 Use sift-kg from Python — Jupyter notebooks, scripts, web apps:
 
 ```python
-from sift_kg import load_domain, run_extract, run_build, run_narrate, run_resolve, run_export
+from sift_kg import load_domain, run_extract, run_build, run_narrate, run_resolve, run_export, run_view
 from sift_kg import KnowledgeGraph
 from pathlib import Path
 
@@ -331,6 +339,11 @@ run_export(Path("./output"), "sqlite")
 
 # Narrate — or just regenerate community labels cheaply
 run_narrate(Path("./output"), "openai/gpt-4o-mini", communities_only=True)
+
+# View — with optional pre-filters
+run_view(Path("./output"))                                          # full graph
+run_view(Path("./output"), neighborhood="person:alice", depth=2)    # ego graph
+run_view(Path("./output"), top_n=10)                                # top hubs
 
 # Or run the full pipeline (extract → build → narrate)
 from sift_kg import run_pipeline
