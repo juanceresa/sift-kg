@@ -58,6 +58,8 @@ def extract_from_text(
     domain: DomainConfig,
     chunk_size: int = 10000,
     concurrency: int = DEFAULT_CONCURRENCY,
+    output_dir: Path | None = None,
+    force: bool = False,
 ) -> DocumentExtraction:
     """Extract entities and relations from document text.
 
@@ -65,7 +67,10 @@ def extract_from_text(
     Runs async extraction internally for concurrency.
     """
     return asyncio.run(
-        _aextract_from_text(text, doc_id, llm, domain, chunk_size, concurrency)
+        _aextract_from_text(
+            text, doc_id, llm, domain, chunk_size, concurrency,
+            output_dir=output_dir, force=force,
+        )
     )
 
 
@@ -96,11 +101,35 @@ async def _aextract_from_text(
     domain: DomainConfig,
     chunk_size: int,
     concurrency: int,
+    output_dir: Path | None = None,
+    force: bool = False,
 ) -> DocumentExtraction:
     """Async extraction — processes chunks concurrently."""
     chunks = chunk_text(text, chunk_size=chunk_size)
     cost_before = llm.total_cost_usd
     sem = asyncio.Semaphore(concurrency)
+
+    # Schema discovery for schema-free domains
+    if domain.schema_free and output_dir is not None:
+        from sift_kg.domains.discovery import (
+            discover_domain,
+            load_discovered_domain,
+            save_discovered_domain,
+        )
+
+        discovered_path = output_dir / "discovered_domain.yaml"
+        cached = load_discovered_domain(discovered_path)
+        if cached is not None and not force:
+            logger.info(f"Using cached discovered schema ({len(cached.entity_types)} entity types)")
+            domain = cached
+        else:
+            samples = [chunks[0].text[:3000]]
+            try:
+                domain = await discover_domain(samples, llm, domain.system_context or "")
+                save_discovered_domain(domain, discovered_path)
+                logger.info(f"Discovered schema: {len(domain.entity_types)} entity types, {len(domain.relation_types)} relation types")
+            except (RuntimeError, ValueError) as e:
+                logger.warning(f"Schema discovery failed, falling back to schema-free extraction: {e}")
 
     # Generate document-level context from the first chunk
     doc_context = await _generate_doc_context(llm, chunks[0].text)
@@ -187,7 +216,10 @@ def extract_document(
             model_used=llm.model,
         )
 
-    extraction = extract_from_text(text, doc_id, llm, domain, chunk_size, concurrency)
+    extraction = extract_from_text(
+        text, doc_id, llm, domain, chunk_size, concurrency,
+        output_dir=output_dir, force=force,
+    )
     extraction.document_path = str(doc_path)
     extraction.domain_name = domain.name
     extraction.chunk_size = chunk_size
@@ -331,6 +363,16 @@ async def _aextract_all(
     extraction_dir = output_dir / "extractions"
     extraction_dir.mkdir(parents=True, exist_ok=True)
 
+    # Load cached discovered domain BEFORE staleness checks so domain_name matches
+    if domain.schema_free:
+        from sift_kg.domains.discovery import load_discovered_domain
+
+        discovered_path = output_dir / "discovered_domain.yaml"
+        cached_domain = load_discovered_domain(discovered_path)
+        if cached_domain is not None and not force:
+            logger.info(f"Using cached discovered schema ({len(cached_domain.entity_types)} entity types)")
+            domain = cached_domain
+
     # Read all docs and prepare chunks upfront (cheap, no LLM calls)
     doc_work: list[tuple[Path, str, str, list[TextChunk]]] = []
     cached: list[DocumentExtraction] = []
@@ -376,6 +418,22 @@ async def _aextract_all(
 
     if not doc_work:
         return cached
+
+    # Schema discovery — only runs if no cached domain was loaded above
+    if domain.schema_free:
+        from sift_kg.domains.discovery import (
+            discover_domain,
+            save_discovered_domain,
+        )
+
+        discovered_path = output_dir / "discovered_domain.yaml"
+        samples = [chunks[0].text[:3000] for _, _, _, chunks in doc_work[:5]]
+        try:
+            domain = await discover_domain(samples, llm, domain.system_context or "")
+            save_discovered_domain(domain, discovered_path)
+            logger.info(f"Discovered schema: {len(domain.entity_types)} entity types, {len(domain.relation_types)} relation types")
+        except (RuntimeError, ValueError) as e:
+            logger.warning(f"Schema discovery failed, falling back to schema-free extraction: {e}")
 
     # Generate document-level context for each document (1 LLM call each)
     doc_contexts: dict[str, str] = {}

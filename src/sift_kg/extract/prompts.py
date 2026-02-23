@@ -92,6 +92,22 @@ def build_combined_prompt(
         doc_context: Optional document-level summary prepended to each chunk
             so the LLM has context about the overall document.
     """
+    context_section = ""
+    if domain.system_context:
+        context_section = f"\n{domain.system_context}\n"
+
+    doc_context_section = ""
+    if doc_context:
+        doc_context_section = (
+            "\nDOCUMENT CONTEXT (applies to entire document, not just this excerpt):\n"
+            f"{doc_context}\n"
+        )
+
+    if domain.schema_free:
+        return _build_schema_free_prompt(
+            text, document_id, domain, context_section, doc_context_section,
+        )
+
     type_lines = []
     for name, cfg in domain.entity_types.items():
         desc = cfg.description or name
@@ -122,17 +138,6 @@ def build_combined_prompt(
             + "\nIMPORTANT: source_entity must be the type on the LEFT, target_entity the type on the RIGHT."
         )
 
-    context_section = ""
-    if domain.system_context:
-        context_section = f"\n{domain.system_context}\n"
-
-    doc_context_section = ""
-    if doc_context:
-        doc_context_section = (
-            "\nDOCUMENT CONTEXT (applies to entire document, not just this excerpt):\n"
-            f"{doc_context}\n"
-        )
-
     return f"""{context_section}Extract entities and relationships from the following document text. Return valid JSON only.
 
 STEP 1 — ENTITIES
@@ -146,6 +151,98 @@ Identify relationships between the entities you extracted.
 
 RELATION TYPES (use ONLY these — do not invent new types): {rel_types}
 If a relationship doesn't fit any listed type, use ASSOCIATED_WITH as the fallback.{direction_section}
+
+OUTPUT SCHEMA:
+{{
+  "entities": [
+    {{
+      "name": "string",
+      "entity_type": "TYPE_NAME",
+      "attributes": {{"key": "value"}},
+      "confidence": 0.0-1.0,
+      "context": "quote from text where entity appears"
+    }}
+  ],
+  "relations": [
+    {{
+      "relation_type": "TYPE_NAME",
+      "source_entity": "entity name",
+      "target_entity": "entity name",
+      "confidence": 0.0-1.0,
+      "evidence": "quote from text supporting this relation"
+    }}
+  ]
+}}
+
+RULES:
+- Extract ALL entity types present, not just the most common
+- Extract only explicit information from the text
+- The text may be in ANY language. Extract entities regardless of source language.
+- Output all entity names and attribute values in English. Use the most internationally recognized form of each name — do not anglicize personal names (Juan stays Juan, not John; 习近平 → Xi Jinping, not "Xi Near-Peace").
+- Keep context and evidence quotes in the original language of the source text.
+- confidence: 0.0-1.0 based on text clarity
+- attributes: include any relevant details (dates, roles, descriptions, etc.)
+- Use entity NAMES (not IDs) for source_entity and target_entity
+- Only extract explicit relationships stated in the text
+- Do not infer relationships from co-occurrence alone
+- If no relations found, return an empty relations list
+
+Document: {document_id}
+{doc_context_section}
+TEXT:
+{text}
+
+OUTPUT JSON:"""
+
+
+def _build_schema_free_prompt(
+    text: str,
+    document_id: str,
+    domain: DomainConfig,
+    context_section: str,
+    doc_context_section: str,
+) -> str:
+    """Build combined prompt for schema-free extraction.
+
+    The LLM discovers entity and relation types organically from the data
+    instead of being constrained to a predefined schema.
+    """
+    # If user provided entity type hints in a custom schema-free domain (hybrid),
+    # include them as guidance rather than constraints
+    entity_guidance = ""
+    if domain.entity_types:
+        hint_lines = []
+        for name, cfg in domain.entity_types.items():
+            desc = cfg.description or name
+            hints = ""
+            if cfg.extraction_hints:
+                hints = " (" + "; ".join(cfg.extraction_hints) + ")"
+            hint_lines.append(f"- {name}: {desc}{hints}")
+        entity_guidance = (
+            "\nSuggested entity types (use these when they fit, but also discover new types as needed):\n"
+            + "\n".join(hint_lines)
+            + "\n"
+        )
+
+    return f"""{context_section}Extract entities and relationships from the following document text. Return valid JSON only.
+
+STEP 1 — ENTITIES
+Identify all entities in the text. Determine the most descriptive entity type for each.
+{entity_guidance}
+ENTITY TYPE GUIDELINES:
+- Use UPPERCASE_SNAKE_CASE for all entity types (e.g. PERSON, COMPANY, LEGAL_CASE, FINANCIAL_INSTRUMENT, GOVERNMENT_AGENCY)
+- Be specific: prefer UNIVERSITY over ORGANIZATION, COURT_CASE over EVENT, BANK over COMPANY — when the data supports it
+- Be consistent: use the same type name for similar entities across the text
+- Common types include: PERSON, ORGANIZATION, LOCATION, EVENT, DOCUMENT, DATE, CONCEPT — but use whatever fits the data best
+
+STEP 2 — RELATIONS
+Identify relationships between the entities you extracted.
+
+RELATION TYPE GUIDELINES:
+- Use UPPERCASE_SNAKE_CASE for all relation types (e.g. EMPLOYED_BY, FUNDED, TESTIFIED_AGAINST, LOCATED_IN)
+- Be specific and descriptive: prefer FUNDED over ASSOCIATED_WITH, TESTIFIED_AGAINST over RELATED_TO
+- Use active voice: EMPLOYED_BY not EMPLOYMENT, FOUNDED not FOUNDING_OF
+- Be consistent: use the same relation type for similar relationships
 
 OUTPUT SCHEMA:
 {{

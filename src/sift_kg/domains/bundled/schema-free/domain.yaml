@@ -1,0 +1,10 @@
+name: "Schema-Free"
+version: "1.0.0"
+description: |
+  LLM-driven schema discovery. Samples your documents, designs entity and
+  relation types tailored to the corpus, then uses that schema for consistent
+  extraction. The discovered schema is saved to output/discovered_domain.yaml
+  and can be inspected or hand-edited for subsequent runs.
+schema_free: true
+entity_types: {}
+relation_types: {}

@@ -96,14 +96,24 @@ def run_build(
     if not extractions:
         raise FileNotFoundError(f"No extractions found in {output_dir / 'extractions'}")
 
-    domain_rel_types = set(domain.relation_types.keys()) if domain.relation_types else None
+    # Use discovered domain for normalization when schema-free
+    effective_domain = domain
+    if domain.schema_free:
+        from sift_kg.domains.discovery import load_discovered_domain
+
+        discovered = load_discovered_domain(output_dir / "discovered_domain.yaml")
+        if discovered:
+            logger.info(f"Using discovered schema for build ({len(discovered.entity_types)} entity types)")
+            effective_domain = discovered
+
+    domain_rel_types = set(effective_domain.relation_types.keys()) if effective_domain.relation_types else None
     domain_rel_configs = {
         name: (cfg.source_types, cfg.target_types, cfg.symmetric)
-        for name, cfg in domain.relation_types.items()
-    } if domain.relation_types else None
+        for name, cfg in effective_domain.relation_types.items()
+    } if effective_domain.relation_types else None
     domain_canonical = {
         name: (cfg.canonical_names, cfg.canonical_fallback_type)
-        for name, cfg in domain.entity_types.items()
+        for name, cfg in effective_domain.entity_types.items()
         if cfg.canonical_names
     } or None
     kg = build_graph(
@@ -120,7 +130,7 @@ def run_build(
 
     # Flag relations for review
     review_types = {
-        name for name, cfg in domain.relation_types.items()
+        name for name, cfg in effective_domain.relation_types.items()
         if cfg.review_required
     }
     flagged = flag_relations_for_review(kg, review_threshold, review_types)

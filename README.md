@@ -27,7 +27,9 @@ Documents (PDF, DOCX, text, HTML, and 75+ formats)
        ↓
   Text Extraction (Kreuzberg, local) — with optional OCR (Tesseract, EasyOCR, PaddleOCR, or Google Cloud Vision)
        ↓
-  Entity & Relation Extraction (LLM)
+  Schema Discovery (LLM designs entity/relation types from your data — or use a predefined domain)
+       ↓
+  Entity & Relation Extraction (LLM, using discovered or predefined schema)
        ↓
   Knowledge Graph (NetworkX, JSON)
        ↓
@@ -44,7 +46,7 @@ Every entity and relation links back to the source document and passage. You con
 
 - **Zero-config start** — point at a folder, get a knowledge graph. Or drop a `sift.yaml` in your project for persistent settings
 - **Any LLM provider** — OpenAI, Anthropic, Mistral, Ollama (local/private), or any LiteLLM-compatible provider
-- **Domain-configurable** — define custom entity types and relation types in YAML
+- **Schema-free by default** — one LLM call samples your documents and designs a schema tailored to the corpus, saved as `discovered_domain.yaml` for reuse and editing. Or use a structured domain (`general`, `osint`, `academic`) for fixed schemas, or define your own in YAML
 - **Human-in-the-loop** — sift proposes entity merges, you approve or reject in an interactive terminal UI
 - **CLI search** — `sift search "SBF"` finds entities by name or alias, with optional relation and description output
 - **Interactive viewer** — explore your graph in-browser with community regions (colored zones showing graph structure), hover preview, focus mode (double-click to isolate neighborhoods), keyboard navigation (arrow keys to step through connections), trail breadcrumb (persistent path that tracks your exploration — trace back through every node you visited), search, type/community/relation toggles, source document filter, and degree filtering. Pre-filter with CLI flags: `--neighborhood`, `--top`, `--community`, `--source-doc`, `--min-confidence`
@@ -80,15 +82,20 @@ Set a domain in `sift.yaml` so you don't need the flag every time:
 domain: academic
 ```
 
-Works with bundled names (`academic`, `osint`, `default`) or a path to a custom YAML file.
+Works with bundled names (`schema-free`, `general`, `osint`, `academic`) or a path to a custom YAML file.
 
 | Domain | Focus | Key Entity Types | Key Relation Types |
 |--------|-------|------------------|--------------------|
-| `default` | General document analysis | PERSON, ORGANIZATION, LOCATION, EVENT, DOCUMENT | ASSOCIATED_WITH, MEMBER_OF, LOCATED_IN |
+| `schema-free` | Auto-discovered from your data (default) | *(LLM designs per corpus)* | *(LLM designs per corpus)* |
+| `general` | General document analysis | PERSON, ORGANIZATION, LOCATION, EVENT, DOCUMENT | ASSOCIATED_WITH, MEMBER_OF, LOCATED_IN |
 | `osint` | Investigations & FOIA | SHELL_COMPANY, FINANCIAL_ACCOUNT | BENEFICIAL_OWNER_OF, TRANSACTED_WITH, SIGNATORY_OF |
 | `academic` | Literature review & topic mapping | CONCEPT, THEORY, METHOD, SYSTEM, FINDING, PHENOMENON, RESEARCHER, PUBLICATION, FIELD, DATASET | SUPPORTS, CONTRADICTS, EXTENDS, IMPLEMENTS, EXPLAINS, PROPOSED_BY, USES_METHOD, APPLIED_TO, INVESTIGATES |
 
 The **academic** domain maps the intellectual landscape of a research area — feed in papers and get a graph of how theories, methods, systems, findings, and concepts connect. Distinguishes abstract ideas (THEORY, METHOD) from concrete artifacts (SYSTEM — e.g. GPT-2, BERT, GLUE). Designed for literature reviews, topic mapping, and understanding where ideas agree, contradict, or build on each other.
+
+The **schema-free** domain (the default) runs a **schema discovery** step before extraction — one LLM call samples your documents and designs entity and relation types tailored to the corpus. The discovered schema is saved to `output/discovered_domain.yaml` and reused on subsequent runs, so types stay consistent across all chunks and documents. You can inspect, hand-edit, or copy the file as a starting point for a custom domain. Use `--force` to re-discover. Instead of forcing relationships into predefined categories like ASSOCIATED_WITH, it produces specific types like FUNDED, TESTIFIED_AGAINST, or ENROLLED_AT. Use a structured domain like `general` or `osint` when you want a fixed schema you define upfront.
+
+The **general** domain provides a fixed schema with PERSON, ORGANIZATION, LOCATION, EVENT, and DOCUMENT entity types plus common relation types. Useful when you want predictable, consistent types across documents.
 
 The **osint** domain adds entity types for shell companies, financial accounts, and offshore jurisdictions, plus relation types for tracing beneficial ownership and financial flows.
 
@@ -266,7 +273,7 @@ Produces `output/narrative.md` — a prose report with an overview, key relation
 
 ## Domain Configuration
 
-sift-kg ships with three bundled domains (see [Bundled Domains](#bundled-domains) above for details).
+sift-kg ships with four bundled domains (see [Bundled Domains](#bundled-domains) above for details). The default is `schema-free`.
 
 Use a bundled domain:
 ```bash
@@ -359,6 +366,7 @@ output/
 ├── extractions/               # Per-document extraction JSON
 │   ├── document1.json
 │   └── document2.json
+├── discovered_domain.yaml     # Auto-discovered schema (schema-free mode)
 ├── graph_data.json            # Knowledge graph (native format)
 ├── merge_proposals.yaml       # Entity merge proposals (DRAFT/CONFIRMED/REJECTED)
 ├── relation_review.yaml       # Flagged relations for review

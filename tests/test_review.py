@@ -26,7 +26,7 @@ class TestOsintDomain:
         """Both default and osint are available."""
         loader = DomainLoader()
         available = loader.list_bundled()
-        assert "default" in available
+        assert "general" in available
         assert "osint" in available
 
     def test_osint_loads_successfully(self):

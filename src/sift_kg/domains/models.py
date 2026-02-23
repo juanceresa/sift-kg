@@ -41,6 +41,9 @@ class DomainConfig(BaseModel):
     # Optional system context injected into LLM prompts
     system_context: str | None = None
 
+    # Schema-free mode: LLM discovers entity/relation types from the data
+    schema_free: bool = False
+
     def get_entity_type_names(self) -> list[str]:
         """Get list of entity type names."""
         return list(self.entity_types.keys())

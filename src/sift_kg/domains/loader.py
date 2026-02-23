@@ -23,7 +23,7 @@ _default_loader: "DomainLoader | None" = None
 
 def load_domain(
     domain_path: Path | None = None,
-    bundled_name: str = "default",
+    bundled_name: str = "schema-free",
 ) -> DomainConfig:
     """Convenience function to load a domain configuration.
 
@@ -86,7 +86,7 @@ class DomainLoader:
         )
         return config
 
-    def load_bundled(self, name: str = "default") -> DomainConfig:
+    def load_bundled(self, name: str = "schema-free") -> DomainConfig:
         """Load a bundled domain by name.
 
         Args:
@@ -149,4 +149,5 @@ class DomainLoader:
             entity_types=entity_types,
             relation_types=relation_types,
             system_context=raw.get("system_context"),
+            schema_free=raw.get("schema_free", False),
         )

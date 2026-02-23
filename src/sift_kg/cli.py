@@ -20,7 +20,7 @@ app = typer.Typer(
 console = Console()
 
 
-def _load_domain(config: SiftConfig, domain_name: str = "default"):
+def _load_domain(config: SiftConfig, domain_name: str = "schema-free"):
     """Load domain config from user path or bundled name.
 
     Priority: --domain CLI flag > SIFT_DOMAIN_PATH env > sift.yaml > bundled default
@@ -65,7 +65,7 @@ def extract(
     directory: str = typer.Argument(..., help="Directory containing documents to process"),
     model: str = typer.Option(None, help="LLM model (e.g. openai/gpt-4o-mini)"),
     domain: str | None = typer.Option(None, help="Path to custom domain YAML"),
-    domain_name: str = typer.Option("default", "--domain-name", "-d", help="Bundled domain name (e.g. osint)"),
+    domain_name: str = typer.Option("schema-free", "--domain-name", "-d", help="Bundled domain name (e.g. general, osint)"),
     max_cost: float | None = typer.Option(None, help="Maximum cost budget in USD"),
     chunk_size: int = typer.Option(10000, "--chunk-size", help="Characters per chunk (larger = fewer API calls, lower cost)"),
     concurrency: int = typer.Option(4, "-c", "--concurrency", help="Concurrent LLM calls per document"),
@@ -116,7 +116,10 @@ def extract(
         console.print(f"[yellow]No supported documents found in {directory}[/yellow]")
         raise typer.Exit(0)
 
-    console.print(f"[cyan]Domain:[/cyan] {domain_config.name}")
+    domain_label = domain_config.name
+    if domain_config.schema_free:
+        domain_label += " [dim](schema-free)[/dim]"
+    console.print(f"[cyan]Domain:[/cyan] {domain_label}")
     console.print(f"[cyan]Model:[/cyan] {effective_model}")
     console.print(f"[cyan]Extractor:[/cyan] {effective_backend}")
     console.print(f"[cyan]Documents:[/cyan] {len(docs)}")
@@ -139,6 +142,18 @@ def extract(
         ocr_backend=effective_ocr_backend, ocr_language=effective_ocr_language,
     )
 
+    # Show discovered schema info if present
+    discovered_path = output_dir / "discovered_domain.yaml"
+    if discovered_path.exists():
+        from sift_kg.domains.discovery import load_discovered_domain
+
+        discovered = load_discovered_domain(discovered_path)
+        if discovered:
+            console.print()
+            console.print(f"[cyan]Discovered schema:[/cyan] {len(discovered.entity_types)} entity types, {len(discovered.relation_types)} relation types")
+            console.print(f"  Entity types: {', '.join(discovered.entity_types.keys())}")
+            console.print(f"  Saved to: {discovered_path}")
+
     # Summary
     successful = [r for r in results if not r.error]
     total_entities = sum(len(r.entities) for r in successful)
@@ -158,7 +173,7 @@ def extract(
 @app.command()
 def build(
     domain: str | None = typer.Option(None, help="Path to custom domain YAML"),
-    domain_name: str = typer.Option("default", "--domain-name", "-d", help="Bundled domain name (e.g. osint)"),
+    domain_name: str = typer.Option("schema-free", "--domain-name", "-d", help="Bundled domain name (e.g. general, osint)"),
     output: str | None = typer.Option(None, "-o", help="Output directory"),
     review_threshold: float = typer.Option(0.7, help="Flag relations below this confidence"),
     no_postprocess: bool = typer.Option(False, help="Skip redundancy removal"),
@@ -184,11 +199,27 @@ def build(
 
     console.print(f"[cyan]Loading:[/cyan] {len(extractions)} extraction files")
 
-    domain_rel_types = set(domain_config.relation_types.keys()) if domain_config.relation_types else None
-    domain_rel_configs = {
-        name: (cfg.source_types, cfg.target_types, cfg.symmetric)
-        for name, cfg in domain_config.relation_types.items()
-    } if domain_config.relation_types else None
+    # Schema-free mode: use discovered domain if available for normalization
+    if domain_config.schema_free:
+        from sift_kg.domains.discovery import load_discovered_domain
+
+        discovered = load_discovered_domain(output_dir / "discovered_domain.yaml")
+        if discovered:
+            console.print(f"[cyan]Using discovered schema:[/cyan] {len(discovered.entity_types)} entity types")
+            domain_rel_types = set(discovered.relation_types.keys()) if discovered.relation_types else None
+            domain_rel_configs = {
+                name: (cfg.source_types, cfg.target_types, cfg.symmetric)
+                for name, cfg in discovered.relation_types.items()
+            } if discovered.relation_types else None
+        else:
+            domain_rel_types = None
+            domain_rel_configs = None
+    else:
+        domain_rel_types = set(domain_config.relation_types.keys()) if domain_config.relation_types else None
+        domain_rel_configs = {
+            name: (cfg.source_types, cfg.target_types, cfg.symmetric)
+            for name, cfg in domain_config.relation_types.items()
+        } if domain_config.relation_types else None
     domain_canonical = {
         name: (cfg.canonical_names, cfg.canonical_fallback_type)
         for name, cfg in domain_config.entity_types.items()
@@ -239,7 +270,7 @@ def build(
 def resolve(
     model: str = typer.Option(None, help="LLM model for entity resolution"),
     domain: str | None = typer.Option(None, help="Path to custom domain YAML"),
-    domain_name: str = typer.Option("default", "--domain-name", "-d", help="Bundled domain name (e.g. osint)"),
+    domain_name: str = typer.Option("schema-free", "--domain-name", "-d", help="Bundled domain name (e.g. general, osint)"),
     concurrency: int = typer.Option(4, "-c", "--concurrency", help="Concurrent LLM calls"),
     rpm: int = typer.Option(40, "--rpm", help="Max requests per minute"),
     use_embeddings: bool = typer.Option(
@@ -739,7 +770,7 @@ def domains() -> None:
 def narrate(
     model: str = typer.Option(None, help="LLM model for narrative generation"),
     domain: str | None = typer.Option(None, help="Path to custom domain YAML"),
-    domain_name: str = typer.Option("default", "--domain-name", "-d", help="Bundled domain name (e.g. osint)"),
+    domain_name: str = typer.Option("schema-free", "--domain-name", "-d", help="Bundled domain name (e.g. general, osint)"),
     output: str | None = typer.Option(None, "-o", help="Output directory"),
     no_descriptions: bool = typer.Option(False, help="Skip per-entity descriptions"),
     max_cost: float | None = typer.Option(None, help="Maximum cost budget in USD"),
