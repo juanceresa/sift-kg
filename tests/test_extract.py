@@ -1,13 +1,12 @@
 """Tests for sift_kg.extract.models and sift_kg.extract.prompts."""
 
-
 from sift_kg.extract.models import (
     DocumentExtraction,
     ExtractedEntity,
     ExtractedRelation,
     ExtractionResult,
 )
-from sift_kg.extract.prompts import build_entity_prompt, build_relation_prompt
+from sift_kg.extract.prompts import build_combined_prompt
 
 
 class TestExtractModels:
@@ -80,53 +79,67 @@ class TestExtractModels:
 class TestExtractPrompts:
     """Test prompt generation."""
 
-    def test_entity_prompt_contains_types(self, sample_domain):
-        """Entity prompt includes entity type names."""
-        prompt = build_entity_prompt("Some text about people.", "test_doc", sample_domain)
+    def test_combined_prompt_contains_entity_types(self, sample_domain):
+        """Combined prompt includes entity type names."""
+        prompt = build_combined_prompt("Some text about people.", "test_doc", sample_domain)
         assert "PERSON" in prompt
         assert "ORGANIZATION" in prompt
         assert "LOCATION" in prompt
 
-    def test_entity_prompt_contains_text(self, sample_domain):
-        """Entity prompt includes the input text."""
+    def test_combined_prompt_contains_text(self, sample_domain):
+        """Combined prompt includes the input text."""
         text = "Alice works at Acme Corp."
-        prompt = build_entity_prompt(text, "test_doc", sample_domain)
+        prompt = build_combined_prompt(text, "test_doc", sample_domain)
         assert text in prompt
 
-    def test_entity_prompt_contains_hints(self, sample_domain):
-        """Entity prompt includes extraction hints."""
-        prompt = build_entity_prompt("text", "test_doc", sample_domain)
+    def test_combined_prompt_contains_hints(self, sample_domain):
+        """Combined prompt includes extraction hints."""
+        prompt = build_combined_prompt("text", "test_doc", sample_domain)
         assert "company" in prompt or "agency" in prompt
 
-    def test_relation_prompt_contains_types(self, sample_domain):
-        """Relation prompt includes relation type names."""
-        entities = [{"name": "Alice", "entity_type": "PERSON"}]
-        prompt = build_relation_prompt("text", entities, "test_doc", sample_domain)
+    def test_combined_prompt_contains_relation_types(self, sample_domain):
+        """Combined prompt includes relation type names."""
+        prompt = build_combined_prompt("text", "test_doc", sample_domain)
         assert "WORKS_FOR" in prompt
         assert "LOCATED_IN" in prompt
 
-    def test_relation_prompt_contains_entities(self, sample_domain):
-        """Relation prompt lists discovered entities."""
-        entities = [
-            {"name": "Alice", "entity_type": "PERSON"},
-            {"name": "Acme", "entity_type": "ORGANIZATION"},
-        ]
-        prompt = build_relation_prompt("text about Alice and Acme", entities, "test_doc", sample_domain)
-        assert "Alice" in prompt
-        assert "Acme" in prompt
-
-    def test_entity_prompt_has_json_schema(self, sample_domain):
-        """Entity prompt contains JSON output format."""
-        prompt = build_entity_prompt("text", "test_doc", sample_domain)
+    def test_combined_prompt_has_json_schema(self, sample_domain):
+        """Combined prompt contains JSON output format."""
+        prompt = build_combined_prompt("text", "test_doc", sample_domain)
         assert "JSON" in prompt or "json" in prompt
 
-    def test_relation_prompt_has_json_schema(self, sample_domain):
-        """Relation prompt contains JSON output format."""
-        entities = [{"name": "X", "entity_type": "PERSON"}]
-        prompt = build_relation_prompt("text", entities, "test_doc", sample_domain)
-        assert "JSON" in prompt or "json" in prompt
+    def test_combined_prompt_includes_context(self, sample_domain):
+        """Combined prompt includes domain system context."""
+        prompt = build_combined_prompt("text", "test_doc", sample_domain)
+        assert "Test context" in prompt
 
-    def test_entity_prompt_includes_context(self, sample_domain):
-        """Entity prompt includes domain system context."""
-        prompt = build_entity_prompt("text", "test_doc", sample_domain)
-        assert "Test context" in prompt or sample_domain.system_context in prompt
+    def test_combined_prompt_enforces_entity_types(self, sample_domain):
+        """Combined prompt tells LLM to use only defined entity types."""
+        prompt = build_combined_prompt("text", "test_doc", sample_domain)
+        assert "use ONLY these" in prompt
+        assert "Do not create new entity types" in prompt
+
+    def test_combined_prompt_enforces_relation_types(self, sample_domain):
+        """Combined prompt tells LLM to use only defined relation types."""
+        prompt = build_combined_prompt("text", "test_doc", sample_domain)
+        assert "do not invent new types" in prompt
+
+    def test_combined_prompt_fallback_when_set(self, sample_domain):
+        """Combined prompt uses fallback_relation when defined."""
+        sample_domain.fallback_relation = "ASSOCIATED_WITH"
+        prompt = build_combined_prompt("text", "test_doc", sample_domain)
+        assert "use ASSOCIATED_WITH" in prompt
+
+    def test_combined_prompt_strict_when_no_fallback(self, sample_domain):
+        """Combined prompt enforces strict matching when no fallback."""
+        sample_domain.fallback_relation = None
+        prompt = build_combined_prompt("text", "test_doc", sample_domain)
+        assert "Only extract relationships that clearly match" in prompt
+
+    def test_combined_prompt_direction_hints(self, sample_domain):
+        """Combined prompt includes relation direction hints."""
+        prompt = build_combined_prompt("text", "test_doc", sample_domain)
+        assert "PERSON" in prompt
+        assert "ORGANIZATION" in prompt
+        # WORKS_FOR has source/target constraints
+        assert "→" in prompt
