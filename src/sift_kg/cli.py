@@ -65,16 +65,38 @@ def extract(
     directory: str = typer.Argument(..., help="Directory containing documents to process"),
     model: str = typer.Option(None, help="LLM model (e.g. openai/gpt-4o-mini)"),
     domain: str | None = typer.Option(None, help="Path to custom domain YAML"),
-    domain_name: str = typer.Option("schema-free", "--domain-name", "-d", help="Bundled domain name (e.g. general, osint)"),
+    domain_name: str = typer.Option(
+        "schema-free", "--domain-name", "-d", help="Bundled domain name (e.g. general, osint)"
+    ),
     max_cost: float | None = typer.Option(None, help="Maximum cost budget in USD"),
-    chunk_size: int = typer.Option(10000, "--chunk-size", help="Characters per chunk (larger = fewer API calls, lower cost)"),
-    concurrency: int = typer.Option(4, "-c", "--concurrency", help="Concurrent LLM calls per document"),
-    rpm: int = typer.Option(40, "--rpm", help="Max requests per minute (prevents rate limit waste)"),
-    force: bool = typer.Option(False, "--force", "-f", help="Re-extract all documents, ignoring cached results"),
+    chunk_size: int = typer.Option(
+        10000, "--chunk-size", help="Characters per chunk (larger = fewer API calls, lower cost)"
+    ),
+    concurrency: int = typer.Option(
+        4, "-c", "--concurrency", help="Concurrent LLM calls per document"
+    ),
+    rpm: int = typer.Option(
+        40, "--rpm", help="Max requests per minute (prevents rate limit waste)"
+    ),
+    force: bool = typer.Option(
+        False, "--force", "-f", help="Re-extract all documents, ignoring cached results"
+    ),
     use_ocr: bool = typer.Option(False, "--ocr", help="Enable OCR for scanned documents"),
-    extractor: str | None = typer.Option(None, "--extractor", help="Extraction backend", click_type=click.Choice(["kreuzberg", "pdfplumber"])),
-    ocr_backend: str | None = typer.Option(None, "--ocr-backend", help="OCR backend", click_type=click.Choice(["tesseract", "easyocr", "paddleocr", "gcv"])),
-    ocr_language: str | None = typer.Option(None, "--ocr-language", help="OCR language code (ISO 639-3, e.g. eng, fra, deu)"),
+    extractor: str | None = typer.Option(
+        None,
+        "--extractor",
+        help="Extraction backend",
+        click_type=click.Choice(["kreuzberg", "pdfplumber"]),
+    ),
+    ocr_backend: str | None = typer.Option(
+        None,
+        "--ocr-backend",
+        help="OCR backend",
+        click_type=click.Choice(["tesseract", "easyocr", "paddleocr", "gcv"]),
+    ),
+    ocr_language: str | None = typer.Option(
+        None, "--ocr-language", help="OCR language code (ISO 639-3, e.g. eng, fra, deu)"
+    ),
     output: str | None = typer.Option(None, "-o", help="Output directory"),
     verbose: bool = typer.Option(False, "-v", "--verbose", help="Verbose logging"),
 ) -> None:
@@ -124,7 +146,9 @@ def extract(
     console.print(f"[cyan]Extractor:[/cyan] {effective_backend}")
     console.print(f"[cyan]Documents:[/cyan] {len(docs)}")
     if effective_ocr:
-        ocr_label = "Google Cloud Vision" if effective_ocr_backend == "gcv" else effective_ocr_backend
+        ocr_label = (
+            "Google Cloud Vision" if effective_ocr_backend == "gcv" else effective_ocr_backend
+        )
         console.print(f"[cyan]OCR:[/cyan] enabled ({ocr_label})")
     if max_cost:
         console.print(f"[cyan]Budget:[/cyan] ${max_cost:.2f}")
@@ -136,21 +160,31 @@ def extract(
 
     llm = LLMClient(model=effective_model, rpm=rpm)
     results = extract_all(
-        docs, llm, domain_config, output_dir,
-        max_cost=max_cost, concurrency=concurrency, chunk_size=chunk_size,
-        force=force, ocr=effective_ocr, backend=effective_backend,
-        ocr_backend=effective_ocr_backend, ocr_language=effective_ocr_language,
+        docs,
+        llm,
+        domain_config,
+        output_dir,
+        max_cost=max_cost,
+        concurrency=concurrency,
+        chunk_size=chunk_size,
+        force=force,
+        ocr=effective_ocr,
+        backend=effective_backend,
+        ocr_backend=effective_ocr_backend,
+        ocr_language=effective_ocr_language,
     )
 
     # Show discovered schema info if present
     discovered_path = output_dir / "discovered_domain.yaml"
-    if discovered_path.exists():
+    if domain_config.schema_free and discovered_path.exists():
         from sift_kg.domains.discovery import load_discovered_domain
 
         discovered = load_discovered_domain(discovered_path)
         if discovered:
             console.print()
-            console.print(f"[cyan]Discovered schema:[/cyan] {len(discovered.entity_types)} entity types, {len(discovered.relation_types)} relation types")
+            console.print(
+                f"[cyan]Discovered schema:[/cyan] {len(discovered.entity_types)} entity types, {len(discovered.relation_types)} relation types"
+            )
             console.print(f"  Entity types: {', '.join(discovered.entity_types.keys())}")
             console.print(f"  Saved to: {discovered_path}")
 
@@ -173,7 +207,9 @@ def extract(
 @app.command()
 def build(
     domain: str | None = typer.Option(None, help="Path to custom domain YAML"),
-    domain_name: str = typer.Option("schema-free", "--domain-name", "-d", help="Bundled domain name (e.g. general, osint)"),
+    domain_name: str = typer.Option(
+        "schema-free", "--domain-name", "-d", help="Bundled domain name (e.g. general, osint)"
+    ),
     output: str | None = typer.Option(None, "-o", help="Output directory"),
     review_threshold: float = typer.Option(0.7, help="Flag relations below this confidence"),
     no_postprocess: bool = typer.Option(False, help="Skip redundancy removal"),
@@ -205,21 +241,35 @@ def build(
 
         discovered = load_discovered_domain(output_dir / "discovered_domain.yaml")
         if discovered:
-            console.print(f"[cyan]Using discovered schema:[/cyan] {len(discovered.entity_types)} entity types")
-            domain_rel_types = set(discovered.relation_types.keys()) if discovered.relation_types else None
-            domain_rel_configs = {
-                name: (cfg.source_types, cfg.target_types, cfg.symmetric)
-                for name, cfg in discovered.relation_types.items()
-            } if discovered.relation_types else None
+            console.print(
+                f"[cyan]Using discovered schema:[/cyan] {len(discovered.entity_types)} entity types"
+            )
+            domain_rel_types = (
+                set(discovered.relation_types.keys()) if discovered.relation_types else None
+            )
+            domain_rel_configs = (
+                {
+                    name: (cfg.source_types, cfg.target_types, cfg.symmetric)
+                    for name, cfg in discovered.relation_types.items()
+                }
+                if discovered.relation_types
+                else None
+            )
         else:
             domain_rel_types = None
             domain_rel_configs = None
     else:
-        domain_rel_types = set(domain_config.relation_types.keys()) if domain_config.relation_types else None
-        domain_rel_configs = {
-            name: (cfg.source_types, cfg.target_types, cfg.symmetric)
-            for name, cfg in domain_config.relation_types.items()
-        } if domain_config.relation_types else None
+        domain_rel_types = (
+            set(domain_config.relation_types.keys()) if domain_config.relation_types else None
+        )
+        domain_rel_configs = (
+            {
+                name: (cfg.source_types, cfg.target_types, cfg.symmetric)
+                for name, cfg in domain_config.relation_types.items()
+            }
+            if domain_config.relation_types
+            else None
+        )
     domain_canonical = {
         name: (cfg.canonical_names, cfg.canonical_fallback_type)
         for name, cfg in domain_config.entity_types.items()
@@ -239,8 +289,7 @@ def build(
 
     # Flag relations for review
     review_types = {
-        name for name, cfg in domain_config.relation_types.items()
-        if cfg.review_required
+        name for name, cfg in domain_config.relation_types.items() if cfg.review_required
     }
     flagged = flag_relations_for_review(kg, review_threshold, review_types)
 
@@ -249,9 +298,7 @@ def build(
         from sift_kg.resolve.models import RelationReviewEntry, RelationReviewFile
 
         entries = [RelationReviewEntry(**f) for f in flagged]
-        review_file = RelationReviewFile(
-            review_threshold=review_threshold, relations=entries
-        )
+        review_file = RelationReviewFile(review_threshold=review_threshold, relations=entries)
         review_path = output_dir / "relation_review.yaml"
         write_relation_review(review_file, review_path)
 
@@ -270,11 +317,15 @@ def build(
 def resolve(
     model: str = typer.Option(None, help="LLM model for entity resolution"),
     domain: str | None = typer.Option(None, help="Path to custom domain YAML"),
-    domain_name: str = typer.Option("schema-free", "--domain-name", "-d", help="Bundled domain name (e.g. general, osint)"),
+    domain_name: str = typer.Option(
+        "schema-free", "--domain-name", "-d", help="Bundled domain name (e.g. general, osint)"
+    ),
     concurrency: int = typer.Option(4, "-c", "--concurrency", help="Concurrent LLM calls"),
     rpm: int = typer.Option(40, "--rpm", help="Max requests per minute"),
     use_embeddings: bool = typer.Option(
-        False, "--embeddings", help="Use semantic clustering (requires: pip install sift-kg[embeddings])"
+        False,
+        "--embeddings",
+        help="Use semantic clustering (requires: pip install sift-kg[embeddings])",
     ),
     output: str | None = typer.Option(None, "-o", help="Output directory"),
     verbose: bool = typer.Option(False, "-v", "--verbose", help="Verbose logging"),
@@ -313,7 +364,13 @@ def resolve(
     console.print(f"[cyan]Graph:[/cyan] {kg.entity_count} entities, {kg.relation_count} relations")
 
     llm = LLMClient(model=effective_model, rpm=rpm)
-    merge_file, variant_relations = find_merge_candidates(kg, llm, concurrency=concurrency, use_embeddings=use_embeddings, system_context=system_context)
+    merge_file, variant_relations = find_merge_candidates(
+        kg,
+        llm,
+        concurrency=concurrency,
+        use_embeddings=use_embeddings,
+        system_context=system_context,
+    )
 
     if not merge_file.proposals and not variant_relations:
         console.print("[green]No duplicates or variant relationships found![/green]")
@@ -332,7 +389,11 @@ def resolve(
             review_file = RelationReviewFile()
         # Avoid duplicating existing entries
         existing = {(r.source_id, r.target_id, r.relation_type) for r in review_file.relations}
-        new_variants = [v for v in variant_relations if (v.source_id, v.target_id, v.relation_type) not in existing]
+        new_variants = [
+            v
+            for v in variant_relations
+            if (v.source_id, v.target_id, v.relation_type) not in existing
+        ]
         review_file.relations.extend(new_variants)
         write_relation_review(review_file, review_path)
 
@@ -340,7 +401,9 @@ def resolve(
     if merge_file.proposals:
         console.print(f"[green]Found {len(merge_file.proposals)} merge proposals[/green]")
     if variant_relations:
-        console.print(f"[green]Found {len(variant_relations)} variant relationships (EXTENDS)[/green]")
+        console.print(
+            f"[green]Found {len(variant_relations)} variant relationships (EXTENDS)[/green]"
+        )
     console.print(f"  Cost: ${llm.total_cost_usd:.4f}")
     console.print(f"  Output: {output_dir}")
     console.print()
@@ -417,11 +480,13 @@ def apply_merges_cmd(
 def review(
     output: str | None = typer.Option(None, "-o", help="Output directory"),
     auto_approve: float = typer.Option(
-        0.85, "--auto-approve",
+        0.85,
+        "--auto-approve",
         help="Auto-confirm proposals where all members meet this confidence (0-1). Set to 1.0 to disable.",
     ),
     auto_reject: float = typer.Option(
-        0.5, "--auto-reject",
+        0.5,
+        "--auto-reject",
         help="Auto-reject relations below this confidence (0-1). Set to 0.0 to disable.",
     ),
     verbose: bool = typer.Option(False, "-v", "--verbose", help="Verbose logging"),
@@ -447,7 +512,9 @@ def review(
 
     if not has_merges and not has_relations:
         console.print("[yellow]Nothing to review.[/yellow]")
-        console.print("Run [cyan]sift resolve[/cyan] (entity merges) or [cyan]sift build[/cyan] (relation flags) first.")
+        console.print(
+            "Run [cyan]sift resolve[/cyan] (entity merges) or [cyan]sift build[/cyan] (relation flags) first."
+        )
         raise typer.Exit(0)
 
     # Review merge proposals
@@ -487,8 +554,12 @@ def review(
 def search(
     query: str = typer.Argument(..., help="Search term (matches entity names and aliases)"),
     relations: bool = typer.Option(False, "-r", "--relations", help="Show connected entities"),
-    description: bool = typer.Option(False, "-d", "--description", help="Show entity description (requires sift narrate)"),
-    entity_type: str | None = typer.Option(None, "-t", "--type", help="Filter by entity type (e.g. PERSON)"),
+    description: bool = typer.Option(
+        False, "-d", "--description", help="Show entity description (requires sift narrate)"
+    ),
+    entity_type: str | None = typer.Option(
+        None, "-t", "--type", help="Filter by entity type (e.g. PERSON)"
+    ),
     output: str | None = typer.Option(None, "-o", help="Output directory"),
     verbose: bool = typer.Option(False, "-v", "--verbose", help="Verbose logging"),
 ) -> None:
@@ -539,7 +610,7 @@ def search(
             matches.append((node_id, data))
 
     if not matches:
-        console.print(f"[yellow]No entities matching \"{query}\"[/yellow]")
+        console.print(f'[yellow]No entities matching "{query}"[/yellow]')
         raise typer.Exit(0)
 
     console.print(f"[cyan]{len(matches)} result{'s' if len(matches) != 1 else ''}[/cyan]\n")
@@ -590,7 +661,9 @@ def search(
             for line in all_rels[:limit]:
                 console.print(line)
             if len(all_rels) > limit:
-                console.print(f"    [dim]... {len(all_rels) - limit} more (use --verbose to show all)[/dim]")
+                console.print(
+                    f"    [dim]... {len(all_rels) - limit} more (use --verbose to show all)[/dim]"
+                )
 
         console.print()
 
@@ -632,6 +705,7 @@ def export(
     desc_path = output_dir / "entity_descriptions.json"
     if desc_path.exists():
         import json
+
         descriptions = json.loads(desc_path.read_text())
         console.print(f"  Including {len(descriptions)} entity descriptions")
 
@@ -640,7 +714,9 @@ def export(
     elif fmt == "csv":
         dest = output_dir / "csv"
     else:
-        ext = {"json": "json", "graphml": "graphml", "gexf": "gexf", "sqlite": "sqlite"}[fmt.lower()]
+        ext = {"json": "json", "graphml": "graphml", "gexf": "gexf", "sqlite": "sqlite"}[
+            fmt.lower()
+        ]
         dest = output_dir / f"graph.{ext}"
 
     result = export_graph(kg, dest, fmt, descriptions=descriptions)
@@ -660,11 +736,19 @@ def view(
     to: str | None = typer.Option(None, "--to", help="Output HTML path"),
     no_open: bool = typer.Option(False, "--no-open", help="Don't open in browser"),
     top: int | None = typer.Option(None, "--top", help="Show only top N entities by degree"),
-    min_confidence: float | None = typer.Option(None, "--min-confidence", help="Hide nodes/edges below this confidence (0.0-1.0)"),
-    source_doc: str | None = typer.Option(None, "--source-doc", help="Show only entities from this document"),
-    neighborhood: str | None = typer.Option(None, "--neighborhood", help="Center on entity and show N-hop neighborhood"),
+    min_confidence: float | None = typer.Option(
+        None, "--min-confidence", help="Hide nodes/edges below this confidence (0.0-1.0)"
+    ),
+    source_doc: str | None = typer.Option(
+        None, "--source-doc", help="Show only entities from this document"
+    ),
+    neighborhood: str | None = typer.Option(
+        None, "--neighborhood", help="Center on entity and show N-hop neighborhood"
+    ),
     depth: int = typer.Option(1, "--depth", help="Neighborhood hops [default: 1]"),
-    community: str | None = typer.Option(None, "--community", help="Focus on a specific community (e.g. 'Community 1')"),
+    community: str | None = typer.Option(
+        None, "--community", help="Focus on a specific community (e.g. 'Community 1')"
+    ),
     verbose: bool = typer.Option(False, "-v", "--verbose", help="Verbose logging"),
 ) -> None:
     """Open an interactive graph visualization in your browser."""
@@ -690,7 +774,9 @@ def view(
         console.print(f"[cyan]Descriptions:[/cyan] loaded from {desc_path.name}")
 
     result = generate_view(
-        kg, dest, open_browser=not no_open,
+        kg,
+        dest,
+        open_browser=not no_open,
         descriptions_path=desc_path if desc_path.exists() else None,
         top_n=top,
         min_confidence=min_confidence,
@@ -719,8 +805,12 @@ def view(
     any_filter = top or min_confidence or source_doc or neighborhood
     if any_filter:
         clean_kg = filter_graph(
-            clean_kg, top_n=top, min_confidence=min_confidence,
-            source_doc=source_doc, neighborhood=neighborhood, depth=depth,
+            clean_kg,
+            top_n=top,
+            min_confidence=min_confidence,
+            source_doc=source_doc,
+            neighborhood=neighborhood,
+            depth=depth,
         )
     entity_ct, relation_ct = clean_kg.entity_count, clean_kg.relation_count
 
@@ -770,11 +860,15 @@ def domains() -> None:
 def narrate(
     model: str = typer.Option(None, help="LLM model for narrative generation"),
     domain: str | None = typer.Option(None, help="Path to custom domain YAML"),
-    domain_name: str = typer.Option("schema-free", "--domain-name", "-d", help="Bundled domain name (e.g. general, osint)"),
+    domain_name: str = typer.Option(
+        "schema-free", "--domain-name", "-d", help="Bundled domain name (e.g. general, osint)"
+    ),
     output: str | None = typer.Option(None, "-o", help="Output directory"),
     no_descriptions: bool = typer.Option(False, help="Skip per-entity descriptions"),
     max_cost: float | None = typer.Option(None, help="Maximum cost budget in USD"),
-    communities_only: bool = typer.Option(False, "--communities-only", help="Only regenerate community labels (~$0.01)"),
+    communities_only: bool = typer.Option(
+        False, "--communities-only", help="Only regenerate community labels (~$0.01)"
+    ),
     verbose: bool = typer.Option(False, "-v", "--verbose", help="Verbose logging"),
 ) -> None:
     """Generate narrative summary from the knowledge graph."""
@@ -843,14 +937,18 @@ def narrate(
 
 @app.command()
 def init(
-    domain: str | None = typer.Option(None, help="Path to custom domain YAML to set in project config"),
+    domain: str | None = typer.Option(
+        None, help="Path to custom domain YAML to set in project config"
+    ),
 ) -> None:
     """Initialize a new sift-kg project in the current directory."""
     env_example_path = Path(".env.example")
     sift_yaml_path = Path("sift.yaml")
 
     # Create .env.example
-    if not env_example_path.exists() or typer.confirm("Overwrite existing .env.example?", default=False):
+    if not env_example_path.exists() or typer.confirm(
+        "Overwrite existing .env.example?", default=False
+    ):
         env_template = """# sift-kg Configuration
 # Copy this file to .env and fill in your API keys
 
@@ -868,7 +966,9 @@ SIFT_DEFAULT_MODEL=openai/gpt-4o-mini
 
     # Create sift.yaml project config
     if not sift_yaml_path.exists() or typer.confirm("Overwrite existing sift.yaml?", default=False):
-        project_config = "# sift-kg project config\n# All commands pick up these settings automatically.\n\n"
+        project_config = (
+            "# sift-kg project config\n# All commands pick up these settings automatically.\n\n"
+        )
         if domain:
             project_config += f"domain: {domain}\n"
         else:
@@ -876,7 +976,9 @@ SIFT_DEFAULT_MODEL=openai/gpt-4o-mini
         project_config += "# model: openai/gpt-4o-mini\n"
         project_config += "# output: output\n"
         project_config += "\n# extraction:\n"
-        project_config += "#   backend: kreuzberg      # kreuzberg (default, 75+ formats) | pdfplumber\n"
+        project_config += (
+            "#   backend: kreuzberg      # kreuzberg (default, 75+ formats) | pdfplumber\n"
+        )
         project_config += "#   ocr_backend: tesseract   # tesseract | easyocr | paddleocr | gcv\n"
         project_config += "#   ocr_language: eng\n"
         sift_yaml_path.write_text(project_config)
@@ -935,7 +1037,7 @@ def info() -> None:
         mf = read_proposals(proposals_path)
         table.add_row(
             "Merge Proposals",
-            f"{len(mf.confirmed)} confirmed, {len(mf.draft)} draft, {len(mf.rejected)} rejected"
+            f"{len(mf.confirmed)} confirmed, {len(mf.draft)} draft, {len(mf.rejected)} rejected",
         )
 
     review_path = config.output_dir / "relation_review.yaml"
@@ -945,7 +1047,7 @@ def info() -> None:
         rf = read_relation_review(review_path)
         table.add_row(
             "Relation Review",
-            f"{len(rf.confirmed)} confirmed, {len(rf.draft)} draft, {len(rf.rejected)} rejected"
+            f"{len(rf.confirmed)} confirmed, {len(rf.draft)} draft, {len(rf.rejected)} rejected",
         )
 
     narrative_exists = (config.output_dir / "narrative.md").exists()

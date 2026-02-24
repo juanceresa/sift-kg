@@ -5,6 +5,8 @@ description: |
   without domain-specific configuration. Entity and relation types cover
   the most common patterns found in documents.
 
+fallback_relation: ASSOCIATED_WITH
+
 entity_types:
   PERSON:
     description: "Individual people mentioned in documents"

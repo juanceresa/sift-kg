@@ -13,6 +13,8 @@ system_context: |
   Pay close attention to shell companies, nominee directors, offshore
   jurisdictions, and obfuscated ownership patterns.
 
+fallback_relation: ASSOCIATED_WITH
+
 entity_types:
   PERSON:
     description: "Individuals — directors, shareholders, signatories, beneficiaries, public officials"

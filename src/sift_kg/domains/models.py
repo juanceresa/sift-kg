@@ -4,7 +4,6 @@ Defines the schema for domain YAML files that control what entity types
 and relation types sift-kg extracts from documents.
 """
 
-
 from pydantic import BaseModel, Field
 
 
@@ -40,6 +39,9 @@ class DomainConfig(BaseModel):
 
     # Optional system context injected into LLM prompts
     system_context: str | None = None
+
+    # Fallback relation type for relationships that don't fit defined types
+    fallback_relation: str | None = None
 
     # Schema-free mode: LLM discovers entity/relation types from the data
     schema_free: bool = False

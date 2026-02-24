@@ -283,6 +283,7 @@ sift extract ./docs/ --domain-name osint
 Or create your own `domain.yaml`:
 ```yaml
 name: My Domain
+fallback_relation: RELATED_TO          # optional — catch-all for relations that don't fit defined types
 entity_types:
   PERSON:
     description: People and individuals
@@ -307,7 +308,11 @@ relation_types:
     description: Ownership relationship
     symmetric: false
     review_required: true
+  RELATED_TO:                            # define the fallback type if you use one
+    description: General relationship
 ```
+
+**Schema enforcement:** Entity types and relation types defined in your domain are treated as a closed set — the LLM is instructed to use only these types and will not invent new ones. If `fallback_relation` is set, relationships that don't fit any defined type are mapped to the fallback. If omitted, the LLM uses the closest matching defined type with lower confidence. If you see many relations landing on your fallback type, your schema is likely missing a relation type that the data needs — add it and re-extract.
 
 Entity types with `canonical_names` enforce a closed vocabulary. The allowed names are injected into the LLM extraction prompt so it outputs exact matches. As a safety net, any extracted name not in the list gets retyped to `canonical_fallback_type` during graph building (or kept as-is if no fallback is set). Useful for controlled taxonomies — departments, jurisdictions, predefined classifications.
 

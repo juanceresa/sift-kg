@@ -126,6 +126,7 @@ async def discover_domain(
         description="Schema discovered by LLM from document samples",
         entity_types=entity_types,
         relation_types=relation_types,
+        fallback_relation="ASSOCIATED_WITH",
         schema_free=False,
     )
 
@@ -142,6 +143,8 @@ def save_discovered_domain(domain: DomainConfig, path: Path) -> None:
     }
     if domain.system_context:
         data["system_context"] = domain.system_context
+    if domain.fallback_relation:
+        data["fallback_relation"] = domain.fallback_relation
 
     for name, cfg in domain.entity_types.items():
         entry: dict = {"description": cfg.description}

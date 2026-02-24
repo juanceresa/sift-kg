@@ -32,6 +32,8 @@ system_context: |
   and concise labels for findings ("bilingual cognitive advantage" not
   "the finding that bilingual individuals show improved executive function").
 
+fallback_relation: ASSOCIATED_WITH
+
 entity_types:
   CONCEPT:
     description: "Core ideas, constructs, variables, and technical terms central to the research area"

@@ -98,9 +98,7 @@ class DomainLoader:
         domain_path = BUNDLED_DOMAINS_DIR / name / "domain.yaml"
         if not domain_path.exists():
             available = self.list_bundled()
-            raise ValueError(
-                f"Bundled domain '{name}' not found. Available: {available}"
-            )
+            raise ValueError(f"Bundled domain '{name}' not found. Available: {available}")
         return self.load_from_path(domain_path)
 
     def list_bundled(self) -> list[str]:
@@ -149,5 +147,6 @@ class DomainLoader:
             entity_types=entity_types,
             relation_types=relation_types,
             system_context=raw.get("system_context"),
+            fallback_relation=raw.get("fallback_relation"),
             schema_free=raw.get("schema_free", False),
         )

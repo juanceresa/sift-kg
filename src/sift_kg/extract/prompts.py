@@ -1,80 +1,9 @@
 """LLM extraction prompts — domain-driven, zero-shot.
 
-Provides both separate (entity-only, relation-only) and combined prompts.
-The combined prompt halves LLM calls per chunk at near-identical accuracy.
+Combined prompt extracts entities and relations in one LLM call per chunk.
 """
 
-import json
-
 from sift_kg.domains.models import DomainConfig
-
-
-def build_entity_prompt(
-    text: str,
-    document_id: str,
-    domain: DomainConfig,
-) -> str:
-    """Build entity extraction prompt from domain config.
-
-    Args:
-        text: Document text to extract from
-        document_id: Document identifier for context
-        domain: Domain configuration with entity types
-
-    Returns:
-        Formatted prompt string
-    """
-    # Build entity type descriptions from domain config
-    type_lines = []
-    for name, cfg in domain.entity_types.items():
-        desc = cfg.description or name
-        hints = ""
-        if cfg.extraction_hints:
-            hints = " (" + "; ".join(cfg.extraction_hints) + ")"
-        if cfg.canonical_names:
-            names_list = ", ".join(cfg.canonical_names)
-            hints += f" ALLOWED VALUES (use ONLY these exact names): [{names_list}]"
-        type_lines.append(f"- {name}: {desc}{hints}")
-
-    entity_types_section = "\n".join(type_lines)
-
-    context_section = ""
-    if domain.system_context:
-        context_section = f"\n{domain.system_context}\n"
-
-    return f"""{context_section}Extract entities from the following document text. Return valid JSON only.
-
-ENTITY TYPES:
-{entity_types_section}
-
-OUTPUT SCHEMA:
-{{
-  "entities": [
-    {{
-      "name": "string",
-      "entity_type": "TYPE_NAME",
-      "attributes": {{"key": "value"}},
-      "confidence": 0.0-1.0,
-      "context": "quote from text where entity appears"
-    }}
-  ]
-}}
-
-RULES:
-- Extract ALL entity types present, not just the most common
-- Extract only explicit information from the text
-- The text may be in ANY language. Extract entities regardless of source language.
-- Output all entity names and attribute values in English. Use the most internationally recognized form of each name — do not anglicize personal names (Juan stays Juan, not John; 习近平 → Xi Jinping, not "Xi Near-Peace").
-- Keep context quotes in the original language of the source text.
-- confidence: 0.0-1.0 based on text clarity
-- attributes: include any relevant details (dates, roles, descriptions, etc.)
-
-Document: {document_id}
-
-TEXT:
-{text}
-
-OUTPUT JSON:"""
 
 
 def build_combined_prompt(
@@ -105,7 +34,11 @@ def build_combined_prompt(
 
     if domain.schema_free:
         return _build_schema_free_prompt(
-            text, document_id, domain, context_section, doc_context_section,
+            text,
+            document_id,
+            domain,
+            context_section,
+            doc_context_section,
         )
 
     type_lines = []
@@ -121,6 +54,7 @@ def build_combined_prompt(
 
     entity_types_section = "\n".join(type_lines)
     rel_types = ", ".join(domain.relation_types.keys())
+    fallback = domain.fallback_relation
 
     # Build direction hints for relation types that have source/target constraints
     direction_lines = []
@@ -143,14 +77,15 @@ def build_combined_prompt(
 STEP 1 — ENTITIES
 Identify all entities in the text.
 
-ENTITY TYPES:
+ENTITY TYPES (use ONLY these — do not invent new types):
 {entity_types_section}
+IMPORTANT: Every entity must use one of the types listed above. Do not create new entity types.
 
 STEP 2 — RELATIONS
 Identify relationships between the entities you extracted.
 
 RELATION TYPES (use ONLY these — do not invent new types): {rel_types}
-If a relationship doesn't fit any listed type, use ASSOCIATED_WITH as the fallback.{direction_section}
+{f"If a relationship doesn't fit any listed type, use {fallback}." if fallback else "Only extract relationships that clearly match one of the listed types."}{direction_section}
 
 OUTPUT SCHEMA:
 {{
@@ -175,15 +110,15 @@ OUTPUT SCHEMA:
 }}
 
 RULES:
-- Extract ALL entity types present, not just the most common
+- Extract ALL entities that match the defined types, not just the most prominent
 - Extract only explicit information from the text
 - The text may be in ANY language. Extract entities regardless of source language.
 - Output all entity names and attribute values in English. Use the most internationally recognized form of each name — do not anglicize personal names (Juan stays Juan, not John; 习近平 → Xi Jinping, not "Xi Near-Peace").
 - Keep context and evidence quotes in the original language of the source text.
-- confidence: 0.0-1.0 based on text clarity
+- confidence: 0.0-1.0 based on how clearly the text supports the extraction and how well it fits the assigned type
 - attributes: include any relevant details (dates, roles, descriptions, etc.)
 - Use entity NAMES (not IDs) for source_entity and target_entity
-- Only extract explicit relationships stated in the text
+- Only extract relationships that are explicitly stated in the text and match a defined relation type
 - Do not infer relationships from co-occurrence alone
 - If no relations found, return an empty relations list
 
@@ -267,84 +202,20 @@ OUTPUT SCHEMA:
 }}
 
 RULES:
-- Extract ALL entity types present, not just the most common
+- Extract ALL entities present in the text, not just the most prominent
 - Extract only explicit information from the text
 - The text may be in ANY language. Extract entities regardless of source language.
 - Output all entity names and attribute values in English. Use the most internationally recognized form of each name — do not anglicize personal names (Juan stays Juan, not John; 习近平 → Xi Jinping, not "Xi Near-Peace").
 - Keep context and evidence quotes in the original language of the source text.
-- confidence: 0.0-1.0 based on text clarity
+- confidence: 0.0-1.0 based on how clearly the text supports the extraction
 - attributes: include any relevant details (dates, roles, descriptions, etc.)
 - Use entity NAMES (not IDs) for source_entity and target_entity
-- Only extract explicit relationships stated in the text
+- Only extract relationships that are explicitly stated in the text
 - Do not infer relationships from co-occurrence alone
 - If no relations found, return an empty relations list
 
 Document: {document_id}
 {doc_context_section}
-TEXT:
-{text}
-
-OUTPUT JSON:"""
-
-
-def build_relation_prompt(
-    text: str,
-    entities: list[dict],
-    document_id: str,
-    domain: DomainConfig,
-) -> str:
-    """Build relation extraction prompt from domain config.
-
-    Args:
-        text: Document text
-        entities: Previously extracted entities (list of dicts with name, entity_type)
-        document_id: Document identifier
-        domain: Domain configuration with relation types
-
-    Returns:
-        Formatted prompt string
-    """
-    # Build relation types list
-    rel_types = ", ".join(domain.relation_types.keys())
-
-    entities_json = json.dumps(entities, indent=2, ensure_ascii=False)
-
-    context_section = ""
-    if domain.system_context:
-        context_section = f"\n{domain.system_context}\n"
-
-    return f"""{context_section}Extract relationships between entities from this document. Return valid JSON only.
-
-RELATION TYPES (use ONLY these — do not invent new types): {rel_types}
-If a relationship doesn't fit any listed type, use ASSOCIATED_WITH as the fallback.
-
-OUTPUT SCHEMA:
-{{
-  "relations": [
-    {{
-      "relation_type": "TYPE_NAME",
-      "source_entity": "entity name",
-      "target_entity": "entity name",
-      "confidence": 0.0-1.0,
-      "evidence": "quote from text supporting this relation"
-    }}
-  ]
-}}
-
-RULES:
-- The text may be in ANY language. Extract relationships regardless of source language.
-- Output all entity names in English, matching the names from the entity extraction step.
-- Keep evidence quotes in the original language of the source text.
-- Use entity NAMES (not IDs) for source_entity and target_entity
-- Only extract explicit relationships stated in the text
-- Do not infer relationships from co-occurrence alone
-- If no relations found, return {{"relations": []}}
-
-Document: {document_id}
-
-ENTITIES:
-{entities_json}
-
 TEXT:
 {text}
 
