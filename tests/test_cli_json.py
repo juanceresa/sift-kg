@@ -166,3 +166,114 @@ class TestTopologyCommand:
 
         result = runner.invoke(app, ["topology", "-o", str(tmp_dir)])
         assert result.exit_code == 1
+
+
+class TestQueryCommand:
+    """Test sift query command."""
+
+    def _setup_graph(self, tmp_dir, sample_extraction):
+        """Build graph with communities for query tests."""
+        from sift_kg.graph.builder import build_graph
+        from sift_kg.graph.communities import detect_communities, save_communities
+
+        kg = build_graph([sample_extraction], postprocess=False)
+        kg.save(tmp_dir / "graph_data.json")
+        communities = detect_communities(kg, min_community_size=1)
+        if communities:
+            save_communities(communities, tmp_dir)
+        else:
+            (tmp_dir / "communities.json").write_text("{}")
+        return kg
+
+    def test_query_by_name(self, tmp_dir, sample_extraction):
+        """Query by name returns match with subgraph."""
+        self._setup_graph(tmp_dir, sample_extraction)
+        result = runner.invoke(app, ["query", "Alice", "-o", str(tmp_dir)])
+        assert result.exit_code == 0
+        data = json.loads(result.stdout)
+        assert data["match"] is not None
+        assert data["match"]["name"] == "Alice Smith"
+        assert len(data["subgraph"]["nodes"]) >= 1
+
+    def test_query_by_exact_id(self, tmp_dir, sample_extraction):
+        """Query by exact entity ID skips search."""
+        self._setup_graph(tmp_dir, sample_extraction)
+        result = runner.invoke(
+            app, ["query", "person:alice_smith", "-o", str(tmp_dir)]
+        )
+        assert result.exit_code == 0
+        data = json.loads(result.stdout)
+        assert data["match"]["id"] == "person:alice_smith"
+
+    def test_query_no_match(self, tmp_dir, sample_extraction):
+        """No match returns null match."""
+        self._setup_graph(tmp_dir, sample_extraction)
+        result = runner.invoke(
+            app, ["query", "nonexistent_xyz", "-o", str(tmp_dir)]
+        )
+        assert result.exit_code == 0
+        data = json.loads(result.stdout)
+        assert data["match"] is None
+
+    def test_query_multiple_matches(self, tmp_dir):
+        """Multiple matches returns top match + other_matches."""
+        from sift_kg.extract.models import DocumentExtraction, ExtractedEntity
+
+        entities = [
+            ExtractedEntity(name="John Smith", entity_type="PERSON", confidence=0.9, context="ctx"),
+            ExtractedEntity(name="Jane Smith", entity_type="PERSON", confidence=0.9, context="ctx"),
+            ExtractedEntity(name="Acme Corp", entity_type="ORGANIZATION", confidence=0.9, context="ctx"),
+        ]
+        extraction = DocumentExtraction(
+            document_id="test", document_path="/tmp/test.txt",
+            entities=entities, relations=[], chunks_processed=1,
+            model_used="test", cost_usd=0.0,
+        )
+        from sift_kg.graph.builder import build_graph
+
+        kg = build_graph([extraction], postprocess=False)
+        kg.save(tmp_dir / "graph_data.json")
+        (tmp_dir / "communities.json").write_text("{}")
+
+        result = runner.invoke(app, ["query", "Smith", "-o", str(tmp_dir)])
+        assert result.exit_code == 0
+        data = json.loads(result.stdout)
+        assert data["match"] is not None
+        assert "other_matches" in data
+        assert len(data["other_matches"]) >= 1
+        assert "note" in data
+
+    def test_query_missing_graph(self, tmp_dir):
+        """Missing graph exits 1."""
+        result = runner.invoke(app, ["query", "test", "-o", str(tmp_dir)])
+        assert result.exit_code == 1
+
+    def test_query_missing_communities_still_works(self, tmp_dir, sample_extraction):
+        """Missing communities.json degrades gracefully."""
+        from sift_kg.graph.builder import build_graph
+
+        kg = build_graph([sample_extraction], postprocess=False)
+        kg.save(tmp_dir / "graph_data.json")
+
+        result = runner.invoke(app, ["query", "Alice", "-o", str(tmp_dir)])
+        assert result.exit_code == 0
+        data = json.loads(result.stdout)
+        assert data["match"]["community"] is None
+
+    def test_query_subgraph_excludes_documents(self, tmp_dir, sample_extraction):
+        """Subgraph excludes DOCUMENT nodes."""
+        self._setup_graph(tmp_dir, sample_extraction)
+        result = runner.invoke(app, ["query", "Alice", "-o", str(tmp_dir)])
+        data = json.loads(result.stdout)
+        node_types = {n["entity_type"] for n in data["subgraph"]["nodes"]}
+        assert "DOCUMENT" not in node_types
+
+    def test_query_depth_flag(self, tmp_dir, sample_extraction):
+        """--depth controls neighborhood size."""
+        self._setup_graph(tmp_dir, sample_extraction)
+        r1 = runner.invoke(app, ["query", "Alice", "--depth", "1", "-o", str(tmp_dir)])
+        r2 = runner.invoke(app, ["query", "Alice", "--depth", "2", "-o", str(tmp_dir)])
+        d1 = json.loads(r1.stdout)
+        d2 = json.loads(r2.stdout)
+        assert d2["depth"] == 2
+        assert len(d2["subgraph"]["nodes"]) >= len(d1["subgraph"]["nodes"])

@@ -1339,5 +1339,186 @@ def topology(
         print(json_mod.dumps(result, indent=2))
 
 
+@app.command()
+def query(
+    query_str: str = typer.Argument(..., help="Entity name or exact entity ID"),
+    depth: int = typer.Option(1, "--depth", help="Number of neighborhood hops"),
+    entity_type: str | None = typer.Option(None, "-t", "--type", help="Filter by entity type"),
+    output: str | None = typer.Option(None, "-o", help="Output directory"),
+    pretty: bool = typer.Option(False, "--pretty", help="Human-readable rich output"),
+    verbose: bool = typer.Option(False, "-v", "--verbose", help="Verbose logging"),
+) -> None:
+    """Query entity neighborhood subgraph with topology context."""
+    _setup_logging(verbose)
+    config = SiftConfig()
+    output_dir = Path(output) if output else config.output_dir
+
+    graph_path = output_dir / "graph_data.json"
+    if not graph_path.exists():
+        console.print("[yellow]No graph found.[/yellow] Run [cyan]sift build[/cyan] first.")
+        raise typer.Exit(1)
+
+    import json as json_mod
+    from typing import Any
+
+    from sift_kg.graph.communities import extract_subgraph, get_entity_topology
+    from sift_kg.graph.knowledge_graph import KnowledgeGraph
+
+    kg = KnowledgeGraph.load(graph_path)
+
+    # --- Input resolution ---
+    matched_id: str | None = None
+    other_matches: list[dict[str, Any]] = []
+
+    if kg.graph.has_node(query_str):
+        matched_id = query_str
+    else:
+        query_lower = query_str.lower()
+        candidates: list[tuple[str, dict]] = []
+
+        for node_id, data in kg.graph.nodes(data=True):
+            if data.get("entity_type") == "DOCUMENT":
+                continue
+            if entity_type and data.get("entity_type", "").upper() != entity_type.upper():
+                continue
+
+            name = data.get("name", "")
+            if query_lower in name.lower():
+                candidates.append((node_id, data))
+                continue
+
+            attrs = data.get("attributes", {})
+            aliases = attrs.get("aliases", []) or attrs.get("also_known_as", [])
+            if isinstance(aliases, str):
+                aliases = [aliases]
+            if any(query_lower in str(a).lower() for a in aliases):
+                candidates.append((node_id, data))
+
+        if candidates:
+            def _sub_degree(nid: str) -> int:
+                count = 0
+                for _, target, edata in kg.graph.edges(nid, data=True):
+                    if edata.get("relation_type") != "MENTIONED_IN" and kg.graph.nodes[target].get("entity_type") != "DOCUMENT":
+                        count += 1
+                for source, _, edata in kg.graph.in_edges(nid, data=True):
+                    if source == nid:
+                        continue
+                    if edata.get("relation_type") != "MENTIONED_IN" and kg.graph.nodes[source].get("entity_type") != "DOCUMENT":
+                        count += 1
+                return count
+
+            candidates.sort(key=lambda c: _sub_degree(c[0]), reverse=True)
+            matched_id = candidates[0][0]
+
+            if len(candidates) > 1:
+                other_matches = [
+                    {
+                        "id": nid,
+                        "name": data.get("name", nid),
+                        "entity_type": data.get("entity_type", "UNKNOWN"),
+                    }
+                    for nid, data in candidates[1:]
+                ]
+
+    # --- Build result ---
+    if matched_id is None:
+        result: dict[str, Any] = {
+            "match": None,
+            "subgraph": {"nodes": [], "links": []},
+            "depth": depth,
+        }
+    else:
+        node_data = kg.graph.nodes.get(matched_id, {})
+
+        def _sub_degree_single(nid: str) -> int:
+            count = 0
+            for _, target, edata in kg.graph.edges(nid, data=True):
+                if edata.get("relation_type") != "MENTIONED_IN" and kg.graph.nodes[target].get("entity_type") != "DOCUMENT":
+                    count += 1
+            for source, _, edata in kg.graph.in_edges(nid, data=True):
+                if source == nid:
+                    continue
+                if edata.get("relation_type") != "MENTIONED_IN" and kg.graph.nodes[source].get("entity_type") != "DOCUMENT":
+                    count += 1
+            return count
+
+        topo = get_entity_topology(kg, matched_id, output_dir)
+        subgraph = extract_subgraph(kg, matched_id, depth=depth)
+
+        match_info: dict[str, Any] = {
+            "id": matched_id,
+            "name": node_data.get("name", matched_id),
+            "entity_type": node_data.get("entity_type", "UNKNOWN"),
+            "community": topo["community"],
+            "is_bridge": topo["is_bridge"],
+            "bridge_communities": topo["bridge_communities"],
+            "connections": _sub_degree_single(matched_id),
+        }
+
+        result = {
+            "match": match_info,
+            "subgraph": subgraph,
+            "depth": depth,
+        }
+
+        if other_matches:
+            result["other_matches"] = other_matches
+            result["note"] = "Multiple matches found. Re-query with exact entity ID for a specific result."
+
+    # --- Output ---
+    if pretty:
+        if result["match"] is None:
+            console.print(f'[yellow]No entities matching "{query_str}"[/yellow]')
+        else:
+            m = result["match"]
+            console.print(f"[bold]{m['entity_type']}:[/bold] {m['name']}")
+            console.print(f"  [dim]ID:[/dim] {m['id']}")
+            console.print(f"  [dim]Connections:[/dim] {m['connections']}")
+            if m["community"]:
+                console.print(f"  [dim]Community:[/dim] {m['community']}")
+            if m["is_bridge"]:
+                console.print(f"  [dim]Bridge to:[/dim] {', '.join(m['bridge_communities'])}")
+            console.print()
+
+            sg = result["subgraph"]
+            console.print(f"[cyan]Subgraph:[/cyan] {len(sg['nodes'])} nodes, {len(sg['links'])} edges (depth {depth})")
+
+            if sg["links"]:
+                table = Table(show_header=True, header_style="bold cyan")
+                table.add_column("Type")
+                table.add_column("Name")
+                table.add_column("Relation")
+                for link in sg["links"]:
+                    if link["source"] == m["id"]:
+                        target_name = next(
+                            (n["name"] for n in sg["nodes"] if n["id"] == link["target"]),
+                            link["target"],
+                        )
+                        table.add_row(
+                            next((n["entity_type"] for n in sg["nodes"] if n["id"] == link["target"]), ""),
+                            target_name,
+                            f"-> {link['relation_type']}",
+                        )
+                    elif link["target"] == m["id"]:
+                        source_name = next(
+                            (n["name"] for n in sg["nodes"] if n["id"] == link["source"]),
+                            link["source"],
+                        )
+                        table.add_row(
+                            next((n["entity_type"] for n in sg["nodes"] if n["id"] == link["source"]), ""),
+                            source_name,
+                            f"<- {link['relation_type']}",
+                        )
+                console.print(table)
+
+            if other_matches:
+                console.print()
+                console.print(f"[dim]{len(other_matches)} other matches. Re-query with exact entity ID.[/dim]")
+                for om in other_matches[:5]:
+                    console.print(f"  [dim]{om['entity_type']}: {om['name']} ({om['id']})[/dim]")
+    else:
+        print(json_mod.dumps(result, indent=2))
+
+
 if __name__ == "__main__":
     app()
