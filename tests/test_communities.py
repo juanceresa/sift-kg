@@ -94,3 +94,60 @@ class TestDetectCommunities:
             deg_0 = sum(degree_map.get(e["id"], 0) for e in communities[0])
             deg_1 = sum(degree_map.get(e["id"], 0) for e in communities[1])
             assert deg_0 >= deg_1
+
+
+class TestSaveLoadCommunities:
+    """Test community persistence."""
+
+    def test_save_and_load_roundtrip(self, tmp_dir):
+        """Save and load preserves community assignments."""
+        from sift_kg.graph.communities import load_communities, save_communities
+
+        communities = [
+            [{"id": "person:a1", "name": "A1", "entity_type": "PERSON"},
+             {"id": "person:a2", "name": "A2", "entity_type": "PERSON"}],
+            [{"id": "person:b1", "name": "B1", "entity_type": "PERSON"}],
+        ]
+        labels = {0: "Group Alpha", 1: "Group Beta"}
+        save_communities(communities, tmp_dir, labels=labels)
+
+        loaded = load_communities(tmp_dir)
+        assert loaded["person:a1"] == "Group Alpha"
+        assert loaded["person:a2"] == "Group Alpha"
+        assert loaded["person:b1"] == "Group Beta"
+
+    def test_save_without_labels_uses_generic(self, tmp_dir):
+        """Save without labels generates 'Community N' labels."""
+        from sift_kg.graph.communities import load_communities, save_communities
+
+        communities = [
+            [{"id": "person:a1", "name": "A1", "entity_type": "PERSON"}],
+            [{"id": "person:b1", "name": "B1", "entity_type": "PERSON"}],
+        ]
+        save_communities(communities, tmp_dir)
+
+        loaded = load_communities(tmp_dir)
+        assert loaded["person:a1"] == "Community 1"
+        assert loaded["person:b1"] == "Community 2"
+
+    def test_load_missing_file_returns_empty(self, tmp_dir):
+        """Loading from dir without communities.json returns empty dict."""
+        from sift_kg.graph.communities import load_communities
+
+        assert load_communities(tmp_dir) == {}
+
+    def test_load_grouped_inverts_mapping(self, tmp_dir):
+        """load_communities_grouped inverts entity→label to label→[entities]."""
+        from sift_kg.graph.communities import load_communities_grouped, save_communities
+
+        communities = [
+            [{"id": "person:a1", "name": "A1", "entity_type": "PERSON"},
+             {"id": "person:a2", "name": "A2", "entity_type": "PERSON"}],
+            [{"id": "person:b1", "name": "B1", "entity_type": "PERSON"}],
+        ]
+        labels = {0: "Alpha", 1: "Beta"}
+        save_communities(communities, tmp_dir, labels=labels)
+
+        grouped = load_communities_grouped(tmp_dir)
+        assert set(grouped["Alpha"]) == {"person:a1", "person:a2"}
+        assert grouped["Beta"] == ["person:b1"]

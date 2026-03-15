@@ -287,6 +287,17 @@ def build(
     graph_path = output_dir / "graph_data.json"
     kg.save(graph_path)
 
+    # Detect communities (Louvain, no LLM needed)
+    from sift_kg.graph.communities import detect_communities, save_communities
+
+    communities = detect_communities(kg)
+    if communities:
+        save_communities(communities, output_dir)
+        console.print(f"  Communities: {len(communities)} detected")
+    else:
+        # Write empty communities.json so downstream commands know build ran
+        (output_dir / "communities.json").write_text("{}", encoding="utf-8")
+
     # Flag relations for review
     review_types = {
         name for name, cfg in domain_config.relation_types.items() if cfg.review_required
