@@ -1193,5 +1193,151 @@ def info(
     raise typer.Exit(0)
 
 
+@app.command()
+def topology(
+    output: str | None = typer.Option(None, "-o", help="Output directory"),
+    pretty: bool = typer.Option(False, "--pretty", help="Human-readable rich table output"),
+    verbose: bool = typer.Option(False, "-v", "--verbose", help="Verbose logging"),
+) -> None:
+    """Show structural topology of the knowledge graph (for agents)."""
+    _setup_logging(verbose)
+    config = SiftConfig()
+    output_dir = Path(output) if output else config.output_dir
+
+    graph_path = output_dir / "graph_data.json"
+    if not graph_path.exists():
+        console.print("[yellow]No graph found.[/yellow] Run [cyan]sift build[/cyan] first.")
+        raise typer.Exit(1)
+
+    comm_path = output_dir / "communities.json"
+    if not comm_path.exists():
+        console.print(
+            "[yellow]No communities found.[/yellow] Run [cyan]sift build[/cyan] first."
+        )
+        raise typer.Exit(1)
+
+    import json as json_mod
+
+    from sift_kg.graph.communities import (
+        find_bridges,
+        find_community_connections,
+        find_isolated,
+        load_communities_grouped,
+    )
+    from sift_kg.graph.knowledge_graph import KnowledgeGraph
+    from sift_kg.graph.postprocessor import strip_metadata
+
+    kg = KnowledgeGraph.load(graph_path)
+    clean = strip_metadata(kg)
+
+    # Community summary
+    grouped = load_communities_grouped(output_dir)
+    degree_map = dict(clean.graph.degree())
+    community_list = []
+
+    if not grouped:
+        # Graph too small for community detection — still output valid JSON
+        logging.debug("No communities detected (graph may be too small).")
+
+    for label, member_ids in grouped.items():
+        entity_types: dict[str, int] = {}
+        for eid in member_ids:
+            node = kg.graph.nodes.get(eid, {})
+            etype = node.get("entity_type", "UNKNOWN")
+            entity_types[etype] = entity_types.get(etype, 0) + 1
+
+        top = sorted(member_ids, key=lambda eid: degree_map.get(eid, 0), reverse=True)[:5]
+
+        # Count internal edges
+        member_set = set(member_ids)
+        internal = sum(
+            1 for u, v in clean.graph.to_undirected().edges()
+            if u in member_set and v in member_set
+        )
+
+        community_list.append({
+            "label": label,
+            "members": len(member_ids),
+            "top_entities": top,
+            "entity_types": entity_types,
+            "internal_edges": internal,
+        })
+    community_list.sort(key=lambda c: c["members"], reverse=True)
+
+    # Bridges, isolated, connections
+    bridges = find_bridges(kg, output_dir)
+    isolated = find_isolated(kg)
+    connections = find_community_connections(kg, output_dir)
+
+    result = {
+        "stats": {
+            "entities": clean.entity_count,
+            "relations": clean.relation_count,
+            "communities": len(grouped),
+            "bridges": len(bridges),
+            "isolated": len(isolated),
+        },
+        "communities": community_list,
+        "bridges": bridges,
+        "isolated": isolated,
+        "community_connections": connections,
+    }
+
+    if pretty:
+        # Human-readable output
+        console.print(f"[cyan]Entities:[/cyan] {clean.entity_count}")
+        console.print(f"[cyan]Relations:[/cyan] {clean.relation_count}")
+        console.print(f"[cyan]Communities:[/cyan] {len(grouped)}")
+        console.print(f"[cyan]Bridges:[/cyan] {len(bridges)}")
+        console.print(f"[cyan]Isolated:[/cyan] {len(isolated)}")
+        console.print()
+
+        if community_list:
+            table = Table(title="Communities", show_header=True, header_style="bold cyan")
+            table.add_column("Label")
+            table.add_column("Members", justify="right")
+            table.add_column("Internal Edges", justify="right")
+            table.add_column("Top Entities")
+            for comm in community_list:
+                top_names = []
+                for eid in comm["top_entities"]:
+                    name = kg.graph.nodes.get(eid, {}).get("name", eid)
+                    top_names.append(name)
+                table.add_row(
+                    comm["label"],
+                    str(comm["members"]),
+                    str(comm["internal_edges"]),
+                    ", ".join(top_names),
+                )
+            console.print(table)
+
+        if bridges:
+            console.print()
+            bridge_table = Table(title="Bridge Entities", show_header=True, header_style="bold cyan")
+            bridge_table.add_column("Entity")
+            bridge_table.add_column("Communities")
+            bridge_table.add_column("Cross-edges", justify="right")
+            for b in bridges[:20]:
+                bridge_table.add_row(
+                    b["name"],
+                    ", ".join(b["communities"]),
+                    str(b["cross_community_edges"]),
+                )
+            console.print(bridge_table)
+
+        if connections:
+            console.print()
+            conn_table = Table(title="Community Connections", show_header=True, header_style="bold cyan")
+            conn_table.add_column("From")
+            conn_table.add_column("To")
+            conn_table.add_column("Shared Edges", justify="right")
+            conn_table.add_column("Bridge Entities", justify="right")
+            for c in connections:
+                conn_table.add_row(c["from"], c["to"], str(c["shared_edges"]), str(c["bridge_entities"]))
+            console.print(conn_table)
+    else:
+        print(json_mod.dumps(result, indent=2))
+
+
 if __name__ == "__main__":
     app()

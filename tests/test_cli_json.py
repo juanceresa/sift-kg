@@ -110,3 +110,59 @@ class TestSearchJson:
         # Alice has 1 substantive relation (WORKS_FOR -> Acme)
         # MENTIONED_IN edges to DOCUMENT nodes should be excluded
         assert alice["connections"] == 1
+
+
+class TestTopologyCommand:
+    """Test sift topology command."""
+
+    def _build_graph_with_communities(self, tmp_dir, sample_extraction):
+        """Helper: build graph and run community detection."""
+        from sift_kg.graph.builder import build_graph
+        from sift_kg.graph.communities import detect_communities, save_communities
+
+        kg = build_graph([sample_extraction], postprocess=False)
+        kg.save(tmp_dir / "graph_data.json")
+        communities = detect_communities(kg, min_community_size=1)
+        if communities:
+            save_communities(communities, tmp_dir)
+        else:
+            (tmp_dir / "communities.json").write_text("{}")
+        return kg
+
+    def test_topology_outputs_valid_json(self, tmp_dir, sample_extraction):
+        """sift topology outputs valid JSON with expected schema."""
+        self._build_graph_with_communities(tmp_dir, sample_extraction)
+
+        result = runner.invoke(app, ["topology", "-o", str(tmp_dir)])
+        assert result.exit_code == 0
+        data = json.loads(result.stdout)
+        assert "stats" in data
+        assert "communities" in data
+        assert "bridges" in data
+        assert "isolated" in data
+        assert "community_connections" in data
+
+    def test_topology_stats_exclude_documents(self, tmp_dir, sample_extraction):
+        """Stats exclude DOCUMENT nodes and MENTIONED_IN edges."""
+        self._build_graph_with_communities(tmp_dir, sample_extraction)
+
+        result = runner.invoke(app, ["topology", "-o", str(tmp_dir)])
+        data = json.loads(result.stdout)
+        # 3 substantive entities (Alice, Acme, New York)
+        assert data["stats"]["entities"] == 3
+
+    def test_topology_missing_graph_exits_1(self, tmp_dir):
+        """Missing graph_data.json exits with code 1."""
+        result = runner.invoke(app, ["topology", "-o", str(tmp_dir)])
+        assert result.exit_code == 1
+
+    def test_topology_missing_communities_exits_1(self, tmp_dir, sample_extraction):
+        """Missing communities.json exits with code 1."""
+        from sift_kg.graph.builder import build_graph
+
+        kg = build_graph([sample_extraction], postprocess=False)
+        kg.save(tmp_dir / "graph_data.json")
+        # Don't create communities.json
+
+        result = runner.invoke(app, ["topology", "-o", str(tmp_dir)])
+        assert result.exit_code == 1
