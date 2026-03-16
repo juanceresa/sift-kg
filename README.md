@@ -4,6 +4,8 @@
 
 No code, no database, no infrastructure — just a CLI and your documents. Drop in PDFs, papers, articles, or records — get a browsable knowledge graph that shows how everything connects, in minutes. sift-kg extracts entities and relationships via LLM, deduplicates with your approval, and generates an interactive viewer you can explore in your browser. Concept maps for anything, at your fingertips.
 
+Building an AI second brain? [**sift-kg is the knowledge graph you build in 2 minutes instead of 2 years.**](#ai-knowledge-base) No manual linking, no tags, no folder hierarchies — just point at your stuff and get a structured graph your agents can operate from.
+
 **[Live demos →](https://juanceresa.github.io/sift-kg/)** graphs generated entirely by sift-kg
 
 ```bash
@@ -66,6 +68,28 @@ Every entity and relation links back to the source document and passage. You con
 - **Investigative work** — analyze FOIA releases, court filings, public records, and document leaks
 - **Legal review** — extract and connect entities across document collections
 - **Genealogy** — trace family relationships across vital records
+
+## AI Knowledge Base
+
+sift-kg generates structured knowledge that AI agents can operate from directly.
+
+Point sift at your documents, notes, or project files. The output — a JSON knowledge graph — gives any AI agent a persistent, structured understanding of how everything in your world connects. No manual organization, no tagging, no wiki links. The structure emerges from the content.
+
+```bash
+sift extract ./my-stuff/
+sift build
+sift topology          # structural overview (JSON, for agents)
+sift query "topic"     # entity neighborhood subgraph (JSON, for agents)
+sift search "X" --json # entity lookup (JSON, for agents)
+sift info --json       # project stats (JSON, for agents)
+```
+
+The graph persists across sessions and grows incrementally — extract new documents into the same output directory and rebuild. Entity deduplication ensures the graph stays coherent as it grows.
+
+**What this gives your agent:**
+- **Structure** — not just text chunks, but entities, relationships, communities, and how they connect
+- **Topology** — which knowledge clusters exist, what bridges them, what's isolated
+- **Durability** — the graph survives context window resets. Your agent stops starting from zero every session
 
 ## Bundled Domains
 
