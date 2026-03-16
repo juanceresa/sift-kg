@@ -204,9 +204,9 @@ class TestDiscovery:
         # The prompt should contain at most 3000 x's from the sample
         assert prompt.count("x") <= 3000
 
-    @pytest.mark.asyncio
-    async def test_discover_domain_normalizes_relation_endpoint_types_for_direction_fixing(self):
+    def test_discover_domain_normalizes_relation_endpoint_types_for_direction_fixing(self):
         """Discovered schemas use uppercase endpoints so direction fixing can work."""
+        import asyncio
 
         class FakeLLM:
             async def acall_json(self, prompt):
@@ -224,7 +224,7 @@ class TestDiscovery:
                     },
                 }
 
-        domain = await discover_domain(["Alice works for Acme."], FakeLLM())
+        domain = asyncio.run(discover_domain(["Alice works for Acme."], FakeLLM()))
 
         kg = KnowledgeGraph()
         kg.add_entity("person:alice", "PERSON", "Alice")
