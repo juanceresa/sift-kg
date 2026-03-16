@@ -91,6 +91,8 @@ The graph persists across sessions and grows incrementally — extract new docum
 - **Topology** — which knowledge clusters exist, what bridges them, what's isolated
 - **Durability** — the graph survives context window resets. Your agent stops starting from zero every session
 
+**Bundled agent skill:** sift-kg ships with a skill at `.agents/skills/sift-kg/SKILL.md` that teaches agents how to use the knowledge graph as persistent memory — session orientation, entity exploration, link-knowledge-islands reasoning, and grounded suggestion generation.
+
 ## Bundled Domains
 
 sift-kg ships with specialized domains you can use out of the box:
