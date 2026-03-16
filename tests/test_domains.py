@@ -7,11 +7,14 @@ import yaml
 
 from sift_kg.domains.discovery import (
     build_discovery_prompt,
+    discover_domain,
     load_discovered_domain,
     save_discovered_domain,
 )
 from sift_kg.domains.loader import DomainLoader, load_domain
 from sift_kg.domains.models import DomainConfig, EntityTypeConfig, RelationTypeConfig
+from sift_kg.graph.knowledge_graph import KnowledgeGraph
+from sift_kg.graph.postprocessor import fix_relation_directions
 
 
 class TestDomainModels:
@@ -106,6 +109,30 @@ class TestDomainLoader:
         assert "ANIMAL" in domain.entity_types
         assert "LIVES_IN" in domain.relation_types
 
+    def test_load_from_custom_yaml_normalizes_relation_endpoint_types(self, tmp_dir):
+        """Lowercase source/target type names are normalized on load."""
+        yaml_content = {
+            "name": "Custom Domain",
+            "entity_types": {
+                "PERSON": {"description": "A person"},
+                "COMPANY": {"description": "A company"},
+            },
+            "relation_types": {
+                "WORKS_FOR": {
+                    "description": "Employment",
+                    "source_types": ["person"],
+                    "target_types": ["company"],
+                },
+            },
+        }
+        yaml_path = tmp_dir / "custom.yaml"
+        yaml_path.write_text(yaml.dump(yaml_content))
+
+        loader = DomainLoader()
+        domain = loader.load_from_path(yaml_path)
+        assert domain.relation_types["WORKS_FOR"].source_types == ["PERSON"]
+        assert domain.relation_types["WORKS_FOR"].target_types == ["COMPANY"]
+
     def test_load_from_nonexistent_path(self):
         """Loading from missing path raises error."""
         loader = DomainLoader()
@@ -176,6 +203,56 @@ class TestDiscovery:
         prompt = build_discovery_prompt([long_sample])
         # The prompt should contain at most 3000 x's from the sample
         assert prompt.count("x") <= 3000
+
+    @pytest.mark.asyncio
+    async def test_discover_domain_normalizes_relation_endpoint_types_for_direction_fixing(self):
+        """Discovered schemas use uppercase endpoints so direction fixing can work."""
+
+        class FakeLLM:
+            async def acall_json(self, prompt):
+                return {
+                    "entity_types": {
+                        "person": {"description": "A person"},
+                        "company": {"description": "A company"},
+                    },
+                    "relation_types": {
+                        "works_for": {
+                            "description": "Employment",
+                            "source_types": ["person"],
+                            "target_types": ["company"],
+                        },
+                    },
+                }
+
+        domain = await discover_domain(["Alice works for Acme."], FakeLLM())
+
+        kg = KnowledgeGraph()
+        kg.add_entity("person:alice", "PERSON", "Alice")
+        kg.add_entity("company:acme", "COMPANY", "Acme")
+        kg.add_relation(
+            "r1",
+            "company:acme",
+            "person:alice",
+            "WORKS_FOR",
+            canonicalize=False,
+        )
+
+        stats = fix_relation_directions(
+            kg,
+            {
+                "WORKS_FOR": (
+                    domain.relation_types["WORKS_FOR"].source_types,
+                    domain.relation_types["WORKS_FOR"].target_types,
+                    False,
+                )
+            },
+        )
+
+        assert domain.relation_types["WORKS_FOR"].source_types == ["PERSON"]
+        assert domain.relation_types["WORKS_FOR"].target_types == ["COMPANY"]
+        assert stats["relations_flipped"] == 1
+        assert kg.graph.has_edge("person:alice", "company:acme")
+        assert not kg.graph.has_edge("company:acme", "person:alice")
 
     def test_save_and_load_roundtrip(self, tmp_dir):
         """Saving a DomainConfig and loading it back produces equivalent data."""

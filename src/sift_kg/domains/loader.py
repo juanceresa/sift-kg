@@ -17,6 +17,13 @@ logger = logging.getLogger(__name__)
 # Bundled domains directory (shipped with the package)
 BUNDLED_DOMAINS_DIR = Path(__file__).parent / "bundled"
 
+
+def _normalize_type_names(values: list[str] | None) -> list[str]:
+    """Normalize relation endpoint type names to uppercase identifiers."""
+    if not values:
+        return []
+    return [str(value).upper() for value in values if str(value).strip()]
+
 # Module-level loader for convenience function
 _default_loader: "DomainLoader | None" = None
 
@@ -133,8 +140,8 @@ class DomainLoader:
             else:
                 relation_types[name] = RelationTypeConfig(
                     description=cfg.get("description", ""),
-                    source_types=cfg.get("source_types", []),
-                    target_types=cfg.get("target_types", []),
+                    source_types=_normalize_type_names(cfg.get("source_types", [])),
+                    target_types=_normalize_type_names(cfg.get("target_types", [])),
                     symmetric=cfg.get("symmetric", False),
                     extraction_hints=cfg.get("extraction_hints", []),
                     review_required=cfg.get("review_required", False),

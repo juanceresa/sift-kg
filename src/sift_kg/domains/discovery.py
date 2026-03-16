@@ -19,6 +19,13 @@ logger = logging.getLogger(__name__)
 _SAMPLE_MAX_CHARS = 3000
 
 
+def _normalize_type_names(values: list[str] | None) -> list[str]:
+    """Normalize entity type names from LLM output to uppercase identifiers."""
+    if not values:
+        return []
+    return [str(value).upper() for value in values if str(value).strip()]
+
+
 def build_discovery_prompt(
     samples: list[str],
     system_context: str = "",
@@ -112,8 +119,8 @@ async def discover_domain(
         elif isinstance(cfg, dict):
             relation_types[name.upper()] = RelationTypeConfig(
                 description=cfg.get("description", ""),
-                source_types=cfg.get("source_types", []),
-                target_types=cfg.get("target_types", []),
+                source_types=_normalize_type_names(cfg.get("source_types", [])),
+                target_types=_normalize_type_names(cfg.get("target_types", [])),
                 symmetric=cfg.get("symmetric", False),
             )
 
