@@ -4,7 +4,7 @@
 
 No code, no database, no infrastructure — just a CLI and your documents. Drop in PDFs, papers, articles, or records — get a browsable knowledge graph that shows how everything connects, in minutes. sift-kg extracts entities and relationships via LLM, deduplicates with your approval, and generates an interactive viewer you can explore in your browser. Concept maps for anything, at your fingertips.
 
-The same graph that powers your visualizations also works as an [**AI second brain**](#ai-knowledge-base). Everyone's spending months building knowledge bases in Notion and Obsidian. Who has time for that? sift-kg is the knowledge graph you build in 2 minutes instead of 2 years. Just point at your docs and your AI has a structured understanding of how everything connects.
+The same graph that powers your visualizations also works as an [**AI second brain**](#ai-knowledge-base). Everyone's spending months building knowledge bases in Notion and Obsidian. Who has time for that? sift-kg is the structured memory you build in 2 minutes instead of 2 years. Just point at your docs and your AI has a structured understanding of how everything connects.
 
 **[Live demos →](https://juanceresa.github.io/sift-kg/)** graphs generated entirely by sift-kg
 
