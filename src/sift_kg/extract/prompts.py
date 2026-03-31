@@ -1,6 +1,6 @@
-"""LLM extraction prompts — domain-driven, zero-shot.
+"""LLM提取提示词 — 域驱动，零样本。
 
-Combined prompt extracts entities and relations in one LLM call per chunk.
+组合提示在一个LLM调用中同时提取实体和关系，每个分块只需要一次调用。
 """
 
 from sift_kg.domains.models import DomainConfig
@@ -12,27 +12,30 @@ def build_combined_prompt(
     domain: DomainConfig,
     doc_context: str = "",
 ) -> str:
-    """Build a single prompt that extracts both entities and relations.
+    """构建同时提取实体和关系的单个提示词。
 
-    Cuts LLM calls per chunk from 2 to 1. The prompt instructs the model
-    to identify entities first, then find relations between them.
+    将每个分块的LLM调用从2次减少到1次。提示词 instructs 模型
+    先识别实体，然后在它们之间寻找关系。
 
     Args:
-        doc_context: Optional document-level summary prepended to each chunk
-            so the LLM has context about the overall document.
+        doc_context: 可选的文档级摘要，预加到每个分块提示中，
+            让LLM获得整个文档的上下文。
     """
     context_section = ""
     if domain.system_context:
+        # 添加域提供的系统上下文
         context_section = f"\n{domain.system_context}\n"
 
     doc_context_section = ""
     if doc_context:
+        # 添加文档级上下文
         doc_context_section = (
             "\nDOCUMENT CONTEXT (applies to entire document, not just this excerpt):\n"
             f"{doc_context}\n"
         )
 
     if domain.schema_free:
+        # 无模式域，使用无模式提示
         return _build_schema_free_prompt(
             text,
             document_id,
@@ -41,13 +44,16 @@ def build_combined_prompt(
             doc_context_section,
         )
 
+    # 构建实体类型列表
     type_lines = []
     for name, cfg in domain.entity_types.items():
         desc = cfg.description or name
         hints = ""
         if cfg.extraction_hints:
+            # 添加提取提示
             hints = " (" + "; ".join(cfg.extraction_hints) + ")"
         if cfg.canonical_names:
+            # 如果有规范名称列表，添加到提示中强制要求只使用这些名称
             names_list = ", ".join(cfg.canonical_names)
             hints += f" ALLOWED VALUES (use ONLY these exact names): [{names_list}]"
         type_lines.append(f"- {name}: {desc}{hints}")
@@ -56,7 +62,7 @@ def build_combined_prompt(
     rel_types = ", ".join(domain.relation_types.keys())
     fallback = domain.fallback_relation
 
-    # Build direction hints for relation types that have source/target constraints
+    # 为有源/目标约束的关系类型构建方向提示
     direction_lines = []
     for rel_name, rel_cfg in domain.relation_types.items():
         if rel_cfg.source_types and rel_cfg.target_types:
@@ -66,6 +72,7 @@ def build_combined_prompt(
 
     direction_section = ""
     if direction_lines:
+        # 添加方向说明，强制要求源实体类型必须在左侧，目标在右侧
         direction_section = (
             "\n\nRELATION DIRECTIONS (source_entity → target_entity):\n"
             + "\n".join(direction_lines)
@@ -91,20 +98,20 @@ OUTPUT SCHEMA:
 {{
   "entities": [
     {{
-      "name": "string",
-      "entity_type": "TYPE_NAME",
-      "attributes": {{"key": "value"}},
-      "confidence": 0.0-1.0,
-      "context": "quote from text where entity appears"
+        "name": "string",
+        "entity_type": "TYPE_NAME",
+        "attributes": {{"key": "value"}},
+        "confidence": 0.0-1.0,
+        "context": "quote from text where entity appears"
     }}
   ],
   "relations": [
     {{
-      "relation_type": "TYPE_NAME",
-      "source_entity": "entity name",
-      "target_entity": "entity name",
-      "confidence": 0.0-1.0,
-      "evidence": "quote from text supporting this relation"
+        "relation_type": "TYPE_NAME",
+        "source_entity": "entity name",
+        "target_entity": "entity name",
+        "confidence": 0.0-1.0,
+        "evidence": "quote from text supporting this relation"
     }}
   ]
 }}
@@ -137,13 +144,13 @@ def _build_schema_free_prompt(
     context_section: str,
     doc_context_section: str,
 ) -> str:
-    """Build combined prompt for schema-free extraction.
+    """构建无模式提取的组合提示词。
 
-    The LLM discovers entity and relation types organically from the data
-    instead of being constrained to a predefined schema.
+    LLM从数据中有机地发现实体和关系类型，
+    而不是被约束到预定义的模式。
     """
-    # If user provided entity type hints in a custom schema-free domain (hybrid),
-    # include them as guidance rather than constraints
+    # 如果用户在自定义无模式域（混合）中提供了实体类型提示，
+    # 将它们作为指导而不是约束包含进去
     entity_guidance = ""
     if domain.entity_types:
         hint_lines = []
@@ -151,6 +158,7 @@ def _build_schema_free_prompt(
             desc = cfg.description or name
             hints = ""
             if cfg.extraction_hints:
+                # 添加提取提示
                 hints = " (" + "; ".join(cfg.extraction_hints) + ")"
             hint_lines.append(f"- {name}: {desc}{hints}")
         entity_guidance = (
@@ -183,20 +191,20 @@ OUTPUT SCHEMA:
 {{
   "entities": [
     {{
-      "name": "string",
-      "entity_type": "TYPE_NAME",
-      "attributes": {{"key": "value"}},
-      "confidence": 0.0-1.0,
-      "context": "quote from text where entity appears"
+        "name": "string",
+        "entity_type": "TYPE_NAME",
+        "attributes": {{"key": "value"}},
+        "confidence": 0.0-1.0,
+        "context": "quote from text where entity appears"
     }}
   ],
   "relations": [
     {{
-      "relation_type": "TYPE_NAME",
-      "source_entity": "entity name",
-      "target_entity": "entity name",
-      "confidence": 0.0-1.0,
-      "evidence": "quote from text supporting this relation"
+        "relation_type": "TYPE_NAME",
+        "source_entity": "entity name",
+        "target_entity": "entity name",
+        "confidence": 0.0-1.0,
+        "evidence": "quote from text supporting this relation"
     }}
   ]
 }}

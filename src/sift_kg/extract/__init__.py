@@ -1,1 +1,3 @@
-"""LLM-powered entity and relation extraction."""
+"""基于LLM的实体和关系提取模块。
+
+包含LLM客户端、提取器、数据模型和提示词构建。"""
