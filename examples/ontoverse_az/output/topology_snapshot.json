@@ -1,0 +1,1571 @@
+{
+  "stats": {
+    "entities": 468,
+    "relations": 706,
+    "communities": 14,
+    "bridges": 95,
+    "isolated": 0
+  },
+  "communities": [
+    {
+      "label": "Community 1",
+      "members": 73,
+      "top_entities": [
+        "system:uni",
+        "concept:diagnostic_accuracy",
+        "system:ctranspath",
+        "system:remedis",
+        "method:simpleshot"
+      ],
+      "entity_types": {
+        "CONCEPT": 12,
+        "PHENOMENON": 23,
+        "SYSTEM": 19,
+        "UNKNOWN": 7,
+        "METHOD": 9,
+        "FINDING": 2,
+        "RESEARCHER": 1
+      },
+      "internal_edges": 94
+    },
+    {
+      "label": "Community 3",
+      "members": 58,
+      "top_entities": [
+        "system:zoomldm",
+        "system:brush",
+        "concept:latent_diffusion_models",
+        "method:cross_attention_neural_operator",
+        "system:pixcell_1024"
+      ],
+      "entity_types": {
+        "RESEARCHER": 8,
+        "CONCEPT": 11,
+        "PHENOMENON": 6,
+        "THEORY": 1,
+        "METHOD": 11,
+        "SYSTEM": 13,
+        "UNKNOWN": 1,
+        "FINDING": 2,
+        "FIELD": 5
+      },
+      "internal_edges": 73
+    },
+    {
+      "label": "Community 2",
+      "members": 54,
+      "top_entities": [
+        "system:titan",
+        "method:self_supervised_learning",
+        "method:alibi",
+        "phenomenon:cancer_prognosis",
+        "phenomenon:rare_disease_retrieval"
+      ],
+      "entity_types": {
+        "SYSTEM": 11,
+        "UNKNOWN": 8,
+        "CONCEPT": 8,
+        "METHOD": 11,
+        "PHENOMENON": 9,
+        "FIELD": 2,
+        "RESEARCHER": 3,
+        "FINDING": 1,
+        "THEORY": 1
+      },
+      "internal_edges": 66
+    },
+    {
+      "label": "Community 4",
+      "members": 42,
+      "top_entities": [
+        "system:contrastive_learning_from_captions_for_histopathology",
+        "method:few_shot_learning",
+        "method:clip",
+        "phenomenon:segmentation",
+        "concept:supervised_fine_tuning"
+      ],
+      "entity_types": {
+        "CONCEPT": 7,
+        "PHENOMENON": 6,
+        "SYSTEM": 13,
+        "METHOD": 10,
+        "FINDING": 2,
+        "UNKNOWN": 3,
+        "RESEARCHER": 1
+      },
+      "internal_edges": 52
+    },
+    {
+      "label": "Community 5",
+      "members": 31,
+      "top_entities": [
+        "system:pixcell",
+        "concept:data_augmentation",
+        "phenomenon:brca",
+        "phenomenon:data_scarcity",
+        "method:virtual_staining"
+      ],
+      "entity_types": {
+        "PHENOMENON": 8,
+        "CONCEPT": 8,
+        "UNKNOWN": 3,
+        "METHOD": 5,
+        "SYSTEM": 6,
+        "FINDING": 1
+      },
+      "internal_edges": 38
+    },
+    {
+      "label": "Community 6",
+      "members": 29,
+      "top_entities": [
+        "concept:miphei",
+        "theory:u_net",
+        "phenomenon:cancer_diagnosis",
+        "theory:vision_transformer",
+        "phenomenon:multiplex_immunofluorescence"
+      ],
+      "entity_types": {
+        "RESEARCHER": 5,
+        "FINDING": 5,
+        "PHENOMENON": 3,
+        "SYSTEM": 1,
+        "CONCEPT": 8,
+        "METHOD": 4,
+        "THEORY": 3
+      },
+      "internal_edges": 40
+    },
+    {
+      "label": "Community 12",
+      "members": 29,
+      "top_entities": [
+        "system:concept_discovery_through_latent_diffusion_based_counterfactual_trajectories",
+        "method:variational_autoencoder",
+        "system:vae",
+        "theory:latent_diffusion_model",
+        "phenomenon:counterfactual_trajectories"
+      ],
+      "entity_types": {
+        "SYSTEM": 5,
+        "FIELD": 1,
+        "METHOD": 3,
+        "CONCEPT": 5,
+        "RESEARCHER": 5,
+        "PHENOMENON": 7,
+        "THEORY": 1,
+        "UNKNOWN": 1,
+        "FINDING": 1
+      },
+      "internal_edges": 28
+    },
+    {
+      "label": "Community 9",
+      "members": 27,
+      "top_entities": [
+        "system:tcga",
+        "method:scangen",
+        "system:cptac",
+        "system:miphei_unetr",
+        "concept:foundation_models_fms"
+      ],
+      "entity_types": {
+        "CONCEPT": 5,
+        "SYSTEM": 7,
+        "METHOD": 3,
+        "UNKNOWN": 2,
+        "RESEARCHER": 7,
+        "PHENOMENON": 3
+      },
+      "internal_edges": 27
+    },
+    {
+      "label": "Community 10",
+      "members": 27,
+      "top_entities": [
+        "system:pluto_4g",
+        "system:pluto_4s",
+        "method:self_supervised_framework",
+        "finding:dice_score",
+        "method:flexivit"
+      ],
+      "entity_types": {
+        "FINDING": 4,
+        "SYSTEM": 6,
+        "METHOD": 6,
+        "RESEARCHER": 2,
+        "PHENOMENON": 1,
+        "UNKNOWN": 3,
+        "THEORY": 1,
+        "CONCEPT": 3,
+        "FIELD": 1
+      },
+      "internal_edges": 25
+    },
+    {
+      "label": "Community 7",
+      "members": 26,
+      "top_entities": [
+        "system:multimodal_semantic_diffusion_model",
+        "system:restaingan",
+        "method:diffusion_model",
+        "researcher:marco_rosati",
+        "researcher:dominik_winter"
+      ],
+      "entity_types": {
+        "RESEARCHER": 10,
+        "SYSTEM": 4,
+        "METHOD": 4,
+        "FINDING": 2,
+        "CONCEPT": 3,
+        "PHENOMENON": 3
+      },
+      "internal_edges": 35
+    },
+    {
+      "label": "Community 8",
+      "members": 25,
+      "top_entities": [
+        "system:dinov2",
+        "concept:computational_pathology_foundation_models",
+        "concept:cpathfms",
+        "system:vit",
+        "system:ibot"
+      ],
+      "entity_types": {
+        "RESEARCHER": 5,
+        "SYSTEM": 5,
+        "METHOD": 7,
+        "PHENOMENON": 5,
+        "CONCEPT": 3
+      },
+      "internal_edges": 28
+    },
+    {
+      "label": "Community 11",
+      "members": 25,
+      "top_entities": [
+        "system:histopathological_foundation_models",
+        "method:k_nearest_neighbors",
+        "phenomenon:batch_effects",
+        "method:linear_probing",
+        "researcher:jonah_komen"
+      ],
+      "entity_types": {
+        "RESEARCHER": 4,
+        "METHOD": 11,
+        "UNKNOWN": 5,
+        "PHENOMENON": 3,
+        "SYSTEM": 1,
+        "FIELD": 1
+      },
+      "internal_edges": 23
+    },
+    {
+      "label": "Community 13",
+      "members": 17,
+      "top_entities": [
+        "system:the_ontoverse",
+        "field:computational_pathology",
+        "concept:natural_language_processing",
+        "method:named_entity_recognition_ner",
+        "method:mask_guided_cross_image_attention"
+      ],
+      "entity_types": {
+        "METHOD": 5,
+        "FINDING": 1,
+        "CONCEPT": 3,
+        "FIELD": 2,
+        "RESEARCHER": 3,
+        "THEORY": 1,
+        "SYSTEM": 1,
+        "PHENOMENON": 1
+      },
+      "internal_edges": 19
+    },
+    {
+      "label": "Community 14",
+      "members": 8,
+      "top_entities": [
+        "method:self_supervised_representation_learning",
+        "system:transmil",
+        "method:adversarial_learning",
+        "method:self_supervised_attention_based_deep_learning",
+        "system:yottixel"
+      ],
+      "entity_types": {
+        "SYSTEM": 3,
+        "METHOD": 3,
+        "FINDING": 1,
+        "UNKNOWN": 1
+      },
+      "internal_edges": 6
+    }
+  ],
+  "bridges": [
+    {
+      "entity": "method:self_supervised_learning",
+      "name": "self-supervised learning",
+      "entity_type": "METHOD",
+      "communities": [
+        "Community 1",
+        "Community 11",
+        "Community 14",
+        "Community 2",
+        "Community 3",
+        "Community 5",
+        "Community 8",
+        "Community 9"
+      ],
+      "cross_community_edges": 15
+    },
+    {
+      "entity": "system:uni",
+      "name": "UNI",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 1",
+        "Community 10",
+        "Community 11",
+        "Community 13",
+        "Community 2",
+        "Community 3",
+        "Community 4",
+        "Community 8",
+        "Community 9"
+      ],
+      "cross_community_edges": 14
+    },
+    {
+      "entity": "system:titan",
+      "name": "TITAN",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 1",
+        "Community 11",
+        "Community 2",
+        "Community 4",
+        "Community 7",
+        "Community 8",
+        "Community 9"
+      ],
+      "cross_community_edges": 14
+    },
+    {
+      "entity": "system:tcga",
+      "name": "TCGA",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 1",
+        "Community 2",
+        "Community 3",
+        "Community 5",
+        "Community 9"
+      ],
+      "cross_community_edges": 13
+    },
+    {
+      "entity": "system:pixcell",
+      "name": "PixCell",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 11",
+        "Community 12",
+        "Community 2",
+        "Community 3",
+        "Community 5",
+        "Community 6",
+        "Community 7",
+        "Community 9"
+      ],
+      "cross_community_edges": 11
+    },
+    {
+      "entity": "system:dinov2",
+      "name": "DINOv2",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 1",
+        "Community 10",
+        "Community 13",
+        "Community 2",
+        "Community 3",
+        "Community 8"
+      ],
+      "cross_community_edges": 9
+    },
+    {
+      "entity": "system:contrastive_learning_from_captions_for_histopathology",
+      "name": "CONtrastive learning from Captions for Histopathology",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 1",
+        "Community 2",
+        "Community 3",
+        "Community 4",
+        "Community 6",
+        "Community 8"
+      ],
+      "cross_community_edges": 9
+    },
+    {
+      "entity": "concept:latent_diffusion_models",
+      "name": "Latent Diffusion Models",
+      "entity_type": "CONCEPT",
+      "communities": [
+        "Community 12",
+        "Community 3",
+        "Community 6"
+      ],
+      "cross_community_edges": 5
+    },
+    {
+      "entity": "method:few_shot_learning",
+      "name": "few-shot learning",
+      "entity_type": "METHOD",
+      "communities": [
+        "Community 1",
+        "Community 4"
+      ],
+      "cross_community_edges": 4
+    },
+    {
+      "entity": "system:pluto_4g",
+      "name": "PLUTO-4G",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 1",
+        "Community 10",
+        "Community 6",
+        "Community 8"
+      ],
+      "cross_community_edges": 4
+    },
+    {
+      "entity": "concept:cpathfms",
+      "name": "CPathFMs",
+      "entity_type": "CONCEPT",
+      "communities": [
+        "Community 2",
+        "Community 8"
+      ],
+      "cross_community_edges": 4
+    },
+    {
+      "entity": "theory:u_net",
+      "name": "U-Net",
+      "entity_type": "THEORY",
+      "communities": [
+        "Community 11",
+        "Community 6",
+        "Community 8",
+        "Community 9"
+      ],
+      "cross_community_edges": 4
+    },
+    {
+      "entity": "field:computational_pathology",
+      "name": "computational pathology",
+      "entity_type": "FIELD",
+      "communities": [
+        "Community 1",
+        "Community 13",
+        "Community 7",
+        "Community 8"
+      ],
+      "cross_community_edges": 3
+    },
+    {
+      "entity": "system:ctranspath",
+      "name": "CTransPath",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 1",
+        "Community 2",
+        "Community 4",
+        "Community 9"
+      ],
+      "cross_community_edges": 3
+    },
+    {
+      "entity": "system:cptac",
+      "name": "CPTAC",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 1",
+        "Community 2",
+        "Community 9"
+      ],
+      "cross_community_edges": 3
+    },
+    {
+      "entity": "method:linear_probing",
+      "name": "linear probing",
+      "entity_type": "METHOD",
+      "communities": [
+        "Community 1",
+        "Community 11",
+        "Community 2",
+        "Community 9"
+      ],
+      "cross_community_edges": 3
+    },
+    {
+      "entity": "method:k_nearest_neighbors",
+      "name": "k-nearest neighbors",
+      "entity_type": "METHOD",
+      "communities": [
+        "Community 1",
+        "Community 11",
+        "Community 2",
+        "Community 5"
+      ],
+      "cross_community_edges": 3
+    },
+    {
+      "entity": "system:ibot",
+      "name": "iBOT",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 2",
+        "Community 4",
+        "Community 8"
+      ],
+      "cross_community_edges": 3
+    },
+    {
+      "entity": "system:vit",
+      "name": "ViT",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 4",
+        "Community 6",
+        "Community 8"
+      ],
+      "cross_community_edges": 3
+    },
+    {
+      "entity": "phenomenon:cancer_diagnosis",
+      "name": "cancer diagnosis",
+      "entity_type": "PHENOMENON",
+      "communities": [
+        "Community 3",
+        "Community 5",
+        "Community 6"
+      ],
+      "cross_community_edges": 3
+    },
+    {
+      "entity": "system:zoomldm",
+      "name": "ZoomLDM",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 1",
+        "Community 2",
+        "Community 3",
+        "Community 8"
+      ],
+      "cross_community_edges": 3
+    },
+    {
+      "entity": "concept:miphei",
+      "name": "MIPHEI",
+      "entity_type": "CONCEPT",
+      "communities": [
+        "Community 3",
+        "Community 6",
+        "Community 7",
+        "Community 8"
+      ],
+      "cross_community_edges": 3
+    },
+    {
+      "entity": "system:restaingan",
+      "name": "ReStainGAN",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 13",
+        "Community 5",
+        "Community 7"
+      ],
+      "cross_community_edges": 2
+    },
+    {
+      "entity": "method:cyclegan",
+      "name": "CycleGAN",
+      "entity_type": "METHOD",
+      "communities": [
+        "Community 5",
+        "Community 6",
+        "Community 7"
+      ],
+      "cross_community_edges": 2
+    },
+    {
+      "entity": "method:adam_optimizer",
+      "name": "ADAM optimizer",
+      "entity_type": "METHOD",
+      "communities": [
+        "Community 11",
+        "Community 3",
+        "Community 6"
+      ],
+      "cross_community_edges": 2
+    },
+    {
+      "entity": "system:imagenet",
+      "name": "ImageNet",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 1",
+        "Community 2",
+        "Community 3"
+      ],
+      "cross_community_edges": 2
+    },
+    {
+      "entity": "system:mass_100k",
+      "name": "Mass-100K",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 1",
+        "Community 8",
+        "Community 9"
+      ],
+      "cross_community_edges": 2
+    },
+    {
+      "entity": "system:resnet_50",
+      "name": "ResNet-50",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 1",
+        "Community 4",
+        "Community 9"
+      ],
+      "cross_community_edges": 2
+    },
+    {
+      "entity": "phenomenon:nsclc_subtyping",
+      "name": "NSCLC subtyping",
+      "entity_type": "PHENOMENON",
+      "communities": [
+        "Community 1",
+        "Community 4"
+      ],
+      "cross_community_edges": 2
+    },
+    {
+      "entity": "phenomenon:rcc_subtyping",
+      "name": "RCC subtyping",
+      "entity_type": "PHENOMENON",
+      "communities": [
+        "Community 1",
+        "Community 4"
+      ],
+      "cross_community_edges": 2
+    },
+    {
+      "entity": "method:simpleshot",
+      "name": "SimpleShot",
+      "entity_type": "METHOD",
+      "communities": [
+        "Community 1",
+        "Community 2",
+        "Community 4"
+      ],
+      "cross_community_edges": 2
+    },
+    {
+      "entity": "system:abmil",
+      "name": "ABMIL",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 1",
+        "Community 2",
+        "Community 4"
+      ],
+      "cross_community_edges": 2
+    },
+    {
+      "entity": "finding:balanced_accuracy",
+      "name": "Balanced Accuracy",
+      "entity_type": "FINDING",
+      "communities": [
+        "Community 1",
+        "Community 10",
+        "Community 2"
+      ],
+      "cross_community_edges": 2
+    },
+    {
+      "entity": "concept:diagnostic_accuracy",
+      "name": "diagnostic accuracy",
+      "entity_type": "CONCEPT",
+      "communities": [
+        "Community 1",
+        "Community 2",
+        "Community 9"
+      ],
+      "cross_community_edges": 2
+    },
+    {
+      "entity": "concept:auroc",
+      "name": "AUROC",
+      "entity_type": "CONCEPT",
+      "communities": [
+        "Community 1",
+        "Community 11",
+        "Community 2"
+      ],
+      "cross_community_edges": 2
+    },
+    {
+      "entity": "method:self_supervised_representation_learning",
+      "name": "Self-supervised representation learning",
+      "entity_type": "METHOD",
+      "communities": [
+        "Community 14",
+        "Community 2",
+        "Community 8"
+      ],
+      "cross_community_edges": 2
+    },
+    {
+      "entity": "theory:vision_transformer",
+      "name": "Vision Transformer",
+      "entity_type": "THEORY",
+      "communities": [
+        "Community 10",
+        "Community 4",
+        "Community 6"
+      ],
+      "cross_community_edges": 2
+    },
+    {
+      "entity": "system:brush",
+      "name": "\u221e-Brush",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 11",
+        "Community 3",
+        "Community 9"
+      ],
+      "cross_community_edges": 2
+    },
+    {
+      "entity": "system:histopathological_foundation_models",
+      "name": "histopathological foundation models",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 1",
+        "Community 11",
+        "Community 2"
+      ],
+      "cross_community_edges": 2
+    },
+    {
+      "entity": "concept:data_augmentation",
+      "name": "Data Augmentation",
+      "entity_type": "CONCEPT",
+      "communities": [
+        "Community 5",
+        "Community 7"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "phenomenon:non_small_cell_lung_cancer",
+      "name": "Non-Small Cell Lung Cancer",
+      "entity_type": "PHENOMENON",
+      "communities": [
+        "Community 11",
+        "Community 6"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "finding:dice_score",
+      "name": "Dice score",
+      "entity_type": "FINDING",
+      "communities": [
+        "Community 1",
+        "Community 10"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "method:multi_head_cross_attention",
+      "name": "multi-head cross-attention",
+      "entity_type": "METHOD",
+      "communities": [
+        "Community 2",
+        "Community 7"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "method:synthetic_data_generation",
+      "name": "synthetic data generation",
+      "entity_type": "METHOD",
+      "communities": [
+        "Community 5",
+        "Community 7"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "system:cancer_genome_atlas",
+      "name": "Cancer Genome Atlas",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 1",
+        "Community 2"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "system:remedis",
+      "name": "REMEDIS",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 1",
+        "Community 9"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "researcher:richard_j_chen",
+      "name": "Richard J. Chen",
+      "entity_type": "RESEARCHER",
+      "communities": [
+        "Community 1",
+        "Community 8"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "researcher:faisal_mahmood",
+      "name": "Faisal Mahmood",
+      "entity_type": "RESEARCHER",
+      "communities": [
+        "Community 2",
+        "Community 4"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "system:panda",
+      "name": "PANDA",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 1",
+        "Community 10"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "phenomenon:glioma_idh1_mutation_prediction",
+      "name": "glioma IDH1 mutation prediction",
+      "entity_type": "PHENOMENON",
+      "communities": [
+        "Community 1",
+        "Community 4"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "phenomenon:glioma_histomolecular_subtyping",
+      "name": "glioma histomolecular subtyping",
+      "entity_type": "PHENOMENON",
+      "communities": [
+        "Community 1",
+        "Community 4"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "concept:acc_k",
+      "name": "Acc@K",
+      "entity_type": "CONCEPT",
+      "communities": [
+        "Community 1",
+        "Community 2"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "concept:mvacc_5",
+      "name": "MVAcc@5",
+      "entity_type": "CONCEPT",
+      "communities": [
+        "Community 1",
+        "Community 2"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "phenomenon:brca_subtyping",
+      "name": "BRCA subtyping",
+      "entity_type": "PHENOMENON",
+      "communities": [
+        "Community 1",
+        "Community 3"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "phenomenon:crc_polyp_classification",
+      "name": "CRC polyp classification",
+      "entity_type": "PHENOMENON",
+      "communities": [
+        "Community 1",
+        "Community 9"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "system:aggc",
+      "name": "AGGC",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 1",
+        "Community 2"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "phenomenon:pan_cancer_tissue_classification",
+      "name": "Pan-Cancer Tissue Classification",
+      "entity_type": "PHENOMENON",
+      "communities": [
+        "Community 1",
+        "Community 9"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "phenomenon:pan_cancer_tumor_immune_lymphocyte_til_detection",
+      "name": "Pan-Cancer Tumor-Immune Lymphocyte (TIL) Detection",
+      "entity_type": "PHENOMENON",
+      "communities": [
+        "Community 1",
+        "Community 9"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "system:bwh_emb",
+      "name": "BWH-EMB",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 1",
+        "Community 2"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "phenomenon:brca",
+      "name": "BRCA",
+      "entity_type": "PHENOMENON",
+      "communities": [
+        "Community 5",
+        "Community 9"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "phenomenon:crc",
+      "name": "CRC",
+      "entity_type": "PHENOMENON",
+      "communities": [
+        "Community 5",
+        "Community 9"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "system:coca",
+      "name": "CoCa",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 2",
+        "Community 4"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "system:tcga_brca",
+      "name": "TCGA BRCA",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 3",
+        "Community 4"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "system:tcga_rcc",
+      "name": "TCGA RCC",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 1",
+        "Community 4"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "system:tcga_nsclc",
+      "name": "TCGA NSCLC",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 1",
+        "Community 4"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "concept:cross_modal_retrieval",
+      "name": "cross-modal retrieval",
+      "entity_type": "CONCEPT",
+      "communities": [
+        "Community 2",
+        "Community 4"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "theory:transformer",
+      "name": "Transformer",
+      "entity_type": "THEORY",
+      "communities": [
+        "Community 2",
+        "Community 4"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "finding:recall_k",
+      "name": "Recall@K",
+      "entity_type": "FINDING",
+      "communities": [
+        "Community 2",
+        "Community 4"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "system:titanv",
+      "name": "TITANV",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 2",
+        "Community 8"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "system:prism",
+      "name": "PRISM",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 2",
+        "Community 8"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "system:chief",
+      "name": "CHIEF",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 1",
+        "Community 2"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "system:ebrains",
+      "name": "EBRAINS",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 2",
+        "Community 9"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "method:clip",
+      "name": "CLIP",
+      "entity_type": "METHOD",
+      "communities": [
+        "Community 2",
+        "Community 4"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "researcher:srikar_yellapragada",
+      "name": "Srikar Yellapragada",
+      "entity_type": "RESEARCHER",
+      "communities": [
+        "Community 3",
+        "Community 5"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "researcher:alexandros_graikos",
+      "name": "Alexandros Graikos",
+      "entity_type": "RESEARCHER",
+      "communities": [
+        "Community 3",
+        "Community 5"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "researcher:joel_saltz",
+      "name": "Joel Saltz",
+      "entity_type": "RESEARCHER",
+      "communities": [
+        "Community 3",
+        "Community 5"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "researcher:dimitris_samaras",
+      "name": "Dimitris Samaras",
+      "entity_type": "RESEARCHER",
+      "communities": [
+        "Community 3",
+        "Community 5"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "method:variational_autoencoder",
+      "name": "Variational Autoencoder",
+      "entity_type": "METHOD",
+      "communities": [
+        "Community 12",
+        "Community 5"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "method:lora",
+      "name": "LoRA",
+      "entity_type": "METHOD",
+      "communities": [
+        "Community 3",
+        "Community 6"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "system:pixcell_1024",
+      "name": "PixCell-1024",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 3",
+        "Community 6"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "system:pluto_4s",
+      "name": "PLUTO-4S",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 10",
+        "Community 8"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "method:bfloat16",
+      "name": "bfloat16",
+      "entity_type": "METHOD",
+      "communities": [
+        "Community 10",
+        "Community 8"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "concept:computational_pathology_foundation_models",
+      "name": "Computational Pathology Foundation Models",
+      "entity_type": "CONCEPT",
+      "communities": [
+        "Community 2",
+        "Community 8"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "method:masked_image_modeling",
+      "name": "masked image modeling",
+      "entity_type": "METHOD",
+      "communities": [
+        "Community 14",
+        "Community 8"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "phenomenon:inter_institutional_variability",
+      "name": "inter-institutional variability",
+      "entity_type": "PHENOMENON",
+      "communities": [
+        "Community 2",
+        "Community 8"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "concept:standardized_benchmark_dataset",
+      "name": "standardized benchmark dataset",
+      "entity_type": "CONCEPT",
+      "communities": [
+        "Community 2",
+        "Community 8"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "method:cross_entropy",
+      "name": "cross-entropy",
+      "entity_type": "METHOD",
+      "communities": [
+        "Community 11",
+        "Community 9"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "method:conditioning_diffusion_model",
+      "name": "Conditioning Diffusion Model",
+      "entity_type": "METHOD",
+      "communities": [
+        "Community 2",
+        "Community 3"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "system:dime",
+      "name": "DiME",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 12",
+        "Community 3"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "system:concept_discovery_through_latent_diffusion_based_counterfactual_trajectories",
+      "name": "Concept Discovery through Latent Diffusion-based Counterfactual Trajectories",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 12",
+        "Community 3"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "concept:counterfactual_explanations",
+      "name": "counterfactual explanations",
+      "entity_type": "CONCEPT",
+      "communities": [
+        "Community 12",
+        "Community 3"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "phenomenon:color_related_biases",
+      "name": "color-related biases",
+      "entity_type": "PHENOMENON",
+      "communities": [
+        "Community 12",
+        "Community 3"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "concept:cell_type_aware_analysis",
+      "name": "cell-type-aware analysis",
+      "entity_type": "CONCEPT",
+      "communities": [
+        "Community 6",
+        "Community 8"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "system:miphei_unetr",
+      "name": "MIPHEI-UNETR",
+      "entity_type": "SYSTEM",
+      "communities": [
+        "Community 6",
+        "Community 9"
+      ],
+      "cross_community_edges": 1
+    },
+    {
+      "entity": "phenomenon:hematoxylin_and_eosin_h_e",
+      "name": "Hematoxylin and Eosin (H&E)",
+      "entity_type": "PHENOMENON",
+      "communities": [
+        "Community 6",
+        "Community 8"
+      ],
+      "cross_community_edges": 1
+    }
+  ],
+  "isolated": [],
+  "community_connections": [
+    {
+      "from": "Community 1",
+      "to": "Community 2",
+      "shared_edges": 14,
+      "bridge_entities": 16
+    },
+    {
+      "from": "Community 1",
+      "to": "Community 9",
+      "shared_edges": 13,
+      "bridge_entities": 11
+    },
+    {
+      "from": "Community 1",
+      "to": "Community 4",
+      "shared_edges": 11,
+      "bridge_entities": 13
+    },
+    {
+      "from": "Community 2",
+      "to": "Community 8",
+      "shared_edges": 10,
+      "bridge_entities": 10
+    },
+    {
+      "from": "Community 2",
+      "to": "Community 4",
+      "shared_edges": 6,
+      "bridge_entities": 8
+    },
+    {
+      "from": "Community 1",
+      "to": "Community 11",
+      "shared_edges": 5,
+      "bridge_entities": 5
+    },
+    {
+      "from": "Community 5",
+      "to": "Community 7",
+      "shared_edges": 4,
+      "bridge_entities": 5
+    },
+    {
+      "from": "Community 2",
+      "to": "Community 9",
+      "shared_edges": 4,
+      "bridge_entities": 5
+    },
+    {
+      "from": "Community 11",
+      "to": "Community 2",
+      "shared_edges": 4,
+      "bridge_entities": 5
+    },
+    {
+      "from": "Community 5",
+      "to": "Community 9",
+      "shared_edges": 4,
+      "bridge_entities": 4
+    },
+    {
+      "from": "Community 3",
+      "to": "Community 5",
+      "shared_edges": 4,
+      "bridge_entities": 5
+    },
+    {
+      "from": "Community 12",
+      "to": "Community 3",
+      "shared_edges": 4,
+      "bridge_entities": 5
+    },
+    {
+      "from": "Community 1",
+      "to": "Community 10",
+      "shared_edges": 3,
+      "bridge_entities": 5
+    },
+    {
+      "from": "Community 1",
+      "to": "Community 8",
+      "shared_edges": 3,
+      "bridge_entities": 4
+    },
+    {
+      "from": "Community 10",
+      "to": "Community 8",
+      "shared_edges": 3,
+      "bridge_entities": 4
+    },
+    {
+      "from": "Community 6",
+      "to": "Community 8",
+      "shared_edges": 3,
+      "bridge_entities": 5
+    },
+    {
+      "from": "Community 3",
+      "to": "Community 6",
+      "shared_edges": 3,
+      "bridge_entities": 5
+    },
+    {
+      "from": "Community 11",
+      "to": "Community 6",
+      "shared_edges": 2,
+      "bridge_entities": 3
+    },
+    {
+      "from": "Community 1",
+      "to": "Community 3",
+      "shared_edges": 2,
+      "bridge_entities": 4
+    },
+    {
+      "from": "Community 2",
+      "to": "Community 5",
+      "shared_edges": 2,
+      "bridge_entities": 2
+    },
+    {
+      "from": "Community 2",
+      "to": "Community 3",
+      "shared_edges": 2,
+      "bridge_entities": 3
+    },
+    {
+      "from": "Community 4",
+      "to": "Community 8",
+      "shared_edges": 2,
+      "bridge_entities": 3
+    },
+    {
+      "from": "Community 5",
+      "to": "Community 6",
+      "shared_edges": 2,
+      "bridge_entities": 2
+    },
+    {
+      "from": "Community 13",
+      "to": "Community 7",
+      "shared_edges": 1,
+      "bridge_entities": 2
+    },
+    {
+      "from": "Community 6",
+      "to": "Community 7",
+      "shared_edges": 1,
+      "bridge_entities": 2
+    },
+    {
+      "from": "Community 1",
+      "to": "Community 13",
+      "shared_edges": 1,
+      "bridge_entities": 2
+    },
+    {
+      "from": "Community 13",
+      "to": "Community 8",
+      "shared_edges": 1,
+      "bridge_entities": 2
+    },
+    {
+      "from": "Community 11",
+      "to": "Community 3",
+      "shared_edges": 1,
+      "bridge_entities": 2
+    },
+    {
+      "from": "Community 2",
+      "to": "Community 7",
+      "shared_edges": 1,
+      "bridge_entities": 2
+    },
+    {
+      "from": "Community 14",
+      "to": "Community 2",
+      "shared_edges": 1,
+      "bridge_entities": 2
+    },
+    {
+      "from": "Community 3",
+      "to": "Community 9",
+      "shared_edges": 1,
+      "bridge_entities": 2
+    },
+    {
+      "from": "Community 11",
+      "to": "Community 9",
+      "shared_edges": 1,
+      "bridge_entities": 2
+    },
+    {
+      "from": "Community 11",
+      "to": "Community 5",
+      "shared_edges": 1,
+      "bridge_entities": 2
+    },
+    {
+      "from": "Community 3",
+      "to": "Community 8",
+      "shared_edges": 1,
+      "bridge_entities": 2
+    },
+    {
+      "from": "Community 14",
+      "to": "Community 8",
+      "shared_edges": 1,
+      "bridge_entities": 2
+    },
+    {
+      "from": "Community 3",
+      "to": "Community 4",
+      "shared_edges": 1,
+      "bridge_entities": 2
+    },
+    {
+      "from": "Community 4",
+      "to": "Community 6",
+      "shared_edges": 1,
+      "bridge_entities": 2
+    },
+    {
+      "from": "Community 10",
+      "to": "Community 6",
+      "shared_edges": 1,
+      "bridge_entities": 2
+    },
+    {
+      "from": "Community 12",
+      "to": "Community 5",
+      "shared_edges": 1,
+      "bridge_entities": 2
+    },
+    {
+      "from": "Community 6",
+      "to": "Community 9",
+      "shared_edges": 1,
+      "bridge_entities": 2
+    }
+  ]
+}

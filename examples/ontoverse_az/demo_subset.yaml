@@ -1,0 +1,56 @@
+# Demo subset for AstraZeneca presentation (2026-05-12)
+# Curated from the 157-paper Ontoverse Zotero sandbox.
+# Topic: computational pathology AI — the lab's actual world.
+# Target: ~$1-1.50 LLM cost, transformers-example sized.
+#
+# Design goals:
+#   1. AZ's 4 papers anchor the graph (they recognize their own work centrally)
+#   2. Pathology foundation models become a tight cluster (shared architectures)
+#   3. Benchmark/eval papers glue the FM cluster via comparison edges
+#   4. Diffusion papers form a peer cluster to AZ's generative work
+#   5. MIPHEI-ViT bridges FMs <-> stain translation (ReStainGAN's exact problem)
+#   6. The Ontoverse paper itself becomes a node — meta punchline
+
+papers:
+  # ── AstraZeneca (anchor, x4) ──
+  - { id: 01_az_ReStainGAN,           title: "ReStainGAN: IHC to IF Stain Domain Translation",
+      pdf_url: "https://arxiv.org/pdf/2403.06545.pdf" }
+  - { id: 02_az_Ontoverse,            title: "The Ontoverse: KG-based Data via Cartographic Interface",
+      pdf_url: "https://arxiv.org/pdf/2408.03339.pdf" }
+  - { id: 03_az_MaskGuidedDiffusion,  title: "Mask-guided cross-image attention zero-shot in-silico histopath generation",
+      pdf_url: "https://arxiv.org/pdf/2407.11664.pdf" }
+  - { id: 04_az_MSDM,                 title: "MSDM: Multimodal Conditioned Diffusion for Cell/Nuclei Segmentation",
+      pdf_url: "https://arxiv.org/pdf/2510.09121.pdf" }
+
+  # ── Pathology Foundation Models (substrate, x5) ──
+  - { id: 05_fm_UNI,                  title: "UNI: General-Purpose Self-Supervised Model for Comp Pathology",
+      pdf_url: "https://arxiv.org/pdf/2308.15474.pdf" }
+  - { id: 06_fm_CONCH,                title: "CONCH: Visual-Language Foundation Model for Comp Pathology",
+      pdf_url: "https://arxiv.org/pdf/2307.12914.pdf" }
+  - { id: 07_fm_TITAN,                title: "TITAN: Multimodal Whole Slide Foundation Model",
+      pdf_url: "https://arxiv.org/pdf/2411.19666.pdf" }
+  - { id: 08_fm_PixCell,              title: "PixCell: Generative Foundation Model for Histopathology",
+      pdf_url: "https://arxiv.org/pdf/2506.05127.pdf" }
+  - { id: 09_fm_PLUTO4,               title: "PLUTO-4: Frontier Pathology Foundation Models",
+      pdf_url: "https://arxiv.org/pdf/2511.02826.pdf" }
+
+  # ── FM evaluation & critique (gluing edges, x3) ──
+  - { id: 10_ev_FMSurvey,             title: "Survey on Computational Pathology Foundation Models",
+      pdf_url: "https://arxiv.org/pdf/2501.15724.pdf" }
+  - { id: 11_ev_BatchEffects,         title: "Do Histopathological FMs Eliminate Batch Effects?",
+      pdf_url: "https://arxiv.org/pdf/2411.05489.pdf" }
+  - { id: 12_ev_ScannerSensitive,     title: "Pathology FMs are Scanner Sensitive (ScanGen Loss)",
+      pdf_url: "https://arxiv.org/pdf/2507.22092.pdf" }
+
+  # ── Generative pathology peers to AZ (x3) ──
+  - { id: 13_df_ZoomLDM,              title: "ZoomLDM: Multi-scale Latent Diffusion for WSI",
+      pdf_url: "https://arxiv.org/pdf/2411.16969.pdf" }
+  - { id: 14_df_InfBrush,             title: "Infinity-Brush: Large Image Synthesis Diffusion in Infinite Dimensions",
+      pdf_url: "https://arxiv.org/pdf/2407.14709.pdf" }
+  - { id: 15_df_CounterfactualTrajectories, title: "Generating Counterfactual Trajectories with Latent Diffusion Models for Concept Discovery",
+      pdf_url: "https://arxiv.org/pdf/2404.10356.pdf",
+      note: "Replaces biorxiv Counterfactual-Diffusion-for-Pathology (403'd); same counterfactual+diffusion+explainability angle, also in Ontoverse Diffusion Models collection." }
+
+  # ── The killer bridge (x1) ──
+  - { id: 16_br_MIPHEI_ViT,           title: "MIPHEI-ViT: Multiplex IF Prediction from H&E using ViT Foundation Models",
+      pdf_url: "https://arxiv.org/pdf/2505.10294.pdf" }
