@@ -72,6 +72,7 @@ network.once('stabilizationIterationsDone', function() {
 network.on('beforeDrawing', function(ctx) {
     if (focusedNodeId !== null) return;
     for (var comm in communityHulls) {
+        if (hiddenCommunities.has(comm)) continue;
         var hull = communityHulls[comm];
         if (hull.length < 2) continue;
         var color = communityColors[comm] || '#ffffff';
@@ -114,6 +115,7 @@ network.on('afterDrawing', function(ctx) {
     var fontSize = Math.round(16 / scale);
     var strokeW = Math.max(2, Math.round(3 / scale));
     for (var comm in communityCentroids) {
+        if (hiddenCommunities.has(comm)) continue;
         var pos = communityCentroids[comm];
         var color = communityColors[comm] || '#ffffff';
         ctx.save();
@@ -840,8 +842,11 @@ function inverseRelLabel(rt) {
     // Fallback: try common English verb patterns
     var lower = rt.toLowerCase().replace(/_/g, ' ');
     if (lower.endsWith('s') && !lower.endsWith('ss')) {
-        // "contradicts" → "contradicted by" (rough heuristic)
-        return lower.replace(/s$/, 'd by');
+        // present-tense → past participle: strip trailing 's', then 'd' if the stem
+        // ends in 'e' (investigates → investigated) else 'ed' (explains → explained,
+        // implements → implemented).
+        var stem = lower.slice(0, -1);
+        return stem + (stem.endsWith('e') ? 'd' : 'ed') + ' by';
     }
     return lower + ' (inverse)';
 }
@@ -1224,23 +1229,33 @@ function enterFocusMode(nodeId, skipCamera) {
     });
     nodes.update(nodeUpdates);
 
-    // Count parallel edges per node pair to offset curves
-    var pairCount = {};
-    var pairIndex = {};
-    allEdges.forEach(function(e) {
-        if (!connectedEdgeIds.has(e.id)) return;
-        var key = [e.from, e.to].sort().join('||');
-        if (!pairCount[key]) pairCount[key] = 0;
-        pairIndex[e.id] = pairCount[key];
-        pairCount[key]++;
-    });
-
     // Show static edge labels only for small neighborhoods
     var showStaticLabels = visibleNeighbors.size <= 20;
 
     // Show edges only to visible neighbors + trail edges
     var trailEdgeIds = getTrailEdgeIds();
     var trailEdgePersp = getTrailEdgePerspectives();
+
+    // Count parallel edges per node pair to offset curves. Include trail edges so
+    // multi-relation trail steps (e.g. APPLIED_TO + EXPLAINS between the same two
+    // nodes) get staggered curvatures instead of stacking on top of each other.
+    var pairCount = {};
+    var pairIndex = {};
+    allEdges.forEach(function(e) {
+        if (!connectedEdgeIds.has(e.id) && !trailEdgeIds.has(e.id)) return;
+        var key = [e.from, e.to].sort().join('||');
+        if (!pairCount[key]) pairCount[key] = 0;
+        pairIndex[e.id] = pairCount[key];
+        pairCount[key]++;
+    });
+
+    function curvature(edgeId, fromId, toId) {
+        var key = [fromId, toId].sort().join('||');
+        var total = pairCount[key] || 1;
+        var idx = pairIndex[edgeId] || 0;
+        return total > 1 ? 0.15 + idx * 0.2 : 0.1;
+    }
+
     var edgeUpdates = [];
     allEdges.forEach(function(e) {
         var isTrailEdge = trailEdgeIds.has(e.id);
@@ -1251,7 +1266,7 @@ function enterFocusMode(nodeId, skipCamera) {
                 color: { opacity: 0.6 },
                 font: { size: 11, color: '#ccc', strokeWidth: 3, strokeColor: '#1a1a2e' },
                 label: edgeLabelFrom(e, trailEdgePersp[e.id] || nodeId),
-                smooth: { type: 'curvedCW', roundness: 0.1 }
+                smooth: { type: 'curvedCW', roundness: curvature(e.id, e.from, e.to) }
             });
         } else if (connectedEdgeIds.has(e.id)) {
             var other = e.from === nodeId ? e.to : e.from;
@@ -1259,17 +1274,13 @@ function enterFocusMode(nodeId, skipCamera) {
                 edgeUpdates.push({ id: e.id, hidden: true });
                 return;
             }
-            var key = [e.from, e.to].sort().join('||');
-            var total = pairCount[key] || 1;
-            var idx = pairIndex[e.id] || 0;
-            var roundness = total > 1 ? 0.15 + idx * 0.2 : 0.1;
             edgeUpdates.push({
                 id: e.id,
                 hidden: hiddenRelationTypes.has(e.relation_type),
                 color: { opacity: 0.6 },
                 font: { size: showStaticLabels ? 11 : 0, color: '#ccc', strokeWidth: 3, strokeColor: '#1a1a2e' },
                 label: showStaticLabels ? edgeLabelFrom(e, nodeId) : '',
-                smooth: { type: 'curvedCW', roundness: roundness }
+                smooth: { type: 'curvedCW', roundness: curvature(e.id, e.from, e.to) }
             });
         } else {
             edgeUpdates.push({ id: e.id, hidden: true });
