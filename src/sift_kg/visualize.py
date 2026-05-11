@@ -343,7 +343,7 @@ def generate_view(
             "arrows": { "to": { "enabled": true, "scaleFactor": 1.2 } },
             "smooth": { "type": "curvedCW", "roundness": 0.1 },
             "color": { "opacity": 0.2 },
-            "font": { "size": 0 }
+            "font": { "size": 0, "align": "top" }
         },
         "nodes": {
             "font": { "size": 0, "face": "Inter, sans-serif" },
