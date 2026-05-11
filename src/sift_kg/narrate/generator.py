@@ -54,6 +54,7 @@ _BANNED_PATTERNS = [
     re.compile(r"played a pivotal role", re.IGNORECASE),
 ]
 
+_PLACEHOLDER_LABEL = re.compile(r"^Community \d+$")
 _YEAR_PATTERN = re.compile(r"\b((?:19|20)\d{2})\b")
 _FULL_DATE_PATTERN = re.compile(
     r"\b(\w+ \d{1,2},? (?:19|20)\d{2}"
@@ -227,12 +228,20 @@ def generate_narrative(
         timeline_narrative = _rewrite_banned_phrases(timeline_narrative, llm)
 
     # --- Phase 3: Community detection + theme naming (cached) ---
+    # `sift build` writes communities.json with default "Community N" placeholder
+    # labels; we only treat the cache as complete when it contains real themes.
     communities: list[list[dict]] | None = None
     community_labels: dict[int, str] = {}
     comm_path = output_dir / "communities.json"
+    cached_labels_are_themed = False
     if comm_path.exists():
-        logger.info("Communities already cached, skipping detection + theme naming")
         comm_data = json.loads(comm_path.read_text())
+        unique_labels = set(comm_data.values())
+        if unique_labels and not all(_PLACEHOLDER_LABEL.match(lbl) for lbl in unique_labels):
+            cached_labels_are_themed = True
+
+    if cached_labels_are_themed:
+        logger.info("Communities already cached, skipping detection + theme naming")
         # Rebuild communities structure for _build_markdown
         comm_groups: dict[str, list[dict]] = {}
         entity_map = {e["id"]: e for e in entities}

@@ -1,7 +1,33 @@
 """Tests for sift_kg.narrate.prompts."""
 
 
+from sift_kg.narrate.generator import _PLACEHOLDER_LABEL
 from sift_kg.narrate.prompts import build_entity_description_prompt, build_narrative_prompt
+
+
+class TestPlaceholderLabelDetection:
+    """Cache-check regex distinguishes default 'Community N' from real theme labels.
+
+    Regression: `sift build` writes communities.json with placeholder labels, then
+    `sift narrate`'s cache check used to skip theme generation because the file
+    existed. The regex below is the signal that triggers regeneration.
+    """
+
+    def test_matches_default_labels(self):
+        for label in ("Community 1", "Community 12", "Community 999"):
+            assert _PLACEHOLDER_LABEL.match(label), label
+
+    def test_rejects_themed_labels(self):
+        themed = [
+            "Cancer Classification Techniques",
+            "Synthetic Image Generation Methods",
+            "Community of practice",  # contains 'Community' but isn't the placeholder
+            "community 1",  # case sensitive — must match the exact placeholder format
+            "Community",  # missing number
+            "Community 1 — pathology",
+        ]
+        for label in themed:
+            assert not _PLACEHOLDER_LABEL.match(label), label
 
 
 class TestNarrativePrompt:
