@@ -127,7 +127,7 @@ The **osint** domain adds entity types for shell companies, financial accounts, 
 
 Nothing gets merged without your approval — the LLM proposes, you verify. Every extraction links back to the source document and passage.
 
-See [`examples/transformers/`](examples/transformers/) for 12 foundational AI papers mapped as a concept graph (425 entities, ~$0.72), [`examples/ftx/`](examples/ftx/) for the FTX collapse (431 entities from 9 articles), and [`examples/epstein/`](examples/epstein/) for the Giuffre v. Maxwell depositions (190 entities from a scanned PDF). [**Explore all three live**](https://juanceresa.github.io/sift-kg/) — no install, no API key.
+See [`examples/transformers/`](examples/transformers/) for 12 foundational AI papers mapped as a concept graph (425 entities, ~$0.72), and [`examples/ftx/`](examples/ftx/) for the FTX collapse (431 entities from 9 articles). [**Explore the live demos**](https://juanceresa.github.io/sift-kg/) — no install, no API key.
 
 ## Civic Table
 
